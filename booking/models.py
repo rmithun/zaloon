@@ -14,7 +14,7 @@ from user_account.models import UserProfile
 class ActivityType(models.Model):
 
 	"""type of activities available"""
-	activity_type = models.CharField(max_length = 25)
+	activity_type_name = models.CharField(max_length = 25)
 	description = models.TextField()
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
@@ -40,7 +40,7 @@ class BookingDetails(models.Model):
 	activity = models.ForeignKey(Activity, related_name = "activity_booked")
 	count_booked = models.IntegerField()
 	scheduled_at = models.DateTimeField()
-	booked_code = models.CharField(max_length = 25)
+	booking_code = models.CharField(max_length = 25)
 	expires_on = models.DateTimeField()
 	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
 	promo_code = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)

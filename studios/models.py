@@ -33,8 +33,8 @@ class StudioProfile(models.Model):
 	mobile_no_2 = models.CharField(max_length = 40, null = True)
 	contact_person_1 = models.CharField(max_length = 75)
 	contact_person_2 = models.CharField(max_length = 75, null = True)
-	start_time = models.PositiveSmallIntegerField()
-	end_time = models.PositiveSmallIntegerField()
+	opening_at = models.PositiveSmallIntegerField()
+	closing_at = models.PositiveSmallIntegerField()
 	is_active = models.BooleanField(default  = 1)
 	contract_start_date = models.DateTimeField()
 	contract_end_date = models.DateTimeField()
@@ -43,12 +43,12 @@ class StudioProfile(models.Model):
 	is_closed = models.BooleanField(default = 1)
 	daily_studio_closed_from = models.PositiveSmallIntegerField()
 	daily_studio_closed_till = models.PositiveSmallIntegerField()
-	studio_close_timing = models.PositiveSmallIntegerField()
+	#studio_close_timing = models.PositiveSmallIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
-class StudioActivitTypes(models.Model):
+class StudioActivityTypes(models.Model):
 
 	"""list of available activity type in studio"""
 	studio = models.ForeignKey(StudioLogin, related_name = "studio_detail_for_type")
