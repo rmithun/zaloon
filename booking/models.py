@@ -46,6 +46,7 @@ class BookingDetails(models.Model):
 	promo_code = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
 	booking_status = models.BooleanField(default = 1) 
 	reminder_sent  = models.BooleanField(default = 0)
+	user_arrived = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 

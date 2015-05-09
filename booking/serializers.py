@@ -7,6 +7,7 @@ from rest_framework import serializers
 #application imports
 from models import *
 from studios.serializers import SudioProfileSerizlier
+from user_accounts.serializers import UserNameOnlySerializer
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
 
@@ -28,6 +29,7 @@ class BookingDetailsSerializer(serializers.ModelSerializer):
 
 	"""serializer for booked details"""
 	studio = SudioProfileSerizlier()
+	user = UserNameOnlySerializer()
 	class Meta:
 		model = BookingDetails
 		fields = ('user', 'activity', 'count_booked', 'scheduled_at',  \

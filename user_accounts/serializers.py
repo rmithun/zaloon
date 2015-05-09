@@ -18,13 +18,20 @@ class UserProfileSerializer(serializers.ModelSerializer):
 			'country', 'city', 'area', 'email', 'plan', 'mobile',  \
 			'relationship', 'last_login')
 
+class UserNameOnlySerializer(serializers.ModelSerializer):
+
+	"""serializer to get only name and id of the user"""
+	class Meta:
+		model = UserProfile
+		fields = ('id','first_name', 'last_name')
+
 
 class UserActivitySerializer(serializers.ModelSerializer):
 
 	"""list of activities available for user"""
 	activity = ActivitySerializer()
 	activity_type = ActivityTypeSerializer()
-	user = UserProfileSerializer()
+	user = UserNameOnlySerializer()
 	class Meta:
 		model = UserActivitiesList
 		fields = ('id', 'activity', 'activity_type', 'user', 'count_available', \

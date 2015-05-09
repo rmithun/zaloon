@@ -68,12 +68,21 @@ class StudioActivities(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
+class PaymentModes(models.Model):
+
+	"""payment modes available"""
+
+	mode = models.CharField(max_length = 40)
+	description = models.CharField(max_length = 75)
+	is_active = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
 
 class StudioAccountDetails(models.Model):
 
 	"""studio bank and payment details"""
 	studio = models.ForeignKey(StudioLogin, related_name = "studio_account_detail")
-	mode_of_payment = models.ForeignKey(ModeOfPayment, related_name = "payment_mode_for_studio_account")
+	mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_account")
 	bank_name = models.CharField(max_length = 120)
 	bank_branch = models.CharField(max_length = 120)
 	bank_ifsc = models.CharField(max_length = 25)
@@ -85,11 +94,11 @@ class StudioAccountDetails(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
-class StudiPaymene(models.Model):
+class StudioPayment(models.Model):
 
 	"""all payement details for a studio"""
 	studio = models.ForeignKey(StudioLogin, related_name = "studio_payment_detail")
-	mode_of_payment = models.ForeignKey(ModeOfPayment, related_name = "payment_mode_for_studio_payments")
+	mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_payments")
 	amount_paid = models.PositiveIntegerField()
 	paid_by = models.CharField(max_length = 120) ##has to be foreign key in future
 	paid_date = models.DateTimeField(default = datetime.now())
@@ -161,9 +170,17 @@ class StudioClosedFromTill(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
+class StudioDailyInvoice(models.Model):
 
-
-
+	"""daily booked details for a studio"""
+	studio = models.ForeignKey(StudioLogin, related_name = "studio_daily_invoice")
+	booked_date = models.DateTimeField()
+	activity_booked = models.ForeignKey(Activity, related_name = "daily_invoice_booked_activity")
+	count_booked = models.PositiveIntegerField()
+	booking = models.ForeignKey(BookingDetails, related_name = "booking_for_daily_invoice")
+	is_filled = models.NullBooleanField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
 
