@@ -14,9 +14,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = UserProfile
-		fields = ('id','first_name', 'last_name', 'date_of_birth', 'sex', \
-			'country', 'city', 'area', 'email', 'plan', 'mobile',  \
-			'relationship', 'last_login')
+		fields = ('id', 'date_of_birth', 'sex', \
+			'country', 'city', 'area','facebook_id', 'plan', 'mobile',  \
+			'relationship', 'last_login','user_acc')
 
 class UserNameOnlySerializer(serializers.ModelSerializer):
 

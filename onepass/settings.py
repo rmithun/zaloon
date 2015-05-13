@@ -39,6 +39,9 @@ INSTALLED_APPS = (
     'rest_framework',
     'oauth2_provider',
     'social.apps.django_app.default',
+    'user_accounts',
+    'booking',
+    'studios',
 
 )
 
@@ -87,8 +90,42 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-TEMPLATE_CONTEXT_PROCESSORS = (
+STATIC_URL = '/static/'
 
+# Additional locations of static files
+STATICFILES_DIRS = (
+    
+    os.path.join(BASE_DIR, 'static'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+
+
+
+TEMPLATE_DIRS = (
+    'templates/',
+)
+TEMPLATE_LOADERS = (
+
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+
+)
+
+
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
 )
@@ -111,5 +148,26 @@ OAUTH2_PROVIDER = {
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope'}
 }
 
-SOCIAL_AUTH_FACEBOOK_KEY = #YOUR FACEBOOK APP KEY
-SOCIAL_AUTH_FACEBOOK_SECRET = #YOUR FACEBOOK APP SECRET
+SOCIAL_AUTH_FACEBOOK_KEY = 442685319234348
+SOCIAL_AUTH_FACEBOOK_SECRET = '514402ab5b5f424bb288737376f508d3'
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    #'social.pipeline.social_auth.associate_by_email',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+    'utils.generic_utils.social_auth_to_profile'
+)
+
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_location','user_birthday']
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [('gender','gender')]
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/account/home/'

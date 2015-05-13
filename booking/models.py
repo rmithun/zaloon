@@ -8,7 +8,7 @@ from django.db import models
 from django.utils import timezone
 
 #application imports
-from user_account.models import UserProfile
+#from user_accounts.models import UserProfile
 
 
 class ActivityType(models.Model):
@@ -36,14 +36,14 @@ class Activity(models.Model):
 class BookingDetails(models.Model):
 
 	"""table holding all booking related infos"""
-	user = models.ForeignKey(UserProfile, related_name = "booked_by_user")
+	#user = models.ForeignKey(UserProfile, related_name = "booked_by_user")
 	activity = models.ForeignKey(Activity, related_name = "activity_booked")
 	count_booked = models.IntegerField()
 	scheduled_at = models.DateTimeField()
 	booking_code = models.CharField(max_length = 25)
 	expires_on = models.DateTimeField()
-	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
-	promo_code = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
+	#studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
+	#promo_code = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
 	booking_status = models.BooleanField(default = 1) 
 	reminder_sent  = models.BooleanField(default = 0)
 	user_arrived = models.BooleanField(default = 0)

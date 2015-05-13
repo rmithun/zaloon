@@ -1,3 +1,18 @@
-from django.shortcuts import render
 
-# Create your views here.
+""" 
+Views 
+"""
+#standard library imports
+from datetime import timedelta, datetime
+
+#third party imports
+from django.shortcuts import get_object_or_404, render_to_response,redirect, \
+render
+from django.contrib.auth.decorators import login_required
+
+#application imports
+
+@login_required
+def home(request):
+
+	return render(request,'user_accounts/home.html',{})

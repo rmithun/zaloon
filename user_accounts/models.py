@@ -6,28 +6,38 @@ from datetime import datetime
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 #application imports
-from booking.models import Activity,ActivityType
+from booking.models import ActivityType, Activity
 
+
+
+class Plan(models.Model):
+
+	"""type of available plans"""
+	name = models.CharField(max_length = 25)
+	description = models.TextField()
+	is_active = models.BooleanField(default = 1)
+	active_till_date = models.DateTimeField(null = True)
+	price = models.IntegerField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
 
 class UserProfile(models.Model):
 
 	"""table holding user related basic infos"""
-	first_name = models.CharField(max_length = 70)
-	last_name = models.CharField(max_length = 70, null = True)
-	date_of_birth = models.DateField(null = True)
-	sex = models.NullBooleanField()
-	country = models.CharField(max_length = 40, null = True)
-	city = models.CharField(max_length = 40, null = True)
+	user_acc = models.OneToOneField(User, blank=True, null=True, unique=True)
+	dob = models.DateField(null = True)
+	sex = models.CharField(max_length = 10) # 1 - female 0 -male
+	#country = models.CharField(max_length = 40, null = True)
+	city_state = models.CharField(max_length = 60, null = True)
 	area = models.CharField(max_length = 40, null = True)
-	email = models.CharField(max_length = 120)
-	plan = models.ForeignKey(Plan, related_name = "user_in_plan")
+	facebook_id = models.CharField(max_length = 50, blank = True)
+	plan = models.ForeignKey(Plan, related_name = "user_in_plan", null = True)
 	mobile = models.CharField(max_length = 25, null = True)
-	relation_ship = models.CharField(max_length = 25, null = True)
-	signup_date = models.DateTimeField(default = datetime.now())
-	last_login = models.DateTimeField(default = datetime.now())
-	service_updated = models.CharField(max_length = 25)
+	#relationship = models.CharField(max_length = 25, null = True)
+	service_updated = models.CharField(max_length = 25, null = True)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
@@ -46,18 +56,6 @@ class UserActivitiesList(models.Model):
 	is_active = models.BooleanField(default = 1)
 
 
-class Plan(models.Model):
-
-	"""type of available plans"""
-	name = models.CharField(max_length = 25)
-	description = models.TextField()
-	is_active = models.BooleanField(default = 1)
-	active_till_date = models.DateTimeField(null = True)
-	price = models.IntegerField()
-	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
-
-
 class PlanDetails(models.Model):
 
 	"""plan description and avialble activities"""
@@ -67,11 +65,5 @@ class PlanDetails(models.Model):
 	count_in_plan = models.IntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
-	
-
-
-
-
-
 
 
