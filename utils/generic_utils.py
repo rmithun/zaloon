@@ -9,6 +9,7 @@ from oauth2_provider.models import AccessToken, Application, RefreshToken
 from django.utils.timezone import now, timedelta
 from django.contrib.auth import login
 from social.apps.django_app.utils import psa
+from django.http import HttpResponse
 
 ##application imports
 from user_accounts.models import UserProfile
@@ -85,11 +86,8 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
             profile.save()
         #as different function
         token = access_token_gen(user)
-        access_token = token['access_token']
-        user = request.backend.do_auth(request.GET.get('access_token'))
-        if user:
-            login(request, user)
-            print "Logged in"
-        print token
     except Exception ,e:
         print repr(e)
+        return HttpResponse(status = 500)
+    else:
+        return HttpResponse(token)

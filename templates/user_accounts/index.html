@@ -1,5 +1,29 @@
-<html>
-<body>
-<a href = "/login/facebook/">Login With Facebook</a>
-</body>
+<!DOCTYPE html>
+<html lang="en" ng-app = "accountApp" >
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Onepass</title>
+    {% load static from staticfiles %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
+	<!-- Font -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>    
+    <!-- loading django static files -->
+    <!-- <link rel="stylesheet" href='{% static "css/main.css"%}'> -->
+    <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
+    <script src='{% static "js/angular1.3.15/angular.min.js" %}'></script>
+    <script src='{% static "js/angular1.3.15/angular-cookies.min.js" %}'></script>
+  </head>
+  <body>
+  	<div ng-controller = "landingpagecontroller">
+    	<button ng-click="fblogin()">Login With Facebook</button>
+	</div>
+  <script src='{% static "js/app.js" %}'></script>
+  <script src='{% static "js/controllers/landing_page_controllers.js" %}'></script>
+  <script src='{% static "js/services/httpservices.js" %}'></script>
+  <!-- Bootstrap Js -->
+  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  </body>
 </html>
