@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
+from user_accounts import views as uac_view
 
 urlpatterns = patterns('',
     # Examples:
@@ -13,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^$', TemplateView.as_view(template_name='user_accounts/index.html'), name="home"),
+    url(r'^register/(?P<backend>[^/]+)/$',
+        uac_view.register_by_access_token),
 
 
 )

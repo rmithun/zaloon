@@ -12,6 +12,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
+from social.apps.django_app.utils import psa
+from utils.generic_utils import *
+
 
 
 #application imports
@@ -28,5 +31,14 @@ def login_view(request):
 @login_required
 def logout_view(request):
   auth.logout(request)
-  # Redirect to a success page.
   return HttpResponseRedirect("/")
+
+@psa('social:complete')
+def register_by_access_token(request, backend):
+    token = request.body
+    user = request.backend.do_auth(token)
+    if user:
+        login(request, user)
+        return access_token_gen(user)
+    else:
+        return HttpResponse(status = 500)

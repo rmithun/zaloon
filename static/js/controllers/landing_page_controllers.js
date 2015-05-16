@@ -1,14 +1,15 @@
-accountsApp.controller('landingpagecontroller',function($scope, httpServices){
+accountsApp.controller('landingpagecontroller',function($scope, $window, httpServices){
 
-	$scope.fblogin = function()
+	$scope.fblogin = function(dummy)
 	{
-		httpServices.login_to_fb().then(function(data)
+		httpServices.login_to_fb(dummy).then(function(data)
 		{
-		  //get token and login	
 		  console.log(data)
 		},
 		{
 		   //cannot login to fb try again
 		});
 	}
+	$scope.getData
+
 });

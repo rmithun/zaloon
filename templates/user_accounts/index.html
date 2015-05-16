@@ -18,12 +18,18 @@
   </head>
   <body>
   	<div ng-controller = "landingpagecontroller">
-    	<button ng-click="fblogin()">Login With Facebook</button>
+  		<button ng-click="fblogin()">Login With Facebook</button>
     	<a href="/login/facebook/">Login</a>
-	</div>
+
+    	<div data-facebook='442685319234348'>
+		<div id="fb-root"></div>
+		 <a href='#' data-ng-click='fetch()'  class='btn btn-primary'>fetch</a> {{login_status}}
+  </div>
+		</div>
   <script src='{% static "js/app.js" %}'></script>
-  <script src='{% static "js/controllers/landing_page_controllers.js" %}'></script>
   <script src='{% static "js/services/httpservices.js" %}'></script>
+  <script src='{% static "js/controllers/landing_page_controllers.js" %}'></script>
+  <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
   <!-- Bootstrap Js -->
   <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
   </body>

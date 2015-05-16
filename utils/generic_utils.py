@@ -65,29 +65,33 @@ def access_token_gen(user):
 
 def social_auth_to_profile(backend, details, response, user=None, is_new=False, *args, **kwargs):
     try:
+        dob = None
+        sex = None
+        city_state = None
+        if response.has_key('birthday'):  
+                dob = datetime.strptime(response['birthday'],'%m/%d/%Y').date()
+        if response.has_key('gender'):
+                sex = response['gender']
+        if response.has_key('location') and len(response['location'])>0:
+                if response['location'].has_key('name'):
+                    city_state = response['location']['name']
         if is_new:
             if response.has_key('email'):
                 profile = UserProfile()
                 profile.user_acc_id = user.id
         else:
-            if response.has_key('birthday'):  
-                dob = datetime.strptime(response['birthday'],'%m/%d/%Y').date()
-            if response.has_key('gender'):
-                sex = response['gender']
-            if response.has_key('location') and len(response['location'])>0:
-                if response['location'].has_key('name'):
-                    city_state = response['location']['name']
             UserProfile.objects.filter(user_acc = user).update(dob = dob,  \
                 sex = sex, city_state = city_state,  \
                 service_updated = 'User details updation')
         if is_new:
             profile.service_updated = "User first login"
             profile.facebook_id = response['id']
+            profile.dob = dob
+            profile.city_state = city_state
+            profile.sex = sex
             profile.save()
-        #as different function
-        token = access_token_gen(user)
     except Exception ,e:
         print repr(e)
-        return HttpResponse(status = 500)
+        return None
     else:
-        return HttpResponse(token)
+        return user
