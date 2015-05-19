@@ -18,12 +18,9 @@
   </head>
   <body>
   	<div ng-controller = "landingpagecontroller">
-  		<button ng-click="fblogin()">Login With Facebook</button>
-    	<a href="/login/facebook/">Login</a>
-
-    	<div data-facebook='442685319234348'>
+  		<div data-facebook='442685319234348'>
 		<div id="fb-root"></div>
-		 <a href='#' data-ng-click='fetch()'  class='btn btn-primary'>fetch</a> {{login_status}}
+		 <a href='#' data-ng-click='fetch()'  class='btn btn-primary'>Login With Facebook</a>
   </div>
 		</div>
   <script src='{% static "js/app.js" %}'></script>

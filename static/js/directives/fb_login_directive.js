@@ -21,7 +21,7 @@ accountsApp.directive('facebook', function($http) {
           } else {
             console.log('FB.login cancelled');
           }
-          }, { scope: 'email,user_location,user_birthday,user_hometown' }
+          }, { scope: 'email,user_location,user_birthday' }
         );
       };
 
@@ -41,21 +41,6 @@ accountsApp.directive('facebook', function($http) {
           status     : true, // check login status
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML
-        });
-
-        // Additional init code here
-        FB.getLoginStatus(function(response) {
-          if (response.status === 'connected') {
-            // connected
-            scope.auth = response.authResponse;
-            scope.fblogin(response.authResponse.accessToken)
-          } else if (response.status === 'not_authorized') {
-            // not_authorized
-          } else {
-            // not_logged_in
-          }
-          scope.login_status = response.status;
-          scope.$apply();
         });
       }; // end of fbAsyncInit
     }

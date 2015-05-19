@@ -82,7 +82,8 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
         else:
             UserProfile.objects.filter(user_acc = user).update(dob = dob,  \
                 sex = sex, city_state = city_state,  \
-                service_updated = 'User details updation')
+                service_updated = 'User details updation', updated_date_time = \
+                datetime.now())
         if is_new:
             profile.service_updated = "User first login"
             profile.facebook_id = response['id']
