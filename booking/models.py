@@ -8,45 +8,55 @@ from django.db import models
 from django.utils import timezone
 
 #application imports
-#from user_accounts.models import UserProfile
+from user_accounts.models import UserProfile
 
 
-class ActivityType(models.Model):
+class SerivceType(models.Model):
 
-	"""type of activities available"""
-	activity_type_name = models.CharField(max_length = 25)
+	"""type of service types available"""
+	service_type_name = models.CharField(max_length = 25)
 	description = models.TextField()
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
-class Activity(models.Model):
+class Service(models.Model):
 
-	"""table holding all list of activities"""
+	"""table holding all list of services"""
 
-	activity_name = models.CharField(max_length = 25)
-	activity_type = models.ForeignKey(ActivityType, related_name = "type_of_activity")
+	service_name = models.CharField(max_length = 25)
+	service_type = models.ForeignKey(SerivceType, related_name = "type_of_service")
 	#is_dependent = models.BooleanField(default = 0)
 	min_duration = models.IntegerField() ##duration in mins
 	is_active = models.BooleanField(default = 1)
-	unit_price = models.IntegerField()
+	#unit_price = models.IntegerField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+class Purchase(models.Model):
+
+	"""table holding details of all the purchases made"""
+	customer = models.ForeignKey(UserProfile, related_name = "user_who_purchased")
+	purchase_amount = models.FloatField()
+	actual_amount = models.FloatField()
+	purchase_status = models.CharField(max_length = 30)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 class BookingDetails(models.Model):
 
 	"""table holding all booking related infos"""
-	#user = models.ForeignKey(UserProfile, related_name = "booked_by_user")
-	activity = models.ForeignKey(Activity, related_name = "activity_booked")
-	count_booked = models.IntegerField()
-	scheduled_at = models.DateTimeField()
+	user = models.ForeignKey(UserProfile, related_name = "booked_by_user")
+	booked_date = models.DateTimeField()
+	appointment_date = models.DateField()
+	apoointment_time = models.FloatField() # ex 13.15 14.30
 	booking_code = models.CharField(max_length = 25)
-	expires_on = models.DateTimeField()
-	#studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
-	#promo_code = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
-	booking_status = models.BooleanField(default = 1) 
+	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
+	#promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
+	booking_status = models.CharField(max_length = 30)
 	reminder_sent  = models.BooleanField(default = 0)
-	user_arrived = models.BooleanField(default = 0)
+	booking_type = models.BooleanField(default = 0) #0- new 1-postponed
+	purchase = models.ForeignKey(Purchase, related_name = "purchase_id")
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -62,3 +72,21 @@ class BookedMessageSend(models.Model):
 	mode = models.CharField(max_length = 25) ## mobile and email
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+class BookingServices(models.Model):
+
+	"""table for services booked for a booking id"""
+	booking = models.ForeignKey(BookingDetails, related_name = "service_booked_with")
+	service = models.ForeignKey(Service, related_name = "service_booked")
+	status = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+class Payments(models.Model):
+
+	"""table holding all payment related infos"""
+	amount_paid = models.FloatField()
+	initiated_time = models.DateTimeField(default = datetime.now())
+	confirmation_time = models.DateTimeField(default = datetime.now())
+	payment_status = models.CharField(max_length = 30)
+	purchase = models.ForeignKey(Purchase, related_name = "purchase_id_payment")

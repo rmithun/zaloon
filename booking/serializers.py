@@ -9,21 +9,25 @@ from models import *
 from studios.serializers import SudioProfileSerizlier
 from user_accounts.serializers import UserNameOnlySerializer
 
-class ActivityTypeSerializer(serializers.ModelSerializer):
 
-	"""list of available activity type serializer"""
+
+class ServiceTypeSerializer(serializers.ModelSerializer):
+
+	"""list of available service type serializer"""
 	class Meta:
-		model = Activity
-		fields = ('id', 'activity_type_name', 'description', 'is_active')
+		model = SerivceType
+		fields = ('id', 'service_type_name', 'description', 'is_active')
 
-class ActivitySerializer(serializers.ModelSerializer):
+class ServiceSerializer(serializers.ModelSerializer):
 
 	"""list of available activities serializer"""
-	activity_type = ActivityTypeSerializer()
+	service_type = ServiceTypeSerializer()
 	class Meta:
-		model = Activity
-		fields = ('id', 'activity_type', 'activity_name', 'min_duration', \
-		'is_active', 'unit_price')
+		model = Service
+		fields = ('id', 'service_type', 'service_name', 'min_duration', \
+		'is_active')
+
+
 
 class BookingDetailsSerializer(serializers.ModelSerializer):
 
@@ -32,9 +36,20 @@ class BookingDetailsSerializer(serializers.ModelSerializer):
 	user = UserNameOnlySerializer()
 	class Meta:
 		model = BookingDetails
-		fields = ('user', 'activity', 'count_booked', 'scheduled_at',  \
-			'booking_code', 'expires_on', 'studio', 'promo_code',  \
-			'booking_status', 'reminder_sent')
+		fields = ('user', 'booked_date', 'appointment_date',  \
+			'booking_code', 'apoointment_time', 'studio', 'booking_status',  \
+			'booking_type', 'reminder_sent','id')
+
+
+class ServiceBookedSerializer(serializers.ModelSerializer):
+
+	"""serializer for getting the services booked"""
+	booking = BookingDetailsSerializer()
+	service = ServiceSerializer()
+	class Meta:
+		model = BookingServices
+		fields = ('booking', 'service', 'status')
+
 
 class MessageSentSerializer(serializers.ModelSerializer):
 

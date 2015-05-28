@@ -10,17 +10,30 @@ from booking.serializers import  ActivitySerializer, ActivityTypeSerializer,  \
 BookingDetailsSerializer
 
 
+class StudioGroupSerializer(serializers.ModelSerializer):
+
+	"""serializers to get studio group details"""
+	class Meta:
+		model = StudioGroup
+		fields = ('group_name','studio_type', 'address', 'city', 'country')
+
 
 class SudioProfileSerializer(serializers.ModelSerializer):
 
 	"""serializer to get  studio details"""
+	studio_group = StudioGroupSerializer()
 	class Meta:
 		model = StudioProfile
-		fields = ('id', 'studio', 'name', 'address_1', 'address_2',  \
+		fields = ('id', 'studio_group', 'name', 'address_1', 'address_2',  \
 			'city', 'country', 'area', 'state', 'landline_no_1', 'landline_no_2', \
-			'mobile_no_1', 'mobile_no_2', 'contact_person_1', 'contact_person_2',  \
+			'mobile_no_1', 'mobile_no_2', 'in_charge_person', 'contact_person',  \
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till' )
+
+class StudioServicesSerializer(serializers.ModelSerializer):
+
+	"""studio and its services details"""
+	studio_profile = StudioProfileSerializer()
 
 class StudioActivityTypeSerializer(serializers.ModelSerializer):
 

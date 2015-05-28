@@ -16,10 +16,42 @@ from booking.models import ActivityType,Activity, BookingDetails
 #	email = 
 
 
+class StudioType(models.Model):
+
+	"""type of studios"""
+	type_desc = models.CharField(max_length = 50)
+	is_active = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class StudioGroup(models.Model):
+
+	"""table for holding studio groups"""
+	group_name = models.CharField(max_length = 50)
+	studio_type = models.ForeignKey(StudioType, related_name = "studio_group_type")
+	address = models.TextField()
+	city = models.CharField(max_length = 40)
+	country = models.CharField(max_length = 40)
+	landline_no_1 = models.CharField(max_length = 40, null = True)
+	landline_no_2 = models.CharField(max_length = 40, null = True)
+	mobile_no_1 = models.CharField(max_length = 40)
+	mobile_no_2 = models.CharField(max_length = 40, null = True)
+	contact_person_1 = models.CharField(max_length = 75)
+	contact_person_2 = models.CharField(max_length = 75, null = True)
+	primary_email  = models.CharField(max_length = 50)
+	secondary_email = models.CharField(max_length = 50)
+	total_branches = models.PositiveIntegerField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+	
+
+
 class StudioProfile(models.Model):
 
 	"""studio basic details"""
 	#studio = models.ForeignKey(StudioLogin, related_name = "studio_detail")
+	studio_group = models.ForeignKey(StudioGroup, related_name = "studio_of_group")
 	name = models.CharField(max_length = 120)
 	address_1 = models.CharField(max_length = 200)
 	address_2 = models.CharField(max_length = 200)
@@ -31,42 +63,43 @@ class StudioProfile(models.Model):
 	landline_no_2 = models.CharField(max_length = 40, null = True)
 	mobile_no_1 = models.CharField(max_length = 40)
 	mobile_no_2 = models.CharField(max_length = 40, null = True)
-	contact_person_1 = models.CharField(max_length = 75)
-	contact_person_2 = models.CharField(max_length = 75, null = True)
+	in_charge_person = models.CharField(max_length = 75)
+	contact_person  = models.CharField(max_length = 75, null = True)
 	opening_at = models.PositiveSmallIntegerField()
 	closing_at = models.PositiveSmallIntegerField()
 	is_active = models.BooleanField(default  = 1)
-	contract_start_date = models.DateTimeField()
-	contract_end_date = models.DateTimeField()
-	last_login = models.DateTimeField(default = datetime.now())
-	first_login = models.DateTimeField(default = datetime.now())
+	#contract_start_date = models.DateTimeField()
+	#contract_end_date = models.DateTimeField()
 	is_closed = models.BooleanField(default = 1)
 	daily_studio_closed_from = models.PositiveSmallIntegerField()
 	daily_studio_closed_till = models.PositiveSmallIntegerField()
-	#studio_close_timing = models.PositiveSmallIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
-class StudioActivityTypes(models.Model):
-
-	"""list of available activity type in studio"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_detail_for_type")
-	activity_type = models.ForeignKey(ActivityType, related_name = "type_of_activity_in_studio")
-	is_active = models.BooleanField(default = 1)
-	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
-
-
-class StudioActivities(models.Model):
+class StudioServices(models.Model):
 
 	"""list of available activities in studio"""
 
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_detail_for_activity")
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_activity")
 	activity = models.ForeignKey(Activity, related_name = "activity_in_studio")
 	is_active = models.BooleanField(default = 1)
+	mins_takes = models.PositiveIntegerField()
+	price = models.FloatField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class StudioStaffCounts(models.Model):
+
+	"""table holding studio staff count on normal day and holiday day"""
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_staff_count")
+	normal_day = models.PositiveIntegerField()
+	holiday = models.PositiveIntegerField()
+	festive_season = models.PositiveIntegerField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+	
 
 class PaymentModes(models.Model):
 
@@ -126,19 +159,6 @@ class StudioPasswordReset(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
-class StudioBlockedDetails(models.Model):
-
-	"""all booking details for studio"""
-
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_booked_details")
-	activity = models.ForeignKey(Activity, related_name = "activity_blocked_in_studio")
-	booking = models.ForeignKey(BookingDetails, related_name = "booking_id_for_studio")
-	blocked_from = models.DateTimeField()
-	blocked_till = models.DateTimeField()
-	is_active = models.BooleanField(default = 1)
-	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
-
 
 class CloseDates(models.Model):
 
@@ -170,17 +190,6 @@ class StudioClosedFromTill(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
-class StudioDailyInvoice(models.Model):
-
-	"""daily booked details for a studio"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_daily_invoice")
-	booked_date = models.DateTimeField()
-	activity_booked = models.ForeignKey(Activity, related_name = "daily_invoice_booked_activity")
-	count_booked = models.PositiveIntegerField()
-	booking = models.ForeignKey(BookingDetails, related_name = "booking_for_daily_invoice")
-	is_filled = models.NullBooleanField()
-	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
 
