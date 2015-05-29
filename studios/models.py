@@ -1,19 +1,91 @@
 #standard library imports
 from datetime import datetime
+from django.utils import timezone
+
 
 #third party imports
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 #application imports
 #from user_accounts.models import UserProfile
-from booking.models import ActivityType,Activity, BookingDetails	
 
-#class StudioLogin(models.Model):
 
-#	"""studio login details"""
-#	email = 
+
+class SerivceType(models.Model):
+
+	"""type of service types available"""
+	service_type_name = models.CharField(max_length = 25)
+	description = models.TextField()
+	is_active = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+class Service(models.Model):
+
+	"""table holding all list of services"""
+
+	service_name = models.CharField(max_length = 25)
+	service_type = models.ForeignKey(SerivceType, related_name = "type_of_service")
+	#is_dependent = models.BooleanField(default = 0)
+	min_duration = models.IntegerField() ##duration in mins
+	is_active = models.BooleanField(default = 1)
+	#unit_price = models.IntegerField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+
+class StudioManager(BaseUserManager):
+	    #method which created studios in studios.studio login table
+	    def create_user(self, email, password=None):
+	        if not email:
+	            raise ValueError('Users must have an email address')
+	 
+	        user = self.model(
+            email=StudioManager.normalize_email(email),
+	               )
+	 
+	        user.set_password(password)
+	        user.save(using=self._db)
+	        return user
+	
+	    #method which creates super user in db
+	    def create_superuser(self, email, password):
+	        user = self.create_user(email,
+	            password=password,
+	            
+	        )
+	        user.is_admin = True
+	        user.save(using=self._db)
+	        return user
+	
+# Create your models here.
+class Studio(AbstractBaseUser):
+    
+    #custom user model which has email as primary key
+	email = models.EmailField(max_length=254, unique=True, db_index=True)
+	is_active = models.BooleanField(default=False)
+	last_password_reset_datetime = models.DateTimeField(null = True)
+	last_signout_datetime = models.DateTimeField(default = datetime.now(), null = True)
+	    
+	objects = StudioManager()
+	 
+	USERNAME_FIELD = 'email'
+	    
+	 
+	def __unicode__(self):
+	    return self.email
+	 
+	def has_perm(self, perm, obj=None):
+	    # Handle whether the user has a specific permission?"
+	    return True
+	 
+	def has_module_perms(self, app_label):
+	    # Handle whether the user has permissions to view the app `app_label`?"
+	    return True
 
 
 class StudioType(models.Model):
@@ -82,7 +154,7 @@ class StudioServices(models.Model):
 	"""list of available activities in studio"""
 
 	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_activity")
-	activity = models.ForeignKey(Activity, related_name = "activity_in_studio")
+	activity = models.ForeignKey(Service, related_name = "service_in_studio")
 	is_active = models.BooleanField(default = 1)
 	mins_takes = models.PositiveIntegerField()
 	price = models.FloatField()

@@ -11,24 +11,6 @@ from user_accounts.serializers import UserNameOnlySerializer
 
 
 
-class ServiceTypeSerializer(serializers.ModelSerializer):
-
-	"""list of available service type serializer"""
-	class Meta:
-		model = SerivceType
-		fields = ('id', 'service_type_name', 'description', 'is_active')
-
-class ServiceSerializer(serializers.ModelSerializer):
-
-	"""list of available activities serializer"""
-	service_type = ServiceTypeSerializer()
-	class Meta:
-		model = Service
-		fields = ('id', 'service_type', 'service_name', 'min_duration', \
-		'is_active')
-
-
-
 class BookingDetailsSerializer(serializers.ModelSerializer):
 
 	"""serializer for booked details"""

@@ -16,7 +16,7 @@ accountsApp.directive('facebook', function($http) {
         FB.login(function(response) {
           if (response.authResponse) {
             console.log(response)
-            $scope.fblogin(response.authResponse.accessToken)
+            $scope.fbLogin(response.authResponse.accessToken)
             console.log('FB.login connected');
           } else {
             console.log('FB.login cancelled');

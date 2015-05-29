@@ -14,10 +14,14 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 from social.apps.django_app.utils import psa
 from utils.generic_utils import *
-
-
+from serializers import *
+#from permissions import IsUserThenReadPatch, ReadOnlyAuthentication
+from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 #application imports
+from serializers import *
 
 @login_required
 def home(request):
@@ -35,10 +39,27 @@ def logout_view(request):
 
 @psa('social:complete')
 def register_by_access_token(request, backend):
-    token = request.body
-    user = request.backend.do_auth(token)
-    if user:
-        login(request, user)
-        return access_token_gen(user)
-    else:
+    try:
+        token = request.body
+        user = request.backend.do_auth(token)
+        if user:
+            login(request, user)
+        else:
+            return HttpResponse(status = 500)
+    except Exception,e:
+        print repr(e)
         return HttpResponse(status = 500)
+    else:
+        return access_token_gen(user)
+
+
+class UserMixin(object):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserProfileSerializer()
+    def get_queryset(self):
+        print self.request
+        return UserProfile.objects.all()
+
+
+class GetUserDetail(UserMixin, ListAPIView):
+    pass

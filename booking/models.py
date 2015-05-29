@@ -9,29 +9,10 @@ from django.utils import timezone
 
 #application imports
 from user_accounts.models import UserProfile
+from studios.models import StudioProfile, Service
 
 
-class SerivceType(models.Model):
 
-	"""type of service types available"""
-	service_type_name = models.CharField(max_length = 25)
-	description = models.TextField()
-	is_active = models.BooleanField(default = 1)
-	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
-
-class Service(models.Model):
-
-	"""table holding all list of services"""
-
-	service_name = models.CharField(max_length = 25)
-	service_type = models.ForeignKey(SerivceType, related_name = "type_of_service")
-	#is_dependent = models.BooleanField(default = 0)
-	min_duration = models.IntegerField() ##duration in mins
-	is_active = models.BooleanField(default = 1)
-	#unit_price = models.IntegerField()
-	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
 
 class Purchase(models.Model):
 

@@ -1,19 +1,27 @@
-accountsApp.controller('landingpagecontroller',function($scope, $window, httpServices){
+accountsApp.controller('landingpagecontroller',function($scope, $window, httpServices,sessionService){
 
-	$scope.fblogin = function(dummy)
+	$scope.fbLogin = function(dummy)
 	{
-		httpServices.login_to_fb(dummy).then(function(data)
+		httpServices.loginUsingFB(dummy).then(function(data)
 		{
 		  console.log(data)
-		  if(data['access_token'].data['access_token'] != null)
+		  if(data)
 		  {
+		  	sessionService.setAuthToken(data)
+		  	httpServices.getUsrDetails().then(function(data)
+		  	{
+		  		console.log(data)
+		  	}, function()
+		  	{
+		  		console.log("Error getting user data")
+		  	})
 		  	$window.location.href = "/account/home/"
 		  }
-		},
+		},function()
 		{
 		   //cannot login to fb try again
+		   console.log("Cannot login to FB")
 		});
 	}
-	$scope.getData
 
 });

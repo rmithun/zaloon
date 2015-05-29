@@ -24,7 +24,6 @@ def get_token_json(access_token):
         'access_token': access_token.token,
         'expires_in': oauth2_settings.ACCESS_TOKEN_EXPIRE_SECONDS,
         'token_type': 'Bearer',
-        'refresh_token': access_token.refresh_token.token,
         'scope': access_token.scope
     }
     return JsonResponse(token)	

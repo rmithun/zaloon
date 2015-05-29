@@ -6,21 +6,22 @@ from rest_framework import serializers
 
 #application imports
 from models import *
-
-class UserProfileSerializer(serializers.ModelSerializer):
-	
-	""" UserProfile table serializer."""
-	
-	class Meta:
-		model = UserProfile
-		fields = ('id', 'date_of_birth', 'sex', \
-			'country', 'city', 'area','facebook_id', 'plan', 'mobile',  \
-			'relationship', 'last_login','user_acc')
+from django.contrib.auth.models import User
 
 class UserNameOnlySerializer(serializers.ModelSerializer):
 
 	"""serializer to get only name and id of the user"""
 	class Meta:
-		model = UserProfile
+		model = User
 		fields = ('id','first_name', 'last_name')
 
+
+class UserProfileSerializer(serializers.ModelSerializer):
+	
+	""" UserProfile table serializer."""
+	user_acc = UserNameOnlySerializer()
+	class Meta:
+		model = UserProfile
+		fields = ('id', 'dob', 'sex', \
+			'city_state', 'area', 'mobile',  \
+			'user_acc')
