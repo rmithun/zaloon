@@ -14,7 +14,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 
 
-class SerivceType(models.Model):
+class ServiceType(models.Model):
 
 	"""type of service types available"""
 	service_type_name = models.CharField(max_length = 25)
@@ -28,7 +28,7 @@ class Service(models.Model):
 	"""table holding all list of services"""
 
 	service_name = models.CharField(max_length = 25)
-	service_type = models.ForeignKey(SerivceType, related_name = "type_of_service")
+	service_type = models.ForeignKey(ServiceType, related_name = "type_of_service")
 	#is_dependent = models.BooleanField(default = 0)
 	min_duration = models.IntegerField() ##duration in mins
 	is_active = models.BooleanField(default = 1)
@@ -154,7 +154,7 @@ class StudioServices(models.Model):
 	"""list of available activities in studio"""
 
 	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_activity")
-	activity = models.ForeignKey(Service, related_name = "service_in_studio")
+	service = models.ForeignKey(Service, related_name = "service_in_studio")
 	is_active = models.BooleanField(default = 1)
 	mins_takes = models.PositiveIntegerField()
 	price = models.FloatField()

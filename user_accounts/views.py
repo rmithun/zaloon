@@ -14,7 +14,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 from social.apps.django_app.utils import psa
 from utils.generic_utils import *
-from serializers import *
 #from permissions import IsUserThenReadPatch, ReadOnlyAuthentication
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated

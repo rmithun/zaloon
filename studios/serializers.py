@@ -6,9 +6,23 @@ from rest_framework import serializers
 
 #application imports
 from models import *
-from booking.serializers import  ActivitySerializer, ActivityTypeSerializer,  \
-BookingDetailsSerializer
 
+
+class ServiceTypeSerializer(serializers.ModelSerializer):
+
+	"""list of available service type serializer"""
+	class Meta:
+		model = ServiceType
+		fields = ('id', 'service_type_name', 'description', 'is_active')
+
+class ServiceSerializer(serializers.ModelSerializer):
+
+	"""list of available activities serializer"""
+	service_type = ServiceTypeSerializer()
+	class Meta:
+		model = Service
+		fields = ('id', 'service_type', 'service_name', 'min_duration', \
+		'is_active')
 
 class StudioGroupSerializer(serializers.ModelSerializer):
 
@@ -18,7 +32,7 @@ class StudioGroupSerializer(serializers.ModelSerializer):
 		fields = ('group_name','studio_type', 'address', 'city', 'country')
 
 
-class SudioProfileSerializer(serializers.ModelSerializer):
+class StudioProfileSerializer(serializers.ModelSerializer):
 
 	"""serializer to get  studio details"""
 	studio_group = StudioGroupSerializer()
@@ -34,25 +48,20 @@ class StudioServicesSerializer(serializers.ModelSerializer):
 
 	"""studio and its services details"""
 	studio_profile = StudioProfileSerializer()
-
-class StudioActivityTypeSerializer(serializers.ModelSerializer):
-
-	"""serializer to get studo and available activities 
-	in the studio"""
-	studio = StudioProfileSerializer()
-	activity_type = ActivityTypeSerializer()
+	service = ServiceSerializer()
 	class Meta:
-		model = StudioActivityTypes
-		fields = ('id', 'studio','activity_type','is_active')
+		model = StudioServices
+		fields = ('studio_profile', 'service')
+
 
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 
 	"""activities available in the studio"""
 	studio = StudioProfileSerializer()
-	activity  = ActivitySerializer()
+	activity  = ServiceSerializer()
 	class Meta:
-		model = StudioActivities
+		model = StudioServices
 		fields = ('id', 'studio', 'activity', 'is_active')
 
 
@@ -77,11 +86,11 @@ class StudioAccountDetailsSerializer(serializers.ModelSerializer):
 
 class StudioPaymentSerializer(serializers.ModelSerializer):
 	
-	"""serializer to get list of payments"""
+    """serializer to get list of payments"""
     studio = StudioProfileSerializer()
-	class Meta:
-		model = StudioPayment
-		fields = ('id', 'studio', 'mode_of_payment', 'amount_paid', 'paid_by', \
+    class Meta:
+        model = StudioPayment
+        fields = ('id', 'studio', 'mode_of_payment', 'amount_paid', 'paid_by', \
 			'paid_date')
 
 class StudioInvoicesSerializer(serializers.ModelSerializer):
@@ -103,13 +112,7 @@ class PasswordResetSerializer(serializers.ModelSerializer):
 		fields = ('studio', 'password_changed_date')
 
 
-class StudioBlockedDetailsSerializer(serializers.ModelSerializer):
 
-	"""studio blocked details"""
-	booking = BookingDetailsSerializer()
-	class Meta:
-		model = StudioBlockedDetails
-		fields = ('id', 'studio', 'booking', 'blocked_from', 'blocked_till')
 
 class CloseDatesSerializer(serializers.ModelSerializer):
 
@@ -135,18 +138,3 @@ class StudioClosedFromTillSerializer(serializers.ModelSerializer):
 			'is_active')
 
 
-class ServiceTypeSerializer(serializers.ModelSerializer):
-
-	"""list of available service type serializer"""
-	class Meta:
-		model = SerivceType
-		fields = ('id', 'service_type_name', 'description', 'is_active')
-
-class ServiceSerializer(serializers.ModelSerializer):
-
-	"""list of available activities serializer"""
-	service_type = ServiceTypeSerializer()
-	class Meta:
-		model = Service
-		fields = ('id', 'service_type', 'service_name', 'min_duration', \
-		'is_active')

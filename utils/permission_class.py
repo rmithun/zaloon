@@ -32,6 +32,20 @@ class ReadOnlyAuthentication(permissions.BasePermission):
         return False
 
 
+class ReadWithoutAuthentication(permissions.BasePermission):
+
+    """
+    read only permissions for reading data for populating forms
+    """
+
+    def has_permission(self, request, view):
+
+        allowed_methods = ['GET',]
+        ## only read method allowed for authenticated users
+        if (request.method in allowed_methods):
+            return True
+        return False
+
 class IsUserThenPut(permissions.BasePermission):
 
     """
