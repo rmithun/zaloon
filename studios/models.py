@@ -10,7 +10,8 @@ from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 #application imports
-#from user_accounts.models import UserProfile
+from user_accounts.models import UserProfile
+#from booking.models import BookingDetails
 
 
 
@@ -143,8 +144,11 @@ class StudioProfile(models.Model):
 	#contract_start_date = models.DateTimeField()
 	#contract_end_date = models.DateTimeField()
 	is_closed = models.BooleanField(default = 1)
+	serve_type = models.CharField(max_length = 10)# men women unisex
 	daily_studio_closed_from = models.PositiveSmallIntegerField()
 	daily_studio_closed_till = models.PositiveSmallIntegerField()
+	thumbnail= models.ImageField(upload_to = 'img_gallery/%d'%seld.id)
+	is_ac = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -263,7 +267,33 @@ class StudioClosedFromTill(models.Model):
 
 
 
+class StudioReviews(models.Model):
 
+	"""reviews for studio"""
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_review")
+	user = models.ForeignKey(UserProfile, related_name = "reviewed_by_user")
+	#booking = models.ForeignKey(BookingDetails, related_name = "reviewed_on_booking")
+	service = models.ForeignKey(Service, related_name = "reviewed_the_service", null = True)
+	rating = models.PositiveIntegerField()
+	comments = models.TextField()
+	is_active = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class StudioPicture(models.Model):
+
+    """studios and its pictures"""
+    studio_profile  = models.ForeignKey(StudioProfile, related_name = "pic_of_studio")
+    picture = models.ImageField(upload_to = 'img_gallery', null = True, blank = True)
+    service_updated = models.CharField(max_length = 25)
+    updated_date_time = models.DateTimeField(default = datetime.now())
+
+    def save(self):
+        for field in self._meta.fields:
+            if field.name == 'picture':
+                field.upload_to = 'img_gallery/%d' % self.studio_profile
+        super(StudioPicture, self).save()
 
 
 
