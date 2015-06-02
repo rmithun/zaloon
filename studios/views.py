@@ -19,7 +19,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 #application imports
-from serializers import ServiceSerializer, StudioServicesSerializer
+from serializers import ServiceSerializer, StudioServicesSerializer,  \
+StudioProfileSerializer
 from models import *
 from utils.permission_class import ReadWithoutAuthentication
 
@@ -33,84 +34,37 @@ class ServiceDetails(ServiceMixin, ListAPIView):
 	pass
 
 
-class SearchResults(ListAPIView):
-    permission_classes = (ReadWithoutAuthentication,)
-    serializer_class = StudioServicesSerializer
-    def get_queryset(self):
-	    try:
-			response = None
-			#data = request.GET['data']
-			#location = data['location']
-			#
-			#service = data['service']
-			service = 'hair cut'
-			response = StudioServices.objects.filter(service_id = 1, is_active = True)
-	    except Exception,err:
-			print repr(err)
-			return None
-	    else:
-			return response
+def get_studios(location,services):
+
+    """function which filters the list of studios 
+    based on location and services"""
+    studios = StudioProfile.objects.filter(city__contains = location).values('id')
+    filtered_studios =  StudioServices.objects.filter(service_id__in =   \
+	services, studio_profile_id__in = studios).values('studio_profile').distinct()
+    ##call for booking logic
+    return filtered_studios
 
 
-class StudioBookingSlots(APIView):
+class StudioProfileMixin(object):
 	permission_classes = (ReadWithoutAuthentication,)
-	def get(self, request, *args, **kwargs):
-		try:
-			response = None
-			studio = self.request.GET['studio']
-			from_time = self.request.GET['from_time']
-			to_time = self.request.GET['to_time']
-			date = self.request.GET['date']
-			services = self.request.GET['services']
-			#booking logic function
-			response = bookingLogic(studio,from_time,to_time,date,services)
-		except Exception,e:
-			print repr(e)
-			#add log
-			return Response(response,status.HTTP_500_INTERNAL_SERVER_ERROR)
-		else:
-			return Response(response, status.HTTP_200_OK)
-
-
-class StudioPictures(ListAPIView):
-	permission_classes = (ReadWithoutAuthentication,)
-	serializer_class = StudioPicturesSerializer
+	serializer_class = StudioProfileSerializer
+	model = StudioProfile
 	def get_queryset(self):
-		try:
-			response = None
-			studio = self.request.GET['studio']
-			response = StudioPicture.objects.filter(studio_profile_id = studio)
-		except Exception,e:
-			print repr(e)
-			return response
-		else:
-			return response
+		#get studio id having location get ids related to it
+		#get studio id having services
+		#location = self.request.DATA['location']
+		#service = self.request.DATA['services']
+		location = 'karaikudi'
+		services = [1,2]
+		studios_ = get_studios(location,services)
+		queryset = self.model.objects.filter(id__in = studios_)
+		return queryset
+		
 
-class StudioReviews(ListAPIView):
-	permission_classes = (ReadWithoutAuthentication,)
-	serializer_class = StudioReviewSerializer
-	def get_queryset(self):
-		try:
-			response = None
-			studio = self.request.GET['studio']
-			response = StudioReviews.objects.filter(studio_profile_id = studio, is_active = 1)
-		except Exception,e:
-			print repr(e)
-			return response
-		else:
-			return response
+class StudioProfileDetail(StudioProfileMixin, ListAPIView):
+    pass	
 
-
-class StudioServices(ListAPIView):
+class StudioServicesDetail(ListAPIView):
 	permission_classes = (ReadWithoutAuthentication,)
 	serializer_class = StudioServicesSerializer
-	def get_queryset(self):
-		try:
-			response = None
-			studio = self.request.GET['studio']
-			response = StudioServices.objects.filter(studio_profile_id = studio, is_active = 1)
-		except Exception,e:
-			print repr(e)
-			return response
-		else:
-			return response
+	queryset = StudioServices.objects.filter(studio_profile_id = 1)

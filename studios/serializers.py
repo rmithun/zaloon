@@ -31,19 +31,6 @@ class StudioGroupSerializer(serializers.ModelSerializer):
 		model = StudioGroup
 		fields = ('group_name','studio_type', 'address', 'city', 'country')
 
-
-class StudioProfileSerializer(serializers.ModelSerializer):
-
-	"""serializer to get  studio details"""
-	studio_group = StudioGroupSerializer()
-	class Meta:
-		model = StudioProfile
-		fields = ('id', 'studio_group', 'name', 'address_1', 'address_2',  \
-			'city', 'country', 'area', 'state', 'landline_no_1', 'landline_no_2', \
-			'mobile_no_1', 'mobile_no_2', 'in_charge_person', 'contact_person',  \
-			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
-			'daily_studio_closed_from', 'daily_studio_closed_till' )
-
 class StudioServicesSerializer(serializers.ModelSerializer):
 
 	"""studio and its services details"""
@@ -51,9 +38,49 @@ class StudioServicesSerializer(serializers.ModelSerializer):
 	service = ServiceSerializer()
 	class Meta:
 		model = StudioServices
-		fields = ('studio_profile', 'service','price','is_active','mins_takes')
+		fields = ('service','price','is_active','mins_takes')
 
+class StudioPictureSerializer(serializers.ModelSerializer):
 
+	class Meta:
+		model = StudioPicture
+		fields = ('picture',)
+
+class StudioReviewSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = StudioReviews
+		fields = ('user','service','rating','comments','is_active')
+
+class AmenitiesSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Amenities
+		fields = ('amenity_name', 'is_active')
+
+class StudioAmenitiesSerializer(serializers.ModelSerializer):
+
+	amenity = AmenitiesSerializer()
+	class Meta:
+		model = StudioAmenities
+		fields = ('studio_profile', 'amenity','is_active')
+
+class StudioProfileSerializer(serializers.ModelSerializer):
+
+	"""serializer to get  studio details"""
+	studio_group = StudioGroupSerializer()
+	studio_detail_for_activity = StudioServicesSerializer(many = True)
+	studio_review = StudioReviewSerializer(many = True)
+	pic_of_studio = StudioPictureSerializer(many = True)
+	studio_amenities = StudioAmenitiesSerializer(many = True)
+	class Meta:
+		model = StudioProfile
+		fields = ('id', 'studio_group', 'name', 'address_1', 'address_2',  \
+			'city', 'country', 'area', 'state', 'landline_no_1', 'landline_no_2', \
+			'mobile_no_1', 'mobile_no_2', 'in_charge_person', 'contact_person',  \
+			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
+			'daily_studio_closed_from', 'daily_studio_closed_till',   \
+			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \
+			'studio_amenities')
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 
@@ -64,14 +91,12 @@ class StudioActivitiesSerializer(serializers.ModelSerializer):
 		model = StudioServices
 		fields = ('id', 'studio', 'activity', 'is_active')
 
-
 class PaymentModeSerializer(serializers.ModelSerializer):
 
 	"""serializer to get list of available payment modes"""
 	class Meta:
 		model = PaymentModes
 		fields = ('id', 'mode', 'description', 'is_active')
-
 
 class StudioAccountDetailsSerializer(serializers.ModelSerializer):
 
@@ -102,7 +127,6 @@ class StudioInvoicesSerializer(serializers.ModelSerializer):
 		fields = ('id', 'studio', 'amount_to_be_paid', 'last_payment_amount', \
 			'last_payment_date', 'payment_requested')
 
-
 class PasswordResetSerializer(serializers.ModelSerializer):
 
 	"""get list of password resets"""
@@ -110,9 +134,6 @@ class PasswordResetSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = StudioPasswordReset
 		fields = ('studio', 'password_changed_date')
-
-
-
 
 class CloseDatesSerializer(serializers.ModelSerializer):
 
@@ -127,7 +148,6 @@ class StudioClosedDetailsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = StudioClosedDetails
 		fields = ('id', 'closed_on', 'studio', 'is_active')
-
 
 class StudioClosedFromTillSerializer(serializers.ModelSerializer):
 

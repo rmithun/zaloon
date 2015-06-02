@@ -147,8 +147,29 @@ class StudioProfile(models.Model):
 	serve_type = models.CharField(max_length = 10)# men women unisex
 	daily_studio_closed_from = models.PositiveSmallIntegerField()
 	daily_studio_closed_till = models.PositiveSmallIntegerField()
-	thumbnail= models.ImageField(upload_to = 'img_gallery/%d'%seld.id)
+	thumbnail= models.ImageField(upload_to = 'img_gallery')
 	is_ac = models.BooleanField(default = 0)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+	"""def save(self):
+		for field in self._meta.fields:
+			if field.name == 'thumbnail':
+			   field.upload_to = 'img_gallery/%d' % self.id
+        super(StudioProfile, self).save()"""
+
+class Amenities(models.Model):
+	"""list of all amenities"""
+	amenity_name= models.CharField(max_length = 30)
+	is_active = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+class StudioAmenities(models.Model):
+	"""list of available amenities in studio"""
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_amenities")
+	amenity = models.ForeignKey(Amenities, related_name = "amenity_available")
+	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -292,7 +313,7 @@ class StudioPicture(models.Model):
     def save(self):
         for field in self._meta.fields:
             if field.name == 'picture':
-                field.upload_to = 'img_gallery/%d' % self.studio_profile
+                field.upload_to = 'img_gallery/%d' % self.studio_profile_id
         super(StudioPicture, self).save()
 
 
