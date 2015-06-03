@@ -18,6 +18,7 @@ from utils.generic_utils import *
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
 
 #application imports
 from serializers import *
@@ -53,7 +54,8 @@ def register_by_access_token(request, backend):
 
 
 class UserMixin(object):
-    permission_classes = (IsAuthenticated,)
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = (TokenHasScope,)
     serializer_class = UserProfileSerializer()
     def get_queryset(self):
         print self.request
