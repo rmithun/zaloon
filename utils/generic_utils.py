@@ -22,7 +22,7 @@ def get_token_json(access_token):
     """
     token = {
         'access_token': access_token.token,
-        'expires_in': oauth2_settings.ACCESS_TOKEN_EXPIRE_SECONDS,
+        ' ': oauth2_settings.ACCESS_TOKEN_EXPIRE_SECONDS,
         'token_type': 'Bearer',
         'scope': access_token.scope
     }

@@ -22,23 +22,39 @@ accountsApp.factory('httpServices', function($http, $q, $cookies, sessionService
 });
 
 
-accountsApp.factory('sessionService', function($q)
+accountsApp.factory('sessionService', function($q,$cookies)
 {
 	var sessionData = {}
-	var auth_token = ''
 	sessionData.setAuthToken = function(token)
 	{
-		auth_token =  token['access_token'].data['access_token']
+		$cookies.token = token['access_token'].data['access_token'];
+		expiretime = new Date()
+		$cookies.expiretime = expiretime.setMinutes(token['access_token'].data['expires_in']);
 
 	}
 	sessionData.getAccessToken = function()
 	{
+		auth_token = $cookies.token;
+		console.log(auth_token)
 		return auth_token
 	}
 
 	sessionData.isLogged = function()
 	{
-		if(auth_token != null){return true;}
+		//check has token
+		//check if token no expired
+		//if expired get new token using refresh token
+		//on logout clear cookies
+		console.log($cookies.token)
+		if($cookies.token != null)
+			{
+				date_ = new Date()
+				if($cookies.expiretime >  date_.getTime())
+				{
+					//make refresh token call
+				}
+				return true;
+			}
 		else{return false;}
 	}
 	return sessionData

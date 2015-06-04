@@ -1,7 +1,5 @@
 accountsApp.controller('landingpagecontroller',function($scope, $window, httpServices,sessionService){
-
-
-$scope.is_logged = null;
+$scope.is_logged = sessionService.isLogged()
 	$scope.fbLogin = function(dummy)
 	{
 
@@ -10,11 +8,11 @@ $scope.is_logged = null;
 		  console.log(data)
 		  if(data)
 		  {
-		  	$scope.is_logged = sessionService.isLogged()
 		  	sessionService.setAuthToken(data)
-		  	httpServices.getUsrDetails().then(function(data)
+		  	httpServices.getUsrDetails().then(function(dataz)
 		  	{
-		  		$scope.user_name = data['user_details'].data[0].user_acc.first_name
+		  		console.log(dataz)
+		  		$scope.user_name = dataz['user_details'].data[0].user_acc.first_name
 		  	}, function()
 		  	{
 		  		console.log("Error getting user data")
@@ -28,4 +26,15 @@ $scope.is_logged = null;
 		});
 	}
 
+if($scope.is_logged == 1)
+{
+httpServices.getUsrDetails().then(function(dataz)
+{
+	console.log(dataz)
+	$scope.user_name = dataz['user_details'].data[0].user_acc.first_name
+}, function()
+{
+	console.log("Error getting user data")
+})	
+}
 });
