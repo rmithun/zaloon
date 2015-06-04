@@ -1,15 +1,14 @@
 var accountsApp = angular.module('accountApp', ['ngCookies','ngRoute']);
 
-accountsApp.run(function($http,$cookies,$injector,sessionService) {
+accountsApp.run(function($http,$cookies) {
+
 	$http.defaults.headers.post['X-CSRFToken'] = $cookies['csrftoken'];
-	if(sessionService.isLogged())
-	{
-		$http.defaults.headers.post['Authorization'] = "Bearer " + sessionService.getAccessToken();
-	}
+
 });
 
 // configure our routes
-accountsApp.config(function($routeProvider) {
+accountsApp.config(function($routeProvider,$httpProvider) {
+	$httpProvider.interceptors.push('authInterceptor');
 		$routeProvider
 			// route for the home page
 			.when('/', {

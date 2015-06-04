@@ -23,7 +23,9 @@
 
       <div data-facebook='442685319234348'>
     <div id="fb-root"></div>
-     <a href='#' data-ng-click='fetch()'  class='btn btn-primary'>Login with Facebook</a> {{login_status}}
+     <a href='#' data-ng-click='fetch()' ng-if="is_logged !=1;"  class='btn btn-primary'>Login with Facebook</a> 
+     {%verbatim%}{{is_logged}}{%endverbatim%}
+     <span ng-if="is_logged==1">Hi  {%verbatim%}{{user_name}}{%endverbatim%}</span>
   </div>
     </div>
   <script src='{% static "js/app.js" %}'></script>

@@ -56,7 +56,8 @@ def register_by_access_token(request, backend):
 class UserMixin(object):
     authentication_classes = [OAuth2Authentication]
     permission_classes = (TokenHasScope,)
-    serializer_class = UserProfileSerializer()
+    serializer_class = UserProfileSerializer
+    required_scopes = ['write']
     def get_queryset(self):
         print self.request
         return UserProfile.objects.all()
