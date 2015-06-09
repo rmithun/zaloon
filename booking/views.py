@@ -69,4 +69,9 @@ class NewBooking(ListCreateAPIView,RetrieveUpdateAPIView):
 			reminder_sent = sendReminder(booking_id)
 			BookingDetails.objects.filter(id = booking_id).update(booking_status =   \
 				booking_status, reminder_sent = reminder_sent)
+		except Exception,e:
+			print repr(e)
+			return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
+		else:
+			return Response(status.HTTP_200_OK)
 
