@@ -1,14 +1,15 @@
-var accountsApp = angular.module('accountApp', ['ngCookies','ngRoute']);
+var noqapp = angular.module('accountApp', ['ngCookies','ngRoute']);
 
-accountsApp.run(function($http,$cookies) {
+noqapp.run(function($http,$cookies,sessionService) {
 
-	$http.defaults.headers.post['X-CSRFToken'] = $cookies['csrftoken'];
+	$http.defaults.headers.post['X-CSRFToken'] = $cookies.get('csrftoken');
 
 });
 
 // configure our routes
-accountsApp.config(function($routeProvider,$httpProvider) {
+noqapp.config(function($routeProvider,$httpProvider) {
 	$httpProvider.interceptors.push('authInterceptor');
+
 		$routeProvider
 			// route for the home page
 			.when('/', {

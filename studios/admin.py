@@ -13,5 +13,7 @@ admin.site.register(StudioType)
 admin.site.register(StudioAmenities)
 admin.site.register(Amenities)
 admin.site.register(StudioPicture)
-admin.site.register(StudioReviews)
+admin.site.register(StudioClosedDetails)
+admin.site.register(CloseDates)
+
 #admin.site.register(ThatModel)

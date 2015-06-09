@@ -14,7 +14,7 @@ from django.http import HttpResponse
 ##application imports
 from user_accounts.models import UserProfile
 
-def get_token_json(access_token):
+def get_token_json(access_token,app,refresh_token):
     """
     Takes an AccessToken instance as an argument
     and returns a JsonResponse instance from that
@@ -22,9 +22,12 @@ def get_token_json(access_token):
     """
     token = {
         'access_token': access_token.token,
-        ' ': oauth2_settings.ACCESS_TOKEN_EXPIRE_SECONDS,
+        'expire_time': oauth2_settings.ACCESS_TOKEN_EXPIRE_SECONDS,
         'token_type': 'Bearer',
-        'scope': access_token.scope
+        'scope': access_token.scope,
+        'refresh_token':refresh_token,
+        'client_id':app.client_id,
+        'client_secret':app.client_secret
     }
     return JsonResponse(token)	
 
@@ -60,7 +63,7 @@ def access_token_gen(user):
                application=app,
                token=refresh_token,
                access_token=access_token)
-    return get_token_json(access_token)
+    return get_token_json(access_token,app,refresh_token)
 
 def social_auth_to_profile(backend, details, response, user=None, is_new=False, *args, **kwargs):
     try:

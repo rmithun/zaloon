@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('facebook_id', models.CharField(max_length=50, blank=True)),
                 ('mobile', models.CharField(max_length=25, null=True)),
                 ('service_updated', models.CharField(max_length=25, null=True)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 5, 29, 1, 31, 40, 644200))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 52, 226346))),
                 ('user_acc', models.OneToOneField(null=True, blank=True, to=settings.AUTH_USER_MODEL)),
             ],
             options={

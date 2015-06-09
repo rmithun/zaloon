@@ -1,0 +1,187 @@
+##starts here
+!!!
+!!! WARNING: This command is deprecated.
+!!! 
+!!!     You should now run your application with the WSGI interface
+!!!     installed with your project. Ex.:
+!!! 
+!!!         gunicorn myproject.wsgi:application
+!!! 
+!!!     See https://docs.djangoproject.com/en/1.5/howto/deployment/wsgi/gunicorn/
+!!!     for more info.
+!!!
+
+[2015-06-07 16:25:07 +0000] [3677] [DEBUG] Current configuration:
+  proxy_protocol: False
+  worker_connections: 1000
+  statsd_host: None
+  max_requests_jitter: 0
+  post_fork: <function post_fork at 0x7fe3c39ce7d0>
+  pythonpath: None
+  enable_stdio_inheritance: False
+  worker_class: sync
+  ssl_version: 3
+  suppress_ragged_eofs: True
+  syslog: False
+  syslog_facility: user
+  when_ready: <function when_ready at 0x7fe3c39ce500>
+  pre_fork: <function pre_fork at 0x7fe3c39ce668>
+  cert_reqs: 0
+  preload_app: False
+  keepalive: 2
+  accesslog: None
+  group: 1000
+  graceful_timeout: 30
+  do_handshake_on_connect: False
+  spew: False
+  workers: 3
+  proc_name: None
+  sendfile: True
+  pidfile: None
+  umask: 0
+  on_reload: <function on_reload at 0x7fe3c39ce398>
+  pre_exec: <function pre_exec at 0x7fe3c39ced70>
+  worker_tmp_dir: None
+  post_worker_init: <function post_worker_init at 0x7fe3c39ce938>
+  limit_request_fields: 100
+  on_exit: <function on_exit at 0x7fe3c39d4488>
+  config: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  proxy_allow_ips: ['127.0.0.1']
+  pre_request: <function pre_request at 0x7fe3c39ceed8>
+  post_request: <function post_request at 0x7fe3c39d4050>
+  user: 1000
+  forwarded_allow_ips: ['127.0.0.1']
+  worker_int: <function worker_int at 0x7fe3c39ceaa0>
+  threads: 1
+  max_requests: 0
+  limit_request_line: 4094
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  certfile: None
+  worker_exit: <function worker_exit at 0x7fe3c39d41b8>
+  chdir: /home/mithu/noq/noq
+  paste: None
+  default_proc_name: gunicorn
+  errorlog: /home/mithu/noq/noq/logs/gunicorn.log
+  loglevel: debug
+  logconfig: None
+  syslog_addr: udp://localhost:514
+  syslog_prefix: None
+  daemon: False
+  ciphers: TLSv1
+  on_starting: <function on_starting at 0x7fe3c39ce230>
+  worker_abort: <function worker_abort at 0x7fe3c39cec08>
+  bind: ['127.0.0.1:8001']
+  raw_env: []
+  reload: False
+  check_config: False
+  limit_request_field_size: 8190
+  nworkers_changed: <function nworkers_changed at 0x7fe3c39d4320>
+  timeout: 30
+  ca_certs: None
+  django_settings: None
+  tmp_upload_dir: None
+  keyfile: None
+  backlog: 2048
+  logger_class: gunicorn.glogging.Logger
+  statsd_prefix: 
+[2015-06-07 16:25:07 +0000] [3677] [INFO] Starting gunicorn 19.3.0
+[2015-06-07 16:25:07 +0000] [3677] [DEBUG] Arbiter booted
+[2015-06-07 16:25:07 +0000] [3677] [INFO] Listening at: http://127.0.0.1:8001 (3677)
+[2015-06-07 16:25:07 +0000] [3677] [INFO] Using worker: sync
+[2015-06-07 16:25:08 +0000] [3687] [INFO] Booting worker with pid: 3687
+[2015-06-07 16:25:08 +0000] [3688] [INFO] Booting worker with pid: 3688
+[2015-06-07 16:25:08 +0000] [3689] [INFO] Booting worker with pid: 3689
+[2015-06-07 16:25:08 +0000] [3687] [ERROR] Exception in worker process:
+Traceback (most recent call last):
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/arbiter.py", line 507, in spawn_worker
+    worker.init_process()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/workers/base.py", line 118, in init_process
+    self.wsgi = self.app.wsgi()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/djangoapp.py", line 105, in load
+    mod = util.import_module("gunicorn.app.django_wsgi")
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/django_wsgi.py", line 21, in <module>
+    from django.core.management.validation import get_validation_errors
+ImportError: No module named validation
+Traceback (most recent call last):
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/arbiter.py", line 507, in spawn_worker
+    worker.init_process()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/workers/base.py", line 118, in init_process
+    self.wsgi = self.app.wsgi()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/djangoapp.py", line 105, in load
+    mod = util.import_module("gunicorn.app.django_wsgi")
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/django_wsgi.py", line 21, in <module>
+    from django.core.management.validation import get_validation_errors
+ImportError: No module named validation
+[2015-06-07 16:25:08 +0000] [3688] [ERROR] Exception in worker process:
+Traceback (most recent call last):
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/arbiter.py", line 507, in spawn_worker
+    worker.init_process()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/workers/base.py", line 118, in init_process
+    self.wsgi = self.app.wsgi()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/djangoapp.py", line 105, in load
+    mod = util.import_module("gunicorn.app.django_wsgi")
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/django_wsgi.py", line 21, in <module>
+    from django.core.management.validation import get_validation_errors
+ImportError: No module named validation
+Traceback (most recent call last):
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/arbiter.py", line 507, in spawn_worker
+    worker.init_process()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/workers/base.py", line 118, in init_process
+    self.wsgi = self.app.wsgi()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/djangoapp.py", line 105, in load
+    mod = util.import_module("gunicorn.app.django_wsgi")
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/django_wsgi.py", line 21, in <module>
+    from django.core.management.validation import get_validation_errors
+ImportError: No module named validation
+[2015-06-07 16:25:08 +0000] [3689] [ERROR] Exception in worker process:
+Traceback (most recent call last):
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/arbiter.py", line 507, in spawn_worker
+    worker.init_process()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/workers/base.py", line 118, in init_process
+    self.wsgi = self.app.wsgi()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/djangoapp.py", line 105, in load
+    mod = util.import_module("gunicorn.app.django_wsgi")
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/django_wsgi.py", line 21, in <module>
+    from django.core.management.validation import get_validation_errors
+ImportError: No module named validation
+Traceback (most recent call last):
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/arbiter.py", line 507, in spawn_worker
+    worker.init_process()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/workers/base.py", line 118, in init_process
+    self.wsgi = self.app.wsgi()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/djangoapp.py", line 105, in load
+    mod = util.import_module("gunicorn.app.django_wsgi")
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/mithu/noq/local/lib/python2.7/site-packages/gunicorn/app/django_wsgi.py", line 21, in <module>
+    from django.core.management.validation import get_validation_errors
+ImportError: No module named validation
+[2015-06-07 16:25:08 +0000] [3687] [INFO] Worker exiting (pid: 3687)
+[2015-06-07 16:25:08 +0000] [3689] [INFO] Worker exiting (pid: 3689)
+[2015-06-07 16:25:08 +0000] [3688] [INFO] Worker exiting (pid: 3688)
+[2015-06-07 16:25:08 +0000] [3677] [DEBUG] 3 workers
+[2015-06-07 16:25:08 +0000] [3677] [INFO] Shutting down: Master
+[2015-06-07 16:25:08 +0000] [3677] [INFO] Reason: Worker failed to boot.

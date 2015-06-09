@@ -10,8 +10,7 @@ from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 #application imports
-from user_accounts.models import UserProfile
-#from booking.models import BookingDetails
+from user_accounts.models import User
 
 
 
@@ -102,7 +101,6 @@ class StudioGroup(models.Model):
 
 	"""table for holding studio groups"""
 	group_name = models.CharField(max_length = 50)
-	studio_type = models.ForeignKey(StudioType, related_name = "studio_group_type")
 	address = models.TextField()
 	city = models.CharField(max_length = 40)
 	country = models.CharField(max_length = 40)
@@ -123,7 +121,8 @@ class StudioGroup(models.Model):
 class StudioProfile(models.Model):
 
 	"""studio basic details"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_detail")
+	studio = models.ForeignKey(Studio, related_name = "studio_login")
+	studio_type = models.ForeignKey(StudioType, related_name = "studio_type")
 	studio_group = models.ForeignKey(StudioGroup, related_name = "studio_of_group")
 	name = models.CharField(max_length = 120)
 	address_1 = models.CharField(max_length = 200)
@@ -143,7 +142,7 @@ class StudioProfile(models.Model):
 	is_active = models.BooleanField(default  = 1)
 	#contract_start_date = models.DateTimeField()
 	#contract_end_date = models.DateTimeField()
-	is_closed = models.BooleanField(default = 1)
+	is_closed = models.BooleanField(default = 0)
 	serve_type = models.CharField(max_length = 10)# men women unisex
 	daily_studio_closed_from = models.PositiveSmallIntegerField()
 	daily_studio_closed_till = models.PositiveSmallIntegerField()
@@ -151,12 +150,14 @@ class StudioProfile(models.Model):
 	is_ac = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+	latitude = models.CharField(max_length = 30)
+	longitude = models.CharField(max_length = 30)
 
 	"""def save(self):
 		for field in self._meta.fields:
 			if field.name == 'thumbnail':
 			   field.upload_to = 'img_gallery/%d' % self.id
-        super(StudioProfile, self).save()"""
+        super(Studio, self).save()"""
 
 class Amenities(models.Model):
 	"""list of all amenities"""
@@ -211,7 +212,7 @@ class PaymentModes(models.Model):
 class StudioAccountDetails(models.Model):
 
 	"""studio bank and payment details"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_account_detail")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_account_detail")
 	mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_account")
 	bank_name = models.CharField(max_length = 120)
 	bank_branch = models.CharField(max_length = 120)
@@ -227,7 +228,7 @@ class StudioAccountDetails(models.Model):
 class StudioPayment(models.Model):
 
 	"""all payement details for a studio"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_payment_detail")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_payment_detail")
 	mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_payments")
 	amount_paid = models.PositiveIntegerField()
 	paid_by = models.CharField(max_length = 120) ##has to be foreign key in future
@@ -239,7 +240,7 @@ class StudioPayment(models.Model):
 class StudioInvoices(models.Model):
 
 	"""all invoice details for studio"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_invoice_detail")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_invoice_detail")
 	amount_to_be_paid = models.PositiveIntegerField()
 	last_payment_amount = models.PositiveIntegerField()
 	last_payment_date = models.DateTimeField()
@@ -251,7 +252,7 @@ class StudioPasswordReset(models.Model):
 
 	"""all password resets for studio"""
 
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_pwd_reset")
+	studio = models.ForeignKey(Studio, related_name = "studio_pwd_reset")
 	password_changed_date = models.DateTimeField(default = datetime.now())
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
@@ -269,7 +270,7 @@ class CloseDates(models.Model):
 class StudioClosedDetails(models.Model):
 
 	"""days on which the studio is closed"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_closed_details")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_closed_details")
 	closed_on = models.ForeignKey(CloseDates, related_name = "studio_close_dates")
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
@@ -279,7 +280,7 @@ class StudioClosedDetails(models.Model):
 class StudioClosedFromTill(models.Model):
 
 	"""if studio is closed for to many days"""
-	#studio = models.ForeignKey(StudioLogin, related_name = "studio_long_closed_details")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_long_closed_details")
 	closed_from_date = models.DateField()
 	closed_till_date = models.DateField()
 	is_active = models.BooleanField(default = 1)
@@ -288,18 +289,6 @@ class StudioClosedFromTill(models.Model):
 
 
 
-class StudioReviews(models.Model):
-
-	"""reviews for studio"""
-	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_review")
-	user = models.ForeignKey(UserProfile, related_name = "reviewed_by_user")
-	#booking = models.ForeignKey(BookingDetails, related_name = "reviewed_on_booking")
-	service = models.ForeignKey(Service, related_name = "reviewed_the_service", null = True)
-	rating = models.PositiveIntegerField()
-	comments = models.TextField()
-	is_active = models.BooleanField(default = 1)
-	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
 class StudioPicture(models.Model):

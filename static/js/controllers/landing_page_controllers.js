@@ -1,23 +1,23 @@
-accountsApp.controller('landingpagecontroller',function($scope, $window, httpServices,sessionService){
+noqapp.controller('landingpagecontroller',function($scope, $cookies, $window,httpServices,sessionService){
 $scope.is_logged = sessionService.isLogged()
 	$scope.fbLogin = function(dummy)
 	{
 
 		httpServices.loginUsingFB(dummy).then(function(data)
 		{
-		  console.log(data)
 		  if(data)
 		  {
 		  	sessionService.setAuthToken(data)
 		  	httpServices.getUsrDetails().then(function(dataz)
 		  	{
-		  		console.log(dataz)
-		  		$scope.user_name = dataz['user_details'].data[0].user_acc.first_name
+		  		$scope.is_logged = sessionService.isLogged()
+		  		$scope.user_name = dataz['user_details'].data[0].first_name
 		  	}, function()
 		  	{
+		  		$scope.is_logged = sessionService.isLogged()
 		  		console.log("Error getting user data")
 		  	})
-		  	//$window.location.href = "/account/home/"
+		  	
 		  }
 		},function()
 		{
@@ -26,15 +26,44 @@ $scope.is_logged = sessionService.isLogged()
 		});
 	}
 
-if($scope.is_logged == 1)
+if(sessionService.isLogged())
 {
 httpServices.getUsrDetails().then(function(dataz)
 {
-	console.log(dataz)
-	$scope.user_name = dataz['user_details'].data[0].user_acc.first_name
+	$scope.user_name = dataz['user_details'].data[0].first_name
 }, function()
 {
-	console.log("Error getting user data")
+	console.log("Error getting user data")	
 })	
 }
+
+
+	$scope.logOut = function()
+	{	
+		httpServices.logOut().then(function(logout_data)
+		{
+			$cookies.remove('token')
+			//$scope.is_logged = sessionService.isLogged()
+			console.log("Logged out successfully")
+			$window.location.href = "/"
+		},
+		function()
+		{
+			console.log("Logout Error")
+		})
+	}
+
+
+	$scope.getDetails = function()
+	{
+		httpServices.getBookings().then(function(booking)
+		{
+			console.log(booking)
+		},
+		function()
+		{
+			console.log("Logout Error")	
+		})
+	}
+
 });

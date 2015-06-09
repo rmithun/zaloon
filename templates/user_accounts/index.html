@@ -12,10 +12,10 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>    
     <!-- loading django static files -->
     <!-- <link rel="stylesheet" href='{% static "css/main.css"%}'> -->
-    <script src='{% static "js/angular1.3.15/angular.min.js" %}'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js'></script>
     <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
-    <script src='{% static "js/angular1.3.15/angular-cookies.js" %}'></script>
-    <script src='{% static "js/angular1.3.15/angular-route.min.js" %}'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-cookies.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.min.js'></script>
   </head>
   <body>
 
@@ -25,7 +25,9 @@
     <div id="fb-root"></div>
      <a href='#' data-ng-click='fetch()' ng-if="is_logged !=1;"  class='btn btn-primary'>Login with Facebook</a> 
      {%verbatim%}{{is_logged}}{%endverbatim%}
-     <span ng-if="is_logged==1">Hi  {%verbatim%}{{user_name}}{%endverbatim%}</span>
+     <span ng-if="is_logged==1">Hi  {%verbatim%}{{user_name}}{%endverbatim%}
+      <a  ng-click = "logOut();">Logout</a>
+      <a ng-click="getDetails()">My account </span>
   </div>
     </div>
   <script src='{% static "js/app.js" %}'></script>

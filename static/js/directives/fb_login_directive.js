@@ -1,4 +1,4 @@
-accountsApp.directive('facebook', function($http) {
+noqapp.directive('facebook', function($http) {
   return {
     restrict: 'A',
     scope: true,

@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 #application imports
 from models import *
+from booking.models import StudioReviews
 
 
 class ServiceTypeSerializer(serializers.ModelSerializer):
@@ -29,7 +30,7 @@ class StudioGroupSerializer(serializers.ModelSerializer):
 	"""serializers to get studio group details"""
 	class Meta:
 		model = StudioGroup
-		fields = ('group_name','studio_type', 'address', 'city', 'country')
+		fields = ('group_name', 'address', 'city', 'country')
 
 class StudioServicesSerializer(serializers.ModelSerializer):
 
@@ -74,13 +75,13 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 	studio_amenities = StudioAmenitiesSerializer(many = True)
 	class Meta:
 		model = StudioProfile
-		fields = ('id', 'studio_group', 'name', 'address_1', 'address_2',  \
+		fields = ('id', 'studio_group','studio_type', 'name', 'address_1', 'address_2',  \
 			'city', 'country', 'area', 'state', 'landline_no_1', 'landline_no_2', \
 			'mobile_no_1', 'mobile_no_2', 'in_charge_person', 'contact_person',  \
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \
-			'studio_amenities')
+			'studio_amenities','latitude','longitude')
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 

@@ -8,8 +8,8 @@ import datetime
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('studios', '__first__'),
-        ('user_accounts', '__first__'),
+        ('studios', '0002_auto_20150604_1721'),
+        ('user_accounts', '0002_auto_20150604_1721'),
     ]
 
     operations = [
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('type_of_message', models.CharField(max_length=25)),
                 ('mode', models.CharField(max_length=25)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 5, 29, 1, 31, 26, 429139))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 57, 81729))),
             ],
             options={
             },
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('reminder_sent', models.BooleanField(default=0)),
                 ('booking_type', models.BooleanField(default=0)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 5, 29, 1, 31, 26, 428063))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 57, 81065))),
             ],
             options={
             },
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('status', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 5, 29, 1, 31, 26, 430251))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 57, 82263))),
                 ('booking', models.ForeignKey(related_name=b'service_booked_with', to='booking.BookingDetails')),
                 ('service', models.ForeignKey(related_name=b'service_booked', to='studios.Service')),
             ],
@@ -65,8 +65,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('amount_paid', models.FloatField()),
-                ('initiated_time', models.DateTimeField(default=datetime.datetime(2015, 5, 29, 1, 31, 26, 430963))),
-                ('confirmation_time', models.DateTimeField(default=datetime.datetime(2015, 5, 29, 1, 31, 26, 431000))),
+                ('initiated_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 57, 82829))),
+                ('confirmation_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 57, 82851))),
                 ('payment_status', models.CharField(max_length=30)),
             ],
             options={
@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
                 ('actual_amount', models.FloatField()),
                 ('purchase_status', models.CharField(max_length=30)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 5, 29, 1, 31, 26, 427035))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 57, 80430))),
                 ('customer', models.ForeignKey(related_name=b'user_who_purchased', to='user_accounts.UserProfile')),
             ],
             options={

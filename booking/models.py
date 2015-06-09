@@ -8,7 +8,7 @@ from django.db import models
 from django.utils import timezone
 
 #application imports
-from user_accounts.models import UserProfile
+from user_accounts.models import User
 from studios.models import StudioProfile, Service
 
 
@@ -17,7 +17,7 @@ from studios.models import StudioProfile, Service
 class Purchase(models.Model):
 
 	"""table holding details of all the purchases made"""
-	customer = models.ForeignKey(UserProfile, related_name = "user_who_purchased")
+	customer = models.ForeignKey(User, related_name = "user_who_purchased")
 	purchase_amount = models.FloatField()
 	actual_amount = models.FloatField()
 	purchase_status = models.CharField(max_length = 30)
@@ -27,7 +27,7 @@ class Purchase(models.Model):
 class BookingDetails(models.Model):
 
 	"""table holding all booking related infos"""
-	user = models.ForeignKey(UserProfile, related_name = "booked_by_user")
+	user = models.ForeignKey(User, related_name = "booked_by_user")
 	booked_date = models.DateTimeField()
 	appointment_date = models.DateField()
 	apoointment_time = models.FloatField() # ex 13.15 14.30
@@ -37,7 +37,7 @@ class BookingDetails(models.Model):
 	booking_status = models.CharField(max_length = 30)
 	reminder_sent  = models.BooleanField(default = 0)
 	booking_type = models.BooleanField(default = 0) #0- new 1-postponed
-	purchase = models.ForeignKey(Purchase, related_name = "purchase_id")
+	purchase = models.ForeignKey(Purchase, related_name = "purchase_id", null = True)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -71,3 +71,17 @@ class Payments(models.Model):
 	confirmation_time = models.DateTimeField(default = datetime.now())
 	payment_status = models.CharField(max_length = 30)
 	purchase = models.ForeignKey(Purchase, related_name = "purchase_id_payment")
+
+
+class StudioReviews(models.Model):
+
+	"""reviews for studio"""
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_review")
+	user = models.ForeignKey(User, related_name = "reviewed_by_user")
+	#booking = models.ForeignKey(BookingDetails, related_name = "reviewed_on_booking")
+	service = models.ForeignKey(Service, related_name = "reviewed_the_service", null = True)
+	rating = models.PositiveIntegerField()
+	comments = models.TextField()
+	is_active = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
