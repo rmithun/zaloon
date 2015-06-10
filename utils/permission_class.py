@@ -62,3 +62,4 @@ class IsUserThenPut(permissions.BasePermission):
         if request.method in allowed_methods:
             return obj is None or obj.user == request.user
         return False
+

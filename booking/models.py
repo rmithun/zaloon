@@ -21,6 +21,7 @@ class Purchase(models.Model):
 	purchase_amount = models.FloatField()
 	actual_amount = models.FloatField()
 	purchase_status = models.CharField(max_length = 30)
+	status_code = models.CharField(max_length = 10)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -34,12 +35,27 @@ class BookingDetails(models.Model):
 	booking_code = models.CharField(max_length = 25)
 	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
 	#promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
+	status_code = models.CharField(max_length = 10)
 	booking_status = models.CharField(max_length = 30)
 	reminder_sent  = models.BooleanField(default = 0)
 	booking_type = models.BooleanField(default = 0) #0- new 1-postponed
 	purchase = models.ForeignKey(Purchase, related_name = "purchase_id", null = True)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+class Refund(models.Model):
+
+	"""table holding all refund data"""
+	user = models.ForeignKey(User, related_name = "refund_to_user")
+	purchase = models.ForeignKey(Purchase, related_name = "refund_from_purchase")
+	booking = models.ForeignKey(BookingDetails, related_name = "refund_of_booking")
+	status = models.CharField(max_length = 20)
+	status_code = models.CharField(max_length = 20)
+	amount_refunded = models.FloatField()
+	initiated_date_time = models.DateTimeField(datetime.now())
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
 
 class BookedMessageSend(models.Model):
 
@@ -48,6 +64,7 @@ class BookedMessageSend(models.Model):
 
 	booking = models.ForeignKey(BookingDetails, related_name = "booking_id")
 	message = models.TextField()
+	mobile_no = models.CharField(max_length = 30)
 	is_successful = models.BooleanField(default = 0)
 	type_of_message = models.CharField(max_length = 25) ##book and cancel message
 	mode = models.CharField(max_length = 25) ## mobile and email
