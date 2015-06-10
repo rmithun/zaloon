@@ -27,6 +27,8 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -110,6 +112,27 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+MEDIA_ROOT = BASE_DIR
+AWS_STORAGE_BUCKET_NAME = 'noqimages'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_ACCESS_KEY_ID = 'AKIAIKMW5IUS3L2OCCRQ'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_S3_SECURE_URLS = False
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "http://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+STATICFILES_LOCATION = 'static'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+
+
+from django.conf import settings
+from storages.backends.s3boto import S3BotoStorage
+
+class StaticStorage(S3BotoStorage):
+    location = settings.STATICFILES_LOCATION
+
 
 
 
