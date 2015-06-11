@@ -24,3 +24,8 @@ class UserProfile(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
+
+class UserInvites(models.Model):
+
+	"""table holding all emails of user who wants to be invited"""
+	email = models.EmailField()
