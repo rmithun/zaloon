@@ -16,6 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
 from rest_framework.response import Response
+from django.db import transaction
 from rest_framework import status
 #application imports
 from serializers import *
@@ -41,8 +42,9 @@ class NewBooking(ListCreateAPIView,RetrieveUpdateAPIView):
     permission_classes = (TokenHasScope,)
     required_scopes = ['write','read']
     serializer_class = ActiveBookingSerializer
+    
     @transaction.commit_manually
-	def create(self,request,*args,**kwards):
+    def create(self,request,*args,**kwards):
 		try:
 			user = self.request.user
 			data = self.request.DATA
@@ -78,7 +80,7 @@ class NewBooking(ListCreateAPIView,RetrieveUpdateAPIView):
 			return Response(data, status.HTTP_201_CREATED)
     
     @transaction.commit_manually
-	def put(self,request,*args,**kwargs):
+    def put(self,request,*args,**kwargs):
 		try:
 			user = self.request.user
 			data = self.request.DATA
@@ -106,8 +108,8 @@ class NewBooking(ListCreateAPIView,RetrieveUpdateAPIView):
 
 
 class CancelBooking(ActiveBookingMixin):
-	def get_queryset(self):
-		booking_id = self.request.DATA['booking_id']
+    def get_queryset(self):
+    	booking_id = self.request.DATA['booking_id']
         data = BookingDetails.objects.filter(user = self.request.user,  \
         	id = booking_id)
         return data
@@ -120,29 +122,33 @@ class CancelBooking(ActiveBookingMixin):
     		BookingDetails.objects.filter(id = booking_id).update(booking_status =  \
     			'cancelled', service_updated = 'cancel booking',  \
     			status_code = 'CSBUK03', updated_date_time = datetime.now())
-
+    	except Exception,e:
+    		print repr(e)
+    		return Response(HTTP_500_INTERNAL_SERVER_ERROR)
+    	else:
+    		return Response(status.HTTP_200_OK)
 
 class ValidateBookingCode(ActiveBookingMixin):
 
-	def get_queryset(self):
-		booking_code = self.request.DATA['booking_code']
-		studio = self.request.DATA['studio']
-		data = BookingDetails.objects.filter(studio_id = studio, booking_code =  \
-			booking_code)
+    def get_queryset(self):
+        booking_code = self.request.DATA['booking_code']
+        studio = self.request.DATA['studio']
+        data = BookingDetails.objects.filter(studio_id = studio, booking_code =  \
+	 	booking_code)
         return data
     
     @transaction.commit_manually
     def put(self,request,*args,**kwars):
-    	try:
-    		booking_code = self.request.DATA['booking_code']
-		    studio = self.request.DATA['studio']
-		    BookingDetails.objects.filter(studio_id = studio, booking_code =  \
-			booking_code).update(booking_status = 'used', status_code = 'SBUKUSD05',  \
-			service_updated = 'booking used', updated_date_time = datetime.now())
-		except Exception,e:
+        try:
+            booking_code = self.request.DATA['booking_code']
+            studio = self.request.DATA['studio']
+            BookingDetails.objects.filter(studio_id = studio, booking_code =  \
+		    booking_code).update(booking_status = 'used', status_code = 'SBUKUSD05',  \
+		    service_updated = 'booking used', updated_date_time = datetime.now())
+        except Exception,e:
 			print repr(e)
 			return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
-		else:
+        else:
 			return Response(status.HTTP_200_OK)
 
 

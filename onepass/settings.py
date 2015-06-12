@@ -24,7 +24,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'booking',
     'studios',
     'gunicorn',
+    'storages',
 
 )
 
@@ -66,12 +67,7 @@ WSGI_APPLICATION = 'onepass.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -112,6 +108,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
 MEDIA_ROOT = BASE_DIR
 AWS_STORAGE_BUCKET_NAME = 'noqimages'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
@@ -119,19 +116,45 @@ AWS_ACCESS_KEY_ID = 'AKIAIKMW5IUS3L2OCCRQ'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_S3_SECURE_URLS = False
 MEDIAFILES_LOCATION = 'media'
-MEDIA_URL = "http://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+AWS_CDN_URL = "http://dj44veg5gcpqb.cloudfront.net/"
+MEDIA_URL = "http://%s/%s/" % (AWS_CDN_URL, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-STATICFILES_LOCATION = 'static'
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 
+if 0:
+    STATIC_URL = '/static/'
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    )
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+    }
+    ALLOWED_HOSTS = []
+else:
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    STATIC_URL = "https://%s/%s/" % (AWS_CDN_URL, STATICFILES_LOCATION)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'bopanther_test_db',                      # Or path to database file if using sqlite3.
+            # The following settings are not used with sqlite3:
+            'USER': 'bopanther_dba',
+            'PASSWORD': '11July!99#',
+            'HOST': 'bopanther.cwh48zxk9diu.ap-southeast-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+            'PORT': '5432',                      # Set to empty string for default.
+        }
+    }
+    #ALLOWED_HOSTS = ['bebalance.com', 'http://bebalance.com']
+    ALLOWED_HOSTS = []
 
-from django.conf import settings
-from storages.backends.s3boto import S3BotoStorage
-
-class StaticStorage(S3BotoStorage):
-    location = settings.STATICFILES_LOCATION
 
 
 
@@ -165,6 +188,9 @@ REST_FRAMEWORK = {
  'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
     ),
+ 'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 
 }
 
