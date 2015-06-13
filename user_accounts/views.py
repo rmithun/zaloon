@@ -15,7 +15,7 @@ from django.shortcuts import redirect
 from social.apps.django_app.utils import psa
 from utils.generic_utils import *
 #from permissions import IsUserThenReadPatch, ReadOnlyAuthentication
-from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
@@ -131,3 +131,10 @@ class GetActiveBookings(ActiveBookingMixin, ListAPIView):
     pass
 
 
+class InviteUser(object):
+    permission_classes = ()
+    serializer_class = InviteUserSerializer
+    queryset = UserInvites.objects.all()
+
+class InviteUser(InviteUserMixin,ListCreateAPIView):
+    pass
