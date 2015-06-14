@@ -74,7 +74,7 @@ WSGI_APPLICATION = 'onepass.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -86,20 +86,13 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
 
-STATIC_URL = '/static/'
 
-# Additional locations of static files
-STATICFILES_DIRS = (
-    
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
+
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -121,9 +114,7 @@ MEDIA_URL = "http://%s/%s/" % (AWS_CDN_URL, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 
-if 0:
-    STATIC_URL = '/static/'
-    STATIC_URL = '/static/'
+if 1:
     STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -138,6 +129,14 @@ if 0:
     }
     ALLOWED_HOSTS = []
 else:
+    # Additional locations of static files
+    STATICFILES_DIRS = (
+    
+        "static/",
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    )
     STATICFILES_LOCATION = 'static'
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     STATIC_URL = "https://%s/%s/" % (AWS_CDN_URL, STATICFILES_LOCATION)
@@ -156,7 +155,15 @@ else:
     ALLOWED_HOSTS = []
 
 
-
+#AWS SES SMTP SETTINGS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SMTP_SERVER = 'email-smtp.eu-west-1.amazonaws.com'
+SMTP_USERNAME = 'AKIAI3AQZ6M5Y4GARYKQ'
+SMTP_PASSWORD = 'ArAUIN7BrYD/0fAIzOVXVNAnCLd3KCIEObM1ix1aty4n'
+SMTP_PORT = '587'
+SMTP_DO_TLS = True
+BCC_EMAIL = 'vbnetmithun@gmail.com' 
 
 
 

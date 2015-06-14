@@ -25,6 +25,13 @@ class ServiceSerializer(serializers.ModelSerializer):
 		fields = ('id', 'service_type', 'service_name', 'min_duration', \
 		'is_active')
 
+class StudioTypeSerializer(serializers.ModelSerializer):
+
+	"""serializers for getting studio types"""
+	class Meta:
+		model = StudioType
+		fields = ('type_desc',)
+
 class StudioGroupSerializer(serializers.ModelSerializer):
 
 	"""serializers to get studio group details"""
@@ -65,6 +72,11 @@ class StudioAmenitiesSerializer(serializers.ModelSerializer):
 		model = StudioAmenities
 		fields = ('studio_profile', 'amenity','is_active')
 
+class StudioKindSerialier(serializers.ModelSerializer):
+	class Meta:
+		model = StudioKind
+		fields = ('kind_desc',)
+
 class StudioProfileSerializer(serializers.ModelSerializer):
 
 	"""serializer to get  studio details"""
@@ -73,6 +85,8 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 	studio_review = StudioReviewSerializer(many = True)
 	pic_of_studio = StudioPictureSerializer(many = True)
 	studio_amenities = StudioAmenitiesSerializer(many = True)
+	studio_type = StudioTypeSerializer()
+	studio_kind = StudioKindSerialier()
 	class Meta:
 		model = StudioProfile
 		fields = ('id', 'studio_group','studio_type', 'name', 'address_1', 'address_2',  \
@@ -81,7 +95,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \
-			'studio_amenities','latitude','longitude')
+			'studio_amenities','latitude','longitude','studio_kind')
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 
