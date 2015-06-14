@@ -20,7 +20,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
 from rest_framework.response import Response
-
+from rest_framework.throttling import UserRateThrottle
 #application imports
 from serializers import *
 #from models import *
@@ -135,7 +135,8 @@ class GetActiveBookings(ActiveBookingMixin, ListAPIView):
 
 
 class InviteUserMixin(object):
-    permission_classes = ()
+    permission_classes = (PostWithoutAuthentication,)
+    throttle_classes = (UserRateThrottle,)
     serializer_class = InviteUserSerializer
     queryset = UserInvites.objects.all()
 
