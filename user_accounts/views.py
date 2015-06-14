@@ -131,7 +131,7 @@ class GetActiveBookings(ActiveBookingMixin, ListAPIView):
     pass
 
 
-class InviteUser(object):
+class InviteUserMixin(object):
     permission_classes = ()
     serializer_class = InviteUserSerializer
     queryset = UserInvites.objects.all()

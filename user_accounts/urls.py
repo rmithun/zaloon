@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 import views
 
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'onepass.views.home', name='home'),
@@ -14,6 +15,5 @@ urlpatterns = patterns('',
     url(r'^user_details/$', views.GetUserDetail.as_view(), name = 'user_details'),
     url(r'^user_auth/$', views.AuthView.as_view(), name = 'user_auth'),
     url(r'^user_name/$', views.GetUserDetail.as_view(), name = 'user_details'),
-
-
+    url(r'^invite_user/$', views.InviteUser.as_view(), name = 'invite_user'),
 )

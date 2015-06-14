@@ -20,7 +20,7 @@ from rest_framework import status
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
 #application imports
 from serializers import ServiceSerializer, StudioServicesSerializer,  \
-StudioProfileSerializer, StudioReviewSerializer
+StudioProfileSerializer, StudioReviewSerializer,StudioTypeSerializer
 from models import *
 from booking.models import StudioReviews
 from utils.permission_class import ReadWithoutAuthentication
@@ -89,3 +89,12 @@ class StudioReviewMixin(object):
 
 class StudioReviewDetails(StudioReviewMixin,ListCreateAPIView):
 	pass
+
+
+class GetStudioTypes(ListAPIView):
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = StudioTypeSerializer
+    def get_queryset(self):
+        queryset = StudioType.objects.filter(is_active = True)
+        return queryset
+

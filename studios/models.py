@@ -116,7 +116,12 @@ class StudioGroup(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	
-
+class StudioKind(models.Model):
+	"""what kind of studio it is Men,Women,UNisex,Women and Child"""
+	kind_desc = models.CharField(max_length = 20)
+	is_active = models.BooleanField(default = 1)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+	service_updated = models.CharField(max_length = 25)
 
 class StudioProfile(models.Model):
 
@@ -148,6 +153,7 @@ class StudioProfile(models.Model):
 	daily_studio_closed_till = models.PositiveSmallIntegerField()
 	thumbnail= models.ImageField(upload_to = 'img_gallery')
 	is_ac = models.BooleanField(default = 0)
+	studio_kind = models.ForeignKey(StudioKind, related_name = "kind_of_studio")
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	latitude = models.CharField(max_length = 30)

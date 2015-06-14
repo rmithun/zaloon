@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='user_accounts/index.html'), name="home"),
     url(r'^register/(?P<backend>[^/]+)/$',
         uac_view.register_by_access_token),
+    url(r'^home/$',TemplateView.as_view(template_name='user_accounts/landing_page.html'),name = 'landing_page'),
+
 
 
 )
