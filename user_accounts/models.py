@@ -29,3 +29,4 @@ class UserInvites(models.Model):
 
 	"""table holding all emails of user who wants to be invited"""
 	email = models.EmailField()
+	date = models.DateTimeField(default = datetime.now())

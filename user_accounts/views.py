@@ -20,8 +20,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
 from rest_framework.response import Response
+
 #application imports
 from serializers import *
+#from models import *
+from utils.permission_class import PostWithoutAuthentication
 
 @login_required
 def home(request):
@@ -137,4 +140,5 @@ class InviteUserMixin(object):
     queryset = UserInvites.objects.all()
 
 class InviteUser(InviteUserMixin,ListCreateAPIView):
-    pass
+   pass
+

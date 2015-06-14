@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app = "accountApp" >
+<html lang="en" ng-app = "landingApp" >
   <head>
     <meta charset="utf-8">   
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
@@ -57,18 +57,22 @@
     <div class="container">
       <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
         <div class="row">
-            <form class="form-inline form-register form-register-small">
+            <form  ng-hide="inviteflag == 1;" class="form-inline form-register form-register-small">
               
               <div class="form-group">
               <span class="email-icon"><i class="icon icon-chat-messages-14 icon-active"></i></span>              
-                <input size="50" type="email" class="form-control emailtxt" placeholder="Enter email to get invite"  name="input" ng-model="emailid" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
+                <input ng-hide = "inviteflag == 1;" size="50" type="email" class="form-control emailtxt" placeholder="Enter email to get invite"  name="input" ng-model="emailid" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
               </div>
               
               <div class="form-group invite-wrap">                
                 <button type="button" ng-click="invite()" class="btn btn-primary btn-md">GET INVITED</button>
               </div>
             </form>
-            <p class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
+
+            <p ng-hide="inviteflag == 1;" class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
+            <span ng-show = "inviteflag == 1;" class="easysearch">You are now added to our priorites list.</span>
+            <span ng-show = "inviteflag == 0;" class="easysearch">Please try again.Some error occurred.</span>
+
         </div>
       </div>
     </div>
@@ -108,8 +112,11 @@
     <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
     <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
     <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+    <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
+    <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+
     
-  <script src='{% static "js/app.js" %}'></script>
+  <script src='{% static "js/lp_app.js" %}'></script>
   <script src='{% static "js/services/landingservices.js" %}'></script>
   <script src='{% static "js/controllers/landing_page_controller.js" %}'></script>
   <!-- Bootstrap Js -->

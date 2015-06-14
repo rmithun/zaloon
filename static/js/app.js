@@ -8,6 +8,7 @@ noqapp.run(function($http,$cookies,sessionService) {
 
 // configure our routes
 noqapp.config(function($routeProvider,$httpProvider) {
+
 	$httpProvider.interceptors.push('authInterceptor');
 
 		$routeProvider
