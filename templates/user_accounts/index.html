@@ -1,40 +1,123 @@
 <!DOCTYPE html>
 <html lang="en" ng-app = "accountApp" >
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Your Parlor on Your Hand > Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
     <title>Onepass</title>
     {% load static from staticfiles %}
     <!-- Bootstrap -->
     <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
-  <!-- Font -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>    
+    <!-- Font -->
+    <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
     <!-- loading django static files -->
-    <!-- <link rel="stylesheet" href='{% static "css/main.css"%}'> -->
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js'></script>
-    <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-cookies.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.min.js'></script>
+    
   </head>
-  <body>
 
-   <div ng-controller = "landingpagecontroller">
-
-      <div data-facebook='442685319234348'>
-    <div id="fb-root"></div>
-     <a href='#' data-ng-click='fetch()' ng-if="is_logged !=1;"  class='btn btn-primary'>Login with Facebook</a> 
-     {%verbatim%}{{is_logged}}{%endverbatim%}
-     <span ng-if="is_logged==1">Hi  {%verbatim%}{{user_name}}{%endverbatim%}
-      <a  ng-click = "logOut();">Logout</a>
-      <a ng-click="getDetails()">My account </span>
-  </div>
+<body id="landing-page"  ng-controller = "landingpagecontroller">
+    <!-- Preloader -->
+    <div id="mask">
+        <div id="loader"></div>
     </div>
+    <header>
+        <nav class="navigation navigation-header">
+            <div class="container">
+                <div class="navigation-brand">
+                    <div class="brand-logo">
+            <a href="" class="logo"></a>            
+                    </div>
+                    <button class="navigation-toggle visible-xs" type="button" data-toggle="dropdown" data-target=".navigation-navbar">
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navigation-navbar">                    
+                    <ul class="navigation-bar navigation-bar-right">                        
+                        <li class="featured"><a href="#">get invited</a></li>
+                    </ul>  
+                </div>
+            </div>
+        </nav>
+    </header>
+  <div class="layershadow">
+  <div id="hero" class="static-header-landing register-version light clearfix">
+  <!-- <div class="layer">&nbsp;</div> -->
+        <div class="text-heading">
+            <h1 class="animated " data-animation="bounceInDown" data-delay="0">
+            Where your parlour comes, Handy
+            </h1>
+            <p class="animated  easysearch" data-animation="fadeInDown" data-delay="500">EASY SEARCH  <span> | </span> FREE CANCELLATION   <span> | </span>  100% GUARNTEE</p>
+        </div>
+    
+    <div class="container">
+      <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
+        <div class="row">
+            <form class="form-inline form-register form-register-small">
+              
+              <div class="form-group">
+              <span class="email-icon"><i class="icon icon-chat-messages-14 icon-active"></i></span>              
+                <input size="50" type="text" class="form-control emailtxt" placeholder="Enter email to get invite">
+              </div>
+              
+              <div class="form-group invite-wrap">                
+                <button type="submit" class="btn btn-primary btn-md">GET INVITED</button>
+              </div>
+            </form>
+            <p class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
+        </div>
+      </div>
+    </div>
+    
+    </div>  
+ </div>   
+    
+  
+  <section id="features-list" class="section dark">
+        <div class="container animated " data-animation="fadeInDown">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-office-44 icon-active"></i>
+                    <span class="h7">SELECT</span>
+                    <p class="thin">Choose from 100’s of studios<br>Select your flexible time<br>BOOK after reading reviews</p>
+                </article>
+            </div>                       
+      <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-shopping-18 icon-active"></i>
+                    <span class="h7">PAY</span>
+                    <p class="thin">No FEE<br>Exciting offers<br>Choose your mode of payment</p>
+                </article>
+            </div>             
+      <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-seo-icons-27 icon-active"></i>
+                    <span class="h7">WHAT</span>
+                    <p class="thin">Easy Booking<br>No more waiting<br>100% Satisfcation Guarantee
+                    </p>
+                </article>
+            </div>    
+                
+        </div>
+    </section>
+
+    <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
+    <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-cookies.js'></script>
   <script src='{% static "js/app.js" %}'></script>
-  <script src='{% static "js/services/httpservices.js" %}'></script>
-  <script src='{% static "js/controllers/landing_page_controllers.js" %}'></script>
-  <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
+  <script src='{% static "js/services/landingservices.js" %}'></script>
+  <script src='{% static "js/controllers/landing_page_controller.js" %}'></script>
   <!-- Bootstrap Js -->
-  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  
+  <!-- loader -->
+  <script type="text/javascript" src='{% static "js/scripts.js"%}'></script>
+
   </body>
 </html>
+
+
