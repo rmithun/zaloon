@@ -31,6 +31,7 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		//var booking_history = $http.get(accountURL+'booking_history/')
 		return $q.all({'booking':booking,'user_details':user_details})
 	}
+
     return loginData;
 });
 

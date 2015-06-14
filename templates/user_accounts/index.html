@@ -61,11 +61,11 @@
               
               <div class="form-group">
               <span class="email-icon"><i class="icon icon-chat-messages-14 icon-active"></i></span>              
-                <input size="50" type="text" class="form-control emailtxt" placeholder="Enter email to get invite">
+                <input size="50" type="email" class="form-control emailtxt" placeholder="Enter email to get invite"  name="input" ng-model="emailid" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
               </div>
               
               <div class="form-group invite-wrap">                
-                <button type="submit" class="btn btn-primary btn-md">GET INVITED</button>
+                <button type="button" ng-click="invite()" class="btn btn-primary btn-md">GET INVITED</button>
               </div>
             </form>
             <p class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
@@ -107,8 +107,8 @@
 
     <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
     <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-cookies.js'></script>
+    <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+    
   <script src='{% static "js/app.js" %}'></script>
   <script src='{% static "js/services/landingservices.js" %}'></script>
   <script src='{% static "js/controllers/landing_page_controller.js" %}'></script>
