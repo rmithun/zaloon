@@ -9,8 +9,8 @@ $scope.is_logged = sessionService.isLogged()
 		$scope.fb_key = data['fb_key'].data
 	});
  }
-
 getFBKey()
+
 	$scope.fbLogin = function(dummy)
 	{
 

@@ -1,6 +1,6 @@
 noqapp.controller('landingpagecontroller',function($scope, landingServices){
 
-	$scope.emailid = "dddfds";
+	$scope.emailid = null;
 	$scope.inviteflag = null;
 
 	$scope.invite=function(){
