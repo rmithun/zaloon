@@ -16,4 +16,6 @@ urlpatterns = patterns('',
     url(r'^user_auth/$', views.AuthView.as_view(), name = 'user_auth'),
     url(r'^user_name/$', views.GetUserDetail.as_view(), name = 'user_details'),
     url(r'^invite_user/$', views.InviteUser.as_view(), name = 'invite_user'),
+    url(r'^fb_key/$', views.getFBkey, name = 'fb_key'),
+    
 )

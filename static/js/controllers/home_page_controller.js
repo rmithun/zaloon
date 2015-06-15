@@ -1,5 +1,16 @@
 noqapp.controller('homepagecontroller',function($scope, $cookies, $window,httpServices,sessionService){
 $scope.is_logged = sessionService.isLogged()
+
+
+ function getFBKey()
+ {
+	httpServices.getFBKey().then(function(data)
+	{
+		$scope.fb_key = data['fb_key'].data
+	});
+ }
+
+getFBKey()
 	$scope.fbLogin = function(dummy)
 	{
 
@@ -12,6 +23,7 @@ $scope.is_logged = sessionService.isLogged()
 		  	{
 		  		$scope.is_logged = sessionService.isLogged()
 		  		$scope.user_name = dataz['user_details'].data[0].first_name
+		  		$('#signupmodel').modal('hide');
 		  	}, function()
 		  	{
 		  		$scope.is_logged = sessionService.isLogged()

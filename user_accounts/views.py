@@ -25,6 +25,8 @@ from rest_framework.throttling import UserRateThrottle
 from serializers import *
 #from models import *
 from utils.permission_class import PostWithoutAuthentication
+from django.conf import settings
+
 
 @login_required
 def home(request):
@@ -143,3 +145,6 @@ class InviteUserMixin(object):
 class InviteUser(InviteUserMixin,ListCreateAPIView):
    pass
 
+def getFBkey(request):
+    """function which returns the FB key for making authentication"""
+    return  HttpResponse(settings.FBAPIKEY)

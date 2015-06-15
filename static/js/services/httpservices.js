@@ -6,6 +6,13 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 {
 	//$http.defaults.headers.common['Authorization'] = sessionService.getAccessToken();
 	var loginData = {}
+
+	loginData.getFBKey = function()
+	{
+		var fb_key = $http.get(accountURL+'fb_key/')
+		return $q.all({'fb_key':fb_key})
+	}
+
 	loginData.loginUsingFB = function(dummyKey)
 	{
 		var access_token = $http.post(fbloginURL, dummyKey)

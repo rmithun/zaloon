@@ -1,3 +1,157 @@
-<div ng-controller="dashboardController">Hi  Mithun
-<a href="/account/logout/">Logout</a>
-</div>
+<!DOCTYPE html>
+<html lang="en" ng-app = "accountApp" >
+  <head>
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Your Parlor on Your Hand -  Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
+    <title>Onepass</title>
+    {% load static from staticfiles %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
+    <!-- Font -->
+    <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <!-- loading django static files -->
+   
+    
+  </head>
+
+
+<body id="landing-page" ng-controller="homepagecontroller">  
+ 
+     <!-- Preloader -->
+    <div id="mask">
+        <div id="loader"></div>
+    </div>
+    <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
+    <div id="fb-root"></div>
+    
+    <header>
+        <nav class="navigation navigation-header">
+            <div class="container">
+                <div class="navigation-brand">
+                    <div class="brand-logo">
+            <a href="" class="logo"></a>            
+                    </div>
+                    
+                </div>
+                <div  class="navigation-navbar">                    
+                    <ul ng-hide="is_logged" class="navigation-bar navigation-bar-right">                        
+                        <li class="featured" data-toggle="modal" data-target="#signupmodel"><a href="#">Login / Register</a></li>
+                    </ul>  
+                </div>
+        
+            </div>
+        </nav>
+    </header>
+  
+  
+  <div id="banner" class="static-header register-version light clearfix">
+
+        <div class="text-heading">
+            <h1 class="animated " data-animation="bounceInDown" data-delay="0">Where your parlour booking comes, Handy!</h1>
+            <p class="animated  easysearch" data-animation="fadeInDown" data-delay="500">EASY SEARCH  <span> | </span> FREE CANCELLATION   <span> | </span>  100% GUARNTEE</p>
+        </div>
+    
+    <div class="container">
+      <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
+        <div class="row">
+            <form class="form-inline form-register form-register-small">
+            
+              <div class="form-group">
+              <span class="service-icon"><i class="icon icon-shopping-23 icon-active"></i></span>             
+              <span><input size="35" type="text" class="form-control" id="service" placeholder="Services"></span>
+              <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span> 
+              </div>
+              
+              <div class="form-group">
+              <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></span>              
+                <input size="35" type="text" class="form-control location" id="location"  placeholder="Location">
+              </div>
+              
+              <div class="form-group submit-wrap">                
+                <button  class="btn btn-primary btn-md">Find</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+    
+    </div>    
+    
+  
+  
+  <section id="features-list" class="section dark">
+        <div class="container animated " data-animation="fadeInDown">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-office-44 icon-active"></i>
+                    <span class="h7">SELECT</span>
+                    <p class="thin">Choose from 100’s of studios<br>Select your flexible time<br>BOOK after reading reviews</p>
+                </article>
+            </div>                       
+      <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-shopping-18 icon-active"></i>
+                    <span class="h7">PAY</span>
+                    <p class="thin">No FEE<br>Exciting offers<br>Choose your mode of payment</p>
+                </article>
+            </div>             
+      <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-seo-icons-27 icon-active"></i>
+                    <span class="h7">WHAT</span>
+                    <p class="thin">Easy Booking<br>No more waiting<br>100% Satisfcation Guarantee
+                    </p>
+                </article>
+            </div>    
+                
+        </div>
+    </section>
+    
+
+  <div  id="signupmodel" class=" modal fade" role="dialog">
+    <div class="modal-content signup">
+     <div class="modal-header modal-register-header">
+     <button type="button" class="close" data-dismiss="modal">&times;</button> 
+     <h4 class="modal-title">Login</h4>
+    </div> 
+      <div class="modal-body register">   
+      <div class="socialpanel">
+          <form>
+            <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook">
+              <i class="icon icon-socialmedia-08"></i>Login using Facebook
+            </button>         
+          </form>
+      </div>        
+      <p class="hidden-xs"><i>* we remember our promise of no posts on your wall</i></p>
+      </div>
+    </div>  
+  </div>    
+   
+  
+
+   
+
+   <!-- js libs -->
+  <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
+  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+  <script src='{% static "js/app.js" %}'></script>
+  <script src='{% static "js/services/httpservices.js" %}'></script>
+  <script src='{% static "js/controllers/home_page_controller.js" %}'></script>
+  <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
+  <!-- Bootstrap Js -->
+  
+  <!-- loader -->
+  <script type="text/javascript" src='{% static "js/scripts.js"%}'></script>
+
+  </body>
+</html>
+
+
