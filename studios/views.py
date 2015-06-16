@@ -36,7 +36,7 @@ class ServiceDetails(ServiceMixin, ListAPIView):
 	pass
 
 
-def get_studios(location,services,date):
+def get_studios(location,services,date=None):
 
     """function which filters the list of studios 
     based on location and services"""
