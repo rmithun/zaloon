@@ -70,8 +70,9 @@
               </div>
               
               <div class="form-group">
-              <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></span>              
-                <input size="35" type="text" class="form-control location" id="location"  placeholder="Enter your Location">
+                <span class="service-icon"><i class="icon icon-shopping-25 icon-active"></i></span>
+                <input id="location" size="35" ng-keyup="areacomplete()" type="text" ng-model=" location_.area" placeholder="Enter your Location" typeahead="c as c.value for c in location_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onSelectPart($item, $model, $label)' typeahead-template-url="customTemplate.html" class="form-control location">
+       
               </div>
               
               <div class="form-group submit-wrap">                
@@ -137,6 +138,12 @@
   
 
    
+  <script type="text/ng-template" id="customTemplate.html">
+  <a>
+      <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
+  </a>
+
+  </script>
 
    <!-- js libs -->
   <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
@@ -148,11 +155,11 @@
   <script src='{% static "js/services/httpservices.js" %}'></script>
   <script src='{% static "js/controllers/home_page_controller.js" %}'></script>
   <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
   <!-- Bootstrap Js -->
   
   <!-- loader -->
   <script type="text/javascript" src='{% static "js/scripts.js"%}'></script>
-
   </body>
 </html>
 

@@ -1,6 +1,5 @@
 noqapp.controller('homepagecontroller',function($scope, $cookies, $window,httpServices,sessionService){
-$scope.is_logged = sessionService.isLogged()
-
+$scope.is_logged = sessionService.isLogged();
 
  function getFBKey()
  {
@@ -78,4 +77,33 @@ httpServices.getUsrDetails().then(function(dataz)
 		})
 	}
 
+	//AutoComplete
+	$scope.location_ = {};
+	$scope.location_['area'] = '';
+	$scope.location_['arealist'] = [];
+	var acService = new google.maps.places.AutocompleteService();
+	$scope.areacomplete = function () {
+		console.log($scope.location_['area'])
+    	if ($scope.location_['area'] != "") {
+            acService.getPlacePredictions({
+                input: $scope.location_['area'],
+                types: ['(regions)'],
+                componentRestrictions: { 'country': 'in' }
+            }, function (places, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    //console.log(places);
+                    var _places = [];
+                    for (var i = 0; i < places.length; ++i) {
+                    	_places.push({
+                        	id: places[i].place_id,
+                        	value: places[i].description,
+                        	label: places[i].description
+                    	});
+                	}                	
+                	$scope.location_['arealist'] = _places;
+                	console.log($scope.location_['arealist']);
+            	}
+        	});
+    	}
+    }
 });
