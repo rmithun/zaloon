@@ -1,4 +1,4 @@
-var noqapp = angular.module('accountApp', ['ngCookies','ngRoute']);
+var noqapp = angular.module('accountApp', ['ngCookies','ngRoute','ui.bootstrap']);
 
 noqapp.run(function($http,$cookies,sessionService) {
 
@@ -17,6 +17,10 @@ noqapp.config(function($routeProvider,$httpProvider) {
 				templateUrl : '/account/search/'
 			})
 			
+			.when('/search', {
+				templateUrl : '/account/search/'
+			})
+
 			.when('/search', {
 				templateUrl : '/account/search/'
 			})

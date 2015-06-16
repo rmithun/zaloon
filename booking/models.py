@@ -38,7 +38,7 @@ class BookingDetails(models.Model):
 	status_code = models.CharField(max_length = 10)
 	booking_status = models.CharField(max_length = 30)
 	reminder_sent  = models.BooleanField(default = 0)
-	booking_type = models.BooleanField(default = 0) #0- new 1-postponed
+	is_valid = models.BooleanField(default = 1) #0- new 1-postponed
 	purchase = models.ForeignKey(Purchase, related_name = "purchase_id", null = True)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
