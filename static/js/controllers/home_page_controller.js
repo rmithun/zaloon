@@ -83,7 +83,6 @@ httpServices.getUsrDetails().then(function(dataz)
 	$scope.location_['arealist'] = [];
 	var acService = new google.maps.places.AutocompleteService();
 	$scope.areacomplete = function () {
-		console.log($scope.location_['area'])
     	if ($scope.location_['area'] != "") {
             acService.getPlacePredictions({
                 input: $scope.location_['area'],

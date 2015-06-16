@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^register/(?P<backend>[^/]+)/$',
         uac_view.register_by_access_token),
     url(r'^home/$',TemplateView.as_view(template_name='user_accounts/home.html'),name = 'home'),
+    
 
 
 

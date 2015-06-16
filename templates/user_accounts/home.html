@@ -14,6 +14,7 @@
     <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />      
     <!-- our css -->
     <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
     <!-- loading django static files -->
    
     
@@ -70,8 +71,8 @@
               </div>
               
               <div class="form-group">
-                <span class="service-icon"><i class="icon icon-shopping-25 icon-active"></i></span>
-                <input id="location" size="35" ng-keyup="areacomplete()" type="text" ng-model=" location_.area" placeholder="Enter your Location" typeahead="c as c.value for c in location_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onSelectPart($item, $model, $label)' typeahead-template-url="customTemplate.html" class="form-control location">
+                <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></i></span>
+                <input id="location" size="45" ng-keyup="areacomplete()" type="text" ng-model=" location_.area" placeholder="Enter your Location" typeahead="c as c.value for c in location_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onSelectPart($item, $model, $label)' typeahead-template-url="custom-template.html" class="form-control location">
        
               </div>
               
@@ -93,7 +94,7 @@
                 <article class="center">  
           <i class="icon icon-office-44 icon-active"></i>
                     <span class="h7">SELECT</span>
-                    <p class="thin">Choose from 100’s of studios<br>Select your flexible time<br>BOOK after reading reviews</p>
+                    <p class="thin">Choose from 100’s of studios<br>Select your flexible time<br>Read review and Book</p>
                 </article>
             </div>                       
       <div class="col-md-4 col-sm-4 col-xs-12">
@@ -106,7 +107,7 @@
       <div class="col-md-4 col-sm-4 col-xs-12">
                 <article class="center">  
           <i class="icon icon-seo-icons-27 icon-active"></i>
-                    <span class="h7">WHAT</span>
+                    <span class="h7">MOVE-ON</span>
                     <p class="thin">Easy Booking<br>No more waiting<br>100% Satisfcation Guarantee
                     </p>
                 </article>
@@ -138,9 +139,9 @@
   
 
    
-  <script type="text/ng-template" id="customTemplate.html">
+  <script type="text/ng-template" id="custom-template.html">
   <a>
-      <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
+     <i class="icon icon-socialmedia-25">   <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
   </a>
 
   </script>
@@ -151,6 +152,7 @@
   <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
   <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
   <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+  <script type="text/javascript" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>
   <script src='{% static "js/app.js" %}'></script>
   <script src='{% static "js/services/httpservices.js" %}'></script>
   <script src='{% static "js/controllers/home_page_controller.js" %}'></script>
