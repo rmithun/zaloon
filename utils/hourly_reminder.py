@@ -25,7 +25,7 @@ def get_hourly_bookings():
 	    today = datetime.today()
             hour  = datetime.now().hour
             bookings = BookingDetails.objects.filter(appointment_date = today,   \
-        	booking_status = 'booked', booking_code = 'SBUK01', appointment_time__range = (hour, (hour+1))
+        	booking_status = 'BOOKED', booking_code = 'SBUK01', appointment_time__range = (hour, (hour+1))
             ##log code starting
             for every_book in bookings:
         	code = every_book['booking_code']

@@ -25,7 +25,7 @@ def get_Bookings_for_day():
 	try:
 	    today = datetime.today().date()
             bookings = BookingDetails.objects.filter(appointment_date = today,   \
-            booking_status = 'booked', booking_code = 'SBUK01')
+            booking_status = 'BOOKED', booking_code = 'SBUK01')
             ##log code starting
             for every_book in bookings:
         	code = every_book['booking_code']
