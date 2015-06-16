@@ -57,22 +57,27 @@
     <div class="container">
       <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
         <div class="row">
-            <form  ng-hide="inviteflag == 1;" class="form-inline form-register form-register-small">
+            <form  ng-hide="inviteflag == 1;" class="form-inline form-register form-register-small" name="inviteform" >
               
               <div class="form-group">
               <span class="email-icon"><i class="icon icon-chat-messages-14 icon-active"></i></span>              
-                <input ng-hide = "inviteflag == 1;" size="50" type="email" class="form-control emailtxt" placeholder="Enter email to get invite"  name="input" ng-model="emailid" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
+                <input ng-hide = "inviteflag == 1;" size="50" type="email" class="form-control emailtxt" placeholder="Enter email to get invite"  name="email" ng-model="emailid" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
               </div>
               
               <div class="form-group invite-wrap">                
-                <button type="button" ng-click="invite()" class="btn btn-primary btn-md">GET INVITED</button>
+                <button type="button" ng-click="invite(inviteform)" class="btn btn-primary btn-md">GET INVITED</button>
               </div>
+              <p ng-hide="inviteflag == 1;" class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
+              
+              <span ng-show = "inviteflag == 0;" class="easysearch">Please try again.Some error occurred.</span>
+              <span class="error" ng-show="formsubmit && inviteform.email.$error.required">Please enter valid email.</span>
+              <span class="error" ng-show="formsubmit && inviteform.email.$error.pattern">Please enter valid email.</span>
             </form>
-
-            <p ng-hide="inviteflag == 1;" class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
-            <span ng-show = "inviteflag == 1;" class="easysearch">You are now added to our priorites list.</span>
-            <span ng-show = "inviteflag == 0;" class="easysearch">Please try again.Some error occurred.</span>
-
+            <div ng-show = "inviteflag == 1;">
+            <span  class="easysearch">You are now added to our priorites list.</span><br/>
+            <span id="facebook-like">Like us on FB</span> |
+            <span id="twitter-follow">Follow us on Twitter</span>
+          </div>
         </div>
       </div>
     </div>
@@ -119,6 +124,7 @@
   <script src='{% static "js/lp_app.js" %}'></script>
   <script src='{% static "js/services/landingservices.js" %}'></script>
   <script src='{% static "js/controllers/landing_page_controller.js" %}'></script>
+  <!-- <script src='{% static "js/directives/validation_directives.js" %}'></script> -->
   <!-- Bootstrap Js -->
   
   <!-- loader -->
