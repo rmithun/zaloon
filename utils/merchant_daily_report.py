@@ -10,7 +10,7 @@ from utils import Responses
 from django.contrib.auth.models import User
 
 ------------------------------------------------------------------------------------------------------
-Name | Booking id | Services Booked | Offer code | Booking amount | Offer amount | To pay 
+Name | Booking id | Services Booked | Offer code | Booking amount | Actual amount | To pay 
 ------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------
@@ -20,13 +20,33 @@ Total Bookings -  Total Booking amount  - Total Amount after offer - Total to pa
 def daily_merchant_report():
 	try:
 		##get all used booking for the day
-		from django.db import connection
-        cursor = connection.cursor()
         today = datetime.today().date()
-        all_data = cursor.execute('''select * from booking_bookingdetails db join booking_bookingservices  \
-        bs on bd.id = bs.booking_id where  appointment_date = %s and booking_status = %s  \
-         and  is_valid = 1''' %(today,'USED'))
-        rows = cursor.fetchall()
-        for every in rows:
-        	services = cursor.execute('''select * from booking_bookingservices where  \
-        		booking_id = %s'''%(every.id))
+        bookings = BookingDetails.objects.filter(appointment_date = today,  \
+            booking_status = 'USED', status_code = '', is_valid = True)
+        studios_visited = []
+        to_be_print = {}
+        for stud in booking:
+            if stud not in studios_visited:
+                studios_visited.append(stud['id'])
+                services_booked = BookingServices.objects.filter(booking_id = stud['id'])
+                services = []
+                for sun in services_booked:
+                    services.append(sun['service'].service_name)
+                obx = {}
+                obx['studio_id'] =  stud['studio_id']
+                obx['data'] = []
+                obj = {}
+                obj['studio_name'] = stud['studio'].name 
+                obj['booking_id'] = stud['id']
+                obj['services_booked'] = services[:]
+                obj['offer_code'] = stud['promo'].promo_code
+                obj['booking_amount'] = stud['purchase'].purchase_amount
+                obj['actual_amount'] = stud['purchase'].actual_amount
+                obj['amount_to_pay'] = (obj['booking_amount'] - (obj['booking_amount']/10))
+                obx['data'].append(obj)
+                to_print[stud['studio_id']] = obx
+            else:
+                to_print['']
+
+
+
