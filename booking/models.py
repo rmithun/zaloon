@@ -34,7 +34,7 @@ class BookingDetails(models.Model):
 	appointment_time = models.FloatField() # ex 13.15 14.30
 	booking_code = models.CharField(max_length = 25)
 	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
-	#promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
+	promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
 	status_code = models.CharField(max_length = 10)
 	booking_status = models.CharField(max_length = 30)
 	reminder_sent  = models.BooleanField(default = 0)
