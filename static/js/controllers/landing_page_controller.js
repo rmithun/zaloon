@@ -3,13 +3,15 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
 	$scope.formsubmit=false;
 	$scope.inviteflag = null;
 
-
+    $scope.lp_invited = false;
 	$scope.invite=function(form)
 	{
+		$scope.lp_invited = true;
 		$scope.formsubmit=true;
 		console.log(form.$valid)
 		if(form.$valid)
-		{
+		{ 
+			$scope.lp_invited = false;
 			var data = {email:$scope.emailid};
 			landingServices.invite(data).then(function(res)
 			{
@@ -17,6 +19,7 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
 			}, 
 			function(res)
 			{
+				$scope.lp_invited = false;
 				$scope.inviteflag = 0;
 				console.log("Error inviting")
 			})

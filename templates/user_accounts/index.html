@@ -65,7 +65,10 @@
               </div>
               
               <div class="form-group invite-wrap">                
-                <button type="button" ng-click="invite(inviteform)" class="btn btn-primary btn-md">GET INVITED</button>
+                <button type="button" ng-disabled="lp_invited"  ng-click="invite(inviteform)" class="btn btn-primary btn-md" ng-switch="lp_invited">
+                  <span ng-switch-default>GET INVITED</span>
+                  <span ng-switch-when="true">INVITING...</span>
+              </button>
               </div>
               <p ng-hide="inviteflag == 1;" class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
               
