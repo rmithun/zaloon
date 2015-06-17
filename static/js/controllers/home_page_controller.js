@@ -80,7 +80,9 @@ httpServices.getUsrDetails().then(function(dataz)
 	//AutoComplete
 	$scope.location_ = {};
 	$scope.location_['area'] = '';
+	
 	$scope.location_['arealist'] = [];
+	$
 	var acService = new google.maps.places.AutocompleteService();
 	$scope.areacomplete = function () {
     	if ($scope.location_['area'] != "") {
@@ -100,9 +102,23 @@ httpServices.getUsrDetails().then(function(dataz)
                     	});
                 	}                	
                 	$scope.location_['arealist'] = _places;
-                	console.log($scope.location_['arealist']);
+                	//console.log($scope.location_['arealist']);
             	}
         	});
     	}
     }
+    //Service
+    $scope.location_['service']='';
+    $scope.location_['servicelist']='';
+    httpServices.getService().then(function(data)
+    	{
+    		$scope.location_['servicelist'] = data['service_details'].data;
+
+    	},function()
+    	{
+    		console.log("Try again to get service")
+    	});    
+    $scope.hoverIn = function(){
+    	console.log('hai');
+	};
 });

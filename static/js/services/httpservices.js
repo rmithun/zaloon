@@ -1,6 +1,7 @@
 //URL
 var fbloginURL = '/register/facebook/'
 var accountURL  = '/account/'
+var studioURL = '/studios/'
 
 noqapp.factory('httpServices', function($http, $q, $cookies, sessionService) 
 {
@@ -37,6 +38,11 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		var user_details = $http.get(accountURL+'user_details/')
 		//var booking_history = $http.get(accountURL+'booking_history/')
 		return $q.all({'booking':booking,'user_details':user_details})
+	}
+	loginData.getService=function()
+	{
+		var service=$http.get(studioURL+"services")
+		return $q.all({'service_details':service})
 	}
 
     return loginData;
