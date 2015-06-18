@@ -118,7 +118,7 @@ httpServices.getUsrDetails().then(function(dataz)
     	{
     		console.log("Try again to get service")
     	});    
-    $scope.hoverIn = function(){
+    $scope.hoverin = function(){
     	console.log('hai');
 	};
 });

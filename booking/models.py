@@ -106,3 +106,14 @@ class StudioReviews(models.Model):
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class MerchantDailyReportStatus(models.Model):
+
+	"""table holding all information status for reports sent to merchants"""
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_report")
+	report_date = models.DateField(default = datetime.now().date())
+	report = models.FileField(upload_to = 'reports/%Y/%m/%d')
+	mail_sent = models.BooleanField(default = 0)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
