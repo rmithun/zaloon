@@ -8,7 +8,7 @@ from datetime import datetime
 import django
 from booking.models import BookingDetails
 from studios.models import StudioProfile
-from utils import Responses
+from utils import responses, generic_utils
 from django.contrib.auth.models import User
 
 
@@ -25,35 +25,38 @@ def get_Bookings_for_day():
 	try:
 	    today = datetime.today().date()
             bookings = BookingDetails.objects.filter(appointment_date = today,   \
-            booking_status = 'BOOKED', booking_code = 'SBUK01')
+            booking_status = 'BOOKED', booking_code = 'B001', is_valid = True)
             ##log code starting
-            for every_book in bookings:
+        for every_book in bookings:
         	code = every_book['booking_code']
         	studio_name = StudioProfile.objects.filter(id = every_book['studio']).values('name')
-        	user_name = User.objects.filter(id = every_book['user']).values('first_name')
+        	user_name = User.objects.filter(id = every_book['user']).values('first_name','id')
         	date = today
-                time = datetime.strptime(str(every_book['appointment_time']), "%H.%M").strftime("%I:%M %p")
+            time = datetime.strptime(str(every_book['appointment_time']), "%H.%M").strftime("%I:%M %p")
         	mobile_no = BookedMessageSend.objects.filter(booking_id = every_book['id']).values('mobile_no')
-        	sms_template = (Responses.daily_reminder['sms_template'])%(user_name, studio_name, date, time,code)
+            ##get sms template
+        	#sms_template = (Responses.daily_reminder['sms_template'])%(user_name, studio_name, date, time,code)
         	try:
-        	    sendSMS(mobile_no,sms_template)
+        	    generic_utils.sendSMS(mobile_no,sms_template)
         	    status = True
         	except Exception,smserr:
         		print repr(smserr)
         		status = False
         		daily_reminder = DailyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
-        	    	status = status, service_updated = "daily reminder", message = "sms_template",  \
+        	    	status = status,user_id = user_name['id'],service_updated = "daily reminder", message = sms_template,  \
         	    	)
+                daily_reminder.save()
         	else:
         		daily_reminder = DailyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
-        	    	status = status, service_updated = "daily reminder", message = "sms_template",  \
+        	    	status = status,user_id = user_name['id'], service_updated = "daily reminder", message = sms_template,  \
         	    	)
+                daily_reminder.save()
         ###log code end stats
-        except Exception,error:
-                print error
-        else:
-                print len(bookings)
-        ###log code end stats
+    except Exception,error:
+        print error
+    else:
+        print len(bookings)
+    ###log code end stats
 
 
 get_Bookings_for_day()

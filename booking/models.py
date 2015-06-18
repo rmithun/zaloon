@@ -117,3 +117,39 @@ class MerchantDailyReportStatus(models.Model):
 	mail_sent = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class DailyReminder(models.Model):
+
+	"""table holding all daily booking reminders sent"""
+	booking = models.ForeignKey(BookingDetails, related_name = "reminder_for_booking")
+	mobile_no = models.CharField(max_length = 30)
+	status = models.BooleanField(default = 1)
+	message = models.TextField()
+	service_updated = models.CharField(max_length = 30)
+	user = models.ForeignKey(User, related_name = "dr_for_user")
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+
+class HourlyReminder(models.Model):
+
+	"""table holding all hourly booking reminders sent"""
+	booking = models.ForeignKey(BookingDetails, related_name = "reminder_for_booking")
+	mobile_no = models.CharField(max_length = 30)
+	status = models.BooleanField(default = 1)
+	message = models.TextField()
+	service_updated = models.CharField(max_length = 30)
+	user = models.ForeignKey(User, related_name = "hr_for_user")
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class ThanksMail(models.Model):
+
+	"""table holding all details of thanks mail sent"""
+	booking = models.ForeignKey(BookingDetails, related_name = "reminder_for_booking")
+	mobile_no = models.CharField(max_length = 30)
+	status = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 30)
+	user = models.ForeignKey(User, related_name = "tm_for_user")
+	updated_date_time = models.DateTimeField(default = datetime.now())

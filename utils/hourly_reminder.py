@@ -23,11 +23,12 @@ from django.contrib.auth.models import User
 def get_hourly_bookings():
 	try:
 	    today = datetime.today()
-            hour  = datetime.now().hour
-            bookings = BookingDetails.objects.filter(appointment_date = today,   \
-        	booking_status = 'BOOKED', booking_code = 'SBUK01', appointment_time__range = (hour, (hour+1))
-            ##log code starting
-            for every_book in bookings:
+        hour  = datetime.now().hour
+        bookings = BookingDetails.objects.filter(appointment_date = today,   \
+        booking_status = 'BOOKED', booking_code = 'B001', appointment_time__range =  \
+        (hour, (hour+1)))
+        ##log code starting
+        for every_book in bookings:
         	code = every_book['booking_code']
         	studio_name = StudioProfile.objects.filter(id = every_book['studio']).values('name')
         	user_name = User.objects.filter(id = every_book['user']).values('first_name')
@@ -41,17 +42,19 @@ def get_hourly_bookings():
         	except Exception,smserr:
         		print repr(smserr)
         		status = False
-        		daily_reminder = HourlyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
-        	    	status = status, service_updated = "daily reminder", message = "sms_template",  \
+        		hourly_reminder = HourlyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
+        	    	status = status, service_updated = "daily reminder", message = sms_template,  \
         	    	)
+                hourly_reminder.save()
         	else:
-        		daily_reminder = HourlyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
-        	    	status = status, service_updated = "daily reminder", message = "sms_template",  \
+        		hourly_reminder = HourlyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
+        	    	status = status, service_updated = "daily reminder", message = sms_template,  \
         	    	)
-        except Exception,error:
-                print error
-        else:
-                print len(bookings)
+                hourly_reminder.save()
+    except Exception,error:
+        print error
+    else:
+        print len(bookings)
         ###log code end stats
 
 get_hourly_bookings()
