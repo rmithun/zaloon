@@ -40,7 +40,6 @@ def get_studios(location,services,date=None):
 
     """function which filters the list of studios 
     based on location and services"""
-    import pdb;pdb.set_trace();
 
     closed_on_day = (datetime.today().date().weekday() + 1)
     open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
