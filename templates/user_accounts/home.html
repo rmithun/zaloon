@@ -62,23 +62,23 @@
     <div class="container">
       <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
         <div class="row">
-            <form class="form-inline form-register form-register-small">
-            
-              <div class="form-group">
+            <form name="searchservice" class="form-inline form-register form-register-small" novalidate>            
+              <div class="form-group autocomplete">
               <span class="service-icon"><i class="icon icon-shopping-23 icon-active"></i></span>             
-              <span><input size="35" ng-model="location_.service" type="text" class="form-control" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in location_.servicelist | limitTo:10" typeahead-template-url="custom-template.html"></span>
-              <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span> 
+              <span><input size="35" name="service" ng-model="searchdata_.service" type="text" class="form-control" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="custom-template.html" required></span>              
               </div>
               
-              <div class="form-group">
+              <div class="form-group autocomplete">
                 <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></i></span>
-                <input id="location" size="45" ng-keyup="areacomplete()" type="text" ng-model=" location_.area" placeholder="Enter your Location" typeahead="area as area.value for area in location_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onSelectPart($item, $model, $label)' typeahead-template-url="custom-template.html" class="form-control location">
+                <input id="location" name="location" size="45" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.area" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="custom-template.html" class="form-control location" required>
        
               </div>
               
               <div class="form-group submit-wrap">                
-                <button  class="btn btn-primary btn-md">Find</button>
-              </div>
+                <input type="submit"  class="btn btn-primary btn-md" ng-click="searchstudio(searchservice)" value="Find"/>
+              </div><br/>
+              <span class="error" ng-show="formsubmit && searchservice.service.$error.required">Service is required.</span>
+              <span class="error" ng-show="formsubmit && searchservice.location.$error.required">Location is required.</span>
             </form>
         </div>
       </div>

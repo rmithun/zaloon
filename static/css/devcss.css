@@ -4,3 +4,27 @@
 * {
   border-radius: 0 !important;
 }
+
+/*AutoComplete*/
+.autocomplete ul.dropdown-menu{
+	margin-top: 0px !important;
+	border: none;
+	width: 100%;
+	padding: 0px;
+}
+
+.autocomplete ul.dropdown-menu>li>a{
+	line-height: 36px;
+	cursor:default;
+	padding: 3px 10px !important;
+}
+.autocomplete ul.dropdown-menu>.active>a, .autocomplete ul.dropdown-menu>.active>a:hover, .autocomplete ul.dropdown-menu>.active>a:focus{
+	background-color: #22ab81;
+}
+
+.autocomplete ul.dropdown-menu>li>a>.icon>span,.autocomplete ul.dropdown-menu>.active>a>.icon>span{
+	font-size: 14px;
+	font-family: 'Open Sans', sans-serif;
+	font-style: initial;
+	padding-left: 5px;
+}

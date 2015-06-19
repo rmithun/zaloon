@@ -40,7 +40,9 @@ def get_studios(location,services,date=None):
 
     """function which filters the list of studios 
     based on location and services"""
-    closed_on_day = (datetime.strptime(date,'%Y-%m-%d').weekday() + 1)
+    import pdb;pdb.set_trace();
+
+    closed_on_day = (datetime.today().date().weekday() + 1)
     open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
     studios = StudioProfile.objects.filter(city__contains = location, is_closed = 0	,  \
     	studio__in = open_studios).values('id')
@@ -51,24 +53,22 @@ def get_studios(location,services,date=None):
 
 
 class StudioProfileMixin(object):
-	permission_classes = (ReadWithoutAuthentication,)
-	serializer_class = StudioProfileSerializer
-	model = StudioProfile
-	def get_queryset(self):
-		#get studio id having location get ids related to it
-		#get studio id having services
-		#location = self.request.DATA['location']
-		#service = self.request.DATA['services']
-		#date = self.request.DATA['date']
-		location = 'karaikudi'
-		services = [1,2]
-		date = '2015-12-12'
-		studios_ = get_studios(location,services,date)
-		queryset = self.model.objects.filter(id__in = studios_)
-		return queryset
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = StudioProfileSerializer
+    model = StudioProfile
+    def get_queryset(self):
+        try:
+            location = self.request.GET['location']
+            services = self.request.GET['services']
+            studios_ = get_studios(location,services)
+            queryset = self.model.objects.filter(id__in = studios_)
+        except Exception ,e:
+            print repr(e)
+        return queryset
 		
 
 class StudioProfileDetail(StudioProfileMixin, ListAPIView):
+    #import pdb;pdb.set_trace();
     pass	
 
 class StudioServicesDetail(ListAPIView):

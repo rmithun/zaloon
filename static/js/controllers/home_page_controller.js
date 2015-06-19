@@ -1,5 +1,6 @@
 noqapp.controller('homepagecontroller',function($scope, $cookies, $window,httpServices,sessionService){
 $scope.is_logged = sessionService.isLogged();
+$scope.formsubmit=false;
 
  function getFBKey()
  {
@@ -78,16 +79,14 @@ httpServices.getUsrDetails().then(function(dataz)
 	}
 
 	//AutoComplete
-	$scope.location_ = {};
-	$scope.location_['area'] = '';
-	
-	$scope.location_['arealist'] = [];
-	$
+	$scope.searchdata_ = {};
+	$scope.searchdata_['area'] = '';	
+	$scope.searchdata_['arealist'] = [];	
 	var acService = new google.maps.places.AutocompleteService();
 	$scope.areacomplete = function () {
-    	if ($scope.location_['area'] != "") {
+    	if ($scope.searchdata_['area'] != "") {
             acService.getPlacePredictions({
-                input: $scope.location_['area'],
+                input: $scope.searchdata_['area'],
                 types: ['(regions)'],
                 componentRestrictions: { 'country': 'in' }
             }, function (places, status) {
@@ -101,24 +100,44 @@ httpServices.getUsrDetails().then(function(dataz)
                         	label: places[i].description
                     	});
                 	}                	
-                	$scope.location_['arealist'] = _places;
-                	//console.log($scope.location_['arealist']);
+                	$scope.searchdata_['arealist'] = _places;                	
             	}
         	});
     	}
     }
-    //Service
-    $scope.location_['service']='';
-    $scope.location_['servicelist']='';
+    //Get All Services
+    $scope.searchdata_['service']='';
+    $scope.searchdata_['servicelist']='';
     httpServices.getService().then(function(data)
     	{
-    		$scope.location_['servicelist'] = data['service_details'].data;
+    		$scope.searchdata_['servicelist'] = data['service_details'].data;
 
     	},function()
     	{
     		console.log("Try again to get service")
     	});    
-    $scope.hoverin = function(){
-    	console.log('hai');
+
+    //Search Studio Details Event
+    $scope.searchstudio=function(form){
+    	$scope.formsubmit=true;
+    	if(form.$valid)
+		{ 
+			var obj={'services':$scope.searchdata_.serviceid,'location':$scope.searchdata_.searchlocation};
+			console.log(obj);
+			 httpServices.getstudioDetails(obj).then(function(data)
+		    	{
+		    		console.log(data);
+
+		    	},function()
+		    	{
+		    		console.log("Try again to get service")
+		    	});
+		}
+    }
+    $scope.onserviceselect = function ($item, $model, $label) {
+	    $scope.searchdata_.serviceid=$item.id;	   
+	};
+	$scope.onlocationselect = function ($item, $model, $label) {
+		$scope.searchdata_.searchlocation=$label;
 	};
 });

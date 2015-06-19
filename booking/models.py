@@ -122,7 +122,7 @@ class MerchantDailyReportStatus(models.Model):
 class DailyReminder(models.Model):
 
 	"""table holding all daily booking reminders sent"""
-	booking = models.ForeignKey(BookingDetails, related_name = "reminder_for_booking")
+	booking = models.ForeignKey(BookingDetails, related_name = "dr_for_booking")
 	mobile_no = models.CharField(max_length = 30)
 	status = models.BooleanField(default = 1)
 	message = models.TextField()
@@ -135,7 +135,7 @@ class DailyReminder(models.Model):
 class HourlyReminder(models.Model):
 
 	"""table holding all hourly booking reminders sent"""
-	booking = models.ForeignKey(BookingDetails, related_name = "reminder_for_booking")
+	booking = models.ForeignKey(BookingDetails, related_name = "hr_reminder_for_booking")
 	mobile_no = models.CharField(max_length = 30)
 	status = models.BooleanField(default = 1)
 	message = models.TextField()
@@ -147,7 +147,7 @@ class HourlyReminder(models.Model):
 class ThanksMail(models.Model):
 
 	"""table holding all details of thanks mail sent"""
-	booking = models.ForeignKey(BookingDetails, related_name = "reminder_for_booking")
+	booking = models.ForeignKey(BookingDetails, related_name = "tm_for_booking")
 	mobile_no = models.CharField(max_length = 30)
 	status = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 30)

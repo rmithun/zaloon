@@ -44,7 +44,11 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		var service=$http.get(studioURL+"services/")
 		return $q.all({'service_details':service})
 	}
-
+	loginData.getstudioDetails=function(req){
+		console.log(req);
+		var studiodetails=$http.get(studioURL+"studio_profile/",{params:req})
+		return $q.all({'studio_details':studiodetails})
+	}
     return loginData;
 });
 
