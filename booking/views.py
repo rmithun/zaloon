@@ -128,13 +128,16 @@ class CancelBooking(ActiveBookingMixin):
     	else:
     		return Response(status.HTTP_200_OK)
 
-class ValidateBookingCode(ActiveBookingMixin):
-
+class ValidateBookingCode(ListAPIUpdateView):
+	authentication_classes = [OAuth2Authentication]
+    permission_classes = (TokenHasScope, IsOwner)
+    required_scopes = ['write','read']
+    serializer_class = ActiveBookingSerializer
     def get_queryset(self):
         booking_code = self.request.DATA['booking_code']
         studio = self.request.DATA['studio']
         data = BookingDetails.objects.filter(studio_id = studio, booking_code =  \
-	 	booking_code)
+	 	booking_code, booking_status = 'BOOKED', status_code ='B001', is_valid = True)
         return data
     
     @transaction.commit_manually
@@ -143,7 +146,8 @@ class ValidateBookingCode(ActiveBookingMixin):
             booking_code = self.request.DATA['booking_code']
             studio = self.request.DATA['studio']
             BookingDetails.objects.filter(studio_id = studio, booking_code =  \
-		    booking_code).update(booking_status = 'used', status_code = 'SBUKUSD05',  \
+		    booking_code, booking_status = 'BOOKED', status_code ='B001',  \
+		    is_valid = True).update(booking_status = 'USED', status_code = 'B004',  \
 		    service_updated = 'booking used', updated_date_time = datetime.now())
         except Exception,e:
 			print repr(e)
@@ -153,4 +157,4 @@ class ValidateBookingCode(ActiveBookingMixin):
 
 
 		
-
+class StudioLogin(ListAPIView):

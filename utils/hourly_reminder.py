@@ -35,10 +35,9 @@ def get_hourly_bookings():
         	date = today
         	time = every_book['appointment_time'] ##convert to AM/PM
         	mobile_no = BookedMessageSend.objects.filter(booking_id = every_book['id']).values('mobile_no')
-        	sms_template = (Responses.hourly_reminder['sms_template'])%(user_name, studio_name, date, time,code)
+        	sms_template = (Responses.hourly_reminder['sms_template'])%(user_name, studio_name, date, time)
         	try:
-        	    sendSMS(mobile_no,sms_template)
-        	    status = True
+        	    status = generic_utils.sendSMS(mobile_no,sms_template)
         	except Exception,smserr:
         		print repr(smserr)
         		status = False

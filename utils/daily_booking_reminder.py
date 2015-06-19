@@ -2,10 +2,7 @@
 ##for the day. This differes from every hour notification script
 ##this runs every day at 7 AM
 
-
-
 from datetime import datetime
-import django
 from booking.models import BookingDetails
 from studios.models import StudioProfile
 from utils import responses, generic_utils
@@ -20,13 +17,13 @@ from django.contrib.auth.models import User
 ##Make an entry in daily_reminder table with status	
 
 
-##need to integrate with thread que system when the count overflows in future
+##need to integrate with thread queue system when the count overflows in future
 def get_Bookings_for_day():
 	try:
 	    today = datetime.today().date()
-            bookings = BookingDetails.objects.filter(appointment_date = today,   \
+        bookings = BookingDetails.objects.filter(appointment_date = today,   \
             booking_status = 'BOOKED', booking_code = 'B001', is_valid = True)
-            ##log code starting
+        ##log code starting
         for every_book in bookings:
         	code = every_book['booking_code']
         	studio_name = StudioProfile.objects.filter(id = every_book['studio']).values('name')
@@ -35,10 +32,9 @@ def get_Bookings_for_day():
             time = datetime.strptime(str(every_book['appointment_time']), "%H.%M").strftime("%I:%M %p")
         	mobile_no = BookedMessageSend.objects.filter(booking_id = every_book['id']).values('mobile_no')
             ##get sms template
-        	#sms_template = (Responses.daily_reminder['sms_template'])%(user_name, studio_name, date, time,code)
+        	#sms_template = (responses.sms_templates['daily_reminder'])%(user_name, studio_name, date, time,code)
         	try:
-        	    generic_utils.sendSMS(mobile_no,sms_template)
-        	    status = True
+        	    status = generic_utils.sendSMS(mobile_no,sms_template)
         	except Exception,smserr:
         		print repr(smserr)
         		status = False

@@ -122,7 +122,7 @@ httpServices.getUsrDetails().then(function(dataz)
     	$scope.formsubmit=true;
     	if(form.$valid)
 		{ 
-			var obj={'services':$scope.searchdata_.serviceid,'location':$scope.searchdata_.searchlocation};
+			var obj={'service':$scope.searchdata_.service.service_name,'location':$scope.searchdata_.searchlocation};
 			console.log(obj);
 			 httpServices.getstudioDetails(obj).then(function(data)
 		    	{

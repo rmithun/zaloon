@@ -112,8 +112,9 @@ AWS_CDN_URL = "http://dj44veg5gcpqb.cloudfront.net/"
 MEDIA_URL = "http://%s/%s/" % (AWS_CDN_URL, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
+DB = True
 
-if 1:
+if DB:
     STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".

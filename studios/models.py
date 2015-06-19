@@ -148,7 +148,7 @@ class StudioProfile(models.Model):
 	#contract_start_date = models.DateTimeField()
 	#contract_end_date = models.DateTimeField()
 	is_closed = models.BooleanField(default = 0)
-	serve_type = models.CharField(max_length = 10)# men women unisex
+	#serve_type = models.CharField(max_length = 10)# men women unisex
 	daily_studio_closed_from = models.PositiveSmallIntegerField()
 	daily_studio_closed_till = models.PositiveSmallIntegerField()
 	thumbnail= models.ImageField(upload_to = 'img_gallery')

@@ -4,6 +4,7 @@ Views
 """
 #standard library imports
 from datetime import timedelta, datetime
+import operator
 
 #third party imports
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
@@ -18,13 +19,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
+
 #application imports
 from serializers import ServiceSerializer, StudioServicesSerializer,  \
-StudioProfileSerializer, StudioReviewSerializer,StudioTypeSerializer
+StudioProfileSerializer, StudioReviewSerializer,StudioTypeSerializer,StudioSerializer
 from models import *
 from booking.models import StudioReviews
 from utils.permission_class import ReadWithoutAuthentication
 from django.db.models import Q
+from django.conf import settings
 
 
 class ServiceMixin(object):
@@ -36,19 +39,33 @@ class ServiceDetails(ServiceMixin, ListAPIView):
 	pass
 
 
-def get_studios(location,services,date=None):
+def get_studios(location,service,date=None):
 
     """function which filters the list of studios 
     based on location and services"""
-
-    closed_on_day = (datetime.today().date().weekday() + 1)
-    open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
-    studios = StudioProfile.objects.filter(city__contains = location, is_closed = 0	,  \
-    	studio__in = open_studios).values('id')
-    filtered_studios =  StudioServices.objects.filter(service_id__in =   \
-	services, studio_profile_id__in = studios).values('studio_profile').distinct()
-    ##call for booking logic
-    return filtered_studios
+    try:
+        #import pdb;pdb.set_trace();
+        location_set =  reduce(operator.__or__, [Q(area__icontains=query)  \
+        | Q(address_1__icontains=query) | Q(address_2__icontains=query  \
+        )for query in location])
+        closed_on_day = (datetime.today().date().weekday() + 1)
+        open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
+        if settings.DB:
+            studios = StudioProfile.objects.filter(location_set, is_closed = 0 ,  \
+            studio__in = open_studios).values('id')
+            services = Service.objects.filter(service_name__iregex = r'\b{0}\b'.format(service)).values('id')
+        else:
+            services = Service.objects.filter(service_name__iregex = r'\y{0}\y'.format(service)).values('id')
+            studios = StudioProfile.objects.filter(area__iregex = r'\y{0}\y'.format(location), is_closed = 0 ,  \
+            studio__in = open_studios).values('id')
+        filtered_studios =  StudioServices.objects.filter(service_id__in =   \
+	    services, studio_profile_id__in = studios).values('studio_profile').distinct()
+        ##call for booking logic
+    except Exception,e:
+        print repr(e)
+        return None
+    else:
+        return filtered_studios
 
 
 class StudioProfileMixin(object):
@@ -57,9 +74,12 @@ class StudioProfileMixin(object):
     model = StudioProfile
     def get_queryset(self):
         try:
-            location = self.request.GET['location']
-            services = self.request.GET['services']
-            studios_ = get_studios(location,services)
+            city = self.request.GET['location'].split(',')
+            print city[-3]
+            ##add city to filter in future
+            locations = self.request.GET['location'].split()
+            service = self.request.GET['service']
+            studios_ = get_studios(locations,service)
             queryset = self.model.objects.filter(id__in = studios_)
         except Exception ,e:
             print repr(e)
@@ -96,4 +116,35 @@ class GetStudioTypes(ListAPIView):
     def get_queryset(self):
         queryset = StudioType.objects.filter(is_active = True)
         return queryset
+
+
+
+class StudioRegistration(ListCreateAPIView):
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = StudioSerializer
+    def create(self,request,*args,**kwards):
+        try:
+            data = self.request.DATA
+            password = data['password']
+            email = data['email']
+            studio_name = data['name']
+            studio_group = data['studio_group']
+            existing_email = Studio.objects.filter(email = email)
+            if not existing_email:
+                studio = Studio.objects.create_user(email = email ,password = password)
+                studio.save()
+            else:
+                print "existing"  
+        except Exception,e:
+            print repr(e)
+            return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(status.HTTP_201_CREATED)
+    
+
+
+        
+class StudioLogin(ListAPIView):
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = StudioSerializer
 

@@ -9,6 +9,11 @@ from models import *
 from booking.models import StudioReviews
 
 
+class StudioSerializer(serializers.ModelSerializer):
+	class Meta:
+		models = Studio
+		fields = ('email', 'is_active')
+
 class ServiceTypeSerializer(serializers.ModelSerializer):
 
 	"""list of available service type serializer"""
