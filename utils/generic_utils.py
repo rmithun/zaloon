@@ -13,6 +13,7 @@ from django.http import HttpResponse
 
 ##application imports
 from user_accounts.models import UserProfile
+from django.conf import settings
 
 def get_token_json(access_token,app,refresh_token):
     """
@@ -98,3 +99,9 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
         return None
     else:
         return user
+
+def sendSMS(from,to,message):
+    
+    from twilio.rest import TwilioRestClient
+    client  = TwilioRestClient(settings.TWILIO_ID, settings.TWILIO_KEY)
+    message = client.messages.create(to = to, from_= from, body = message)

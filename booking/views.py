@@ -128,9 +128,9 @@ class CancelBooking(ActiveBookingMixin):
     	else:
     		return Response(status.HTTP_200_OK)
 
-class ValidateBookingCode(ListAPIUpdateView):
-	authentication_classes = [OAuth2Authentication]
-    permission_classes = (TokenHasScope, IsOwner)
+class ValidateBookingCode(RetrieveUpdateAPIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = (TokenHasScope,)
     required_scopes = ['write','read']
     serializer_class = ActiveBookingSerializer
     def get_queryset(self):
@@ -156,5 +156,6 @@ class ValidateBookingCode(ListAPIUpdateView):
 			return Response(status.HTTP_200_OK)
 
 
+
 		
-class StudioLogin(ListAPIView):
+
