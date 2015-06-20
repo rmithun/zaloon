@@ -25,6 +25,7 @@ class Purchase(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
+
 class Promo(models.Model):
 
 	promo_code = models.CharField(max_length = 10)
