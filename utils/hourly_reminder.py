@@ -23,33 +23,37 @@ from django.contrib.auth.models import User
 def get_hourly_bookings():
 	try:
 	    today = datetime.today()
-        hour  = datetime.now().hour
+        minute_15_back  = (datetime.now()- timedelta(minutes = 15))
+        now = datetime.now().time()
+        minute_15_back = minute_15_back.time()
         bookings = BookingDetails.objects.filter(appointment_date = today,   \
-        booking_status = 'BOOKED', booking_code = 'B001', appointment_time__range =  \
-        (hour, (hour+1)))
+        booking_status = 'BOOKED', status_code = 'B001', appointment_time__range =  \
+        (minus_min , now), is_valid = True)
         ##log code starting
         for every_book in bookings:
-        	code = every_book['booking_code']
-        	studio_name = StudioProfile.objects.filter(id = every_book['studio']).values('name')
-        	user_name = User.objects.filter(id = every_book['user']).values('first_name')
-        	date = today
-        	time = every_book['appointment_time'] ##convert to AM/PM
-        	mobile_no = BookedMessageSend.objects.filter(booking_id = every_book['id']).values('mobile_no')
-        	sms_template = (Responses.hourly_reminder['sms_template'])%(user_name, studio_name, date, time)
-        	try:
-        	    status = generic_utils.sendSMS(mobile_no,sms_template)
-        	except Exception,smserr:
-        		print repr(smserr)
-        		status = False
-        		hourly_reminder = HourlyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
+            has_sent = HourlyReminder.objects.filter(booking_id = every_book.id, status = False)
+            if len(has_sent)  == 0:
+        	    code = every_book.booking_code
+        	    studio_name = StudioProfile.objects.filter(id = every_book.studio).values('name')
+        	    user_name = User.objects.filter(id = every_book.user).values('first_name')
+        	    date = today
+        	    time = datetime.strptime(str(every_book.appointment_time), "%H.%M").strftime("%I:%M %p")
+        	    mobile_no = BookedMessageSend.objects.filter(booking_id = every_book.id).values('mobile_no')
+        	    sms_template = (Responses.hourly_reminder['sms_template'])%(user_name, studio_name, date, time)
+        	    try:
+        	        status = generic_utils.sendSMS(mobile_no,sms_template)
+        	    except Exception,smserr:
+        		    print repr(smserr)
+        		    status = False
+        		    hourly_reminder = HourlyReminder(booking_id = every_book.id, mobile_no = mobile_no,  \
         	    	status = status, service_updated = "daily reminder", message = sms_template,  \
         	    	)
-                hourly_reminder.save()
-        	else:
-        		hourly_reminder = HourlyReminder(booking_id = every_book['id'], mobile_no = mobile_no,  \
+                    hourly_reminder.save()
+        	    else:
+        		    hourly_reminder = HourlyReminder(booking_id = every_book.id, mobile_no = mobile_no,  \
         	    	status = status, service_updated = "daily reminder", message = sms_template,  \
         	    	)
-                hourly_reminder.save()
+                    hourly_reminder.save()
     except Exception,error:
         print error
     else:

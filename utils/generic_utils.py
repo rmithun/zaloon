@@ -1,5 +1,10 @@
 ##standard imports
 from datetime import datetime
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.MIMEText import MIMEText
+import os, sys
+
 
 ##third party imports
 from oauthlib.common import generate_token
@@ -14,6 +19,8 @@ from django.http import HttpResponse
 ##application imports
 from user_accounts.models import UserProfile
 from django.conf import settings
+from onepass.settings import SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD, SMTP_PORT, SMTP_DO_TLS
+#import logging
 
 def get_token_json(access_token,app,refresh_token):
     """
@@ -100,8 +107,31 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
     else:
         return user
 
-def sendSMS(from,to,message):
-    
+
+def sendEmail(to, subject, message, raw = 0):
+    server = smtplib.SMTP(host = SMTP_SERVER,port = SMTP_PORT,timeout = 10)
+    server.starttls()
+    server.login(SMTP_USERNAME, SMTP_PASSWORD)
+    msg = MIMEMultipart()
+    #logger = logging.getLogger('log.errors')
+    fromaddr = 'vbnetmithun@gmail.com'
+    msg['Subject'] = subject
+    msg['From'] = "gopanther  <vbnetmithun@gmail.com>"
+    to = "mittugotmail@gmail.com"
+    msg['To'] = to
+    msg.attach(MIMEText(message, 'html','utf-8'))
+    toaddrs = to
+    try:
+        server.sendmail(fromaddr, toaddrs, msg.as_string())
+    except Exception, err:
+        #logger.error(err)
+        server.quit()
+        return False
+    else:
+        return True
+
+
+def sendSMS(to,from_,body):
     from twilio.rest import TwilioRestClient
     client  = TwilioRestClient(settings.TWILIO_ID, settings.TWILIO_KEY)
-    message = client.messages.create(to = to, from_= from, body = message)
+    message = client.messages.create(to = to, from_= from_, body = message)

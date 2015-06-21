@@ -10,11 +10,16 @@ BOOKING_RESPONSES = {"BOOKING_SUCCESS":{"MSG":"Booked successfully.","CODE":'B00
                     "BOOKING_UN_USED":{"MSG":"Service used.","CODE":'B005'}, \
 				   }
 
-BOOKING_CODES = {'BOOKED':'B001','FAILED':'B002','CANCEL':'B003','USED':'B004','UNUSED':'B005'}
+BOOKING_CODES = {'BOOKED':'B001','FAILED':'B002','CANCEL':'B003','USED':'B004','UNUSED':'B005',  \
+                 'BOOKING':'B006','EXPIRED':'B007'}
 PAYMENT_CODES = {'PAID':'P001','PAY_FAILED':'P002','PAY_CANCELLED':'P003',  \
                  'REFUND_REQUESTED':'P004','REFUND_SUCCESS':'P005'}
 
 SMS_TEMPLATES = {'DLY_REM':"Hi %s,This is a reminder for your booking for %s on %s at %s ",
-                'HLY_REM':"Hi %s,This is a reminder for your booking for %s on %s at %s "}
+                'HLY_REM':"Hi %s,This is a reminder for your booking for %s on %s at %s ",
+                'BOOKING_EMAIL':"Hi %s,your booking at %s on %s at %s is successfull"}
 
-MAIL_SUBJECTS = {'THANKS_EMAIL':"Thank you for using gopanther.com"}
+MAIL_SUBJECTS = {'THANKS_EMAIL':"Thank you for using gopanther",
+                 'BOOKING_EMAIL':"Booking code from gopanther",
+                 'CANCEL_EMAIL':"Cancelled booking details",
+                 'DAILY_REPORT_EMAIL':"Daily booking report from gopanther"}

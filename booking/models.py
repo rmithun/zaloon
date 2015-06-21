@@ -36,13 +36,13 @@ class BookingDetails(models.Model):
 	user = models.ForeignKey(User, related_name = "booked_by_user")
 	booked_date = models.DateTimeField()
 	appointment_date = models.DateField()
-	appointment_time = models.FloatField() # ex 13.15 14.30
+	appointment_time = models.TimeField() # ex 13.15 14.30
 	booking_code = models.CharField(max_length = 25)
 	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
 	promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
 	status_code = models.CharField(max_length = 10)
 	booking_status = models.CharField(max_length = 30)
-	reminder_sent  = models.BooleanField(default = 0)
+	notification_send  = models.BooleanField(default = 0)
 	is_valid = models.BooleanField(default = 1) #0- new 1-postponed
 	purchase = models.ForeignKey(Purchase, related_name = "purchase_id", null = True)
 	service_updated = models.CharField(max_length = 25)
@@ -62,14 +62,15 @@ class Refund(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
-class BookedMessageSend(models.Model):
+class BookedMessageSent(models.Model):
 
 	"""table holds whether booked/cancelled message sent to 
 	mobile/email both for user and studio"""
 
 	booking = models.ForeignKey(BookingDetails, related_name = "booking_id")
-	message = models.TextField()
-	mobile_no = models.CharField(max_length = 30)
+	message = models.TextField(null = True)
+	mobile_no = models.CharField(max_length = 30, null = True)
+	email = models.CharField(max_length = 60, null = True)
 	is_successful = models.BooleanField(default = 0)
 	type_of_message = models.CharField(max_length = 25) ##book and cancel message
 	mode = models.CharField(max_length = 25) ## mobile and email
@@ -149,7 +150,7 @@ class ThanksMail(models.Model):
 
 	"""table holding all details of thanks mail sent"""
 	booking = models.ForeignKey(BookingDetails, related_name = "tm_for_booking")
-	mobile_no = models.CharField(max_length = 30)
+	email = models.CharField(max_length = 60)
 	status = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 30)
 	user = models.ForeignKey(User, related_name = "tm_for_user")

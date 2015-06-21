@@ -7,4 +7,4 @@ admin.site.register(BookingServices)
 admin.site.register(StudioReviews)
 admin.site.register(Promo)
 admin.site.register(MerchantDailyReportStatus)
-
+admin.site.register(ThanksMail)
