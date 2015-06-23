@@ -28,6 +28,7 @@ from booking.models import StudioReviews
 from utils.permission_class import ReadWithoutAuthentication
 from django.db.models import Q
 from django.conf import settings
+from utils import generic_utils
 
 
 class ServiceMixin(object):
@@ -58,8 +59,12 @@ def get_studios(location,service,date=None):
             services = Service.objects.filter(service_name__iregex = r'\y{0}\y'.format(service)).values('id')
             studios = StudioProfile.objects.filter(area__iregex = r'\y{0}\y'.format(location), is_closed = 0 ,  \
             studio__in = open_studios).values('id')
-        filtered_studios =  StudioServices.objects.filter(service_id__in =   \
-	    services, studio_profile_id__in = studios).values('studio_profile').distinct()
+        if len(service) > 0:
+            filtered_studios =  StudioServices.objects.filter(service_id__in =   \
+	        services, studio_profile_id__in = studios).values('studio_profile').distinct()
+        else:
+            filtered_studios =  StudioServices.objects.filter(studio_profile_id__in =   \
+                studios).values('studio_profile').distinct()
         ##call for booking logic
     except Exception,e:
         print repr(e)
@@ -117,6 +122,13 @@ class GetStudioTypes(ListAPIView):
         queryset = StudioType.objects.filter(is_active = True)
         return queryset
 
+class GetStudioKind(ListAPIView):
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = StudioKindSerializer
+    def get_queryset(self):
+        queryset = StudioKind.objects.filter(is_active = True)
+        return queryset
+
 
 
 class StudioRegistration(ListCreateAPIView):
@@ -128,11 +140,19 @@ class StudioRegistration(ListCreateAPIView):
             password = data['password']
             email = data['email']
             studio_name = data['name']
-            studio_group = data['studio_group']
+            #studio_group = data['studio_group']
             existing_email = Studio.objects.filter(email = email)
             if not existing_email:
                 studio = Studio.objects.create_user(email = email ,password = password)
                 studio.save()
+                studio_details = {'studio_pin':studio.id,'password':password,'email':email}
+                message = get_template('emails/merchant_registration.html').render(Context(studio_details))
+                studio_mail = email
+                subject = responses.MAIL_SUBJECTS['STUDIO_REGISTRATION']
+                try:
+                    generic_utils.sendEmail(studio_mail,subject,message)
+                except Exception,e:
+                    print repr(e)
             else:
                 print "existing"  
         except Exception,e:
@@ -148,3 +168,21 @@ class StudioLogin(ListAPIView):
     permission_classes = (ReadWithoutAuthentication,)
     serializer_class = StudioSerializer
 
+
+@login_required
+def getSlots(request):
+    try:
+        data = request.GET['data']
+        studio = data['studio_id']
+        date = data['date']
+        services = data['services']
+        bookings = BookingDetails.objects.filter(appointment_date = date, studio_id = studio,  \
+            booking_status = 'BOOKED', status_code = 'B001', is_active = True)
+        if len(bookings) > 0:
+            generate_slots()
+    except Exception,e:
+        print repr(e)
+        data = None
+        return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(data = data, status = status.HTTP_200_OK)

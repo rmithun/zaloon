@@ -100,7 +100,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \
-			'studio_amenities','latitude','longitude','studio_kind')
+			'studio_amenities','latitude','longitude','studio_kind','landmark','thumbnail')
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 

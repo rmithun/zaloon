@@ -132,6 +132,25 @@ def sendEmail(to, subject, message, raw = 0):
 
 
 def sendSMS(to,from_,body):
-    from twilio.rest import TwilioRestClient
-    client  = TwilioRestClient(settings.TWILIO_ID, settings.TWILIO_KEY)
-    message = client.messages.create(to = to, from_= from_, body = message)
+
+    import urllib # Python URL functions
+    import urllib2 # Python URL functions
+    authkey = "YourAuthKey" # Your authentication key.
+    mobiles = "9999999999" # Multiple mobiles numbers separated by comma.
+    message = "Test message" # Your message to send.
+    sender = "112233" # Sender ID,While using route4 sender id should be 6 characters long.
+    route = "default" # Define route
+    # Prepare you post parameters
+    values = {
+          'authkey' : authkey,
+          'mobiles' : mobiles,
+          'message' : message,
+          'sender' : sender,
+          'route' : route
+          }
+    url = "https://control.msg91.com/sendhttp.php" # API URL
+    postdata = urllib.urlencode(values) # URL encoding the data here.
+    req = urllib2.Request(url, postdata)
+    response = urllib2.urlopen(req)
+    output = response.read() # Get Response
+    print output # Print Response

@@ -3,6 +3,8 @@
 Views 
 """
 #standard library imports
+import random
+import string
 from datetime import timedelta, datetime
 
 #third party imports
@@ -106,44 +108,43 @@ class NewBooking(ListCreateAPIView,RetrieveUpdateAPIView):
 			purchase_status =  payment_status, service_updated = 'payment response', \
 			status_code = status_code, updated_date_time = datetime.now())
 			if booking_status == 'BOOKED':
-	    		     user = User.objects.filter(email = user).values('first_name','email')
-			     studio = StudioProfile.objects.filter(id = purchase_id['studio_id']).values('name','address_1', \
-			     'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
-			     'in_charge_mobile_no','city')
-			     contacts = {'in_charge_person':{'name':studio['in_charge_person'],'mobile_no': \
-			     studio['in_charge_mobile_no']},'contact_person':{'name':studio['contact_person'],\
-			     'mobile_no':studio['contact_mobile_no']}}
-			     studio_address = {'address_1':studio['address_1'],'address_2':studio['address_2'],  \
-			     'area':studio['area'],'city':studio['city']}
-			     booking_details = {'first_name':user['first_name'],'code':booking_code,  \
-			     'date':appnt_date, 'appnt_time':appnt_time,'services':services,  \
-			     'studio':studio['name'],'studio_address':studio_address,  \
-			     'contact':contacts}
-			     message = get_template('emails/booking_mail.html').render(Context(booking_details))
-	                     to_user = user['email']
-  	                     subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
-	                     sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
-	                     sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],  \
-	                     appointment_date,appointment_time)
-   	                     email = sendEmail(to_user,subject,message)
-	                     sms = sendSMS(mobile_no,sms_message)
-   	                     try:
-	                         email_bms = BookedMessageSent(booking = new_booking, email = to_user, \
-	                         is_successful = email,type_of_message = 'book', mode = 'email', service_updated =  \
-         	                 'new booking')
-	                         sms_bms = BookedMessageSent(booking = new_booking, mobile_no = mobile_no, \
-	                         is_successful = sms_bms, type_of_message = 'book', mode = 'sms', service_updated =  \
-	                         'new booking', message = sms_message)
-   	                         email_bms.save()
-	                         sms_bms.save()
-	                         notification_send = 1
- 	                         BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
-	                	 notification_send)
-	                     except Exception, DBerr:
-        	              	 print (DBerr)
-	                else:
-      	          	     return Response(status.HTTP_304_NOT_MODIFIED)
- 
+				user = User.objects.filter(email = user).values('first_name','email')
+			    studio = StudioProfile.objects.filter(id = purchase_id['studio_id']).values('name','address_1', \
+			    'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
+			    'in_charge_mobile_no','city')
+			    contacts = {'in_charge_person':{'name':studio['in_charge_person'],'mobile_no': \
+			    studio['in_charge_mobile_no']},'contact_person':{'name':studio['contact_person'],\
+			    'mobile_no':studio['contact_mobile_no']}}
+			    studio_address = {'address_1':studio['address_1'],'address_2':studio['address_2'],  \
+			    'area':studio['area'],'city':studio['city']}
+			    booking_details = {'first_name':user['first_name'],'code':booking_code,  \
+			    'date':appnt_date, 'appnt_time':appnt_time,'services':services,  \
+			    'studio':studio['name'],'studio_address':studio_address,  \
+			    'contact':contacts}
+			    message = get_template('emails/booking_mail.html').render(Context(booking_details))
+			    to_user = user['email']
+  	            subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
+	            sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
+	            sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],  \
+	            appointment_date,appointment_time)
+   	            email = sendEmail(to_user,subject,message)
+	            sms = sendSMS(mobile_no,sms_message)
+	            try:
+	                email_bms = BookedMessageSent(booking = new_booking, email = to_user, \
+	                is_successful = email,type_of_message = 'book', mode = 'email', service_updated =  \
+         	        'new booking')
+	                sms_bms = BookedMessageSent(booking = new_booking, mobile_no = mobile_no, \
+	                is_successful = sms_bms, type_of_message = 'book', mode = 'sms', service_updated =  \
+	                'new booking', message = sms_message)
+   	                email_bms.save()
+	                sms_bms.save()
+	                notification_send = 1
+ 	                BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
+	                notification_send)
+	            except Exception, DBerr:
+        	        print (DBerr)
+	            else:
+      	            return Response(status.HTTP_304_NOT_MODIFIED)
 		except Exception,e:
 			print repr(e)
 			return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
