@@ -17,6 +17,7 @@ from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView, ListCreat
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required
 from rest_framework import status
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
 
@@ -25,6 +26,7 @@ from serializers import ServiceSerializer, StudioServicesSerializer,  \
 StudioProfileSerializer, StudioReviewSerializer,StudioTypeSerializer,StudioSerializer,  \
 StudioKindSerializer
 from models import *
+from booking.models import BookingDetails
 from booking.models import StudioReviews
 from utils.permission_class import ReadWithoutAuthentication
 from django.db.models import Q
@@ -170,6 +172,16 @@ class StudioLogin(ListAPIView):
     serializer_class = StudioSerializer
 
 
+def yield_times(start,end):
+    from datetime import date, time, datetime, timedelta
+    start = datetime.combine(date.today(), time(start, 0))
+    end = datetime.combine(date.today(), time(end, 0))
+    yield start.strftime("%H:%M")
+    while end < start:
+        start += timedelta(minutes=15)
+        yield start.strftime("%H:%M")
+
+
 @login_required
 def getSlots(request):
     try:
@@ -179,8 +191,18 @@ def getSlots(request):
         services = data['services']
         bookings = BookingDetails.objects.filter(appointment_date = date, studio_id = studio,  \
             booking_status = 'BOOKED', status_code = 'B001', is_active = True)
+        #get studio start and end time
+        studio_time = StudioProfile.objects.filter(id = studio).values('opening_at',  \
+            'closing_at','daily_studio_closed_from','daily_studio_closed_till')
+        #check whether studio is closed on that day
+        start = studio_time['opening_at']
+        end = studio_time['closing_at']
+        closed_from = studio_time['daily_studio_closed_from']
+        closed_to = studio_time['daily_studio_closed_till']
         if len(bookings) > 0:
-            generate_slots()
+            gen_slots = generate_slots(start,end)
+            slots = [gen_slots.next() for i in range(start,end) if i < closed_from or i>= closed_to]
+                    
     except Exception,e:
         print repr(e)
         data = None

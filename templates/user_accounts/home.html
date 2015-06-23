@@ -69,12 +69,12 @@
             <form name="searchservice" class="form-inline form-register form-register-small" novalidate>            
               <div class="form-group autocomplete">
               <span class="service-icon"><i class="icon icon-shopping-23 icon-active"></i></span>             
-              <span><input size="35" name="service" ng-model="searchdata_.service" type="text" class="form-control" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="custom-template.html" required></span>              
+              <span><input size="35" name="service" ng-model="searchdata_.service" type="text" class="form-control" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" required></span>              
               </div>
               
               <div class="form-group autocomplete">
                 <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></i></span>
-                <input id="location" name="location" size="45" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.area" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="custom-template.html" class="form-control location" required>
+                <input id="location" name="location" size="45" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.area" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" required>
        
               </div>
               
@@ -98,22 +98,22 @@
                 <article class="center">  
           <i class="icon icon-office-44 icon-active"></i>
                     <span class="h7">BOOK</span>
-                    <p class="thin">Choose from 100’s of studios<br>Select your flexible time<br>Read review and Book</p>
+                      <p class="thin">Choose from 100’s of studios<br>Select your flexible time<br>Book by reading reviews</p>
                 </article>
             </div>                       
       <div class="col-md-4 col-sm-4 col-xs-12">
                 <article class="center">  
           <i class="icon icon-shopping-18 icon-active"></i>
                     <span class="h7">PAY</span>
-                    <p class="thin">Choose your mode of payment<br/>No FEE<br>
-                      Exciting offers</p>
+                   <p class="thin">Choose your mode of payment<br/>No FEE<br>
+                      Enjoy Exciting Offers</p>
                 </article>
             </div>             
       <div class="col-md-4 col-sm-4 col-xs-12">
                 <article class="center">  
           <i class="icon icon-seo-icons-27 icon-active"></i>
                     <span class="h7">MOVE-ON</span>
-                    <p class="thin">Easy Booking<br>No more waiting<br>100% Satisfcation Guarantee
+                     <p class="thin">No more waiting<br>Your golden seat is now ready<br/>100% Satisfcation Guarantee
                     </p>
                 </article>
             </div>    
@@ -144,12 +144,22 @@
   
 
    
-  <script type="text/ng-template" id="custom-template.html">
+  <script type="text/ng-template" id="location.html">
   <a>
      <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
   </a>
 
   </script>
+
+
+  <script type="text/ng-template" id="service.html">
+  <a>
+     <i class="icon icon-shopping-23 icon-active"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
+  </a>
+
+  </script>
+
+
 
    <!-- js libs -->
   <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
