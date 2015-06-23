@@ -77,7 +77,7 @@ class StudioAmenitiesSerializer(serializers.ModelSerializer):
 		model = StudioAmenities
 		fields = ('studio_profile', 'amenity','is_active')
 
-class StudioKindSerialier(serializers.ModelSerializer):
+class StudioKindSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = StudioKind
 		fields = ('kind_desc',)
@@ -91,7 +91,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 	pic_of_studio = StudioPictureSerializer(many = True)
 	studio_amenities = StudioAmenitiesSerializer(many = True)
 	studio_type = StudioTypeSerializer()
-	studio_kind = StudioKindSerialier()
+	studio_kind = StudioKindSerializer()
 	class Meta:
 		model = StudioProfile
 		fields = ('id', 'studio_group','studio_type', 'name', 'address_1', 'address_2',  \
