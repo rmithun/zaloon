@@ -172,15 +172,10 @@ class StudioLogin(ListAPIView):
     serializer_class = StudioSerializer
 
 
-def yield_times(start,end):
-    from datetime import date, time, datetime, timedelta
-    start = datetime.combine(date.today(), time(start, 0))
-    end = datetime.combine(date.today(), time(end, 0))
-    yield start.strftime("%H:%M")
-    while end < start:
-        start += timedelta(minutes=15)
-        yield start.strftime("%H:%M")
-
+def return_availablity(closed_from,closing_till):
+    all_hours = responses.HOURS_DICT
+    all_hours.pop(closed_from)
+    all_hours.pop(closing_till)
 
 @login_required
 def getSlots(request):
@@ -201,7 +196,7 @@ def getSlots(request):
         closed_to = studio_time['daily_studio_closed_till']
         if len(bookings) > 0:
             gen_slots = generate_slots(start,end)
-            slots = [gen_slots.next() for i in range(start,end) if i < closed_from or i>= closed_to]
+            slots = [gen_slots.next() for i in range(start,end) if i < str(closed_from) or i>= str(closed_to)]
                     
     except Exception,e:
         print repr(e)
