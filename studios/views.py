@@ -137,6 +137,7 @@ class GetStudioKinds(ListAPIView):
 class StudioRegistration(ListCreateAPIView):
     permission_classes = (ReadWithoutAuthentication,)
     serializer_class = StudioSerializer
+    queryset = Studio.objects.all()
     def create(self,request,*args,**kwards):
         try:
             data = self.request.DATA

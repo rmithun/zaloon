@@ -10,8 +10,9 @@ from booking.models import StudioReviews
 
 
 class StudioSerializer(serializers.ModelSerializer):
+
 	class Meta:
-		models = Studio
+		model = Studio
 		fields = ('email', 'is_active')
 
 class ServiceTypeSerializer(serializers.ModelSerializer):
@@ -96,7 +97,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 		model = StudioProfile
 		fields = ('id', 'studio_group','studio_type', 'name', 'address_1', 'address_2',  \
 			'city', 'country', 'area', 'state', 'landline_no_1', 'landline_no_2', \
-			'mobile_no_1', 'mobile_no_2', 'in_charge_person', 'contact_person',  \
+			'incharge_mobile_no', 'contact_mobile_no', 'in_charge_person', 'contact_person',  \
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \

@@ -188,7 +188,8 @@ class ValidateBookingCode(RetrieveUpdateAPIView):
     def put(self,request,*args,**kwars):
         try:
             booking_code = self.request.DATA['booking_code']
-            studio = self.request.DATA['studio']
+            studio_pin = self.request.DATA['studio_pin']
+            studio = StudioProfile.objects.filter(studio_id = studio_pin)
             BookingDetails.objects.filter(studio_id = studio, booking_code =  \
             booking_code, booking_status = 'BOOKED', status_code ='B001',  \
             is_valid = True).update(booking_status = 'USED', status_code = 'B004',  \

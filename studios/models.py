@@ -67,7 +67,6 @@ class Studio(AbstractBaseUser):
     
     #custom user model which has email as primary key
 	email = models.EmailField(max_length=254, unique=True, db_index=True)
-	studio_pin = models.IntegerField()
 	is_active = models.BooleanField(default=False)
 	last_password_reset_datetime = models.DateTimeField(null = True)
 	last_signout_datetime = models.DateTimeField(default = datetime.now(), null = True)

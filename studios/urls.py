@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^booking_review/$', views.StudioReviewDetails.as_view(), name = 'booking_review'),
     url(r'^studio_type/$', views.GetStudioTypes.as_view(), name = 'studio_type'),
     url(r'^studio_kind/$', views.GetStudioKinds.as_view(), name = 'studio_kind'),
+    url(r'^studio_register/$', views.StudioRegistration.as_view(), name = 'studio_register'),
 
 
 
