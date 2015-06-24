@@ -45,6 +45,7 @@ class BookingDetails(models.Model):
 	notification_send  = models.BooleanField(default = 0)
 	is_valid = models.BooleanField(default = 1) #0- new 1-postponed
 	purchase = models.ForeignKey(Purchase, related_name = "purchase_id", null = True)
+	total_duration = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 

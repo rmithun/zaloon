@@ -62,6 +62,7 @@ class NewBooking(ListCreateAPIView,RetrieveUpdateAPIView):
             services_chosen = data['services']
             studio_id = data['studio']
             status_code = responses.BOOKING_CODES['BOOKING']
+            ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
             new_purchase = Purchase(customer = user,  \
                 purchase_amount = purchase_amount, actual_amount = actual_amount,  \
@@ -164,12 +165,17 @@ class CancelBooking(ActiveBookingMixin):
             booking_id = self.request.DATA['booking_id']
             user = self.request.user
             BookingDetails.objects.filter(id = booking_id).update(booking_status =  \
-                'cancelled', service_updated = 'cancel booking',  \
-                status_code = 'CSBUK03', updated_date_time = datetime.now())
+                'CANCELLED', service_updated = 'cancel booking',  \
+                status_code = 'B003', updated_date_time = datetime.now())
+            purchase_id = BookingDetails.objects.get(id = booking_id).values('purchase_id')
+            Purchase.objects.filter(id = purchase_id).update(purchase_status = 'REFUND_REQUESTED',  \
+                status_code = 'P004')
         except Exception,e:
+            transaction.rollback()
             print repr(e)
             return Response(HTTP_500_INTERNAL_SERVER_ERROR)
         else:
+            transaction.commit()
             return Response(status.HTTP_200_OK)
 
 class ValidateBookingCode(RetrieveUpdateAPIView):
