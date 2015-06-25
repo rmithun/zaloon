@@ -21,8 +21,11 @@ from rest_framework.views import APIView
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
+from rest_framework import status
+
 #application imports
 from serializers import *
+import responses
 #from models import *
 from utils.permission_class import PostWithoutAuthentication
 from django.conf import settings
@@ -113,16 +116,16 @@ class GetUserDetail(UserMixin, ListAPIView, RetrieveUpdateAPIView):
         try:
             user = self.request.user
             data = self.request.DATA
-            mobile_no = data['mobile_no']
+            mobile = data['mobile_no']
             area = data['area']
             first_name = data['first_name']
-            UserProfile.objects.filter(user_acc).update(area = area,  \
-                mobile_no = mobile_no)
+            UserProfile.objects.filter(user_acc_id = user).update(area = area,  \
+                mobile = mobile)
             User.objects.filter(email = user).update(first_name = first_name)
         except Exception,e:
-            return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return Response(status.HTTP_200_OK)
+            return Response(status = status.HTTP_200_OK)
 
 class ActiveBookingMixin(object):
     #authentication_classes = [OAuth2Authentication]
@@ -148,3 +151,36 @@ class InviteUser(InviteUserMixin,ListCreateAPIView):
 def getFBkey(request):
     """function which returns the FB key for making authentication"""
     return  HttpResponse(settings.FBAPIKEY)
+
+
+
+from booking.models import StudioReviews, BookingDetails
+from serializers import StudioReviewSerializer
+
+
+class AddReviews(CreateAPIView):
+    permission_classes = (PostWithoutAuthentication,)
+    serializer_class = StudioReviewSerializer
+
+    def create(self,request,*args,*kwargs):
+        try:
+            data = self.request.DATA
+            studio_id = data['studio_id']
+            booking_id = data['booking_id']
+            comment = data['comment']
+            rating = data['rating']
+            user = self.request.user
+            is_used = BookingDetails.objects.values('status_code').get(id = booking_id)
+            if is_used['status_code'] == responses.BOOKING_CODES['USED']:
+                new_review = StudioReviews(studio_profile_id = studio_id, booking_id = booking_id,  \
+                comment = comment, rating = rating, user = user, service_updated = 'add review')
+                new_review.save()
+            else:
+                return Response(status = status.HTTP_304_NOT_MODIFIED)
+        except Exception,e:
+            print repr(e)
+            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(status = status.HTTP_201_CREATED)
+
+

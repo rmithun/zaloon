@@ -143,10 +143,10 @@ def put(self,request,*args,**kwargs):
             except Exception, DBerr:
                 print (DBerr)
             else:
-                return Response(status.HTTP_304_NOT_MODIFIED)
+                return Response(status = status.HTTP_304_NOT_MODIFIED)
     except Exception,e:
         print repr(e)
-        return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         data = booking_details
         return Response(data = data,status = status.HTTP_200_OK)
@@ -166,17 +166,18 @@ class CancelBooking(ActiveBookingMixin):
             user = self.request.user
             BookingDetails.objects.filter(id = booking_id).update(booking_status =  \
                 'CANCELLED', service_updated = 'cancel booking',  \
-                status_code = 'B003', updated_date_time = datetime.now())
+                status_code = responses.BOOKING_CODES['CANCELLED'],  \
+                updated_date_time = datetime.now())
             purchase_id = BookingDetails.objects.get(id = booking_id).values('purchase_id')
             Purchase.objects.filter(id = purchase_id).update(purchase_status = 'REFUND_REQUESTED',  \
-                status_code = 'P004')
+                status_code = responses.BOOKING_CODES['REFUND_REQUESTED'])
         except Exception,e:
             transaction.rollback()
             print repr(e)
-            return Response(HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             transaction.commit()
-            return Response(status.HTTP_200_OK)
+            return Response(status = status.HTTP_200_OK)
 
 class ValidateBookingCode(RetrieveUpdateAPIView):
     authentication_classes = [OAuth2Authentication]
@@ -185,8 +186,8 @@ class ValidateBookingCode(RetrieveUpdateAPIView):
     serializer_class = ActiveBookingSerializer
     def get_queryset(self):
         booking_code = self.request.DATA['booking_code']
-        studio = self.request.DATA['studio']
-        data = BookingDetails.objects.filter(studio_id = studio, booking_code =  \
+        studio_pin = self.request.DATA['studio_pin']
+        data = BookingDetails.objects.filter(studio_id = studio_pin, booking_code =  \
         booking_code, booking_status = 'BOOKED', status_code ='B001', is_valid = True)
         return data
     
@@ -195,16 +196,16 @@ class ValidateBookingCode(RetrieveUpdateAPIView):
         try:
             booking_code = self.request.DATA['booking_code']
             studio_pin = self.request.DATA['studio_pin']
-            studio = StudioProfile.objects.filter(studio_id = studio_pin)
-            BookingDetails.objects.filter(studio_id = studio, booking_code =  \
+            #studio = StudioProfile.objects.filter(studio_id = studio_pin)
+            BookingDetails.objects.filter(studio_id = studio_pin, booking_code =  \
             booking_code, booking_status = 'BOOKED', status_code ='B001',  \
             is_valid = True).update(booking_status = 'USED', status_code = 'B004',  \
             service_updated = 'booking used', updated_date_time = datetime.now())
         except Exception,e:
             print repr(e)
-            return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return Response(status.HTTP_200_OK)
+            return Response(status = status.HTTP_200_OK)
 
 
 

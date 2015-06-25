@@ -102,10 +102,10 @@ class StudioReviews(models.Model):
 	"""reviews for studio"""
 	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_review")
 	user = models.ForeignKey(User, related_name = "reviewed_by_user")
-	#booking = models.ForeignKey(BookingDetails, related_name = "reviewed_on_booking")
-	service = models.ForeignKey(Service, related_name = "reviewed_the_service", null = True)
+	booking = models.ForeignKey(BookingDetails, related_name = "reviewed_on_booking")
+	#service = models.ForeignKey(Service, related_name = "reviewed_the_service", null = True)
 	rating = models.PositiveIntegerField()
-	comments = models.TextField()
+	comment = models.TextField()
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
