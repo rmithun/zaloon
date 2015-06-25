@@ -64,7 +64,7 @@ class StudioReviewSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = StudioReviews
-		fields = ('user','service','rating','comments','is_active')
+		fields = ('user','rating','comment','is_active')
 
 class AmenitiesSerializer(serializers.ModelSerializer):
 	class Meta:

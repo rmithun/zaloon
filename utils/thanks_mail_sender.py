@@ -37,7 +37,7 @@ def send_thanks_mail():
             studio_name = StudioProfile.objects.values('name').get(id = every_book.studio.id)
             user = User.objects.values('first_name','email','id').get(id = every_book.user.id)
             date = yesterday
-            time = datetime.strptime(str(every_book.appointment_time), "%H:%M:%S").strftime("%I:%M %p")
+            time = datetime.strptime(str(every_book.appointment_start_time), "%H:%M:%S").strftime("%I:%M %p")
             #get email template and render all variables
             user_details = {'first_name':user['first_name'],'studio_name':studio_name['name'],  \
             'date':yesterday}

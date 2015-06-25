@@ -14,6 +14,17 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='UserInvites',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('email', models.EmailField(max_length=75)),
+                ('date', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 25, 224692))),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -24,7 +35,7 @@ class Migration(migrations.Migration):
                 ('facebook_id', models.CharField(max_length=50, blank=True)),
                 ('mobile', models.CharField(max_length=25, null=True)),
                 ('service_updated', models.CharField(max_length=25, null=True)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 52, 226346))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 25, 224166))),
                 ('user_acc', models.OneToOneField(null=True, blank=True, to=settings.AUTH_USER_MODEL)),
             ],
             options={

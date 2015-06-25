@@ -27,7 +27,7 @@ def get_hourly_bookings():
         now = datetime.now().time()
         minute_15_back = minute_15_back.time()
         bookings = BookingDetails.objects.filter(appointment_date = today,   \
-        booking_status = 'BOOKED', status_code = 'B001', appointment_time__range =  \
+        booking_status = 'BOOKED', status_code = 'B001', appointment_start_time__range =  \
         (minus_min , now), is_valid = True)
         ##log code starting
         for every_book in bookings:
@@ -37,7 +37,7 @@ def get_hourly_bookings():
         	    studio_name = StudioProfile.objects.filter(id = every_book.studio).values('name')
         	    user_name = User.objects.filter(id = every_book.user).values('first_name')
         	    date = today
-        	    time = datetime.strptime(str(every_book.appointment_time), "%H.%M").strftime("%I:%M %p")
+        	    time = datetime.strptime(str(every_book.appointment_start_time), "%H.%M").strftime("%I:%M %p")
         	    mobile_no = BookedMessageSend.objects.filter(booking_id = every_book.id).values('mobile_no')
         	    sms_template = (Responses.hourly_reminder['sms_template'])%(user_name, studio_name, date, time)
         	    try:

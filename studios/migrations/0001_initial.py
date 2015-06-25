@@ -9,7 +9,6 @@ import datetime
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_accounts', '__first__'),
     ]
 
     operations = [
@@ -20,7 +19,7 @@ class Migration(migrations.Migration):
                 ('amenity_name', models.CharField(max_length=30)),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 447262))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 208695))),
             ],
             options={
             },
@@ -33,7 +32,7 @@ class Migration(migrations.Migration):
                 ('closed_on_day', models.CharField(max_length=25)),
                 ('closed_on_desc', models.CharField(max_length=50)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 452106))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 213977))),
             ],
             options={
             },
@@ -47,7 +46,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=75)),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 449454))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 211036))),
             ],
             options={
             },
@@ -61,7 +60,7 @@ class Migration(migrations.Migration):
                 ('min_duration', models.IntegerField()),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 443683))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 204177))),
             ],
             options={
             },
@@ -75,7 +74,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField()),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 443181))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 203683))),
             ],
             options={
             },
@@ -90,7 +89,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(unique=True, max_length=254, db_index=True)),
                 ('is_active', models.BooleanField(default=False)),
                 ('last_password_reset_datetime', models.DateTimeField(null=True)),
-                ('last_signout_datetime', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 444218), null=True)),
+                ('last_signout_datetime', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 204818), null=True)),
             ],
             options={
                 'abstract': False,
@@ -109,7 +108,7 @@ class Migration(migrations.Migration):
                 ('min_deposit', models.PositiveIntegerField()),
                 ('max_deposit', models.PositiveIntegerField()),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 450047))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 211614))),
                 ('mode_of_payment', models.ForeignKey(related_name=b'payment_mode_for_studio_account', to='studios.PaymentModes')),
             ],
             options={
@@ -122,7 +121,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 447734))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 209284))),
                 ('amenity', models.ForeignKey(related_name=b'amenity_available', to='studios.Amenities')),
             ],
             options={
@@ -135,7 +134,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 452535))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 214519))),
                 ('closed_on', models.ForeignKey(related_name=b'studio_close_dates', to='studios.CloseDates')),
             ],
             options={
@@ -150,7 +149,7 @@ class Migration(migrations.Migration):
                 ('closed_till_date', models.DateField()),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 452998))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 215170))),
             ],
             options={
             },
@@ -174,7 +173,7 @@ class Migration(migrations.Migration):
                 ('secondary_email', models.CharField(max_length=50)),
                 ('total_branches', models.PositiveIntegerField()),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 445316))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 206222))),
             ],
             options={
             },
@@ -189,7 +188,20 @@ class Migration(migrations.Migration):
                 ('last_payment_date', models.DateTimeField()),
                 ('payment_requested', models.BooleanField(default=0)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 451135))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 212946))),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='StudioKind',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('kind_desc', models.CharField(max_length=20)),
+                ('is_active', models.BooleanField(default=1)),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 206811))),
+                ('service_updated', models.CharField(max_length=25)),
             ],
             options={
             },
@@ -199,9 +211,10 @@ class Migration(migrations.Migration):
             name='StudioPasswordReset',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('password_changed_date', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 451642))),
+                ('password_changed_date', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 213432))),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 451685))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 213476))),
+                ('studio', models.ForeignKey(related_name=b'studio_pwd_reset', to='studios.Studio')),
             ],
             options={
             },
@@ -213,9 +226,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('amount_paid', models.PositiveIntegerField()),
                 ('paid_by', models.CharField(max_length=120)),
-                ('paid_date', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 450592))),
+                ('paid_date', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 212329))),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 450630))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 212371))),
                 ('mode_of_payment', models.ForeignKey(related_name=b'payment_mode_for_studio_payments', to='studios.PaymentModes')),
             ],
             options={
@@ -228,7 +241,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('picture', models.ImageField(null=True, upload_to=b'img_gallery', blank=True)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 454214))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 215693))),
             ],
             options={
             },
@@ -241,46 +254,32 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=120)),
                 ('address_1', models.CharField(max_length=200)),
                 ('address_2', models.CharField(max_length=200)),
+                ('landmark', models.CharField(max_length=200)),
                 ('city', models.CharField(max_length=40)),
                 ('country', models.CharField(max_length=40)),
                 ('area', models.CharField(max_length=40)),
                 ('state', models.CharField(max_length=40)),
                 ('landline_no_1', models.CharField(max_length=40, null=True)),
                 ('landline_no_2', models.CharField(max_length=40, null=True)),
-                ('mobile_no_1', models.CharField(max_length=40)),
-                ('mobile_no_2', models.CharField(max_length=40, null=True)),
+                ('incharge_mobile_no', models.CharField(max_length=40)),
+                ('contact_mobile_no', models.CharField(max_length=40, null=True)),
                 ('in_charge_person', models.CharField(max_length=75)),
                 ('contact_person', models.CharField(max_length=75, null=True)),
                 ('opening_at', models.PositiveSmallIntegerField()),
                 ('closing_at', models.PositiveSmallIntegerField()),
                 ('is_active', models.BooleanField(default=1)),
-                ('is_closed', models.BooleanField(default=1)),
-                ('serve_type', models.CharField(max_length=10)),
+                ('is_closed', models.BooleanField(default=0)),
                 ('daily_studio_closed_from', models.PositiveSmallIntegerField()),
                 ('daily_studio_closed_till', models.PositiveSmallIntegerField()),
                 ('thumbnail', models.ImageField(upload_to=b'img_gallery')),
                 ('is_ac', models.BooleanField(default=0)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 446431))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 207778))),
+                ('latitude', models.CharField(max_length=30)),
+                ('longitude', models.CharField(max_length=30)),
                 ('studio', models.ForeignKey(related_name=b'studio_login', to='studios.Studio')),
                 ('studio_group', models.ForeignKey(related_name=b'studio_of_group', to='studios.StudioGroup')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='StudioReviews',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('rating', models.PositiveIntegerField()),
-                ('comments', models.TextField()),
-                ('is_active', models.BooleanField(default=1)),
-                ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 453551))),
-                ('service', models.ForeignKey(related_name=b'reviewed_the_service', to='studios.Service', null=True)),
-                ('studio_profile', models.ForeignKey(related_name=b'studio_review', to='studios.StudioProfile')),
-                ('user', models.ForeignKey(related_name=b'reviewed_by_user', to='user_accounts.UserProfile')),
+                ('studio_kind', models.ForeignKey(related_name=b'kind_of_studio', to='studios.StudioKind')),
             ],
             options={
             },
@@ -294,7 +293,7 @@ class Migration(migrations.Migration):
                 ('mins_takes', models.PositiveIntegerField()),
                 ('price', models.FloatField()),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 448397))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 209874))),
                 ('service', models.ForeignKey(related_name=b'service_in_studio', to='studios.Service')),
                 ('studio_profile', models.ForeignKey(related_name=b'studio_detail_for_activity', to='studios.StudioProfile')),
             ],
@@ -310,7 +309,7 @@ class Migration(migrations.Migration):
                 ('holiday', models.PositiveIntegerField()),
                 ('festive_season', models.PositiveIntegerField()),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 448962))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 210524))),
                 ('studio_profile', models.ForeignKey(related_name=b'studio_staff_count', to='studios.StudioProfile')),
             ],
             options={
@@ -324,7 +323,7 @@ class Migration(migrations.Migration):
                 ('type_desc', models.CharField(max_length=50)),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 4, 17, 21, 46, 444717))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 20, 205342))),
             ],
             options={
             },
@@ -343,9 +342,39 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
+            model_name='studiopayment',
+            name='studio',
+            field=models.ForeignKey(related_name=b'studio_payment_detail', to='studios.StudioProfile'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='studioinvoices',
+            name='studio',
+            field=models.ForeignKey(related_name=b'studio_invoice_detail', to='studios.StudioProfile'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='studioclosedfromtill',
+            name='studio',
+            field=models.ForeignKey(related_name=b'studio_long_closed_details', to='studios.StudioProfile'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='studiocloseddetails',
+            name='studio',
+            field=models.ForeignKey(related_name=b'studio_closed_details', to='studios.StudioProfile'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
             model_name='studioamenities',
             name='studio_profile',
             field=models.ForeignKey(related_name=b'studio_amenities', to='studios.StudioProfile'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='studioaccountdetails',
+            name='studio',
+            field=models.ForeignKey(related_name=b'studio_account_detail', to='studios.StudioProfile'),
             preserve_default=True,
         ),
         migrations.AddField(

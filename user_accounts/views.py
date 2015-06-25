@@ -25,7 +25,6 @@ from rest_framework import status
 
 #application imports
 from serializers import *
-import responses
 #from models import *
 from utils.permission_class import PostWithoutAuthentication
 from django.conf import settings
@@ -154,33 +153,5 @@ def getFBkey(request):
 
 
 
-from booking.models import StudioReviews, BookingDetails
-from serializers import StudioReviewSerializer
-
-
-class AddReviews(CreateAPIView):
-    permission_classes = (PostWithoutAuthentication,)
-    serializer_class = StudioReviewSerializer
-
-    def create(self,request,*args,*kwargs):
-        try:
-            data = self.request.DATA
-            studio_id = data['studio_id']
-            booking_id = data['booking_id']
-            comment = data['comment']
-            rating = data['rating']
-            user = self.request.user
-            is_used = BookingDetails.objects.values('status_code').get(id = booking_id)
-            if is_used['status_code'] == responses.BOOKING_CODES['USED']:
-                new_review = StudioReviews(studio_profile_id = studio_id, booking_id = booking_id,  \
-                comment = comment, rating = rating, user = user, service_updated = 'add review')
-                new_review.save()
-            else:
-                return Response(status = status.HTTP_304_NOT_MODIFIED)
-        except Exception,e:
-            print repr(e)
-            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else:
-            return Response(status = status.HTTP_201_CREATED)
 
 

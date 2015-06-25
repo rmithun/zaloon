@@ -8,88 +8,85 @@ import datetime
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('booking', '0011_auto_20150620_1936'),
+        ('booking', '0002_auto_20150625_1137'),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='thanksmail',
-            name='mobile_no',
+        migrations.AddField(
+            model_name='bookingdetails',
+            name='appointment_end_time',
+            field=models.TimeField(null=True),
+            preserve_default=True,
         ),
         migrations.AddField(
-            model_name='thanksmail',
-            name='email',
-            field=models.CharField(default=1, max_length=60),
-            preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name='bookedmessagesent',
-            name='email',
-            field=models.CharField(max_length=60, null=True),
+            model_name='bookingdetails',
+            name='appointment_start_time',
+            field=models.TimeField(null=True),
+            preserve_default=True,
         ),
         migrations.AlterField(
             model_name='bookedmessagesent',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 46663)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 460830)),
         ),
         migrations.AlterField(
             model_name='bookingdetails',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 45090)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 459125)),
         ),
         migrations.AlterField(
             model_name='bookingservices',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 47217)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 461479)),
         ),
         migrations.AlterField(
             model_name='dailyreminder',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 49570)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 463952)),
         ),
         migrations.AlterField(
             model_name='hourlyreminder',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 50170)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 464559)),
         ),
         migrations.AlterField(
             model_name='merchantdailyreportstatus',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 48998)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 463356)),
         ),
         migrations.AlterField(
             model_name='payments',
             name='confirmation_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 47682)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 461994)),
         ),
         migrations.AlterField(
             model_name='payments',
             name='initiated_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 47659)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 461970)),
         ),
         migrations.AlterField(
             model_name='purchase',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 44090)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 458025)),
         ),
         migrations.AlterField(
             model_name='refund',
             name='initiated_date_time',
-            field=models.DateTimeField(verbose_name=datetime.datetime(2015, 6, 20, 23, 32, 52, 45972)),
+            field=models.DateTimeField(verbose_name=datetime.datetime(2015, 6, 25, 11, 37, 54, 460062)),
         ),
         migrations.AlterField(
             model_name='refund',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 46013)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 460110)),
         ),
         migrations.AlterField(
             model_name='studioreviews',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 48398)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 462749)),
         ),
         migrations.AlterField(
             model_name='thanksmail',
             name='updated_date_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 6, 20, 23, 32, 52, 50731)),
+            field=models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 37, 54, 465143)),
         ),
     ]

@@ -32,7 +32,7 @@ def get_Bookings_for_day():
         	    studio_name = StudioProfile.objects.filter(id = every_book.studio).values('name')
         	    user_name = User.objects.filter(id = every_book.user).values('first_name','id')
         	    date = today
-                time = datetime.strptime(str(every_book.appointment_time), "%H.%M").strftime("%I:%M %p")
+                time = datetime.strptime(str(every_book.appointment_start_time), "%H.%M").strftime("%I:%M %p")
         	    mobile_no = BookedMessageSend.objects.filter(booking_id = every_book.id).values('mobile_no')
                 ##get sms template
         	    #sms_template = (responses.sms_templates['daily_reminder'])%(user_name, studio_name, date, time,code)

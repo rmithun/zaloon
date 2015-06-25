@@ -2,6 +2,7 @@
 var fbloginURL = '/register/facebook/'
 var accountURL  = '/account/'
 var studioURL = '/studios/'
+var bookingURL = '/my_booking/'
 
 noqapp.factory('httpServices', function($http, $q, $cookies, sessionService) 
 {
@@ -34,7 +35,7 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 	}
 	loginData.getDetails = function()
 	{
-		var booking = $http.get(accountURL+"my_booking")
+		var booking = $http.get(bookingURL+"my_booking")
 		var user_details = $http.get(accountURL+'user_details/')
 		//var booking_history = $http.get(accountURL+'booking_history/')
 		return $q.all({'booking':booking,'user_details':user_details})
@@ -49,6 +50,47 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		var studiodetails=$http.get(studioURL+"studio_profile/",{params:req})
 		return $q.all({'studio_details':studiodetails})
 	}
+
+	loginData.getstudioTypes=function(){
+		var studio_types=$http.get(studioURL+"studio_type/")
+		return $q.all({'studio_types':studio_types})
+	}
+
+	loginData.getstudioKinds=function(){
+		var studio_kinds=$http.get(studioURL+"studio_kind/")
+		return $q.all({'studio_kinds':studio_kinds})
+	}
+
+	loginData.newBooking=function(booking_data){
+		var new_booking=$http.post(bookingURL+"new_booking/",booking_data)
+		return $q.all({'new_booking':new_booking})
+	}
+
+	loginData.newBooking=function(payment_resp){
+		var update_booking=$http.put(bookingURL+"new_booking/",payment_resp)
+		return $q.all({'update_booking':update_booking})
+	}
+
+	loginData.updateUserProfile=function(usr_data){
+		var update_profile=$http.put(accountURL+"user_details/",usr_data)
+		return $q.all({'update_profile':update_profile})
+	}
+
+	loginData.getSlots=function(slot_data){
+		var available_slots=$http.put(bookingURL+"get_slots/",{params:slot_data})
+		return $q.all({'available_slots':available_slots})
+	}
+
+	loginData.cancelBooking=function(booking_id){
+		var cancel_booking = $http.get(bookingURL+"cancel_booking/",{params:slot_data})
+		return $q.all({'cancel_booking':cancel_booking})
+	}
+
+	loginData.addReview=function(review_data){
+		var add_review = $http.post(bookingURL+"add_review/",review_data)
+		return $q.all({'add_review':add_review})
+	}
+
     return loginData;
 });
 

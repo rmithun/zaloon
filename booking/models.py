@@ -36,7 +36,8 @@ class BookingDetails(models.Model):
 	user = models.ForeignKey(User, related_name = "booked_by_user")
 	booked_date = models.DateTimeField()
 	appointment_date = models.DateField()
-	appointment_time = models.TimeField() # ex 13.15 14.30
+	appointment_start_time = models.TimeField() # ex 13.15 14.30
+	appointment_end_time = models.TimeField() # ex 13.15 14.30
 	booking_code = models.CharField(max_length = 25)
 	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
 	promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)

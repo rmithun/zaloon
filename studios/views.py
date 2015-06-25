@@ -13,7 +13,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.http import HttpResponseRedirect, HttpResponse
 #from permissions import IsUserThenReadPatch, ReadOnlyAuthentication
-from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView, ListCreateAPIView,  \
+CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -134,7 +135,7 @@ class GetStudioKinds(ListAPIView):
 
 
 
-class StudioRegistration(ListCreateAPIView):
+class StudioRegistration(CreateAPIView):
     permission_classes = (ReadWithoutAuthentication,)
     serializer_class = StudioSerializer
     queryset = Studio.objects.all()
@@ -143,7 +144,7 @@ class StudioRegistration(ListCreateAPIView):
             data = self.request.DATA
             password = data['password']
             email = data['email']
-            studio_name = data['name']
+            #studio_name = data['name']
             #studio_group = data['studio_group']
             existing_email = Studio.objects.filter(email = email)
             if not existing_email:
@@ -177,6 +178,9 @@ def return_availablity(closed_from,closing_till):
     all_hours = responses.HOURS_DICT
     all_hours.pop(closed_from)
     all_hours.pop(closing_till)
+
+
+
 
 @login_required
 def getSlots(request):
