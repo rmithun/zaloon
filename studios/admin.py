@@ -16,6 +16,7 @@ admin.site.register(Amenities)
 admin.site.register(StudioPicture)
 admin.site.register(StudioClosedDetails)
 admin.site.register(CloseDates)
+admin.site.register(StudioAddRequest)
 
 
 #admin.site.register(ThatModel)

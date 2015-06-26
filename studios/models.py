@@ -88,6 +88,16 @@ class Studio(AbstractBaseUser):
 	    return True
 
 
+class StudioAddRequest(models.Model):
+
+	"""table holding all data related to studios want to use fairlour.com"""
+	studio_name = models.CharField(max_length = 30)
+	area = models.CharField(max_length = 50)
+	mobile_no= models.CharField(max_length = 20)
+	email = models.CharField(max_length = 60)
+	service_updated = models.CharField(max_length = 30)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
 class StudioType(models.Model):
 
 	"""type of studios"""

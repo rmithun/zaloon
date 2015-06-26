@@ -21,6 +21,10 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 from rest_framework import status
 from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasScope, TokenHasReadWriteScope
+from django.template.loader import get_template
+from django.template import Context
+from django.db import transaction
+
 
 #application imports
 from serializers import ServiceSerializer, StudioServicesSerializer,  \
@@ -29,10 +33,10 @@ StudioKindSerializer
 from models import *
 from booking.models import BookingDetails
 from booking.models import StudioReviews
-from utils.permission_class import ReadWithoutAuthentication
+from utils.permission_class import ReadWithoutAuthentication, PostWithoutAuthentication
 from django.db.models import Q
 from django.conf import settings
-from utils import generic_utils
+from utils import generic_utils,responses
 
 
 class ServiceMixin(object):
@@ -136,37 +140,47 @@ class GetStudioKinds(ListAPIView):
 
 
 class StudioRegistration(CreateAPIView):
-    permission_classes = (ReadWithoutAuthentication,)
+    permission_classes = (PostWithoutAuthentication,)
     serializer_class = StudioSerializer
-    queryset = Studio.objects.all()
+    @transaction.commit_manually
     def create(self,request,*args,**kwards):
         try:
             data = self.request.DATA
-            password = data['password']
             email = data['email']
-            #studio_name = data['name']
+            mobile_no = data['mobile_no']
+            studio_name = data['name']
+            area = data['area']
+            password = data['password']
             #studio_group = data['studio_group']
-            existing_email = Studio.objects.filter(email = email)
+            existing_email = StudioAddRequest.objects.filter(email = email)
             if not existing_email:
-                studio = Studio.objects.create_user(email = email ,password = password)
-                studio.save()
-                studio_details = {'studio_pin':studio.id,'password':password,'email':email}
-                message = get_template('emails/merchant_registration.html').render(Context(studio_details))
+                studio_req = StudioAddRequest(email = email, area = area,  \
+                    mobile_no = mobile_no,studio_name = studio_name)
+                studio_req.save()
+                studio = Studio(email = email, password = password)
+                studio.save();
+                studio_details = {'email':email,'studio_name':studio_name,'studio_pin':studio.id,  \
+                'password':password}
+                message = get_template('emails/studio_req_register.html').render(Context(studio_details))
                 studio_mail = email
-                subject = responses.MAIL_SUBJECTS['STUDIO_REGISTRATION']
+                subject = responses.MAIL_SUBJECTS['STUDIO_REQ_REGISTER']
                 try:
                     generic_utils.sendEmail(studio_mail,subject,message)
                 except Exception,e:
+                    transaction.rollback()
                     print repr(e)
+                    return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
-                print "existing"  
+                transaction.rollback()
+                return Response(status = status.HTTP_400_BAD_REQUEST)
         except Exception,e:
             print repr(e)
-            return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
+            transaction.rollback()
+            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return Response(status.HTTP_201_CREATED)
+            transaction.commit()
+            return Response(status = status.HTTP_201_CREATED)
     
-
 
         
 class StudioLogin(ListAPIView):
