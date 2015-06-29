@@ -31,9 +31,9 @@ from django.conf import settings
 
 
 @login_required
-def home(request):
+def user_account(request):
 
-	return render(request,'user_accounts/home.html',{})
+	return render(request,'user_accounts/my_accounts.html',{})
 
 def login_view(request):
     data = redirect("/login/facebook/")
@@ -104,13 +104,19 @@ class UserMixin(object):
     authentication_classes = [OAuth2Authentication]
     permission_classes = (TokenHasScope,)
     serializer_class = UserProfileSerializer
-    required_scopes = ['write']
+    required_scopes = ['write','read']
     def get_queryset(self):
         return UserProfile.objects.filter(user_acc = self.request.user)
 
 
 class GetUserDetail(UserMixin, ListAPIView, RetrieveUpdateAPIView):
-    
+
+    def get(self,request,*args,**kwargs):
+        import pdb;pdb.set_trace();
+        print "hi"
+
+
+
     def put(self,request,*args,**kwargs):
         try:
             user = self.request.user

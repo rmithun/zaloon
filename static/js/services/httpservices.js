@@ -2,7 +2,7 @@
 var fbloginURL = '/register/facebook/'
 var accountURL  = '/account/'
 var studioURL = '/studios/'
-var bookingURL = '/my_booking/'
+var bookingURL = '/booking/'
 
 noqapp.factory('httpServices', function($http, $q, $cookies, sessionService) 
 {
@@ -35,7 +35,8 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 	}
 	loginData.getDetails = function()
 	{
-		var booking = $http.get(bookingURL+"my_booking")
+		//$http.defaults.headers.get['Authorization'] = "Bearer " + sessionService.getAccessToken();
+		var booking = $http.get(bookingURL+"my_booking/")
 		var user_details = $http.get(accountURL+'user_details/')
 		//var booking_history = $http.get(accountURL+'booking_history/')
 		return $q.all({'booking':booking,'user_details':user_details})
@@ -66,7 +67,7 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		return $q.all({'new_booking':new_booking})
 	}
 
-	loginData.newBooking=function(payment_resp){
+	loginData.updateBooking=function(payment_resp){
 		var update_booking=$http.put(bookingURL+"new_booking/",payment_resp)
 		return $q.all({'update_booking':update_booking})
 	}
@@ -102,6 +103,7 @@ noqapp.factory('sessionService', function($q,$cookies)
 	{
 		$cookies.put('token',token['access_token'].data['access_token']);
 		expiretime = new Date()
+		//$cookies.put('token','RzFkAv1YqohjiIEDP9UmYArj92To7');
 		//$cookies.expiretime = expiretime.setMinutes(token['access_token'].data['expires_in']);
 		//$cookies.refreshtoken = token['access_token'].data['refresh_token'] 
 		//$cookies.client_id = token['access_token'].data['client_id']
@@ -141,7 +143,7 @@ noqapp.factory('authInterceptor', [
         config.headers = config.headers || {};
         if(sessionService.isLogged()) 
         {
-	        config.headers.Authorization = 'Bearer ' + sessionService.getAccessToken(); // add your token from your service or whatever
+	        config.headers.Authorization = 'Bearer ' + sessionService.getAccessToken(); // add your token from your service 
         }
         return config;
       },

@@ -1,34 +1,185 @@
 <!DOCTYPE html>
 <html lang="en" ng-app = "accountApp" >
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Your Parlor on Your Hand -  Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
     <title>Onepass</title>
     {% load static from staticfiles %}
     <!-- Bootstrap -->
     <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
-  <!-- Font -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>    
+    <!-- Font -->
+    <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
     <!-- loading django static files -->
-    <!-- <link rel="stylesheet" href='{% static "css/main.css"%}'> -->
-    <script src='{% static "js/angular1.3.15/angular.min.js" %}'></script>
-    <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
-    <script src='{% static "js/angular1.3.15/angular-cookies.js" %}'></script>
-    <script src='{% static "js/angular1.3.15/angular-route.min.js" %}'></script>
+   
+    
   </head>
-  <body>
-    <div class="header">
-      <ul>
-                    <li><a href="#" ><span>My Account</span></a></li>
-                </ul>     
+
+  
+<body id="landing-page" ng-controller="homepagecontroller">  
+ 
+     <!-- Preloader -->
+    <div id="mask">
+        <div id="loader"></div>
     </div>
- <div ng-view></div>
+    <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
+    <div id="fb-root"></div>
+    
+    <header>
+        <nav class="navigation navigation-header">
+            <div class="container">
+                <div class="navigation-brand">
+                    <div class="brand-logo">
+            <a href="" class="logo"></a>            
+                    </div>
+                    
+                </div>
+                <div  class="navigation-navbar">                    
+                    <ul ng-hide="is_logged" class="navigation-bar navigation-bar-right">                        
+
+                          <button data-ng-click='fetch()' 
+                          class="btn btn-block btn-social btn-facebook">
+              <i class="icon icon-socialmedia-08"></i>Login using Facebook
+            </button>
+                    </ul>  
+                    <span ng-show="is_logged"><a>My Account</a></span>
+                    <span ng-show="is_logged"><a>Log out</a></span>
+                </div>
+        
+            </div>
+        </nav>
+    </header>
+  
+  
+  <div id="banner" class="static-header register-version light clearfix">
+
+        <div class="text-heading">
+            <h1 class="animated " data-animation="bounceInDown" data-delay="0">Where your parlour booking comes, Handy</h1>
+            <p class="animated  easysearch" data-animation="fadeInDown" data-delay="500">EASY SEARCH  <span> | </span> FREE CANCELLATION   <span> | </span>  100% GUARNTEE</p>
+        </div>
+    
+    <div class="container">
+      <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
+        <div class="row">
+            <form name="searchservice" class="form-inline form-register form-register-small" novalidate>            
+              <div class="form-group autocomplete">
+              <span class="service-icon"><i class="icon icon-shopping-23 icon-active"></i></span>             
+              <span><input size="35" name="service" ng-model="searchdata_.service" type="text" class="form-control" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" required></span>              
+              </div>
+              
+              <div class="form-group autocomplete">
+                <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></i></span>
+                <input id="location" name="location" size="45" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.area" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" required>
+       
+              </div>
+              
+              <div class="form-group submit-wrap">                
+                <input type="submit"  class="btn btn-primary btn-md" ng-click="searchstudio(searchservice)" value="Find"/>
+              </div><br/>
+              <span class="error" ng-show="formsubmit && searchservice.service.$error.required">Service is required.</span>
+              <span class="error" ng-show="formsubmit && searchservice.location.$error.required">Location is required.</span>
+            </form>
+        </div>
+      </div>
+    </div>
+    
+    </div>    
+    
+  
+  
+  <section id="features-list" class="section dark">
+        <div class="container animated" style="z-index:0;" data-animation="fadeInDown">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-office-44 icon-active"></i>
+                    <span class="h7">BOOK</span>
+                      <p class="thin">Choose from 100’s of studios<br>Select your flexible time<br>Book by reading reviews</p>
+                </article>
+            </div>                       
+      <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-shopping-18 icon-active"></i>
+                    <span class="h7">PAY</span>
+                   <p class="thin">Choose your mode of payment<br/>No FEE<br>
+                      Enjoy Exciting Offers</p>
+                </article>
+            </div>             
+      <div class="col-md-4 col-sm-4 col-xs-12">
+                <article class="center">  
+          <i class="icon icon-seo-icons-27 icon-active"></i>
+                    <span class="h7">MOVE-ON</span>
+                     <p class="thin">No more waiting<br>Your golden seat is now ready<br/>100% Satisfcation Guarantee
+                    </p>
+                </article>
+            </div>    
+                
+        </div>
+    </section>
+    
+
+  <div  id="signupmodel" class=" modal fade" role="dialog">
+    <div class="modal-content signup">
+     <div class="modal-header modal-register-header">
+     <button type="button" class="close" data-dismiss="modal">&times;</button> 
+     <h4 class="modal-title">Login</h4>
+    </div> 
+      <div class="modal-body register">   
+      <div class="socialpanel">
+          <form>
+            <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook">
+              <i class="icon icon-socialmedia-08"></i>Login using Facebook
+            </button>         
+          </form>
+      </div>        
+      <p class="hidden-xs"><i>* we remember our promise of no posts on your wall</i></p>
+      </div>
+    </div>  
+  </div>    
+   
+
+   
+  <script type="text/ng-template" id="location.html">
+  <a>
+     <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
+  </a>
+
+  </script>
+
+
+  <script type="text/ng-template" id="service.html">
+  <a>
+     <i class="icon icon-shopping-23 icon-active"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
+  </a>
+
+  </script>
+
+
+
+   <!-- js libs -->
+  <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
+  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+  <script src='{% static "js/bootstrap/ui-bootstrap-tpls-0.13.0.js"%}'></script>  
   <script src='{% static "js/app.js" %}'></script>
   <script src='{% static "js/services/httpservices.js" %}'></script>
-  <script src='{% static "js/controllers/landing_page_controllers.js" %}'></script>
+  <script src='{% static "js/controllers/home_page_controller.js" %}'></script>
   <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
   <!-- Bootstrap Js -->
-  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  
+  <!-- loader -->
+  <script type="text/javascript" src='{% static "js/scripts.js"%}'></script>
+
+  
+
   </body>
 </html>
+
+

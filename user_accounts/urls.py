@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'onepass.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^home/$', views.home , name="home"),
+    #url(r'^home/$', views.home , name="home"),
     url(r'^logout/$', views.logout_view , name="logout"),
     url(r'^login/$', views.login_view , name="login"),
     url(r'^user_details/$', views.GetUserDetail.as_view(), name = 'user_details'),
@@ -17,5 +17,6 @@ urlpatterns = patterns('',
     url(r'^user_name/$', views.GetUserDetail.as_view(), name = 'user_details'),
     url(r'^invite_user/$', views.InviteUser.as_view(), name = 'invite_user'),
     url(r'^fb_key/$', views.getFBkey, name = 'fb_key'),
+    url(r'^user_account/$', views.user_account, name = 'user_account'),
     
 )

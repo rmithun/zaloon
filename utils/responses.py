@@ -22,7 +22,7 @@ SMS_TEMPLATES = {'DLY_REM':"Hi %s,This is a reminder for your booking for %s on 
 MAIL_SUBJECTS = {'THANKS_EMAIL':"Thank you for using gopanther",
                  'BOOKING_EMAIL':"Booking code from gopanther",
                  'CANCEL_EMAIL':"Cancelled booking details",
-                 'DAILY_REPORT_EMAIL':"Daily booking report from gopanther",
+                 'DAILY_REPORT_EMAIL':"Daily booking report from zaloon for %s",
                  'STUDIO_REQ_REGISTER':"We will contact you shortly."}
 
 

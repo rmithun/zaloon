@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" ng-app = "accountApp" >
+  <head>
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Your Parlor on Your Hand -  Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
+    <title>Onepass</title>
+    {% load static from staticfiles %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
+    <!-- Font -->
+    <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
+    <!-- loading django static files -->
+   
+    
+  </head>
+<body>
+<div ng-controller="accountscontroller">
+
+	<div>
+	{%verbatim%}{{active_booking_count}}{%endverbatim%}
+</div>
+<div>
+	{%verbatim%}{{expired_booking_count}}{%endverbatim%}
+</div>
+<div>
+	{%verbatim%}{{user_email}}{%endverbatim%}
+	{%verbatim%}{{user_name}}{%endverbatim%}
+	{%verbatim%}{{user_area}}{%endverbatim%}
+	{%verbatim%}{{user_mobile}}{%endverbatim%}
+</div>
+
+<div ng-repeat="buking in active_bookings">
+<span>{%verbatim%}{{buking.appointment_date}}{%endverbatim%}</span>
+<span>{%verbatim%}{{buking.appointment_time}}{%endverbatim%}</span>
+<span>{%verbatim%}{{buking.studio_name}}{%endverbatim%}</span>
+<span>{%verbatim%}{{buking.landmark}}
+	{{buking.address_1}}
+	{{buking.address_2}}<!DOCTYPE html>
+<html lang="en" ng-app = "accountApp" >
+  <head>
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Your Parlor on Your Hand -  Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
+    <title>Onepass</title>
+    {% load static from staticfiles %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap/bootsbodytrap.min.css"%}'>
+    <!-- Font -->
+    <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
+    <!-- loading django static files -->
+   
+    
+  </head>
+<body>
+
+
+	{{buking.area}}
+	{{buking.city}}
+	{%endverbatim%}
+</span>
+<span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</span>
+<span><a href="#">Resend</a></span>
+</div>
+
+<div ng-repeat="buking in expired_bookings">
+<span>{%verbatim%}{{buking.appointment_date}}{%endverbatim%}</span>
+<span>{%verbatim%}{{buking.appointment_time}}{%endverbatim%}</span>
+<span>{%verbatim%}{{buking.studio_name}}{%endverbatim%}</span>
+<span>{%verbatim%}{{buking.landmark}}
+	{{buking.address_1}}
+	{{buking.address_2}}
+	{{buking.area}}
+	{{buking.city}}
+	{%endverbatim%}
+</span>
+</div>
+</div>
+
+   <!-- js libs -->
+  <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
+  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+  <script src='{% static "js/bootstrap/ui-bootstrap-tpls-0.13.0.js"%}'></script>  
+  <script src='{% static "js/app.js" %}'></script>
+  <script src='{% static "js/services/httpservices.js" %}'></script>
+  <script src='{% static "js/controllers/home_page_controller.js" %}'></script>
+  <script src='{% static "js/controllers/accounts_controller.js" %}'></script>
+  <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
+  <!-- Bootstrap Js -->
+  
+  <!-- loader -->
+  <script type="text/javascript" src='{% static "js/scripts.js"%}'></script>
+
+
+</body>
+</html>

@@ -152,7 +152,8 @@ else:
         }
     }
     #ALLOWED_HOSTS = ['bebalance.com', 'http://bebalance.com']
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['zaloon.in','www.zaloon.in','http://zaloon.in','http://www.zaloon.in',  \
+    'https://zaloon.in','https://www.zaloon.in']
 
 
 #AWS SES SMTP SETTINGS

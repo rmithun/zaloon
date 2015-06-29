@@ -66,18 +66,6 @@ httpServices.getUsrDetails().then(function(dataz)
 	}
 
 
-	$scope.getDetails = function()
-	{
-		httpServices.getBookings().then(function(booking)
-		{
-			console.log(booking)
-		},
-		function()
-		{
-			console.log("Logout Error")	
-		})
-	}
-
 	//AutoComplete
 	$scope.searchdata_ = {};
 	$scope.searchdata_['area'] = '';	

@@ -19,8 +19,8 @@ from django.core.files import File
 
 #application imports
 from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus
-from studios.models import StudioProfile
-from utils import responses
+from studios.models import StudioProfile, Studio
+from utils import responses, generic_utils
 
 
 """"------------------------------------------------------------------------------------------------------
@@ -99,6 +99,14 @@ def render_to_pdf(template_url,data,studio):
             pdf = File(result)
             rep = MerchantDailyReportStatus(studio_id = studio, report = pdf)
             rep.save()
+            studio_dt = StudioProfile.objects.values('studio').get(id = studio)
+            studio_email = Studio.objects.values('email').get(id = studio_dt['studio'])
+            try:
+                #send email
+                subject = (responses.MAIL_SUBJECTS['DAILY_REPORT_EMAIL'])%(today)
+                generic_utils.sendEmail(studio_email['email'],subject,message)
+            except, Exception,e:
+                print repr(e)
             ##save pdf to table
             ##location should be inside studio
     except Exception,pdfrenderr:
@@ -113,6 +121,7 @@ def generate_pdf():
         except Exception,pdfgenrateerr:
             print (pdfgenrateerr)
      
+
 
 
 

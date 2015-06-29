@@ -21,8 +21,8 @@ noqapp.config(function($routeProvider,$httpProvider) {
 				templateUrl : '/account/search/'
 			})
 
-			.when('/search', {
-				templateUrl : '/account/search/'
+			.when('/my_account', {
+				templateUrl : '/account/user_account/'
 			})
 
 });

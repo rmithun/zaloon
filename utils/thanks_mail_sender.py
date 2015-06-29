@@ -45,8 +45,7 @@ def send_thanks_mail():
             to_user = user['email']
             subject = responses.MAIL_SUBJECTS['THANKS_EMAIL']
             try:
-                for i in range(10):
-                    status = generic_utils.sendEmail(to_user, subject, message)
+                status = generic_utils.sendEmail(to_user, subject, message)
                 status_code = responses.BOOKING_CODES['EXPIRED']
                 BookingDetails.objects.filter(id = every_book.id).update(is_valid = False, \
                     booking_status = 'EXPIRED', status_code = status_code)
