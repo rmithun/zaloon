@@ -13,7 +13,7 @@ class UserNameOnlySerializer(serializers.ModelSerializer):
 	"""serializer to get only name and id of the user"""
 	class Meta:
 		model = User
-		fields = ('id','first_name', 'last_name')
+		fields = ('id','first_name', 'last_name','email')
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

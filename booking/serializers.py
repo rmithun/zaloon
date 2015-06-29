@@ -22,8 +22,9 @@ class ActiveBookingSerializer(serializers.ModelSerializer):
 	"""list of available active bookings for user"""
 	#studio = StudioProfileSerializer(many = True)
 	service_booked_with = ServicesBooked(many = True)
+	studio = StudioProfileSerializer()
 	class Meta:
 		model = BookingDetails
 		fields = ('id', 'user', 'booked_date', 'appointment_date', 'appointment_start_time',  \
-			'booking_code','studio','booking_status',  \
+			'booking_code','studio','booking_status', 'status_code', \
 			'service_booked_with','appointment_end_time')

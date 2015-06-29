@@ -5,20 +5,31 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
 	{
 		httpServices.getDetails().then(function(data)
 		{
-			console.log(data)
+			$scope.user_details = data.user_details.data[0]
+			$scope.booking_details = data.booking.data
+			httpServices.splitBookings($scope.booking_details).then(function(data)
+			{
+				$scope.active_bookings = data.active_booking
+				$scope.expired_bookings = data.inactive_booking
+			},
+			function()
+			{
+				console.log("Error splitting bookings")
+			});
 		},
 		function()
 		{
-			console.log("Logout Error")	
+			console.log("Error getting user Details and booking")	
 		})
 	}
 
 	$scope.getBookings();
 
-	$scope.booking_cancel = function()
+	$scope.booking_cancel = function(id)
 	{
-		httpServices.cancelBooking().then(function(data)
+		httpServices.cancelBooking(id).then(function(data)
 		{
+			$scope.getBookings();
 			console.log("Booking successfully cancelled")
 		},
 		function()
@@ -53,3 +64,4 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
 		})
 	}
 });
+	

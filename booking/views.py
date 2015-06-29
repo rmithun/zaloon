@@ -174,8 +174,7 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
     @transaction.commit_manually
     def put(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace();
-            booking_id = self.request.DATA['booking_id']
+            booking_id = self.request.DATA
             user = self.request.user
             is_booking = BookingDetails.objects.filter(id = booking_id, user_id = user \
                 , is_valid = True, booking_status = 'BOOKED').update(booking_status =  \

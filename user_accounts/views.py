@@ -111,12 +111,6 @@ class UserMixin(object):
 
 class GetUserDetail(UserMixin, ListAPIView, RetrieveUpdateAPIView):
 
-    def get(self,request,*args,**kwargs):
-        import pdb;pdb.set_trace();
-        print "hi"
-
-
-
     def put(self,request,*args,**kwargs):
         try:
             user = self.request.user
