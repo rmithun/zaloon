@@ -16,25 +16,26 @@ from django.template import Context
 from django.http import HttpResponse
 from cgi import escape
 from django.core.files import File
+from django.db import transaction
 
 #application imports
-from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus
+from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus, DailyBookingConfirmation
 from studios.models import StudioProfile, Studio
 from utils import responses, generic_utils
 
 
 """"
 ------------------------------------------------------------------------------------------------------
-Name | Booking id | Services Booked | Offer code | Booking amount | Booking Date | Booking Time 
+Name | Booking id | Services Booked | Booking Date | Booking Time 
 ------------------------------------------------------------------------------------------------------
 """
 
+today = datetime.today().date()
 
-def daily_confimed_booking():
+def daily_confirmed_booking():
     try:
         ##get all used booking for the day
-        today = datetime.today().date()
-        time = datetime.now().replace(hour = 13, minutes = 00)
+        time = datetime.now().replace(hour = 13, minute = 00)
         if datetime.now().hour < 13:
             bookings = BookingDetails.objects.filter(appointment_date = today,  \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
@@ -59,10 +60,8 @@ def daily_confimed_booking():
                 obj['studio_name'] = stud.studio.name
                 obj['booking_id'] = stud.id
                 obj['services_booked'] = services[:]
-                obj['offer_code'] = stud.promo.promo_code
-                obj['booking_amount'] = stud.purchase.purchase_amount
-                obj['actual_amount'] = stud.purchase.actual_amount
-                obj['amount_to_pay'] = (obj['booking_amount'] - (obj['booking_amount']/10))
+                obj['appointment_date   '] = today
+                obj['appointment_time'] = stud.appointment_start_time
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:
                     studios_visited.append(stud.studio_id)
@@ -74,7 +73,7 @@ def daily_confimed_booking():
                 #dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
                 #    studio_id = stud['studio_id'], status = 'Fail')
                 #dm_status.save()
-            else:
+            else:   
                 #dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
                 #    studio_id = stud['studio_id'], status = 'Fail')
                 #dm_status.save()
@@ -85,15 +84,15 @@ def daily_confimed_booking():
         print to_print
         return to_print
 
-
+@transaction.commit_manually
 def render_to_pdf(template_url,data,studio):
     ##generate pdf with data
-    import pdb;pdb.set_trace();
     try:
+        import pdb;pdb.set_trace();
         template = get_template(template_url)
         context = Context(data)
         html =  template.render(context)
-        filename = data['todayslist']['data'][0]['studio_name'] + str(datetime.today().date())
+        filename = data['todayslist']['data'][0]['studio_name'] + str(datetime.today().date())+"__bookings"
         result = open(filename+'.pdf', 'wb')
         #result = StringIO.StringIO()
         pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
@@ -101,26 +100,33 @@ def render_to_pdf(template_url,data,studio):
             ###get and save the pdf 
             result = open(filename+'.pdf', 'r')
             pdf = File(result)
-            rep = MerchantDailyReportStatus(studio_id = studio, report = pdf)
+            rep = DailyBookingConfirmation(studio_id = studio, booking_pdf = pdf,  \
+                service_updated = "daily confirm booking sender")
             rep.save()
             studio_dt = StudioProfile.objects.values('studio').get(id = studio)
             studio_email = Studio.objects.values('email').get(id = studio_dt['studio'])
             try:
                 #send email
-                subject = (responses.MAIL_SUBJECTS['DAILY_REPORT_EMAIL'])%(today)
+                subject = (responses.MAIL_SUBJECTS['DAILY_BOOKING_MAIL'])%(today)
                 generic_utils.sendEmail(studio_email['email'],subject,message)
-            except, Exception,e:
+                rep = DailyBookingConfirmation.filter(studio_id = studio, report_date = \
+                 today).update(mail_sent = 1, updated_date_time = datetime.now())
+            except Exception,e:
                 print repr(e)
             ##save pdf to table
             ##location should be inside studio
+            result.close();
     except Exception,pdfrenderr:
+        transaction.rollback()
         print (pdfrenderr)
+    else:
+        transaction.commit()
 
 def generate_pdf():
-    to_generate = daily_merchant_report()
+    to_generate = daily_confirmed_booking()
     for key,data in to_generate.iteritems():
         try:
-            pdf_file = render_to_pdf('../templates/reports/merchant_daily_report.html',  \
+            pdf_file = render_to_pdf('../templates/emails/daily_confirmed_bookings.html',  \
                {'pagesize':'A4','todayslist':data},key)
         except Exception,pdfgenrateerr:
             print (pdfgenrateerr)

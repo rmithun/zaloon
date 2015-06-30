@@ -23,7 +23,8 @@ MAIL_SUBJECTS = {'THANKS_EMAIL':"Thank you for using gopanther",
                  'BOOKING_EMAIL':"Booking code from gopanther",
                  'CANCEL_EMAIL':"Cancelled booking details",
                  'DAILY_REPORT_EMAIL':"Daily booking report from zaloon for %s",
-                 'STUDIO_REQ_REGISTER':"We will contact you shortly."}
+                 'STUDIO_REQ_REGISTER':"We will contact you shortly.",
+                 'DAILY_BOOKING_MAIL':"Confirmed Booking details for %s."}
 
 
 

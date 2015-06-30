@@ -6,6 +6,7 @@ Views
 import random
 import string
 from datetime import timedelta, datetime
+import simplejson
 
 #third party imports
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
@@ -21,11 +22,16 @@ from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasSco
 from rest_framework.response import Response
 from django.db import transaction
 from rest_framework import status
+from django.db.models import Sum
+from django.template.loader import get_template
+from django.template import Context
+
 #application imports
 from serializers import *
 from models import *
 from utils.generic_utils import sendEmail
 from utils import responses
+from studios.models import StudioServices
 
 
 
@@ -67,6 +73,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             promo_code = data['promo_code']
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
+            import pdb;pdb.set_trace();
             total_duration = StudioServices.objects.filter(service_id__in = services_chosen  \
                 ).values('mins_takes').aggregate(Sum('mins_takes'))
             new_purchase = Purchase(customer = user,  \
@@ -74,12 +81,14 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 purchase_status = 'BOOKING', service_updated = 'new booking',  \
                 status_code = status_code)
             new_purchase.save()
+            appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
+            appointment_end_time = appointment_start_time + timedelta(minutes = total_duration['mins_takes__sum'])
             new_booking = BookingDetails(user = user, booked_date =
                 datetime.now(), appointment_date = appnt_date,  \
-                appointment_start_time = appnt_time, booking_code = booking_code,  \
+                appointment_start_time = appointment_start_time, booking_code = booking_code,  \
                 studio_id = studio_id, booking_status = 'BOOKING',  \
                 service_updated = 'new booking', purchase = new_purchase,status_code = status_code,  \
-                total_duration = total_duration['mins_takes__sum'])
+                appointment_end_time = appointment_end_time)
             new_booking.save()
             for service in services_chosen:
                 service_booked = BookingServices(booking = new_booking,service_id = service, service_updated = 'new booking')
@@ -117,6 +126,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             status_code = status_code, updated_date_time = datetime.now())
             if booking_status == 'BOOKED':
                 services_booked = BookingServices.objects.filter(booking_id = booking_id)
+                services_booked_list = [ser.service.service_name for ser in services_booked]
                 user = User.objects.values('first_name','email').get(email = user)
                 studio = StudioProfile.objects.values('name','address_1', \
                 'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
@@ -126,13 +136,15 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 'mobile_no':studio['contact_mobile_no']}}
                 studio_address = {'address_1':studio['address_1'],'address_2':studio['address_2'],  \
                 'area':studio['area'],'city':studio['city']}
+                appnt_time =  studio_id.appointment_start_time.strftime('%H:%M')
+                appnt_date = studio_id.appointment_date.strftime('%d-%m-%Y')
                 booking_details = {'first_name':user['first_name'],'code':studio_id.booking_code,  \
-                'date':studio_id.appointment_date, 'appnt_time':studio_id.appointment_start_time,'services':services_booked,  \
+                'date':appnt_date, 'appnt_time':appnt_time,  \
+                'services':services_booked_list,  \
                 'studio':studio['name'],'studio_address':studio_address,  \
                 'contact':contacts}
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
-                import pdb;pdb.set_trace();
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
                 #sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 #sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appointment_date,appointment_start_time)

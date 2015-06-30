@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^validate_code/$', views.ValidateBookingCode.as_view(), name = 'validate_code'),
     url(r'^get_booking/$', views.ValidateBookingCode.as_view(), name = 'get_booking'),
     url(r'^add_review/$', views.AddReviews.as_view(), name = 'add_review'),
+    url(r'^new_booking/$', views.NewBooking.as_view(), name = 'new_booking'),
 
 
 

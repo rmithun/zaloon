@@ -46,7 +46,7 @@ class BookingDetails(models.Model):
 	notification_send  = models.BooleanField(default = 0)
 	is_valid = models.BooleanField(default = 1) #0- new 1-postponed
 	purchase = models.ForeignKey(Purchase, related_name = "purchase_id", null = True)
-	total_duration = models.PositiveIntegerField()
+	#total_duration = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -156,4 +156,16 @@ class ThanksMail(models.Model):
 	status = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 30)
 	user = models.ForeignKey(User, related_name = "tm_for_user")
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+
+class DailyBookingConfirmation(models.Model):
+
+	"""table holding all information status for reports sent to merchants"""
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_confirmed_booking")
+	report_date = models.DateField(default = datetime.now().date())
+	booking_pdf = models.FileField(upload_to = 'reports/%Y/%m/%d')
+	mail_sent = models.BooleanField(default = 0)
+	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())

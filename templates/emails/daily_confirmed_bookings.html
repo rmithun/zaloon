@@ -1,0 +1,9 @@
+{{todayslist.data.0.studio_name}}
+{%for buks in todayslist.data%}
+{{buks.booking_id}}
+{%for serv in buks.services_booked%}
+{{serv}}
+{%endfor%}
+{{buks.appointment_time}}
+{{buks.appointment_date}}
+{%endfor%}
