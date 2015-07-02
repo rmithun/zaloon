@@ -88,8 +88,11 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 appointment_start_time = appointment_start_time, booking_code = booking_code,  \
                 studio_id = studio_id, booking_status = 'BOOKING',  \
                 service_updated = 'new booking', purchase = new_purchase,status_code = status_code,  \
-                appointment_end_time = appointment_end_time)
+                appointment_end_time = appointment_end_time, mobile_no = mobile_no)
             new_booking.save()
+            sms_bms = BookedMessageSent(booking = new_booking, type_of_message = 'book',   \
+                mode = 'sms', service_updated = 'new booking', message = '')
+            sms_bms.save();
             for service in services_chosen:
                 service_booked = BookingServices(booking = new_booking,service_id = service, service_updated = 'new booking')
                 service_booked.save()
@@ -124,13 +127,13 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             Purchase.objects.filter(id = purchase_id).update(\
             purchase_status =  payment_status, service_updated = 'payment response', \
             status_code = status_code, updated_date_time = datetime.now())
-            if booking_status == 'BOOKED':
+            if booking_status == 'BOOKED' and studio_id.notification_send == 0:
                 services_booked = BookingServices.objects.filter(booking_id = booking_id)
                 services_booked_list = [ser.service.service_name for ser in services_booked]
                 user = User.objects.values('first_name','email').get(email = user)
                 studio = StudioProfile.objects.values('name','address_1', \
                 'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
-                'incharge_mobile_no','city').get(id = studio_id.studio_id)
+                'incharge_mobile_no','city').get(id = studio_id.studio.id)
                 contacts = {'in_charge_person':{'name':studio['in_charge_person'],'mobile_no': \
                 studio['incharge_mobile_no']},'contact_person':{'name':studio['contact_person'],\
                 'mobile_no':studio['contact_mobile_no']}}
@@ -148,17 +151,19 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
-                email = sendEmail(to_user,subject,message)
-                sms = sendSMS(mobile_no,sms_message)
+                #email = sendEmail(to_user,subject,message)
+                #sms = sendSMS(studio_id.mobile_no,sms_message)
+                email = 1
+                sms_bms = 1
                 try:
-                    email_bms = BookedMessageSent(booking_id = booking_id, email = to_user, \
-                    is_successful = email,type_of_message = 'book', mode = 'email', service_updated =  \
+                    email_bms = BookedMessageSent(booking_id = booking_id,is_successful = email,  \
+                        type_of_message = 'book', mode = 'email', service_updated =  \
                     'new booking')
-                    sms_bms = BookedMessageSent(booking = new_booking, mobile_no = mobile_no, \
-                    is_successful = sms_bms, type_of_message = 'book', mode = 'sms', service_updated =  \
-                    'new booking', message = sms_message)
+                    sms_bms = BookedMessageSent.objects.filter(booking_id = booking_id, is_successful = 0,   \
+                    type_of_message = 'book', mode = 'sms', service_updated =  \
+                    'new booking', message = '').update(is_successful = sms_bms,  \
+                    service_updated = 'booking confirmed')
                     email_bms.save()
-                    sms_bms.save()
                     notification_send = 1
                     BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
                     notification_send)

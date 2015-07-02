@@ -38,7 +38,7 @@ def daily_merchant_report():
         ##get all used booking for the day
         today = datetime.today().date()
         bookings = BookingDetails.objects.filter(appointment_date = today,  \
-            booking_status = 'USED', status_code = 'B004', is_valid = True)
+            booking_status = 'USED', status_code = 'B004', is_valid = False)
         studios_visited = []
         to_print = {}
         for stud in bookings:
@@ -105,7 +105,7 @@ def render_to_pdf(template_url,data,studio):
                 #send email
                 subject = (responses.MAIL_SUBJECTS['DAILY_REPORT_EMAIL'])%(today)
                 generic_utils.sendEmail(studio_email['email'],subject,message)
-            except, Exception,e:
+            except Exception,e:
                 print repr(e)
             ##save pdf to table
             ##location should be inside studio

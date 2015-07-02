@@ -3,7 +3,7 @@
 ##this runs every day at 7 AM
 
 from datetime import datetime
-from booking.models import BookingDetails,BookedMessageSent,DailyReminder
+from booking.models import BookingDetails,DailyReminder
 from studios.models import StudioProfile
 from utils import responses, generic_utils
 from django.contrib.auth.models import User
@@ -22,7 +22,6 @@ today = datetime.today().date()
 ##need to integrate with thread queue system when the count overflows indatetime.date(2015, 7, 1) future
 def get_Bookings_for_day():
     try:
-        import pdb;pdb.set_trace();
         bookings = BookingDetails.objects.filter(appointment_date = today,   \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True)
         ##log code starting
@@ -34,9 +33,8 @@ def get_Bookings_for_day():
         	    user_name = User.objects.values('first_name','id').get(id = every_book.user.id)
         	    date = today
                     time = datetime.strptime(str(every_book.appointment_start_time), "%H:%M:%S").strftime("%I:%M %p")
-        	    mobile_no = BookedMessageSent.objects.filter(booking_id = every_book.id).values('mobile_no')
                     ##get sms template
-                    mobile_no = '9677267542'
+                    mobile_no = every_book.mobile_no
         	    sms_template = (responses.SMS_TEMPLATES['DLY_REM'])%(user_name['first_name'], studio_name['name'],   \
                     studio_name['area'], date, time,code)
         	    try:

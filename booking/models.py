@@ -38,6 +38,7 @@ class BookingDetails(models.Model):
 	appointment_date = models.DateField()
 	appointment_start_time = models.TimeField() # ex 13.15 14.30
 	appointment_end_time = models.TimeField() # ex 13.15 14.30
+	mobile_no = models.CharField(max_length = 30, null = True)
 	booking_code = models.CharField(max_length = 25)
 	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
 	promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
@@ -71,8 +72,6 @@ class BookedMessageSent(models.Model):
 
 	booking = models.ForeignKey(BookingDetails, related_name = "booking_id")
 	message = models.TextField(null = True)
-	mobile_no = models.CharField(max_length = 30, null = True)
-	email = models.CharField(max_length = 60, null = True)
 	is_successful = models.BooleanField(default = 0)
 	type_of_message = models.CharField(max_length = 25) ##book and cancel message
 	mode = models.CharField(max_length = 25) ## mobile and email
