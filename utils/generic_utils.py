@@ -131,26 +131,22 @@ def sendEmail(to, subject, message, raw = 0):
         return True
 
 
-def sendSMS(to,from_,body):
+def sendSMS(to,body):
 
-    import urllib # Python URL functions
-    import urllib2 # Python URL functions
-    authkey = "YourAuthKey" # Your authentication key.
-    mobiles = "9999999999" # Multiple mobiles numbers separated by comma.
-    message = "Test message" # Your message to send.
-    sender = "112233" # Sender ID,While using route4 sender id should be 6 characters long.
-    route = "default" # Define route
-    # Prepare you post parameters
-    values = {
-          'authkey' : authkey,
-          'mobiles' : mobiles,
-          'message' : message,
-          'sender' : sender,
-          'route' : route
-          }
-    url = "https://control.msg91.com/sendhttp.php" # API URL
-    postdata = urllib.urlencode(values) # URL encoding the data here.
-    req = urllib2.Request(url, postdata)
-    response = urllib2.urlopen(req)
-    output = response.read() # Get Response
-    print output # Print Response
+    import plivo
+    auth_id = settings.PLIVO_ID
+    auth_token = settings.PLIVO_KEY
+    p = plivo.RestAPI(auth_id, auth_token)
+    # Send a SMS
+    params = {
+        'src': 'ZALOON', # Caller Id
+        'dst' : '91'+to, # User Number to Call
+        'text' : body,
+        'type' : "sms",
+    }
+    response = p.send_message(params)
+    print response
+    if response:
+        return True
+    else:
+        return False

@@ -35,6 +35,7 @@ today = datetime.today().date()
 def daily_confirmed_booking():
     try:
         ##get all used booking for the day
+        #import pdb;pdb.set_trace();
         time = datetime.now().replace(hour = 13, minute = 00)
         if datetime.now().hour < 13:
             bookings = BookingDetails.objects.filter(appointment_date = today,  \
@@ -88,7 +89,6 @@ def daily_confirmed_booking():
 def render_to_pdf(template_url,data,studio):
     ##generate pdf with data
     try:
-        import pdb;pdb.set_trace();
         template = get_template(template_url)
         context = Context(data)
         html =  template.render(context)

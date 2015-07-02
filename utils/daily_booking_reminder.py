@@ -3,14 +3,13 @@
 ##this runs every day at 7 AM
 
 from datetime import datetime
-from booking.models import BookingDetails
+from booking.models import BookingDetails,BookedMessageSent,DailyReminder
 from studios.models import StudioProfile
 from utils import responses, generic_utils
 from django.contrib.auth.models import User
 
 
 #application imports
-from booking.modes import DailyReminder
 ##get all active bookings for the day
 ##get the code,date, time, studio, services
 #get mobile number from BookedMessageSend
@@ -20,9 +19,10 @@ from booking.modes import DailyReminder
 
 
 today = datetime.today().date()
-##need to integrate with thread queue system when the count overflows in future
+##need to integrate with thread queue system when the count overflows indatetime.date(2015, 7, 1) future
 def get_Bookings_for_day():
     try:
+        import pdb;pdb.set_trace();
         bookings = BookingDetails.objects.filter(appointment_date = today,   \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True)
         ##log code starting
@@ -30,15 +30,18 @@ def get_Bookings_for_day():
             has_sent  = DailyReminder.objects.filter(booking_id = every_book.id, status = True)
             if len(has_sent) is 0:
         	    code = every_book.booking_code
-        	    studio_name = StudioProfile.objects.filter(id = every_book.studio).values('name')
-        	    user_name = User.objects.filter(id = every_book.user).values('first_name','id')
+        	    studio_name = StudioProfile.objects.values('name','area').get(id = every_book.studio.id)
+        	    user_name = User.objects.values('first_name','id').get(id = every_book.user.id)
         	    date = today
-                    time = datetime.strptime(str(every_book.appointment_start_time), "%H.%M").strftime("%I:%M %p")
-        	    mobile_no = BookedMessageSend.objects.filter(booking_id = every_book.id).values('mobile_no')
+                    time = datetime.strptime(str(every_book.appointment_start_time), "%H:%M:%S").strftime("%I:%M %p")
+        	    mobile_no = BookedMessageSent.objects.filter(booking_id = every_book.id).values('mobile_no')
                     ##get sms template
-        	    #sms_template = (responses.sms_templates['daily_reminder'])%(user_name, studio_name, date, time,code)
+                    mobile_no = '9677267542'
+        	    sms_template = (responses.SMS_TEMPLATES['DLY_REM'])%(user_name['first_name'], studio_name['name'],   \
+                    studio_name['area'], date, time,code)
         	    try:
         	        status = generic_utils.sendSMS(mobile_no,sms_template)
+                        print "mi"
         	    except Exception,smserr:
         		    print repr(smserr)
         		    status = False

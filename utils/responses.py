@@ -15,9 +15,9 @@ BOOKING_CODES = {'BOOKED':'B001','FAILED':'B002','CANCELLED':'B003','USED':'B004
 PAYMENT_CODES = {'PAID':'P001','PAY_FAILED':'P002','PAY_CANCELLED':'P003',  \
                  'REFUND_REQUESTED':'P004','REFUND_SUCCESS':'P005'}
 
-SMS_TEMPLATES = {'DLY_REM':"Hi %s,This is a reminder for your booking for %s on %s at %s ",
+SMS_TEMPLATES = {'DLY_REM':"Hi %s,This is a reminder for your booking in zaloon.in for %s, %s on %s at %s. Booking code - %s",
                 'HLY_REM':"Hi %s,This is a reminder for your booking for %s on %s at %s ",
-                'BOOKING_EMAIL':"Hi %s,your booking at %s on %s at %s is successfull"}
+                'BOOKING_SMS':"Hi %s,your booking though zaloon.in at %s, %s on %s at %s is successfully booked."}
 
 MAIL_SUBJECTS = {'THANKS_EMAIL':"Thank you for using gopanther",
                  'BOOKING_EMAIL':"Booking code from gopanther",

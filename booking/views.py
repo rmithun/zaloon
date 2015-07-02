@@ -29,7 +29,7 @@ from django.template import Context
 #application imports
 from serializers import *
 from models import *
-from utils.generic_utils import sendEmail
+from utils.generic_utils import sendEmail, sendSMS
 from utils import responses
 from studios.models import StudioServices
 
@@ -146,19 +146,19 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
-                #sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
-                #sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appointment_date,appointment_start_time)
+                sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
+                sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
                 email = sendEmail(to_user,subject,message)
-                #sms = sendSMS(mobile_no,sms_message)
+                sms = sendSMS(mobile_no,sms_message)
                 try:
                     email_bms = BookedMessageSent(booking_id = booking_id, email = to_user, \
                     is_successful = email,type_of_message = 'book', mode = 'email', service_updated =  \
                     'new booking')
-                    #sms_bms = BookedMessageSent(booking = new_booking, mobile_no = mobile_no, \
-                    #is_successful = sms_bms, type_of_message = 'book', mode = 'sms', service_updated =  \
-                    #'new booking', message = sms_message)
+                    sms_bms = BookedMessageSent(booking = new_booking, mobile_no = mobile_no, \
+                    is_successful = sms_bms, type_of_message = 'book', mode = 'sms', service_updated =  \
+                    'new booking', message = sms_message)
                     email_bms.save()
-                    #sms_bms.save()
+                    sms_bms.save()
                     notification_send = 1
                     BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
                     notification_send)
@@ -236,7 +236,7 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
             has_exists = BookingDetails.objects.filter(studio_id = studio_pin, booking_code =  \
             booking_code, booking_status = 'BOOKED', status_code ='B001',  \
             is_valid = True, appointment_date = today).update(booking_status = 'USED', status_code = 'B004',  \
-            service_updated = 'booking used', updated_date_time = datetime.now())
+            service_updated = 'booking used', updated_date_time = datetime.now(), is_valid = False)
             if not has_exists:
                 transaction.rollback()
                 return Response(status = status.HTTP_304_NOT_MODIFIED)

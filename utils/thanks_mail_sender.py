@@ -30,10 +30,10 @@ def send_thanks_mail():
         yesterday = datetime.today().date()-timedelta(days = 1)
         status_code = responses.BOOKING_CODES['USED']
         bookings = BookingDetails.objects.filter(appointment_date = yesterday,   \
-        booking_status = 'USED', status_code = status_code, is_valid = True)
+        booking_status = 'USED', status_code = status_code, is_valid = False)
         ##log code starting
         for every_book in bookings:
-            code = every_book.booking_code
+            #code = every_book.booking_code
             studio_name = StudioProfile.objects.values('name').get(id = every_book.studio.id)
             user = User.objects.values('first_name','email','id').get(id = every_book.user.id)
             date = yesterday

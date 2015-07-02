@@ -9,7 +9,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('studios', '0002_auto_20150625_1136'),
+        ('studios', '0005_auto_20150702_0757'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('type_of_message', models.CharField(max_length=25)),
                 ('mode', models.CharField(max_length=25)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 947079))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 977464))),
             ],
             options={
             },
@@ -38,15 +38,14 @@ class Migration(migrations.Migration):
                 ('booked_date', models.DateTimeField()),
                 ('appointment_date', models.DateField()),
                 ('appointment_start_time', models.TimeField()),
-                ('appointment_end_time', models.TimeField(null=True)),
+                ('appointment_end_time', models.TimeField()),
                 ('booking_code', models.CharField(max_length=25)),
                 ('status_code', models.CharField(max_length=10)),
                 ('booking_status', models.CharField(max_length=30)),
                 ('notification_send', models.BooleanField(default=0)),
                 ('is_valid', models.BooleanField(default=1)),
-                ('total_duration', models.PositiveIntegerField()),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 945369))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 975141))),
             ],
             options={
             },
@@ -58,9 +57,24 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('status', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 947672))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 978396))),
                 ('booking', models.ForeignKey(related_name=b'service_booked_with', to='booking.BookingDetails')),
                 ('service', models.ForeignKey(related_name=b'service_booked', to='studios.Service')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='DailyBookingConfirmation',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('report_date', models.DateField(default=datetime.date(2015, 7, 2))),
+                ('booking_pdf', models.FileField(upload_to=b'reports/%Y/%m/%d')),
+                ('mail_sent', models.BooleanField(default=0)),
+                ('service_updated', models.CharField(max_length=25)),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 985322))),
+                ('studio', models.ForeignKey(related_name=b'studio_confirmed_booking', to='studios.StudioProfile')),
             ],
             options={
             },
@@ -74,7 +88,7 @@ class Migration(migrations.Migration):
                 ('status', models.BooleanField(default=1)),
                 ('message', models.TextField()),
                 ('service_updated', models.CharField(max_length=30)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 950121))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 982337))),
                 ('booking', models.ForeignKey(related_name=b'dr_for_booking', to='booking.BookingDetails')),
                 ('user', models.ForeignKey(related_name=b'dr_for_user', to=settings.AUTH_USER_MODEL)),
             ],
@@ -90,7 +104,7 @@ class Migration(migrations.Migration):
                 ('status', models.BooleanField(default=1)),
                 ('message', models.TextField()),
                 ('service_updated', models.CharField(max_length=30)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 950717))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 983501))),
                 ('booking', models.ForeignKey(related_name=b'hr_reminder_for_booking', to='booking.BookingDetails')),
                 ('user', models.ForeignKey(related_name=b'hr_for_user', to=settings.AUTH_USER_MODEL)),
             ],
@@ -102,11 +116,11 @@ class Migration(migrations.Migration):
             name='MerchantDailyReportStatus',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('report_date', models.DateField(default=datetime.date(2015, 6, 25))),
+                ('report_date', models.DateField(default=datetime.date(2015, 7, 2))),
                 ('report', models.FileField(upload_to=b'reports/%Y/%m/%d')),
                 ('mail_sent', models.BooleanField(default=0)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 949510))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 981356))),
                 ('studio', models.ForeignKey(related_name=b'studio_report', to='studios.StudioProfile')),
             ],
             options={
@@ -118,8 +132,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('amount_paid', models.FloatField()),
-                ('initiated_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 948129))),
-                ('confirmation_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 948153))),
+                ('initiated_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 979319))),
+                ('confirmation_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 979360))),
                 ('payment_status', models.CharField(max_length=30)),
             ],
             options={
@@ -145,7 +159,7 @@ class Migration(migrations.Migration):
                 ('purchase_status', models.CharField(max_length=30)),
                 ('status_code', models.CharField(max_length=10)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 944301))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 973205))),
                 ('customer', models.ForeignKey(related_name=b'user_who_purchased', to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -159,9 +173,9 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(max_length=20)),
                 ('status_code', models.CharField(max_length=20)),
                 ('amount_refunded', models.FloatField()),
-                ('initiated_date_time', models.DateTimeField(verbose_name=datetime.datetime(2015, 6, 25, 11, 36, 31, 946364))),
+                ('initiated_date_time', models.DateTimeField(verbose_name=datetime.datetime(2015, 7, 2, 7, 57, 17, 976342))),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 946409))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 976403))),
                 ('booking', models.ForeignKey(related_name=b'refund_of_booking', to='booking.BookingDetails')),
                 ('purchase', models.ForeignKey(related_name=b'refund_from_purchase', to='booking.Purchase')),
                 ('user', models.ForeignKey(related_name=b'refund_to_user', to=settings.AUTH_USER_MODEL)),
@@ -178,7 +192,7 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField()),
                 ('is_active', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=25)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 948890))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 980365))),
                 ('booking', models.ForeignKey(related_name=b'reviewed_on_booking', to='booking.BookingDetails')),
                 ('studio_profile', models.ForeignKey(related_name=b'studio_review', to='studios.StudioProfile')),
                 ('user', models.ForeignKey(related_name=b'reviewed_by_user', to=settings.AUTH_USER_MODEL)),
@@ -194,7 +208,7 @@ class Migration(migrations.Migration):
                 ('email', models.CharField(max_length=60)),
                 ('status', models.BooleanField(default=1)),
                 ('service_updated', models.CharField(max_length=30)),
-                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 6, 25, 11, 36, 31, 951297))),
+                ('updated_date_time', models.DateTimeField(default=datetime.datetime(2015, 7, 2, 7, 57, 17, 984437))),
                 ('booking', models.ForeignKey(related_name=b'tm_for_booking', to='booking.BookingDetails')),
                 ('user', models.ForeignKey(related_name=b'tm_for_user', to=settings.AUTH_USER_MODEL)),
             ],
