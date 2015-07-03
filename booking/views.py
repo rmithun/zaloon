@@ -22,7 +22,7 @@ from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasSco
 from rest_framework.response import Response
 from django.db import transaction
 from rest_framework import status
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.template.loader import get_template
 from django.template import Context
 
@@ -32,6 +32,7 @@ from models import *
 from utils.generic_utils import sendEmail, sendSMS
 from utils import responses
 from studios.models import StudioServices
+from studios.serializers import StudioReviewSerializer
 
 
 
@@ -255,7 +256,7 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
 
 
 
-from studios.serializers import StudioReviewSerializer
+
 
 class AddReviews(CreateAPIView):
     permission_classes = (OAuth2Authentication,)
@@ -283,3 +284,138 @@ class AddReviews(CreateAPIView):
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(status = status.HTTP_201_CREATED)
+
+
+
+
+
+class  GetSlots(APIView):
+    permission_classes = (OAuth2Authentication,)
+    permission_classes = (TokenHasScope,)
+    required_scopes = ['write','read']
+    serializer_class = ActiveBookingSerializer
+    def get(self,request,*args,**kwargs):
+        try:
+            data = request.GET['data']
+            studio = data['studio_id']
+            date = data['date']
+            services = data['services']
+            duration = data['duration']
+            bookings = BookingDetails.objects.filter(appointment_date = date, studio_id = studio,  \
+                booking_status = 'BOOKED', status_code = 'B001', is_active = True)
+            #get studio start and end time
+            studio_time = StudioProfile.objects.filter(id = studio).values('opening_at',  \
+                'closing_at','daily_studio_closed_from','daily_studio_closed_till')
+            #check whether studio is closed on that day
+            start = studio_time['opening_at']
+            end = studio_time['closing_at']
+            closed_from = studio_time['daily_studio_closed_from']
+            closed_to = studio_time['daily_studio_closed_till']
+            slots = responses.HOURS_DICT
+            #check  total duration not to cross closed hours or other bookings
+            if start.minute != 0:
+                slots[start] =  [slots[start].remove(i) for i in slots[start] if i < start.minute]
+            if end.minute != 0:
+                slots[end] =  [slots[end].remove(i) for i in slots[end] if i > end.minute]
+            if closed_from.minute != 0:
+                slots[closed_from] =  [slots[closed_from].remove(i) for i in   \
+                slots[closed_from] if i > closed_from.minute]
+            if closed_to.minute != 0:
+                slots[closed_to] =  [slots[closed_to].remove(i) for i in   \
+                slots[closed_to] if i < closed_to.minute]
+            for j in range(0, int(start)):
+                slots.pop(j,None)
+            for k in range(int(end),24):
+                slots.pop(k,None)
+            for z in range(closed_from,closed_to):
+                slots.pop(z,None)
+            if len(bookings) > 0:
+                for bks in bookings:
+                    start_hour = bks.appointment_start_time.hour()
+                    start_min = bks.appointment_start_time.minute()
+                    end_hour = bks.appointment_end_time.hour()
+                    end_min = bks.appointment_end_time.minute()
+                    time_diff = end_hour-start_hour
+                    if time_diff > 1:
+                        for i in range((start_hour+1),(end_hour-1)):
+                            slots.pop(i,None)
+                    if time_diff == 0:
+                        for mins in slots[start_hour]:
+                            if mins >= start_min and mins < end_min:
+                                slots[start_hour].remove[mins]
+                    else:
+                        for s_min in slots[start_hour]:
+                            if s_min >= start_min:
+                                slots[start_hour].remove(s_min)
+                        for e_min in slots[end_hour]:    
+                            if e_min < end_min:
+                                slots[end_hour].remove[e_min]
+
+        except Exception,e:
+            print repr(e)
+            data = None
+            return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(data = data, status = status.HTTP_200_OK)
+
+
+class ApplyCoupon(APIView):
+    permission_classes = (OAuth2Authentication,)
+    permission_classes = (TokenHasScope,)
+    required_scopes = ['write','read']
+    serializer_class = CouponSerializer
+    def get(self,request,*args,**kwargs):
+        try:
+            import pdb;pdb.set_trace()
+            data  = self.request.GET
+            #services = data['services']
+            coupon_code = data['coupon_code']
+            #appnt_date = data['appnt_date']
+            studio_id = data['studio_id']
+            amount = int(data['amount'])
+            user = request.user
+            #check coupon code is there
+            try:
+                coupon_detail = Coupon.objects.get(coupon_code = coupon_code, is_active = 1,   \
+                expiry_date__gte =  datetime.today().date())
+            except Exception,e:
+                print repr(e)
+                response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['NO_COUPON'])
+                return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+            else:
+                if coupon_detail.for_all_studios != 1:
+                    is_applicable = CouponForStudios.objects.filter(studio_id = studio_id,  \
+                        coupon_id = coupon_detail.id, is_active = 1)
+                    if len(is_applicable) != 1:
+                        response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['NOT_APPLICABLE'])
+                        return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+                if coupon_detail.is_one_time == 1:
+                    ##change logic if usable only once a month
+                    is_applied = BookingDetails.objects.filter(Q(coupon_id = coupon_detail.id, user = user),  \
+                       ~Q(booking_status = 'CANCELLED'), ~Q(status_code = 'B003'))
+                    if len(is_applied) > 0:
+                        response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['COUPON_USED'])
+                        return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+                """if coupon['services_coupon'] == 1:
+                    #get coupon services 
+                    for serv in services:
+                        if serv.id in for_services:
+                            new_amount = new_amount = serv.amount
+                    if new_amount == 0:
+                        response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['no_applicable_service'])
+                        return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+                """
+                to_deduct = 0
+                if coupon_detail.coupon_type == 'PERCENT':
+                    to_deduct = (amount * coupon_detail.discount_value)/100
+                if coupon_detail.coupon_type == 'FLAT':
+                    to_deduct = (amount -coupon_detail.discount_value)
+                if to_deduct > coupon_detail.maximum_discount:
+                    to_deduct = coupon_detail.maximum_discount
+        except Exception,e:
+            print repr(e)
+            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(data = to_deduct, status = status.HTTP_200_OK)
+
+         

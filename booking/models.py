@@ -26,10 +26,32 @@ class Purchase(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
-class Promo(models.Model):
+class Coupon(models.Model):
+	"""table contaning all coupon details"""
 
-	promo_code = models.CharField(max_length = 10)
+	coupon_code = models.CharField(max_length = 10)
+	expiry_date = models.DateTimeField()
+	for_all_studios = models.BooleanField()
+	#is_service_level = models.BooleanField()
+	maximum_discount = models.PositiveIntegerField()
+	is_one_time = models.BooleanField()
+	is_active = models.BooleanField()
+	coupon_type = models.CharField(max_length = 10)
+	discount_value = models.PositiveIntegerField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
 	
+
+class CouponForStudios(models.Model):
+
+	"""table for coupon applicable studios,if for_all_studios is 0"""
+	coupon = models.ForeignKey(Coupon, related_name = "coupon_for_studio")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_have_coupon")
+	is_active = models.BooleanField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
 class BookingDetails(models.Model):
 
 	"""table holding all booking related infos"""
@@ -41,7 +63,7 @@ class BookingDetails(models.Model):
 	mobile_no = models.CharField(max_length = 30, null = True)
 	booking_code = models.CharField(max_length = 25)
 	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
-	promo = models.ForeignKey(Promo, related_name = "applied_promo_code", null = True)
+	coupon = models.ForeignKey(Coupon, related_name = "applied_promo_code", null = True)
 	status_code = models.CharField(max_length = 10)
 	booking_status = models.CharField(max_length = 30)
 	notification_send  = models.BooleanField(default = 0)

@@ -28,3 +28,10 @@ class ActiveBookingSerializer(serializers.ModelSerializer):
 		fields = ('id', 'user', 'booked_date', 'appointment_date', 'appointment_start_time',  \
 			'booking_code','studio','booking_status', 'status_code', \
 			'service_booked_with','appointment_end_time')
+
+class CouponSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Coupon
+		fields = ('coupon_code','expiry_date','is_one_time','is_active', \
+			'coupon_type','discount_value','for_all_studios')
