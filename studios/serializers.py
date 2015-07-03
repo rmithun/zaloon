@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 #application imports
 from models import *
+from user_accounts.serializers import  UserNameOnlySerializer
 from booking.models import StudioReviews
 
 
@@ -62,9 +63,10 @@ class StudioPictureSerializer(serializers.ModelSerializer):
 
 class StudioReviewSerializer(serializers.ModelSerializer):
 
+	user = UserNameOnlySerializer()
 	class Meta:
 		model = StudioReviews
-		fields = ('user','rating','comment','is_active')
+		fields = ('user','rating','comment','is_active', 'updated_date_time')
 
 class AmenitiesSerializer(serializers.ModelSerializer):
 	class Meta:

@@ -7,7 +7,7 @@ from rest_framework import serializers
 #application imports
 from models import *
 #from studios.serializers import StudioProfileSerializer
-from user_accounts.serializers import UserNameOnlySerializer
+#from user_accounts.serializers import UserNameOnlySerializer
 from studios.serializers import StudioProfileSerializer, ServiceSerializer
 
 class ServicesBooked(serializers.ModelSerializer):

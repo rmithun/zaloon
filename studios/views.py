@@ -213,9 +213,16 @@ def getSlots(request):
         end = studio_time['closing_at']
         closed_from = studio_time['daily_studio_closed_from']
         closed_to = studio_time['daily_studio_closed_till']
+        slots = responses.HOURS_DICT
+        #check  total duration not to cross closed hours or other bookings
         if len(bookings) > 0:
-            gen_slots = generate_slots(start,end)
-            slots = [gen_slots.next() for i in range(start,end) if i < str(closed_from) or i>= str(closed_to)]
+            for bks in bookings:
+                start_hour = bks.appointment_start_time.hour()
+                start_min = bks.appointment_start_time.minute()
+                end_hour = bks.appointment_end_time.hour()
+                end_min = bks.appointment_end_time.minute()
+                slots.pop()
+
                     
     except Exception,e:
         print repr(e)
@@ -223,3 +230,44 @@ def getSlots(request):
         return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(data = data, status = status.HTTP_200_OK)
+
+
+
+@login_required
+def  Coupon_Logic(request):
+    try:
+        data  = request.GET['data']
+        services = data['services']
+        coupon_code = data['coupon_code']
+        appnt_date = data['appnt_date']
+        studio_id = data['studio_id']
+        amount = data['amount']
+        user = request.user
+        #check coupon code is there
+        if len(coupon_code) != 1:
+            response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['no_coupon'])
+            return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+        else:
+            if coupon['expiry_date'] > datetime.today().date:
+                response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['expiry_date'])
+                return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+            if coupon['services_coupon'] == 1:
+                #get coupon services 
+                for serv in services:
+                    if serv.id in for_services:
+                        new_amount = new_amount = serv.amount
+                if new_amount == 0:
+                    response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['no_applicable_service'])
+                    return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+            if coupon['applicable'] != 1:
+                #check whether coupon is applicable in the studio
+                is_applicable = Coupon_Studios.objects.filter(coupon_id = coupon.id, studio_id = studio_id,  \
+                    is_active= True)
+                if len(is_applicable) == 1:
+                    if  coupon['one_time'] == 1:
+                        ##check whether the user already used the coupon
+                        if used:
+                            response_to_ng =  simplejson.dumps(responses.COUPON_RESPONSE['coupon_used'])
+                            return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
+
+

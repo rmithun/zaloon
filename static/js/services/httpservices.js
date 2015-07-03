@@ -140,7 +140,6 @@ noqapp.factory('sessionService', function($q,$cookies)
 		//check if token no expired
 		//if expired get new token using refresh token
 		//on logout clear cookies
-		return true;
 		if($cookies.get('token') == undefined || $cookies.get('token') == null)
 			{
 				return false;
