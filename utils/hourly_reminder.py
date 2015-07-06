@@ -9,7 +9,11 @@ from booking.models import BookingDetails
 from studios.models import StudioProfile
 from utils import Responses
 from django.contrib.auth.models import User
+import logging
+import traceback
 
+logger_hrly  = logging.getLogger('log.daily_scripts')
+logger_error = logging.getLogger('log.errors')
 
 ##get all active bookings for the hour
 ##get the code,date, time, studio, services
@@ -23,12 +27,12 @@ from django.contrib.auth.models import User
 def get_hourly_bookings():
 	try:
 	    today = datetime.today()
-        minute_15_back  = (datetime.now()- timedelta(minutes = 15))
+        minute_15back  = (datetime.now()- timedelta(minutes = 5))
         now = datetime.now().time()
-        minute_15_back = minute_15_back.time()
+        minute_5_back = minute_5_back.time()
         bookings = BookingDetails.objects.filter(appointment_date = today,   \
         booking_status = 'BOOKED', status_code = 'B001', appointment_start_time__range =  \
-        (minus_min , now), is_valid = True)
+        (minute_5_back , now), is_valid = True)
         ##log code starting
         for every_book in bookings:
             has_sent = HourlyReminder.objects.filter(booking_id = every_book.id, status = False)
@@ -40,10 +44,11 @@ def get_hourly_bookings():
         	    time = datetime.strptime(str(every_book.appointment_start_time), "%H.%M").strftime("%I:%M %p")
         	    mobile_no = BookedMessageSend.objects.filter(booking_id = every_book.id).values('mobile_no')
         	    sms_template = (Responses.hourly_reminder['sms_template'])%(user_name, studio_name, date, time)
+                logger_hrly.info("SMS hourly reminder text- "+str(sms_template))
         	    try:
         	        status = generic_utils.sendSMS(mobile_no,sms_template)
         	    except Exception,smserr:
-        		    print repr(smserr)
+                    logger_error.error(traceback.format_exc())
         		    status = False
         		    hourly_reminder = HourlyReminder(booking_id = every_book.id, mobile_no = mobile_no,  \
         	    	status = status, service_updated = "daily reminder", message = sms_template,  \
@@ -54,9 +59,10 @@ def get_hourly_bookings():
         	    	status = status, service_updated = "daily reminder", message = sms_template,  \
         	    	)
                     hourly_reminder.save()
-    except Exception,error:
-        print error
+    except Exception,errorz:
+        logger_error.error(traceback.format_exc())
     else:
+
         print len(bookings)
         ###log code end stats
 

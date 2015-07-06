@@ -241,3 +241,104 @@ FBAPIKEY = 442685319234348
 
 PLIVO_ID = 'MAZGRINGVMODA2MJDJNG'
 PLIVO_KEY = 'MzFkYWZmZDQ3YmQ3YTRkODY1NGNmZGVmZWRhOGVl'
+
+VENV_ROOT = os.path.dirname(os.path.abspath(__file__))
+REQ_RES_PATH = VENV_ROOT.split('/')[1:-1]
+REQ_RES_PATH = '/'.join(REQ_RES_PATH)
+LOG_PATH = '/'+REQ_RES_PATH+'/logs/'
+
+###logging
+LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': True,
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            },
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+            },
+        },
+        'handlers': {
+            'file_booking': {                # define and name a handler
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler', # set the logging class to log to a file
+                'formatter': 'verbose',         # define the formatter to associate
+                'filename': os.path.join(LOG_PATH, 'booking.log') # log file
+            },
+    
+            'file_studios': {                 
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler', # set the logging class to log to a file
+                'formatter': 'verbose',         # define the formatter to associate
+                'filename': os.path.join(LOG_PATH, 'studios.log')  # log file
+            },
+            
+            'req_res_log': {                 
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler', # set the logging class to log to a file
+                'formatter': 'verbose',         # define the formatter to associate
+                'filename': os.path.join(LOG_PATH,  'req_res_log.log')  # log file
+            },
+    
+            'user_account_log': {                 
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler', # set the logging class to log to a file
+                'formatter': 'verbose',         # define the formatter to associate
+                'filename': os.path.join(LOG_PATH, 'user_account.log')  # log file
+            },
+
+            'daily_scripts_log': {                 
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler', # set the logging class to log to a file
+                'formatter': 'verbose',         # define the formatter to associate
+                'filename': os.path.join(LOG_PATH, 'daily_scripts.log')  # log file
+            },
+    
+            'file_applicationerror': {                 
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler', # set the logging class to log to a file
+                'formatter': 'verbose',         # define the formatter to associate
+                'filename': os.path.join(LOG_PATH, 'errors.log')  # log file
+            },
+    
+        },
+        'loggers': {
+            'log.booking': {              # define a logger - give it a name
+                'handlers': ['file_booking'], # specify what handler to associate
+                'level': 'INFO',                 # specify the logging level
+                'propagate': True,
+            },     
+    
+            'log.studios': {               # define another logger
+                'handlers': ['file_studios'],  # associate a different handler
+                'level': 'INFO',                 # specify the logging level
+                'propagate': True,
+            },        
+    
+            'log.req_res': {               # define another logger
+                'handlers': ['req_res_log'],  # associate a different handler
+                'level': 'INFO',                 # specify the logging level
+                'propagate': True,
+            },   
+            
+            'log.user_account': {               # define another logger
+                'handlers': ['user_account_log'],  # associate a different handler
+                'level': 'DEBUG',                 # specify the logging level
+                'propagate': True,
+            },
+            'log.daily_scripts': {               # define another logger
+                'handlers': ['daily_scripts_log'],  # associate a different handler
+                'level': 'DEBUG',                 # specify the logging level
+                'propagate': True,
+            },
+    
+           'log.errors': {               # define another logger
+                'handlers': ['file_applicationerror'],  # associate a different handler
+                'level': 'ERROR',                 # specify the logging level
+                'propagate': True,
+            },
+    
+    
+    }
+}

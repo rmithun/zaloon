@@ -15,6 +15,13 @@ from utils import responses, generic_utils
 from django.contrib.auth.models import User
 from django.template.loader import get_template
 from django.template import Context
+import logging
+import traceback
+
+
+
+logger_booking = logging.getLogger('log.daily_scripts')
+logger_error = logging.getLogger('log.errors')
 
 
 ##get all used bookings for the day
@@ -26,31 +33,32 @@ from django.template import Context
 ##need to integrate with thread que system when the count overflows in future
 def send_thanks_mail():
     try:
-        import pdb;pdb.set_trace();
         yesterday = datetime.today().date()-timedelta(days = 1)
         status_code = responses.BOOKING_CODES['USED']
         bookings = BookingDetails.objects.filter(appointment_date = yesterday,   \
         booking_status = 'USED', status_code = status_code, is_valid = False)
         ##log code starting
+        status_code = responses.BOOKING_CODES['EXPIRED']
         for every_book in bookings:
             #code = every_book.booking_code
             studio_name = StudioProfile.objects.values('name').get(id = every_book.studio.id)
             user = User.objects.values('first_name','email','id').get(id = every_book.user.id)
             date = yesterday
-            time = datetime.strptime(str(every_book.appointment_start_time), "%H:%M:%S").strftime("%I:%M %p")
             #get email template and render all variables
             user_details = {'first_name':user['first_name'],'studio_name':studio_name['name'],  \
             'date':yesterday}
+            logger_booking.info("Thanks mail user details - "+str(user_details))
             message = get_template('emails/thanks_email.html').render(Context(user_details))
             to_user = user['email']
             subject = responses.MAIL_SUBJECTS['THANKS_EMAIL']
             try:
-                status = generic_utils.sendEmail(to_user, subject, message)
-                status_code = responses.BOOKING_CODES['EXPIRED']
-                BookingDetails.objects.filter(id = every_book.id).update(is_valid = False, \
-                    booking_status = 'EXPIRED', status_code = status_code)
+                has_sent = ThanksMail.objects.filter(booking_id = every_book.id)
+                if not has_sent:
+                    status = generic_utils.sendEmail(to_user, subject, message)
+                    BookingDetails.objects.filter(id = every_book.id).update(is_valid = False, \
+                        booking_status = 'EXPIRED', status_code = status_code)
             except Exception,smserr:
-                print repr(smserr)
+                logger_error.error(traceback.format_exc())
                 status = False
                 thanks_mail = ThanksMail(booking_id = every_book.id, email = to_user, \
                 status = status,user_id = user['id'] ,service_updated = "daily reminder",  \
@@ -62,16 +70,22 @@ def send_thanks_mail():
                 )
                 thanks_mail.save()
                 ###log code end stats
-    except Exception,error:
-        print error
+    except Exception,errorz:
+        logger_error.error(traceback.format_exc())
+        print errorz
     else:
-        print len(bookings)
+        logger_booking.info("Total thanks mail sent - "+len(bookings))
         ###log code end stats
 
 
         
-
+logger_booking.info("Thanks mail start time- "+ str(datetime.strptime(datetime.now(),'%y-%m-%d  %H:%M'))
 send_thanks_mail()
+logger_booking.info("Thanks mail end  time- "+ str(datetime.strptime(datetime.now(),'%y-%m-%d  %H:%M'))
 
-
-
+try:
+    BookingDetails.objects.filter(appointment_date = yesterday, booking_status = 'BOOKED',   \
+    status_code = 'B001', is_valid = True).update(booking_status = 'EXPIRED',   \
+    status_code = status_code, is_valid = False)
+except:
+    logger_error.error(traceback.format_exc())

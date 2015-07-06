@@ -4,6 +4,8 @@
 
 #standard library imports
 from datetime import datetime
+import logging
+import traceback
 
 #third party imports
 import django
@@ -22,6 +24,10 @@ from django.db import transaction
 from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus, DailyBookingConfirmation
 from studios.models import StudioProfile, Studio
 from utils import responses, generic_utils
+
+
+logger_booking = logging.getLogger('log.daily_scripts')
+logger_error = logging.getLogger('log.errors')
 
 
 """"
@@ -71,6 +77,7 @@ def daily_confirmed_booking():
                     to_print[stud.studio_id]['data'].append(obj)
             except Exception,jsonerr:
                 print repr(jsonerr)
+                logger_error.error(traceback.format_exec())
                 #dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
                 #    studio_id = stud['studio_id'], status = 'Fail')
                 #dm_status.save()
@@ -78,11 +85,10 @@ def daily_confirmed_booking():
                 #dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
                 #    studio_id = stud['studio_id'], status = 'Fail')
                 #dm_status.save()
-                pass
     except Exception,majErr:
-        print repr(majErr)
+        logger_error.error(traceback.format_exec())
     else:
-        print to_print
+        logger_booking.info(" data to render  "+str(to_print))
         return to_print
 
 @transaction.commit_manually
@@ -95,6 +101,7 @@ def render_to_pdf(template_url,data,studio):
         filename = data['todayslist']['data'][0]['studio_name'] + str(datetime.today().date())+"__bookings"
         result = open(filename+'.pdf', 'wb')
         #result = StringIO.StringIO()
+        logger_booking.info("File name "+str(filename))
         pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
         if not pdf.err:
             ###get and save the pdf 
@@ -112,12 +119,13 @@ def render_to_pdf(template_url,data,studio):
                 rep = DailyBookingConfirmation.filter(studio_id = studio, report_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
             except Exception,e:
-                print repr(e)
+                logger_error.error(traceback.format_exec())
             ##save pdf to table
             ##location should be inside studio
             result.close();
     except Exception,pdfrenderr:
         transaction.rollback()
+        logger_error.error(traceback.format_exec())
         print (pdfrenderr)
     else:
         transaction.commit()
@@ -126,13 +134,18 @@ def generate_pdf():
     to_generate = daily_confirmed_booking()
     for key,data in to_generate.iteritems():
         try:
+            logger_booking.info("data to be rendered - "+str(key)+"---"+str(data))
             pdf_file = render_to_pdf('../templates/emails/daily_confirmed_bookings.html',  \
                {'pagesize':'A4','todayslist':data},key)
         except Exception,pdfgenrateerr:
-            print (pdfgenrateerr)
-     
+            logger_error.error(traceback.format_exec())
 
+     
+logger_booking.info("Confirmed booking script starts running  "+datetime.strftime(datetime.now(),  \
+            '%y-%m-%d %H:%M'))
 generate_pdf()
+logger_booking.info("Confirmed booking script stops running  "+datetime.strftime(datetime.now(),  \
+            '%y-%m-%d %H:%M'))
 
 
 

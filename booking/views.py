@@ -7,6 +7,8 @@ import random
 import string
 from datetime import timedelta, datetime
 import simplejson
+import logging
+import traceback
 
 #third party imports
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
@@ -35,6 +37,8 @@ from studios.models import StudioServices
 from studios.serializers import StudioReviewSerializer
 
 
+logger_booking = logging.getLogger('log.booking')
+logger_error = logging.getLogger('log.errors')
 
 class ActiveBookingMixin(object):
     authentication_classes = [OAuth2Authentication]
@@ -42,7 +46,9 @@ class ActiveBookingMixin(object):
     required_scopes = ['write','read']
     serializer_class = ActiveBookingSerializer
     def get_queryset(self):
+        logger_booking.info("User - "+str(self.request.user))
         data = BookingDetails.objects.filter(user = self.request.user)
+        logger_booking.info("Active Booking Mixin data - "+str(data))
         return data
 
 class GetActiveBookings(ActiveBookingMixin, ListAPIView):
@@ -74,7 +80,21 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             promo_code = data['promo_code']
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
+            appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
+            if appnt_date < datetime.today().date():
+                data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
+                return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+            if appnt_date == datetime.today().date():
+                if datetime.now().hour > 5:
+                    if appointment_start_time.hour < 12:
+                        data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
+                        return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+                    else:
+                        if datetime.now().hour > 12:
+                            data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
+                            return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
             import pdb;pdb.set_trace();
+            logger_booking.info("New booking - "+str(data))
             total_duration = StudioServices.objects.filter(service_id__in = services_chosen  \
                 ).values('mins_takes').aggregate(Sum('mins_takes'))
             new_purchase = Purchase(customer = user,  \
@@ -82,7 +102,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 purchase_status = 'BOOKING', service_updated = 'new booking',  \
                 status_code = status_code)
             new_purchase.save()
-            appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
+            logger_booking.info("New purchase id - "+str(new_purchase.id))
             appointment_end_time = appointment_start_time + timedelta(minutes = total_duration['mins_takes__sum'])
             new_booking = BookingDetails(user = user, booked_date =
                 datetime.now(), appointment_date = appnt_date,  \
@@ -91,9 +111,11 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 service_updated = 'new booking', purchase = new_purchase,status_code = status_code,  \
                 appointment_end_time = appointment_end_time, mobile_no = mobile_no)
             new_booking.save()
+            logger_booking.info("New booking id - "+str(new_booking.id))
             sms_bms = BookedMessageSent(booking = new_booking, type_of_message = 'book',   \
                 mode = 'sms', service_updated = 'new booking', message = '')
             sms_bms.save();
+            logger_booking.info("New bookmessage send id - "+str(sms_bms.id))
             for service in services_chosen:
                 service_booked = BookingServices(booking = new_booking,service_id = service, service_updated = 'new booking')
                 service_booked.save()
@@ -101,7 +123,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             response = {'booking_id':new_booking.id,'purchase_id':new_purchase.id}
             data = simplejson.dumps(response)
         except Exception,e:
-            print repr(e)
+            logger_error.error(traceback.format_exc())
             transaction.rollback()
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
@@ -117,6 +139,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             booking_id = data['booking_id']
             purchase_id = data['purchase_id']
             payment_status = data['payment_status']
+            logger_booking.info("Updated booking data - "+str(data))
             if booking_status == 'BOOKED':
                 status_code = responses.BOOKING_CODES['BOOKED']
             else:
@@ -147,6 +170,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 'services':services_booked_list,  \
                 'studio':studio['name'],'studio_address':studio_address,  \
                 'contact':contacts}
+                logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
@@ -166,16 +190,17 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                     service_updated = 'booking confirmed')
                     email_bms.save()
                     notification_send = 1
+                    logger_booking.info("Notification sent - "+str(notification_send))
                     BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
                     notification_send)
                 except Exception, DBerr:
-                    print (DBerr)
+                    logger_error.error(traceback.format_exc())
                     transaction.commit();
                     return Response(status = status.HTTP_304_NOT_MODIFIED)
                 data = simplejson.dumps(booking_details)
         except Exception,e:
             transaction.rollback()
-            print repr(e)
+            logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             transaction.commit()
@@ -185,6 +210,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
 class CancelBooking(ActiveBookingMixin,UpdateAPIView):
     def get_queryset(self):
         booking_id = self.request.DATA['booking_id']
+        logger_booking.info("Cancel booking id - "+str(booking_id))
         data = BookingDetails.objects.filter(user = self.request.user,  \
             id = booking_id)
         return data
@@ -206,13 +232,15 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                 service_updated = 'cancel booking', updated_date_time = datetime.now())
             else:
                 transaction.rollback()
+                logger_booking.info("No booking with booking id - "+str(is_booking))
                 return Response(status = status.HTTP_304_NOT_MODIFIED)
         except Exception,e:
             transaction.rollback()
-            print repr(e)
+            logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             transaction.commit()
+            logger_booking.info("Booking Cancelled")
             return Response(status = status.HTTP_200_OK)
 
 
@@ -226,6 +254,7 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
         booking_code = self.request.GET['booking_code']
         studio_pin = self.request.GET['studio_pin']
         today = datetime.today().date()
+        logger_booking.info("validate booking code - "+str(self.request.GET))
         data = BookingDetails.objects.filter(studio_id = studio_pin, booking_code =  \
         booking_code, booking_status = 'BOOKED', status_code ='B001', is_valid = True,  \
         appointment_date = today)
@@ -239,16 +268,18 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
             studio_pin = self.request.DATA['studio_pin']
             #studio = StudioProfile.objects.filter(studio_id = studio_pin)
             today = datetime.today().date()
+            logger_booking.info("Update booking - "+str(self.request.GET))
             has_exists = BookingDetails.objects.filter(studio_id = studio_pin, booking_code =  \
             booking_code, booking_status = 'BOOKED', status_code ='B001',  \
             is_valid = True, appointment_date = today).update(booking_status = 'USED', status_code = 'B004',  \
             service_updated = 'booking used', updated_date_time = datetime.now(), is_valid = False)
             if not has_exists:
                 transaction.rollback()
+                logger_booking.info("No booking with booking code")
                 return Response(status = status.HTTP_304_NOT_MODIFIED)
         except Exception,e:
-            print repr(e)
             transaction.rollback()
+            logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             transaction.commit()
@@ -272,17 +303,20 @@ class AddReviews(CreateAPIView):
             comment = data['comment']
             rating = data['rating']
             user = self.request.user
+            logger_booking.info("Review data by user- "+ user +" -- " +str(data))
             is_used = BookingDetails.objects.values('status_code','studio_id').get(id = booking_id)
             if is_used['status_code'] == responses.BOOKING_CODES['USED']:
                 new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
                 comment = comment, rating = rating, user = user, service_updated = 'add review')
                 new_review.save()
             else:
+                logger_booking.info("Review not added")
                 return Response(status = status.HTTP_304_NOT_MODIFIED)
         except Exception,e:
-            print repr(e)
+            logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
+            logger_booking.info("Review added")
             return Response(status = status.HTTP_201_CREATED)
 
 
@@ -301,6 +335,7 @@ class  GetSlots(APIView):
             date = data['date']
             services = data['services']
             duration = data['duration']
+            logger_booking.info("Get slots for - " +str(data))
             bookings = BookingDetails.objects.filter(appointment_date = date, studio_id = studio,  \
                 booking_status = 'BOOKED', status_code = 'B001', is_active = True)
             #get studio start and end time
@@ -312,6 +347,7 @@ class  GetSlots(APIView):
             closed_from = studio_time['daily_studio_closed_from']
             closed_to = studio_time['daily_studio_closed_till']
             slots = responses.HOURS_DICT
+            logger_booking.info("Studio time details - "+str(start,end,closed_from,closed_to)))
             #check  total duration not to cross closed hours or other bookings
             if start.minute != 0:
                 slots[start] =  [slots[start].remove(i) for i in slots[start] if i < start.minute]
@@ -352,10 +388,11 @@ class  GetSlots(APIView):
                                 slots[end_hour].remove[e_min]
 
         except Exception,e:
-            print repr(e)
+            logger_error.error(traceback.format_exc())
             data = None
             return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
+            logger_booking.info("Available slots - "+str(slots))
             return Response(data = data, status = status.HTTP_200_OK)
 
 
@@ -375,11 +412,12 @@ class ApplyCoupon(APIView):
             amount = int(data['amount'])
             user = request.user
             #check coupon code is there
+            logger_booking.info("Coupon request -" +str(data))
             try:
                 coupon_detail = Coupon.objects.get(coupon_code = coupon_code, is_active = 1,   \
                 expiry_date__gte =  datetime.today().date())
             except Exception,e:
-                print repr(e)
+                logger_error.info(traceback.format_exc())
                 response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['NO_COUPON'])
                 return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
             else:
@@ -387,6 +425,7 @@ class ApplyCoupon(APIView):
                     is_applicable = CouponForStudios.objects.filter(studio_id = studio_id,  \
                         coupon_id = coupon_detail.id, is_active = 1)
                     if len(is_applicable) != 1:
+                        logger_booking.info("Coupon code not applicable")
                         response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['NOT_APPLICABLE'])
                         return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
                 if coupon_detail.is_one_time == 1:
@@ -394,6 +433,7 @@ class ApplyCoupon(APIView):
                     is_applied = BookingDetails.objects.filter(Q(coupon_id = coupon_detail.id, user = user),  \
                        ~Q(booking_status = 'CANCELLED'), ~Q(status_code = 'B003'))
                     if len(is_applied) > 0:
+                        logger_booking.info("Coupon code already used")
                         response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['COUPON_USED'])
                         return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
                 """if coupon['services_coupon'] == 1:
@@ -407,15 +447,19 @@ class ApplyCoupon(APIView):
                 """
                 to_deduct = 0
                 if coupon_detail.coupon_type == 'PERCENT':
+                    logger_booking.info("Coupon type is PERCENT")
                     to_deduct = (amount * coupon_detail.discount_value)/100
                 if coupon_detail.coupon_type == 'FLAT':
+                    logger_booking.info("Coupon type is FLAT")
                     to_deduct = (amount -coupon_detail.discount_value)
                 if to_deduct > coupon_detail.maximum_discount:
+                    logger_booking.info("Coupon discount greater than maximum_discount")
                     to_deduct = coupon_detail.maximum_discount
         except Exception,e:
-            print repr(e)
+            logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
+            logger_booking.info("To deduct"+str(to_deduct))
             return Response(data = to_deduct, status = status.HTTP_200_OK)
 
          

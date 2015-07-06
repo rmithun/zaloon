@@ -3,10 +3,15 @@
 ##this runs every day at 7 AM
 
 from datetime import datetime
+import logging
+import traceback
 from booking.models import BookingDetails,DailyReminder
 from studios.models import StudioProfile
 from utils import responses, generic_utils
 from django.contrib.auth.models import User
+
+logger_booking = logging.getLogger('log.daily_scripts')
+logger_error = logging.getLogger('log.errors')
 
 
 #application imports
@@ -37,11 +42,11 @@ def get_Bookings_for_day():
                     mobile_no = every_book.mobile_no
         	    sms_template = (responses.SMS_TEMPLATES['DLY_REM'])%(user_name['first_name'], studio_name['name'],   \
                     studio_name['area'], date, time,code)
+                logger_booking.info("sms message - "+str(sms_template))
         	    try:
         	        status = generic_utils.sendSMS(mobile_no,sms_template)
-                        print "mi"
         	    except Exception,smserr:
-        		    print repr(smserr)
+        		    logger_error.error(traceback.format_exc())
         		    status = False
         	            daily_reminder = DailyReminder(booking_id = every_book.id, mobile_no = mobile_no,  \
         	            status = status,user_id = user_name['id'],service_updated = "daily reminder", message = sms_template,  \
@@ -53,8 +58,8 @@ def get_Bookings_for_day():
         	    	)
                         daily_reminder.save()
             ###log code end stats
-    except Exception,error:
-        print error
+    except Exception,errorz:
+        logger_error.error(traceback.format_exc())
     else:
         print len(bookings)
     ###log code end stats

@@ -5,6 +5,9 @@ Views
 #standard library imports
 from datetime import timedelta, datetime
 import operator
+import logging
+import traceback
+
 
 #third party imports
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
@@ -38,6 +41,10 @@ from django.db.models import Q
 from django.conf import settings
 from utils import generic_utils,responses
 
+
+
+logger_studios = logging.getLogger('log.studios')
+logger_error = logging.getLogger('log.errors')
 
 class ServiceMixin(object):
     permission_classes = (ReadWithoutAuthentication,)
@@ -73,11 +80,13 @@ def get_studios(location,service,date=None):
         else:
             filtered_studios =  StudioServices.objects.filter(studio_profile_id__in =   \
                 studios).values('studio_profile').distinct()
+
         ##call for booking logic
     except Exception,e:
-        print repr(e)
+        logger_error.error(traceback.format_exc())
         return None
     else:
+        logger_studios.info("Found - "+str(len(filtered_studios))+" studios")
         return filtered_studios
 
 
@@ -92,10 +101,11 @@ class StudioProfileMixin(object):
             ##add city to filter in future
             locations = self.request.GET['location'].split()
             service = self.request.GET['service']
+            logger_studios.info("Search Query - "+str(self.request.GET))
             studios_ = get_studios(locations,service)
             queryset = self.model.objects.filter(id__in = studios_)
         except Exception ,e:
-            print repr(e)
+            logger_error.error(traceback.format_exc())
         return queryset
 		
 
@@ -152,6 +162,7 @@ class StudioRegistration(CreateAPIView):
             area = data['area']
             password = data['password']
             #studio_group = data['studio_group']
+            logger_studios.info("Studio registration data "+str(data))
             existing_email = StudioAddRequest.objects.filter(email = email)
             if not existing_email:
                 studio_req = StudioAddRequest(email = email, area = area,  \
@@ -161,6 +172,7 @@ class StudioRegistration(CreateAPIView):
                 studio.save();
                 studio_details = {'email':email,'studio_name':studio_name,'studio_pin':studio.id,  \
                 'password':password}
+                logger_studios.info("Studios details "+str(studio_details))
                 message = get_template('emails/studio_req_register.html').render(Context(studio_details))
                 studio_mail = email
                 subject = responses.MAIL_SUBJECTS['STUDIO_REQ_REGISTER']
@@ -168,13 +180,14 @@ class StudioRegistration(CreateAPIView):
                     generic_utils.sendEmail(studio_mail,subject,message)
                 except Exception,e:
                     transaction.rollback()
-                    print repr(e)
+                    logger_error.error(traceback.format_exc())
                     return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 transaction.rollback()
+                logger_studios.info("Studio already registered")
                 return Response(status = status.HTTP_400_BAD_REQUEST)
         except Exception,e:
-            print repr(e)
+            logger_error.error(traceback.format_exc())
             transaction.rollback()
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:

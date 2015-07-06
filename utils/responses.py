@@ -7,7 +7,9 @@ BOOKING_RESPONSES = {"BOOKING_SUCCESS":{"MSG":"Booked successfully.","CODE":'B00
                     "BOOKING_CANCELLED_SUCCESS":{"MSG":"Cancelled successfully.","CODE":'B003'}, \
                     "BOOKING_CANCELLED_FAIL":{"MSG":"Could not cancel booking.Contact support","CODE":'B003F'}, \
                     "BOOKING_USED":{"MSG":"Service used.","CODE":'B004'}, \
-                    "BOOKING_UN_USED":{"MSG":"Service used.","CODE":'B005'}, \
+                    "BOOKING_UN_USED":{"MSG":"Service used.","CODE":'B005',}, \
+                    "DATE_EXPIRED":{"MSG":"The selected date is crossed","CODE":'B006'},  \
+                    "TIME_EXPIRED":{"MSG":"The selected time is not available now","CODE":'B007'}
 				   }
 
 BOOKING_CODES = {'BOOKED':'B001','FAILED':'B002','CANCELLED':'B003','USED':'B004','UNUSED':'B005',  \

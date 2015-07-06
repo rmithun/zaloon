@@ -4,6 +4,9 @@ Views
 """
 #standard library imports
 from datetime import timedelta, datetime
+import logging
+import traceback
+
 
 #third party imports
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
@@ -29,6 +32,9 @@ from serializers import *
 from utils.permission_class import PostWithoutAuthentication
 from django.conf import settings
 
+
+logger_user = logging.getLogger('log.user_account')
+logger_error = logging.getLogger('log.errors')
 
 @login_required
 def user_account(request):
@@ -89,12 +95,16 @@ def register_by_access_token(request, backend):
     try:
         token = request.body
         user = request.backend.do_auth(token)
+        logger_user.info("adding new user "+str(user))
+        logger_user.info("user adding request "+str(request))
         if user:
             login(request, user)
         else:
+            logger_error.error(traceback.format_exc())
             return HttpResponse(status = 500)
     except Exception,e:
         print repr(e)
+        logger_error.error(traceback.format_exc())
         return HttpResponse(status = 500)
     else:
         return access_token_gen(user)
@@ -118,10 +128,12 @@ class GetUserDetail(UserMixin, ListAPIView, RetrieveUpdateAPIView):
             mobile = data['mobile_no']
             area = data['area']
             first_name = data['first_name']
+            logger_user.info("updated user data "+str(data))
             UserProfile.objects.filter(user_acc_id = user).update(area = area,  \
                 mobile = mobile)
             User.objects.filter(email = user).update(first_name = first_name)
         except Exception,e:
+            logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(status = status.HTTP_200_OK)
