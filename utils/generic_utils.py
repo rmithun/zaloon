@@ -4,6 +4,8 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import os, sys
+import logging
+import traceback
 
 
 ##third party imports
@@ -22,6 +24,10 @@ from django.conf import settings
 from onepass.settings import SMTP_SERVER, SMTP_USERNAME, SMTP_PASSWORD, SMTP_PORT, SMTP_DO_TLS
 #import logging
 
+logger_user = logging.getLogger('log.user_account')
+logger_error = logging.getLogger('log.errors')
+
+
 def get_token_json(access_token,app,refresh_token):
     """
     Takes an AccessToken instance as an argument
@@ -37,6 +43,7 @@ def get_token_json(access_token,app,refresh_token):
         'client_id':app.client_id,
         'client_secret':app.client_secret
     }
+    logger_user.info("JSON for tokens created")
     return JsonResponse(token)	
 
 
@@ -49,6 +56,7 @@ def access_token_gen(user):
         	access_token=old_access_token)
     except:
         pass
+        logger_error.error(traceback.format_exc())
     else:
         old_access_token.delete()
         old_refresh_token.delete()
@@ -71,6 +79,7 @@ def access_token_gen(user):
                application=app,
                token=refresh_token,
                access_token=access_token)
+    logger_user.info("Token created")
     return get_token_json(access_token,app,refresh_token)
 
 def social_auth_to_profile(backend, details, response, user=None, is_new=False, *args, **kwargs):
@@ -86,10 +95,12 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
                 if response['location'].has_key('name'):
                     city_state = response['location']['name']
         if is_new:
+            logger_user.info("New User")
             if response.has_key('email'):
                 profile = UserProfile()
                 profile.user_acc_id = user.id
         else:
+            logger_user.info("Exisiting user return ")
             UserProfile.objects.filter(user_acc = user).update(dob = dob,  \
                 sex = sex, city_state = city_state,  \
                 service_updated = 'User details updation', updated_date_time = \
@@ -102,51 +113,62 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
             profile.sex = sex
             profile.save()
     except Exception ,e:
-        print repr(e)
+        logger_error.error(traceback.format_exc())
         return None
     else:
+        logger_user.info("Profile created/updated")
         return user
 
 
-def sendEmail(to, subject, message, raw = 0):
+def sendEmail(to, subject, message, *args):
     server = smtplib.SMTP(host = SMTP_SERVER,port = SMTP_PORT,timeout = 10)
     server.starttls()
     server.login(SMTP_USERNAME, SMTP_PASSWORD)
     msg = MIMEMultipart()
-    #logger = logging.getLogger('log.errors')
-    fromaddr = 'vbnetmithun@gmail.com'
+    fromaddr = 'donotreply@zaloon.in'
     msg['Subject'] = subject
-    msg['From'] = "gopanther  <vbnetmithun@gmail.com>"
+    msg['From'] = "Zaloon.in <donotreply@zaloon.in>"
     to = "mittugotmail@gmail.com"
     msg['To'] = to
     msg.attach(MIMEText(message, 'html','utf-8'))
-    toaddrs = to
+    
+    if args:
+        attachFile = MIMEBase('application', 'pdf')    
+        attachFile.set_payload( open(args[0],"rb").read())    
+        Encoders.encode_base64(attachFile)    
+        attachFile.add_header('Content-Disposition', 'attachment; filename="%s"'% os.path.basename(args[0]))
+        msg.attach(attachFile)       
     try:
-        server.sendmail(fromaddr, toaddrs, msg.as_string())
+        server.sendmail(fromaddr, to, msg.as_string())
     except Exception, err:
-        #logger.error(err)
+        logger_error.error(traceback.format_exc())
         server.quit()
         return False
     else:
+        server.quit()
         return True
 
 
 def sendSMS(to,body):
 
-    import plivo
-    auth_id = settings.PLIVO_ID
-    auth_token = settings.PLIVO_KEY
-    p = plivo.RestAPI(auth_id, auth_token)
-    # Send a SMS
-    params = {
-        'src': 'ZALOON', # Caller Id
-        'dst' : '91'+to, # User Number to Call
-        'text' : body,
-        'type' : "sms",
-    }
-    response = p.send_message(params)
-    print response
-    if response:
-        return True
-    else:
+    try:
+        import plivo
+        auth_id = settings.PLIVO_ID
+        auth_token = settings.PLIVO_KEY
+        p = plivo.RestAPI(auth_id, auth_token)
+        # Send a SMS
+        params = {
+            'src': 'ZALOON', # Caller Id
+            'dst' : '91'+to, # User Number to Call
+            'text' : body,
+            'type' : "sms",
+        }
+        response = p.send_message(params)
+    except:
+        logger.error(traceback.format_exc())
         return False
+    else:
+        if response:
+            return True
+        else:
+            return False

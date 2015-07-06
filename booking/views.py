@@ -65,6 +65,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
+            import pdb;pdb.set_trace();
             user = self.request.user
             data = self.request.DATA
             appnt_date = datetime.strptime(data['appnt_date'],'%Y-%m-%d')
@@ -81,10 +82,10 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
             appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
-            if appnt_date < datetime.today().date():
+            if appnt_date.date() < datetime.today().date():
                 data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
                 return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
-            if appnt_date == datetime.today().date():
+            if appnt_date.date() == datetime.today().date():
                 if datetime.now().hour > 5:
                     if appointment_start_time.hour < 12:
                         data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
@@ -93,7 +94,6 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                         if datetime.now().hour > 12:
                             data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
                             return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
-            import pdb;pdb.set_trace();
             logger_booking.info("New booking - "+str(data))
             total_duration = StudioServices.objects.filter(service_id__in = services_chosen  \
                 ).values('mins_takes').aggregate(Sum('mins_takes'))
@@ -176,7 +176,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
-                #email = sendEmail(to_user,subject,message)
+                email = sendEmail(to_user,subject,message)
                 #sms = sendSMS(studio_id.mobile_no,sms_message)
                 email = 1
                 sms_bms = 1
@@ -347,7 +347,7 @@ class  GetSlots(APIView):
             closed_from = studio_time['daily_studio_closed_from']
             closed_to = studio_time['daily_studio_closed_till']
             slots = responses.HOURS_DICT
-            logger_booking.info("Studio time details - "+str(start,end,closed_from,closed_to)))
+            logger_booking.info("Studio time details - "+str(start,end,closed_from,closed_to))
             #check  total duration not to cross closed hours or other bookings
             if start.minute != 0:
                 slots[start] =  [slots[start].remove(i) for i in slots[start] if i < start.minute]
