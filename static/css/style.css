@@ -88,7 +88,7 @@ article { text-align: left; }
 /*Logo*/
 .navigation-brand { float: left; }
 .navigation-brand:after { content: ''; display: table; }
-.navigation-brand .brand-logo .logo { display:block;width:84px; height: 37px; background:url(../img/logo.png) center center no-repeat; }
+.navigation-brand .brand-logo .logo { display:block;width:168px; height: 54px; background:url(../img/logo.png) center center no-repeat; }
 
 
 /*login*/
@@ -148,7 +148,7 @@ p.txtmessage{font-size:12px;line-height:4px;color:#C2C2C2;}
 .register-version.static-header { background: url('../img/background/home-bg.jpg') top center no-repeat; -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;  min-height: 400px; position: relative;background-position:center; }
 .register-version .text-heading { padding-top: 8%; }
 .register-version .signup-wrapper { text-align:center; width:auto; }
-.register-version.static-header-landing { background: url('../img/background/landing-bg.jpg') top center no-repeat; -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;  min-height: 400px; position: relative;background-position:center; }
+.register-version.static-header-landing { background: url('../img/background/landing-bg.jpeg') top center no-repeat; -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;  min-height: 400px; position: relative;background-position:center; }
 
 
 /*Search*/
