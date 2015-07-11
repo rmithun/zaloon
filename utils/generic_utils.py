@@ -44,16 +44,16 @@ def get_token_json(access_token,app,refresh_token):
         'client_secret':app.client_secret
     }
     logger_user.info("JSON for tokens created")
-    return JsonResponse(token)	
+    return JsonResponse(token)  
 
 
 def access_token_gen(user):
     try:
         app = Application.objects.get(name="Facebook")
         old_access_token = AccessToken.objects.get(user=user,  \
-        	application=app)
+            application=app)
         old_refresh_token = RefreshToken.objects.get(user=user,  \
-        	access_token=old_access_token)
+            access_token=old_access_token)
     except:
         pass
         logger_error.error(traceback.format_exc())
