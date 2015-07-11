@@ -88,7 +88,7 @@ article { text-align: left; }
 /*Logo*/
 .navigation-brand { float: left; }
 .navigation-brand:after { content: ''; display: table; }
-.navigation-brand .brand-logo .logo { display:block;width:168px; height: 54px; background:url(../img/logo.png) center center no-repeat; }
+.navigation-brand .brand-logo .logo { display:block;width:168px; height: 45px;border-radius:50px; background:url(../img/logo.png) center center no-repeat; }
 
 
 /*login*/
