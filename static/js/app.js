@@ -1,4 +1,4 @@
-var noqapp = angular.module('accountApp', ['ngCookies','ngRoute','ui.bootstrap']);
+var noqapp = angular.module('accountApp', ['ngCookies','ngRoute','ui.bootstrap','ngLodash']);
 
 noqapp.run(function($http,$cookies,sessionService) {
 

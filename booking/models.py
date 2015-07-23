@@ -129,6 +129,7 @@ class StudioReviews(models.Model):
 	rating = models.PositiveIntegerField()
 	comment = models.TextField()
 	is_active = models.BooleanField(default = 1)
+	has_reviewed = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -190,3 +191,14 @@ class DailyBookingConfirmation(models.Model):
 	mail_sent = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class ReviewLink(models.Model):
+
+	"""table to validate whether the user is allowed to write review when clicked on 
+	review link"""
+	booking = models.ForeignKey(BookingDetails, related_name = "review_link_of_booking")
+	is_reviewed = models.BooleanField(default = 0)
+	link_code = models.CharField(max_length = 50)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+	service_updated = models.CharField(max_length = 30)

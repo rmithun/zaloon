@@ -6,9 +6,11 @@ Views
 import random
 import string
 from datetime import timedelta, datetime
+import datetime as dt
 import simplejson
 import logging
 import traceback
+import copy
 
 #third party imports
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
@@ -31,10 +33,11 @@ from django.template import Context
 #application imports
 from serializers import *
 from models import *
-from utils.generic_utils import sendEmail, sendSMS
+from utils.generic_utils import sendEmail, sendSMS, uniquekey_generator
 from utils import responses
 from studios.models import StudioServices
 from studios.serializers import StudioReviewSerializer
+from utils.permission_class import ReadWithoutAuthentication, PostWithoutAuthentication
 
 
 logger_booking = logging.getLogger('log.booking')
@@ -176,7 +179,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
-                email = sendEmail(to_user,subject,message)
+                #email = sendEmail(to_user,subject,message)
                 #sms = sendSMS(studio_id.mobile_no,sms_message)
                 email = 1
                 sms_bms = 1
@@ -271,8 +274,14 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
             logger_booking.info("Update booking - "+str(self.request.GET))
             has_exists = BookingDetails.objects.filter(studio_id = studio_pin, booking_code =  \
             booking_code, booking_status = 'BOOKED', status_code ='B001',  \
-            is_valid = True, appointment_date = today).update(booking_status = 'USED', status_code = 'B004',  \
-            service_updated = 'booking used', updated_date_time = datetime.now(), is_valid = False)
+            is_valid = True, appointment_date = today)
+            if has_exists:
+                BookingDetails.objects.filter(id = has_exists[0].booking_id).update(booking_status = 'USED', status_code = 'B004',  \
+                service_updated = 'booking used', updated_date_time = datetime.now(), is_valid = False)
+                review_key = generic_utils.uniquekey_generator()
+                new_link = ReviewLink(booking_id = has_exists[0].booking_id, link_code = review_key,  \
+                    service_updated = "thanks mail sender")
+                new_link.save()
             if not has_exists:
                 transaction.rollback()
                 logger_booking.info("No booking with booking code")
@@ -290,7 +299,7 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
 
 
 class AddReviews(CreateAPIView):
-    permission_classes = (OAuth2Authentication,)
+    authentication_classes = (OAuth2Authentication,)
     permission_classes = (TokenHasScope,)
     required_scopes = ['write','read']
     serializer_class = StudioReviewSerializer
@@ -305,10 +314,14 @@ class AddReviews(CreateAPIView):
             user = self.request.user
             logger_booking.info("Review data by user- "+ user +" -- " +str(data))
             is_used = BookingDetails.objects.values('status_code','studio_id').get(id = booking_id)
-            if is_used['status_code'] == responses.BOOKING_CODES['USED']:
+            is_reviewed = StudioReviews.objects.values('is_reviewed').get(booking_id = booking_id,  \
+                user = user)
+            if is_used['status_code'] == responses.BOOKING_CODES['USED'] and   \
+            is_reviewed['is_reviewed'] == 0:
                 new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
                 comment = comment, rating = rating, user = user, service_updated = 'add review')
                 new_review.save()
+                ReviewLink.objects.filter(booking_id = booking_id).update(is_reviewed = 1)
             else:
                 logger_booking.info("Review not added")
                 return Response(status = status.HTTP_304_NOT_MODIFIED)
@@ -319,85 +332,157 @@ class AddReviews(CreateAPIView):
             logger_booking.info("Review added")
             return Response(status = status.HTTP_201_CREATED)
 
+class ReviewFromEmail(CreateAPIView):
+    permission_classes = (PostWithoutAuthentication,)
+    serializer_class = StudioReviewSerializer
+    @transaction.commit_manually
+    def create(self,request,*args,**kwargs):
+        try:
+            data = self.request.DATA
+            booking_id = data['booking_id']
+            review_code = data['review_key']
+            is_used = BookingDetails.objects.values('status_code','studio_id').get(id = booking_id)
+            is_reviewed = StudioReviews.objects.values('is_reviewed').get(booking_id = booking_id,  \
+                user = user)
+            if is_used['status_code'] == responses.BOOKING_CODES['USED'] and   \
+            is_reviewed['is_reviewed'] == 0:
+                new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
+                comment = comment, rating = rating, user = user, service_updated = 'add review')
+                new_review.save()
+                ReviewLink.objects.filter(booking_id = booking_id).update(is_reviewed = 1)
+            else:
+                transaction.rollback()
+                logger_booking.info("Review not added")
+                return Response(status = status.HTTP_304_NOT_MODIFIED)
+        except Exception,e:
+            transaction.rollback()
+            logger_error.error(traceback.format_exc())
+            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            transaction.commit()
+            logger_booking.info("Review added")
+            return Response(status = status.HTTP_201_CREATED)
+
+
+            
 
 
 
 
 class  GetSlots(APIView):
-    permission_classes = (OAuth2Authentication,)
+    authentication_classes = (OAuth2Authentication,)
     permission_classes = (TokenHasScope,)
     required_scopes = ['write','read']
     serializer_class = ActiveBookingSerializer
     def get(self,request,*args,**kwargs):
         try:
-            data = request.GET['data']
+            data = self.request.GET
             studio = data['studio_id']
             date = data['date']
             services = data['services']
-            duration = data['duration']
+            duration = int(data['duration'])
             logger_booking.info("Get slots for - " +str(data))
             bookings = BookingDetails.objects.filter(appointment_date = date, studio_id = studio,  \
-                booking_status = 'BOOKED', status_code = 'B001', is_active = True)
+                booking_status = 'BOOKED', status_code = 'B001', is_valid = True)
             #get studio start and end time
-            studio_time = StudioProfile.objects.filter(id = studio).values('opening_at',  \
-                'closing_at','daily_studio_closed_from','daily_studio_closed_till')
+            studio_time = StudioProfile.objects.values('opening_at',  \
+                'closing_at','daily_studio_closed_from','daily_studio_closed_till').get(id = studio)
             #check whether studio is closed on that day
             start = studio_time['opening_at']
             end = studio_time['closing_at']
             closed_from = studio_time['daily_studio_closed_from']
             closed_to = studio_time['daily_studio_closed_till']
-            slots = responses.HOURS_DICT
-            logger_booking.info("Studio time details - "+str(start,end,closed_from,closed_to))
+            slots = copy.deepcopy(responses.HOURS_DICT)
+            #logger_booking.info("Studio time details - "+ str(start),str(end),str(closed_from),str(closed_to))
             #check  total duration not to cross closed hours or other bookings
+            import pdb;pdb.set_trace();
+
             if start.minute != 0:
-                slots[start] =  [slots[start].remove(i) for i in slots[start] if i < start.minute]
+                slots[start.hour] =  [i for i in slots[start.hour] if i >= start.minute]
+            cl_end_hour = end.hour
             if end.minute != 0:
-                slots[end] =  [slots[end].remove(i) for i in slots[end] if i > end.minute]
+                cl_end_hour = cl_end_hour + 1
+                slots[end.hour] =  [i for i in slots[end.hour] if i < end.minute]
+            cl_start_hour = closed_from.hour
             if closed_from.minute != 0:
-                slots[closed_from] =  [slots[closed_from].remove(i) for i in   \
-                slots[closed_from] if i > closed_from.minute]
+                cl_start_hour = cl_start_hour + 1
+                slots[closed_from.hour] =  [i for i in   \
+                slots[closed_from.hour] if i < closed_from.minute]
             if closed_to.minute != 0:
-                slots[closed_to] =  [slots[closed_to].remove(i) for i in   \
-                slots[closed_to] if i < closed_to.minute]
-            for j in range(0, int(start)):
+                slots[closed_to.hour] =  [i for i in   \
+                slots[closed_to.hour] if i >= closed_to.minute]
+            for j in range(0, start.hour):
                 slots.pop(j,None)
-            for k in range(int(end),24):
+            for k in range(cl_end_hour,24):
                 slots.pop(k,None)
-            for z in range(closed_from,closed_to):
+            for z in range(cl_start_hour,closed_to.hour):
                 slots.pop(z,None)
             if len(bookings) > 0:
                 for bks in bookings:
-                    start_hour = bks.appointment_start_time.hour()
-                    start_min = bks.appointment_start_time.minute()
-                    end_hour = bks.appointment_end_time.hour()
-                    end_min = bks.appointment_end_time.minute()
+                    start_hour = bks.appointment_start_time.hour
+                    start_min = bks.appointment_start_time.minute
+                    end_hour = bks.appointment_end_time.hour
+                    end_min = bks.appointment_end_time.minute
                     time_diff = end_hour-start_hour
                     if time_diff > 1:
-                        for i in range((start_hour+1),(end_hour-1)):
+                        for i in range((start_hour+dt.timedelta(hour = 1)).hour,  \
+                            (end_hour-dt.timedelta(hour = 1)).hour):
                             slots.pop(i,None)
                     if time_diff == 0:
-                        for mins in slots[start_hour]:
-                            if mins >= start_min and mins < end_min:
-                                slots[start_hour].remove[mins]
+                        slots[start_hour]  = [mins for mins in slots[start_hour] if mins  < start_min]
                     else:
-                        for s_min in slots[start_hour]:
-                            if s_min >= start_min:
-                                slots[start_hour].remove(s_min)
-                        for e_min in slots[end_hour]:    
-                            if e_min < end_min:
-                                slots[end_hour].remove[e_min]
+                        slots[start_hour]  = [s_min for s_min in slots[start_hour] if s_min  < start_min]
+                        slots[end_hour]  = [e_min for e_min in slots[end_hour] if e_min  >= end_min]
+            obj = {}
+            needed_slots = duration / 15
+            for key, values in  slots.iteritems():
+                obj[key] = []
+                for val in values:
+                    slot_lens = 0
+                    btwn_lens = 0
+                    start_ = []
+                    end_ = []
+                    start_time = datetime.combine(datetime.today(),dt.time(key,val))
+                    end_time = start_time + timedelta(minutes = (duration - 15))
+                    start_hr = start_time.time().hour
+                    start_min = start_time.time().minute
+                    end_hr = end_time.hour
+                    end_min = end_time.minute
+                    difference = end_hr- start_hr
+                    start_ = [s for s in slots[start_hr] if s>= start_min]
+                    if difference == 0:
+                        start_ = [s for s in start_ if s <= end_min]
+                    else:
+                        if slots.has_key(end_hr):
+                            end_ = [f for f in slots[end_hr] if f <= end_min]
+                        else:
+                            obj[key].append(val)
+                    slot_lens = slot_lens + len(start_)  + len(end_)
+                    if difference > 1:
+                        for i in range((start_time.hour+1),(end_hr)):
+                            if slots.has_key(i):
+                                btwn_lens = btwn_lens + len(slots[i])
+                    slot_lens = btwn_lens + slot_lens
+                    if slot_lens != needed_slots and val not in obj[key]:
+                        obj[key].append(val)
+            for key, values in obj.iteritems():
+                if len(values) > 0 and slots.has_key(key):
+                    slots[key] = [s for s in slots[key] if s not in values]
 
+            
         except Exception,e:
             logger_error.error(traceback.format_exc())
             data = None
             return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             logger_booking.info("Available slots - "+str(slots))
+            print slots
+            data = slots
             return Response(data = data, status = status.HTTP_200_OK)
 
 
 class ApplyCoupon(APIView):
-    permission_classes = (OAuth2Authentication,)
+    authentication_classes = (OAuth2Authentication,)
     permission_classes = (TokenHasScope,)
     required_scopes = ['write','read']
     serializer_class = CouponSerializer
@@ -462,4 +547,26 @@ class ApplyCoupon(APIView):
             logger_booking.info("To deduct"+str(to_deduct))
             return Response(data = to_deduct, status = status.HTTP_200_OK)
 
-         
+
+class ReviewLinkValidate(APIView):
+    """class which validates the review link ans returns html for enter review if true else
+    error message"""
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = EmailReviewLinkSerializer
+    def get(self,request,*args,**kwargs):
+        try:
+            data = self.request.GET
+            booking_id = data['booking_id']
+            review_code = data['review_key']
+            data = ReviewLink.objects.filter(booking_id = booking_id, link_code = review_code,  \
+                is_reviewed = 0)
+            if data:
+                #return html
+                return render(request, 'booking/review_from_email.html',{'can_review':1})
+            else:
+                #return error message
+                return render(request, 'booking/review_from_email.html',{'can_review':0})
+        except Exception,e:
+            print repr(e)
+            return render(request, 'booking/review_from_email.html',{'can_review':0})
+

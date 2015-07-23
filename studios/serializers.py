@@ -85,6 +85,20 @@ class StudioKindSerializer(serializers.ModelSerializer):
 		model = StudioKind
 		fields = ('kind_desc',)
 
+"""
+class ClosedDatesSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = CloseDates
+		fields = ('id','closed_on_day',)
+
+class StudioClosedDatesSerializer(serializers.ModelSerializer):
+	studio_close_dates = ClosedDatesSerializer(many = True)
+	class Meta:
+		model = StudioClosedDetails
+		fields = ('id','studio_close_dates')
+
+		"""
+
 class StudioProfileSerializer(serializers.ModelSerializer):
 
 	"""serializer to get  studio details"""
@@ -95,6 +109,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 	studio_amenities = StudioAmenitiesSerializer(many = True)
 	studio_type = StudioTypeSerializer()
 	studio_kind = StudioKindSerializer()
+	#studio_closed_details = StudioClosedDatesSerializer(many = True)
 	class Meta:
 		model = StudioProfile
 		fields = ('id', 'studio_group','studio_type', 'name', 'address_1', 'address_2',  \
@@ -103,7 +118,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \
-			'studio_amenities','latitude','longitude','studio_kind','landmark','thumbnail')
+			'studio_amenities','latitude','longitude','studio_kind','landmark','thumbnail',)
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 

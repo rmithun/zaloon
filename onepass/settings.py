@@ -31,6 +31,7 @@ TEMPLATE_DEBUG = True
 # Application definition
 
 INSTALLED_APPS = (
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,6 +129,7 @@ if DB:
     }
     }
     ALLOWED_HOSTS = []
+    HOST_NAME = 'http://127.0.0.1:8000'
 else:
     # Additional locations of static files
     STATICFILES_DIRS = (
@@ -154,6 +156,7 @@ else:
     #ALLOWED_HOSTS = ['bebalance.com', 'http://bebalance.com']
     ALLOWED_HOSTS = ['zaloon.in','www.zaloon.in','http://zaloon.in','http://www.zaloon.in',  \
     'https://zaloon.in','https://www.zaloon.in']
+    HOST_NAME = 'http://www.zaloon.in'
 
 
 #AWS SES SMTP SETTINGS
@@ -184,6 +187,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
+     "django.core.context_processors.request",
 )
 
 AUTHENTICATION_BACKENDS = (

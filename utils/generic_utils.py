@@ -6,7 +6,7 @@ from email.MIMEText import MIMEText
 import os, sys
 import logging
 import traceback
-
+import random, hashlib, base64
 
 ##third party imports
 from oauthlib.common import generate_token
@@ -172,3 +172,15 @@ def sendSMS(to,body):
             return True
         else:
             return False
+
+
+
+def uniquekey_generator():
+        
+    """function which generates and returns unique key"""
+ 
+    unique_key = ''
+    rough_key = hashlib.sha224(str(random.getrandbits(256))).hexdigest() 
+    unique_key = base64.b64encode(hashlib.sha256(rough_key).digest(), \
+    random.choice(['rA1','aZ2','gQ3','hH4','hG5','aR6','d7D'])).rstrip('==')
+    return unique_key

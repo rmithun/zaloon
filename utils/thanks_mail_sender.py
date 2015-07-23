@@ -9,12 +9,13 @@
 from datetime import datetime, timedelta
 import django
 from user_accounts import models
-from booking.models import BookingDetails, ThanksMail
+from booking.models import BookingDetails, ThanksMail, ReviewLink
 from studios.models import StudioProfile
 from utils import responses, generic_utils
 from django.contrib.auth.models import User
 from django.template.loader import get_template
 from django.template import Context
+from django.conf import settings
 import logging
 import traceback
 
@@ -45,8 +46,13 @@ def send_thanks_mail():
             user = User.objects.values('first_name','email','id').get(id = every_book.user.id)
             date = yesterday
             #get email template and render all variables
+            review_link = None
+            review_key = ReviewLink.objects.get('link_code').filter(booking_id = every_book.id, is_reviewed = 0)
+            if review_key:
+                review_link = settings.HOST_NAME+'/booking/review_from_email/?review_key='+str(review_key['link_code'])+  \
+                '&&booking_id='+str(every_book.id)
             user_details = {'first_name':user['first_name'],'studio_name':studio_name['name'],  \
-            'date':yesterday}
+            'date':yesterday,'review_link':review_link}
             logger_booking.info("Thanks mail user details - "+str(user_details))
             message = get_template('emails/thanks_email.html').render(Context(user_details))
             to_user = user['email']
@@ -74,14 +80,14 @@ def send_thanks_mail():
         logger_error.error(traceback.format_exc())
         print errorz
     else:
-        logger_booking.info("Total thanks mail sent - "+len(bookings))
+        logger_booking.info("Total thanks mail sent - "+str(len(bookings)))
         ###log code end stats
 
 
         
-logger_booking.info("Thanks mail start time- "+ str(datetime.strptime(datetime.now(),'%y-%m-%d  %H:%M'))
+logger_booking.info("Thanks mail start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 send_thanks_mail()
-logger_booking.info("Thanks mail end  time- "+ str(datetime.strptime(datetime.now(),'%y-%m-%d  %H:%M'))
+logger_booking.info("Thanks mail end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
 try:
     BookingDetails.objects.filter(appointment_date = yesterday, booking_status = 'BOOKED',   \

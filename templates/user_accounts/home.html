@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" ng-app = "accountApp" >
   <head>
+
     <meta charset="utf-8">   
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Your Parlor on Your Hand -  Home</title>
     <meta name="description" content="">
     <meta name="keywords" content="">     
-    <title>Onepass</title>
+    <title>Onepass</title>    
     {% load static from staticfiles %}
     <!-- Bootstrap -->
     <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
@@ -16,7 +17,20 @@
     <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
     <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
     <!-- loading django static files -->
-   
+   <style type="text/css">
+
+.loader-overlay {
+position: fixed;
+left: 0;
+top: 0;
+bottom: 0;
+right: 0;
+background: #000;
+opacity: 0.8;
+filter: alpha(opacity=80);
+z-index: 999;
+}
+   </style>
     
   </head>
 
@@ -26,6 +40,9 @@
      <!-- Preloader -->
     <div id="mask">
         <div id="loader"></div>
+    </div>
+    <div class="loader-overlay" style="display:none;">
+      <div style="position:absolute;color:white;top:50%;width:100%;text-align:center;">Loading..</div>
     </div>
     <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
     <div id="fb-root"></div>
@@ -55,33 +72,38 @@
         </nav>
     </header>
   
-  
-  <div id="banner" class="static-header register-version light clearfix">
-
+    
+  <div id="banner" class="static-header">
+<div class="layer"></div>
         <div class="text-heading">
-            <h1 class="animated " data-animation="bounceInDown" data-delay="0">Where your parlour booking comes, Handy</h1>
+            <h1 class="animated " data-animation="bounceInDown" data-delay="0">YOUR PARLOR ON YOUR HAND</h1>
             <p class="animated  easysearch" data-animation="fadeInDown" data-delay="500">EASY SEARCH  <span> | </span> FREE CANCELLATION   <span> | </span>  100% GUARNTEE</p>
         </div>
     
     <div class="container">
       <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
         <div class="row">
-            <form name="searchservice" class="form-inline form-register form-register-small" novalidate>            
+            <form name ="searchservice" class="form-register form-register-small col-lg-12 no-padding">
+            <div class="col-xs-12 col-md-4 col-lg-4 no-padding">
               <div class="form-group autocomplete">
               <span class="service-icon"><i class="icon icon-shopping-23 icon-active"></i></span>             
-              <span><input size="35" name="service" ng-model="searchdata_.service" type="text" class="form-control" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" required></span>              
+              <span><input size="35" name="service" ng-model="searchdata_.service_name" type="text" class="form-control location" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" required></span>
+              <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span> 
               </div>
-              
+            </div>  
+            <div class="col-xs-12 col-md-5 col-lg-6 no-padding">
               <div class="form-group autocomplete">
-                <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></i></span>
-                <input id="location" name="location" size="45" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.area" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" required>
+              <span class="service-icon"><i class="icon icon-socialmedia-25 icon-active"></i></span>              
+                 <input id="location" name="location" size="35" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.searchlocation" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" required>
        
               </div>
-              
+            </div>  
+            <div class="col-xs-12 col-md-3 col-lg-2 no-padding">
               <div class="form-group submit-wrap">                
                 <input type="submit"  class="btn btn-primary btn-md" ng-click="searchstudio(searchservice)" value="Find"/>
-              </div><br/>
-              <span class="error" ng-show="formsubmit && searchservice.service.$error.required">Service is required.</span>
+              </div>
+            </div>
+             <span class="error" ng-show="formsubmit && searchservice.service.$error.required">Service is required.</span>
               <span class="error" ng-show="formsubmit && searchservice.location.$error.required">Location is required.</span>
             </form>
         </div>
@@ -89,8 +111,6 @@
     </div>
     
     </div>    
-    
-  
   
   <section id="features-list" class="section dark">
         <div class="container animated" style="z-index:0;" data-animation="fadeInDown">
@@ -167,11 +187,15 @@
   <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
   <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
   <script src='{% static "js/bootstrap/ui-bootstrap-tpls-0.13.0.js"%}'></script>  
+  <script type="text/javascript" src='{% static "js/ng-lodash.js" %}'></script>
   <script src='{% static "js/app.js" %}'></script>
   <script src='{% static "js/services/httpservices.js" %}'></script>
+  <script src='{% static "js/services/genericservices.js" %}'></script>
   <script src='{% static "js/controllers/home_page_controller.js" %}'></script>
   <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
+ 
+
+ <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
   <!-- Bootstrap Js -->
   
   <!-- loader -->

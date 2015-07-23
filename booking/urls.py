@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^add_review/$', views.AddReviews.as_view(), name = 'add_review'),
     url(r'^new_booking/$', views.NewBooking.as_view(), name = 'new_booking'),
     url(r'^apply_coupon/$', views.ApplyCoupon.as_view(), name = 'apply_coupon'),
-
-
-
-)
+    url(r'^get_slots/$', views.GetSlots.as_view(), name = 'get_slots'),
+    url(r'^review_from_email/$', views.ReviewLinkValidate.as_view(), name = 'review_from_email'),
+    url(r'^add_review_from_email/$', views.ReviewFromEmail.as_view(), name = 'add_review_from_email'),
+ )

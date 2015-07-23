@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">   
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Book your salon ,spa appointments online through Zaloon </title>
+    <title>Book your salon,spa appointments online through Zaloon </title>
     <meta name="description" content="">
     <meta name="keywords" content="">     
     {% load static from staticfiles %}
@@ -60,7 +60,7 @@
   <!-- <div class="layer">&nbsp;</div> -->
         <div class="text-heading">
             <h1 class="animated " data-animation="bounceInDown" data-delay="0">
-            Where your parlour booking comes, Handy
+            Where your parlour bookings come Handy, in Chennai
             </h1>
             <p class="animated  easysearch" data-animation="fadeInDown" data-delay="500">BOOK 24 X 7 <span> | </span> FREE CANCELLATION   <span> | </span>  100% GUARNTEE</p>
         </div>
@@ -72,23 +72,23 @@
               
               <div class="form-group">
               <span class="email-icon"><i class="icon fa fa-envelope-o icon-active"></i></span>              
-                <input ng-hide = "inviteflag == 1;" size="50" type="email" class="form-control emailtxt" placeholder="Enter email to get invite"  name="email" ng-model="emailid" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
+                <input ng-hide = "inviteflag == 1;" size="50" type="email" class="form-control emailtxt" placeholder="Enter email to get early access"  name="email" ng-model="emailid" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
               </div>
               
               <div class="form-group invite-wrap">                
                 <button type="button" ng-disabled="lp_invited"  ng-click="invite(inviteform)" class="btn btn-primary btn-md" ng-switch="lp_invited">
-                  <span ng-switch-default>GET INVITED</span>
+                  <span ng-switch-default>GET EARLY ACCESS</span>
                   <span ng-switch-when="true">INVITING...</span>
               </button>
               </div>
-              <p ng-hide="inviteflag == 1;" class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue</p>
-              
-              <span ng-show = "inviteflag == 0;" class="easysearch">Please try again.Some error occurred.</span>
+              <p ng-hide="inviteflag == 1;" class="animated  txtmessage" data-animation="fadeInDown" data-delay="500">Wait here, not in queue. We too hate Spam.</p>
+
+              <span ng-show = "inviteflag == 0;" class="prioritylist">Please try again.Some error occurred.</span>
               <span class="error" ng-show="formsubmit && inviteform.email.$error.required">Please enter your email.</span>
               <span class="error" ng-show="formsubmit && inviteform.email.$error.pattern">Please enter valid email.</span>
             </form>
-            <div ng-show = "inviteflag == 1;">
-            <span  class="easysearch" >You are now added to our priorites list.</span><br/>
+            <div ng-show = "inviteflag == 1">
+            <span  class="prioritylist"   >You are now added to our priorites list.You will receive early access once we launch.</span><br/>
             <div id="facebook-like"><div class="fb-like" data-href="https://www.facebook.com/zaloonindia" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div></div> </br>
 
             <div id="twitter-follow"><a href="https://twitter.com/zaloon_in" class="twitter-follow-button" data-show-count="false">Follow @zaloon_in</a>

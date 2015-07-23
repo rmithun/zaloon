@@ -61,19 +61,19 @@ def get_studios(location,service,date=None):
     based on location and services"""
     try:
         #import pdb;pdb.set_trace();
-        location_set =  reduce(operator.__or__, [Q(area__icontains=query)  \
-        | Q(address_1__icontains=query) | Q(address_2__icontains=query  \
-        )for query in location])
+        #location_set =  reduce(operator.__or__, [Q(area__icontains=query)  \
+        #| Q(address_1__icontains=query) | Q(address_2__icontains=query  \
+        #)for query in location])
         closed_on_day = (datetime.today().date().weekday() + 1)
         open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
         if settings.DB:
-            studios = StudioProfile.objects.filter(location_set, is_closed = 0 ,  \
-            studio__in = open_studios).values('id')
+            studios = StudioProfile.objects.filter(city = 'Chennai', is_closed = 0 ,  \
+            id__in = open_studios).values('id')
             services = Service.objects.filter(service_name__iregex = r'\b{0}\b'.format(service)).values('id')
         else:
             services = Service.objects.filter(service_name__iregex = r'\y{0}\y'.format(service)).values('id')
             studios = StudioProfile.objects.filter(area__iregex = r'\y{0}\y'.format(location), is_closed = 0 ,  \
-            studio__in = open_studios).values('id')
+            id__in = open_studios).values('id')
         if len(service) > 0:
             filtered_studios =  StudioServices.objects.filter(service_id__in =   \
 	        services, studio_profile_id__in = studios).values('studio_profile').distinct()
@@ -102,7 +102,7 @@ class StudioProfileMixin(object):
             locations = self.request.GET['location'].split()
             service = self.request.GET['service']
             logger_studios.info("Search Query - "+str(self.request.GET))
-            studios_ = get_studios(locations,service)
+            studios_ = get_studios(city,service)
             queryset = self.model.objects.filter(id__in = studios_)
         except Exception ,e:
             logger_error.error(traceback.format_exc())
