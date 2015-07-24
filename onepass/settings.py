@@ -80,7 +80,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -102,6 +102,7 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+
 MEDIA_ROOT = BASE_DIR
 AWS_STORAGE_BUCKET_NAME = 'noqimages'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
@@ -113,9 +114,27 @@ AWS_CDN_URL = "http://dj44veg5gcpqb.cloudfront.net/"
 MEDIA_URL = "http://%s/%s/" % (AWS_CDN_URL, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-DB = True
+if DEBUG:
+    """STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    )
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'dev_zaloon',                      # Or path to database file if using sqlite3.
+            # The following settings are not used with sqlite3:
+            'USER': 'dev_zaloon',
+            'PASSWORD': 'zaloon123',
+            'HOST': 'dev-zaloon.cwh48zxk9diu.ap-southeast-1.rds.amazonaws.com',
+            'PORT': '5432',                      # Set to empty string for default.
+        }
+    }
+    ALLOWED_HOSTS = []
+    HOST_NAME = 'http://127.0.0.1:8000'"""##AWS DEV DB
 
-if DB:
     STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -145,18 +164,17 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'bopanther_test_db',                      # Or path to database file if using sqlite3.
+            'NAME': 'zaloon_prod',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
-            'USER': 'bopanther_dba',
+            'USER': 'zaloon_dba',
             'PASSWORD': '11July!99#',
-            'HOST': 'bopanther.cwh48zxk9diu.ap-southeast-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+            'HOST': 'zaloon.cwh48zxk9diu.ap-southeast-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
             'PORT': '5432',                      # Set to empty string for default.
         }
     }
-    #ALLOWED_HOSTS = ['bebalance.com', 'http://bebalance.com']
+    #ALLOWED_HOSTS = []
     ALLOWED_HOSTS = ['zaloon.in','www.zaloon.in','http://zaloon.in','http://www.zaloon.in',  \
     'https://zaloon.in','https://www.zaloon.in']
-    HOST_NAME = 'http://www.zaloon.in'
 
 
 #AWS SES SMTP SETTINGS
@@ -204,7 +222,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
  'DEFAULT_THROTTLE_RATES': {
-        'anon': '1000/day',
+        'anon': '1000/day',  ##change before going live
         'user': '10/day'
     }
 
@@ -346,3 +364,21 @@ LOGGING = {
     
     }
 }
+
+
+##CCAVENUE SETTINGS
+MERCHANT_ID = 71637
+WORKING_KEY = 'BB8279BFF481AF452ADA6C6384B3AB32'
+ACCESS_CODE = 'AVNI05CG68BJ32INJB'
+CURRENCY = 'INR'
+if DEBUG:
+    REDIRECT_URL = '127.0.0.1:8000/paymentsuccess/'
+    CANCEL_URL =  '127.0.0.1:8000/paymentfailed/'
+else:
+    REDIRECT_URL = 'www.zaloon.in/paymentsuccess/'
+    CANCEL_URL =  '127.0.0.1:8000/paymentfailed/'
+LANGUAGE = 'EN'
+INTEGRATION_TYPE = "iframe_normal"
+
+
+

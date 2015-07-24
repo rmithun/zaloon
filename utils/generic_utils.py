@@ -165,7 +165,7 @@ def sendSMS(to,body):
         }
         response = p.send_message(params)
     except:
-        logger.error(traceback.format_exc())
+        logger_error.error(traceback.format_exc())
         return False
     else:
         if response:
@@ -184,3 +184,70 @@ def uniquekey_generator():
     unique_key = base64.b64encode(hashlib.sha256(rough_key).digest(), \
     random.choice(['rA1','aZ2','gQ3','hH4','hG5','aR6','d7D'])).rstrip('==')
     return unique_key
+
+#!/usr/bin/env python
+
+from Crypto.Cipher import AES
+import md5
+
+def pad(data):
+    length = 16 - (len(data) % 16)
+    data += chr(length)*length
+    return data
+
+def encrypt(plainText,workingKey):
+    iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
+    plainText = pad(plainText)
+    encDigest = md5.new ()
+    encDigest.update(workingKey)
+    enc_cipher = AES.new(encDigest.digest(), AES.MODE_CBC, iv)
+    encryptedText = enc_cipher.encrypt(plainText).encode('hex')
+    return encryptedText
+
+
+
+def decrypt(cipherText,workingKey):
+    iv = '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
+    decDigest = md5.new ()
+    decDigest.update(workingKey)
+    encryptedText = cipherText.decode('hex')
+    dec_cipher = AES.new(decDigest.digest(), AES.MODE_CBC, iv)
+    decryptedText = dec_cipher.decrypt(encryptedText)
+    return decryptedText
+
+
+##@login_required
+def getIframeFromPG(order_data):
+    try:
+        import pdb;pdb.set_trace();
+        merchant_id = str(settings.MERCHANT_ID)
+        order_id = str(order_data['purchase_id'])
+        currency = settings.CURRENCY
+        amount = str(order_data['amount'])
+        redirect_url = settings.REDIRECT_URL
+        cancel_url = settings.CANCEL_URL
+        language = settings.LANGUAGE
+        customer_identifier = str(order_data['user_id'])
+        integration_type = settings.INTEGRATION_TYPE
+        workingKey = settings.WORKING_KEY
+        booking_id = str(order_data['booking_id'])
+        merchant_data='merchant_id='+merchant_id+'&'+'order_id='+order_id + '&'   \
+        + "currency=" + currency + '&' + 'amount=' + amount+'&'+  \
+        'redirect_url='+redirect_url+'&'+'cancel_url='+cancel_url+'&'+  \
+        'language='+language+'&'+'merchant_param1='+booking_id+'integration_type='  \
+        +integration_type+'&'+'customer_identifier='+customer_identifier+'&'
+        encryption = encrypt(merchant_data,workingKey)
+        iframe = (""" <center>
+        <!-- width required mininmum 482px -->
+           <iframe  width="482" height="500" scrolling="No" frameborder="0"  id="paymentFrame"
+           src="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&merchant_id=%s&encRequest=%s&access_code=%s">
+           </iframe>
+        </center>""")%(settings.MERCHANT_ID,encryption,settings.ACCESS_CODE)
+    except Exception:
+        logger_error.error(traceback.format_exc())
+        return None
+    else:
+        return iframe
+
+
+

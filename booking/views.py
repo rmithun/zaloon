@@ -16,7 +16,6 @@ import copy
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
 render
 from django.contrib.auth.decorators import login_required
-from utils.generic_utils import *
 #from permissions import IsUserThenReadPatch, ReadOnlyAuthentication
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView, \
 CreateAPIView, UpdateAPIView
@@ -33,7 +32,7 @@ from django.template import Context
 #application imports
 from serializers import *
 from models import *
-from utils.generic_utils import sendEmail, sendSMS, uniquekey_generator
+from utils.generic_utils import sendEmail, sendSMS, uniquekey_generator, getIframeFromPG
 from utils import responses
 from studios.models import StudioServices
 from studios.serializers import StudioReviewSerializer
@@ -68,7 +67,6 @@ class NewBooking(CreateAPIView,UpdateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace();
             user = self.request.user
             data = self.request.DATA
             appnt_date = datetime.strptime(data['appnt_date'],'%Y-%m-%d')
@@ -82,6 +80,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             studio_id = data['studio']
             status_code = responses.BOOKING_CODES['BOOKING']
             promo_code = data['promo_code']
+            ##check purchase amount is not changed
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
             appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
@@ -107,6 +106,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             new_purchase.save()
             logger_booking.info("New purchase id - "+str(new_purchase.id))
             appointment_end_time = appointment_start_time + timedelta(minutes = total_duration['mins_takes__sum'])
+            ##check has slots available by passing start time with duration
             new_booking = BookingDetails(user = user, booked_date =
                 datetime.now(), appointment_date = appnt_date,  \
                 appointment_start_time = appointment_start_time, booking_code = booking_code,  \
@@ -123,15 +123,22 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 service_booked = BookingServices(booking = new_booking,service_id = service, service_updated = 'new booking')
                 service_booked.save()
             #services_class = ActiveBookingSerializer(new_booking)
-            response = {'booking_id':new_booking.id,'purchase_id':new_purchase.id}
-            data = simplejson.dumps(response)
+            ##send query to PG to load iframe
+            iframe_req = {'booking_id':new_booking.id,'purchase_id':new_purchase.id,  \
+            'amount':purchase_amount,'user_id':user.id}
+            if iframe_req:
+                iframe_resp = getIframeFromPG(iframe_req)
+            else:
+                transaction.rollback()
+                return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+            #data = simplejson.dumps(response)
         except Exception,e:
             logger_error.error(traceback.format_exc())
             transaction.rollback()
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             transaction.commit()
-            return Response(data = data, status = status.HTTP_201_CREATED)
+            return Response(data = iframe_resp, status = status.HTTP_201_CREATED)
     
     @transaction.commit_manually
     def put(self,request,*args,**kwargs):
@@ -278,7 +285,7 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
             if has_exists:
                 BookingDetails.objects.filter(id = has_exists[0].booking_id).update(booking_status = 'USED', status_code = 'B004',  \
                 service_updated = 'booking used', updated_date_time = datetime.now(), is_valid = False)
-                review_key = generic_utils.uniquekey_generator()
+                review_key = uniquekey_generator()
                 new_link = ReviewLink(booking_id = has_exists[0].booking_id, link_code = review_key,  \
                     service_updated = "thanks mail sender")
                 new_link.save()
