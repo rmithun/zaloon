@@ -203,7 +203,7 @@ class Amenities(models.Model):
 
 class StudioAmenities(models.Model):
 	"""list of available amenities in studio"""
-	studio_profile = models.OneToOneField(StudioProfile, related_name = "studio_amenities")
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_amenities")
 	amenity = models.ForeignKey(Amenities, related_name = "amenity_available")
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)

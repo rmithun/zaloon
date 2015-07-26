@@ -14,15 +14,27 @@ noqapp.config(function($routeProvider,$httpProvider) {
 		$routeProvider
 			// route for the home page
 			.when('/', {
-				templateUrl : '/account/search/'
+				templateUrl : '/home/',
+				controller  : 'homepagecontroller'
 			})
 			
 			.when('/search', {
-				templateUrl : '/account/search/'
+				templateUrl : '/search/',
+				controller  : 'resultCtrl'
 			})
 
 			.when('/my_account', {
-				templateUrl : '/account/user_account/'
+				templateUrl : '/account/user_account/',
+				controller  : 'accountscontroller'
+			})
+
+			.when('/home', {
+				templateUrl : '/home/',
+				controller  : 'homepagecontroller'
+			})
+
+			.when('/booking', {
+				templateUrl : '/booking/booking_page/'
 			})
 
 });

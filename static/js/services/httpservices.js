@@ -119,12 +119,12 @@ noqapp.factory('sessionService', function($q,$cookies)
 	var sessionData = {}
 	sessionData.setAuthToken = function(token)
 	{
-		$cookies.put('token',token['access_token'].data['access_token']);
+		$cookies.put('token',token['access_token'].data['access_token'],{path:'/'});
 		expiretime = new Date()
-		//$cookies.expiretime = expiretime.setMinutes(token['access_token'].data['expires_in']);
-		//$cookies.refreshtoken = token['access_token'].data['refresh_token'] 
-		//$cookies.client_id = token['access_token'].data['client_id']
-		//$cookies.client_secret = token['access_token'].data['client_secret']
+		$cookies.put('expiretime',token['access_token'].data['expire_time'],{path:'/'});
+		$cookies.put('refreshtoken',token['access_token'].data['refresh_token'],{path:'/'})
+		$cookies.put('client_id',token['access_token'].data['client_id'],{path:'/'})
+		$cookies.put('client_secret', token['access_token'].data['client_secret'],{path:'/'})
 
 
 	}
@@ -160,8 +160,8 @@ noqapp.factory('authInterceptor', [
         config.headers = config.headers || {};
         if(sessionService.isLogged()) 
         {
-	        //config.headers.Authorization = 'Bearer ' + sessionService.getAccessToken(); // add your token from your service 
-        	config.headers.Authorization = 'Bearer ' + 'rtPmqphRY60xPVbUO1gDYYZVYx0DE5';
+	        config.headers.Authorization = 'Bearer ' + sessionService.getAccessToken(); // add your token from your service 
+        	//config.headers.Authorization = 'Bearer ' + 'rtPmqphRY60xPVbUO1gDYYZVYx0DE5';
         }
         return config;
       },

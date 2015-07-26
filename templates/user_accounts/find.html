@@ -1,16 +1,15 @@
+ <div ng-controller="homepagecontroller">  
 
 
-<div id="landing-page">  
-
-  <!-- csrf token-->{% csrf_token %} <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
-    <div id="fb-root"></div>
- 
      <!-- Preloader -->
-    
+    <div id="mask">
+        <div id="loader"></div>
+    </div>
     <div class="loader-overlay" style="display:none;">
       <div style="position:absolute;color:white;top:50%;width:100%;text-align:center;">Loading..</div>
     </div>
-   
+    <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}></div>
+    <div id="fb-root"></div>
     
     <header>
         <nav class="navigation navigation-header">
@@ -140,26 +139,5 @@
     </div>  
   </div>    
    
-
-  </div> 
-  </div>
-  <script type="text/ng-template" id="location.html">
-  <a>
-     <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
-  </a>
-
-  </script>
-
-
-  <script type="text/ng-template" id="service.html">
-  <a>
-     <i class="icon icon-shopping-23 icon-active"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
-  </a>
-
-  </script>
-
-
-
-
-
-
+</div>
+   

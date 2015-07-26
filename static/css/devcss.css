@@ -81,3 +81,8 @@
 {
     background: url('../img/rating_stars_transparent_small.png') no-repeat -3px -167px;
 }
+
+.carousel-indicators
+{
+    display: none;
+}

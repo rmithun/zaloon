@@ -1,4 +1,4 @@
-noqapp.directive('facebook', function($http) {
+noqapp.directive('facebook', function($http,httpServices) {
   return {
     restrict: 'A',
     scope: true,
@@ -27,6 +27,7 @@ noqapp.directive('facebook', function($http) {
 
     
       $scope.fetch = function() {
+        alert("here")
         if ($scope.login_status != 'connected') {
           login()
         } 

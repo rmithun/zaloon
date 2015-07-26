@@ -1,4 +1,4 @@
-noqapp.controller('homepagecontroller',function($scope, $cookies, $window,httpServices,sessionService){
+noqapp.controller('homepagecontroller',function($scope, $cookies, $location,httpServices,sessionService,putResultService){
 $scope.is_logged = sessionService.isLogged();
 $scope.formsubmit=false;
 
@@ -23,7 +23,7 @@ getFBKey()
 		  	{
 		  		$scope.is_logged = sessionService.isLogged()
 		  		$scope.user_name = dataz['user_details'].data[0].first_name
-		  		$('#signupmodel').modal('hide');
+		  		//$('#signupmodel').modal('hide');
 		  	}, function()
 		  	{
 		  		$scope.is_logged = sessionService.isLogged()
@@ -113,8 +113,9 @@ httpServices.getUsrDetails().then(function(dataz)
 		    	{		
 		    		$cookies.putObject('searchdata',obj,{path:'/'})    	
 		    		//console.log(data.studio_details.data)	
-		    		$cookies.putObject('data',data.studio_details.data,{path:'/'})
-		    		window.location = '/search' 
+		    		//$cookies.putObject('data',data.studio_details.data,{path:'/'})
+		    		putResultService.setresult(data.studio_details.data);
+		    		$location.path("/search");		    		
 		    	},function()
 		    	{
 		    		console.log("Try again to get service")

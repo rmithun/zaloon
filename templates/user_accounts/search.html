@@ -1,385 +1,438 @@
-<!doctype html>
-<html lang="en" ng-app="accountApp">
+ <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
+    <div id="fb-root"></div>
+<header class="searchheader">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <title>Zaloon</title>
-    {% load static from staticfiles %}
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
-    <!-- Font -->
-    <link rel="stylesheet" href='{% static "css/font-awesome.css"%}' type="text/css" media="all" />
-    <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />
-    <!-- our css -->
-    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" />
-    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" />
-    <!-- loading django static files -->
 
-</head>
+    <nav class="navigation">
 
-<body ng-controller="resultCtrl">
-
-    <!-- Preloader -->
-    <div id="mask">
-        <div id="loader"></div>
-    </div>
-
-    <header class="searchheader">
-        <nav class="navigation">
-
-            <div class="navigation-brand">
-                <!--  <div class="brand-logo">
+        <div class="navigation-brand">
+            <!--  <div class="brand-logo">
                         <a href="#" class="logo"></a>                       
                     </div>  -->
-                <a href="#"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png"> </a>
-                <a href="#"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
-            </div>
-            <!-- Login -->
+            <a href="#"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png"> </a>
+            <a href="#"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
+        </div>
+        <!-- Login -->
 
-            <div class="navigation-navbar">
-                <ul class="navigation-bar navigation-bar-right">
-                    <li class="navsearch hidden-md hidden-lg">
-                        <a href="#" class="active"><span class="glyphicon glyphicon-search"></span></a>
-                    </li>
-                    <li class="moresearch">
-                        <button class="btn btnmore" ng-click="clkmore()">
-                            <i class="glyphicon glyphicon-filter"></i><span class="hidden-xs hidden-sm">More</span>
-                        </button>
+        <div class="navigation-navbar">
+            <ul class="navigation-bar navigation-bar-right">
+                <li class="navsearch hidden-md hidden-lg">
+                    <a href="#" class="active"><span class="glyphicon glyphicon-search"></span></a>
+                </li>
+                <li class="moresearch">
+                    <button class="btn btnmore" ng-click="clkmore()">
+                        <i class="glyphicon glyphicon-filter"></i><span class="hidden-xs hidden-sm">More</span>
+                    </button>
 
-                        <!-- More -->
-                        <div ng-show="morefilter" class="more-filters-dropdown-panel">
-                            <div class="triangle-up hidden-xs"></div>
-                            <div class="more-filters-dropdown-menu">
-                                <div class="col-xs-12 col-sm-6 brdrgt">
-                                    <div class="hidden-md hidden-lg paddbtm">
-                                        <input size="3" type="text" class="form-control" placeholder="Search by name">
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <h3 class="more-panel-title margintopnone">Studio Type</h3>
-                                    <div class="btn-toolbars">
+                    <!-- More -->
+                    <div ng-show="morefilter" class="more-filters-dropdown-panel">
+                        <div class="triangle-up hidden-xs"></div>
+                        <div class="more-filters-dropdown-menu">
+                            <div class="col-xs-12 col-sm-6 brdrgt">
+                                <div class="hidden-md hidden-lg paddbtm">
+                                    <input size="3" type="text" class="form-control" placeholder="Search by name">
+                                </div>
+                                <div class="clearfix"></div>
+                                <h3 class="more-panel-title margintopnone">Studio Type</h3>
+                                <div class="btn-toolbars">
 
-                                        <a ng-repeat="type in studiotype" class="btn " ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiotypeclick(type.name,$index)">
-                                            <span ng-class="type.icon">
+                                    <a ng-repeat="type in studiotype" class="btn " ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiotypeclick(type.name,$index)">
+                                        <span ng-class="type.icon">
                                                 {%verbatim%}{{type.name}}{%endverbatim%}</span>
-                                        </a>
+                                    </a>
 
-                                    </div>
-
-                                    <div class="clearfix"></div>
-
-                                    <h3 class="more-panel-title">Type</h3>
-                                    <div class="clearfix"></div>
-                                    <div class="btn-toolbars">
-
-
-                                        <a ng-repeat="type in studiokind" class="btn" ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiokindclick(type.name,$index)">
-                                            <span class="fa" ng-class="type.icon">{%verbatim%}{{type.name}}{%endverbatim%}</span>
-                                        </a>
-
-
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <h3 class="more-panel-title">Rating</h3>
-                                    <div class="clearfix"></div>
-
-                                    <div class="btn-toolbars ratingbar">
-                                        <a ng-repeat="star in studiostar" class="btn" ng-class="{'active':star.active == true,'borderrgtnone':$last == true}" ng-click="studioreviewclick(star.star,$index)"><span>{%verbatim%}{{star.star}}{%endverbatim%}</span></a>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-6 more-services">
-                                    <h3 class="more-panel-title">Services</h3>
-                                    <div class="hidden-xs">
-                                        <input size="3" type="text" class="form-control" ng-model="service" placeholder="filter service">
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div class="checkboxcolumn">
-                                        <label ng-repeat="ser in  services_filtered = ( studioservice | filter:service)" class="checkbox">
-                                            <input type="checkbox" ng-click="studioserviceclick(ser)">
-                                            <span ng-bind="ser"></span>
-                                        </label>
-                                        <span ng-hide="services_filtered.length">No Service found</span>
-                                    </div>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-12  more-footer">
-                                    <div class="resetpanel">
-                                        <span class="btn pull-right" ng-click="applyfilter()">Apply</span>
-                                        <span class="btn pull-right" ng-click="resetfilter()">Reset</span>
-                                    </div>
-                                    <!-- <div class="btn btn-primary pull-right">Done</div> -->
+                                <div class="clearfix"></div>
+
+                                <h3 class="more-panel-title">Type</h3>
+                                <div class="clearfix"></div>
+                                <div class="btn-toolbars">
+
+
+                                    <a ng-repeat="type in studiokind" class="btn" ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiokindclick(type.name,$index)">
+                                        <span class="fa" ng-class="type.icon">{%verbatim%}{{type.name}}{%endverbatim%}</span>
+                                    </a>
+
+
+                                </div>
+                                <div class="clearfix"></div>
+                                <h3 class="more-panel-title">Rating</h3>
+                                <div class="clearfix"></div>
+
+                                <div class="btn-toolbars ratingbar">
+                                    <a ng-repeat="star in studiostar" class="btn" ng-class="{'active':star.active == true,'borderrgtnone':$last == true}" ng-click="studioreviewclick(star.star,$index)"><span>{%verbatim%}{{star.star}}{%endverbatim%}</span></a>
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-sm-6 more-services">
+                                <h3 class="more-panel-title">Services</h3>
+                                <div class="hidden-xs">
+                                    <input size="3" type="text" class="form-control" ng-model="service" placeholder="filter service">
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="checkboxcolumn">
+                                    <label ng-repeat="ser in  services_filtered = ( studioservice | filter:service)" class="checkbox">
+                                        <input type="checkbox" ng-click="studioserviceclick(ser)">
+                                        <span ng-bind="ser"></span>
+                                    </label>
+                                    <span ng-hide="services_filtered.length">No Service found</span>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12  more-footer">
+                                <div class="resetpanel">
+                                    <span class="btn pull-right" ng-click="applyfilter()">Apply</span>
+                                    <span class="btn pull-right" ng-click="resetfilter()">Reset</span>
+                                </div>
+                                <!-- <div class="btn btn-primary pull-right">Done</div> -->
+                            </div>
                         </div>
-                    </li>
-                    <li ng-show = "is_logged == 0" class="hidden-xs hidden-sm" >
-                       <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook">
-              <i class="icon icon-socialmedia-08"></i>Login using Facebook
-            </button>  
-                    </li>
-                    <li ng-show = "is_logged == 1" class="dropdown logindetails">
-                        <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Hi Mithun
-                            <span class="caret"></span>
+                    </div>
+                </li>
+                <li ng-show="is_logged == 0" class="hidden-xs hidden-sm">
+                    <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook">
+                        <i class="icon icon-socialmedia-08"></i>Login using Facebook
+                    </button>
+                </li>
+                <li ng-show="is_logged == 1" class="dropdown logindetails">
+                    <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Hi {%verbatim%}{{user_name}}{%endverbatim%}
+                        <span class="caret"></span>
+                    </button>
+
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="#my_account">My Account</a></li>
+                        <li><a style ="cursor:pointer;" ng-click="logOut()">Signout</a></li>
+                    </ul>
+
+                </li>
+
+                <li class=" hidden-md hidden-lg hide" data-toggle="modal" data-target="#signupmodel">
+                    <button class="btn btn-facebook-small">
+                        <i class="icon icon-socialmedia-08"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="searchdevice">
+
+            <!-- search -->
+
+            <form role="form" name="searchForm" class="searchpanel">
+                <div class="col-md-2 col-lg-3 no-padding">
+                    <div class="form-group autocomplete">
+                        <input type="text" ng-model="searchdata.service" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-lg-3 no-padding">
+                    <div class="form-group autocomplete">
+                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html">
+                    </div>
+                </div>
+                <div class="col-custom-button">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" ng-click="searchservicestudio()">
+                            <span class="glyphicon glyphicon-search hidden-xs hidden-sm"></span><span class="hidden-md hidden-lg hidden-md">search</span>
                         </button>
-
-
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Signout</a></li>
-                        </ul>
-
-                    </li>
-
-                    <li class=" hidden-md hidden-lg hide" data-toggle="modal" data-target="#signupmodel">
-                        <button class="btn btn-facebook-small">
-                            <i class="icon icon-socialmedia-08"></i>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            <div class="searchdevice">
-
-                <!-- search -->
-
-                <form role="form" name="searchForm" class="searchpanel">
-                    <div class="col-md-2 col-lg-3 no-padding">
-                        <div class="form-group autocomplete">
-                            <input type="text" ng-model="searchdata.service" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
-                        </div>
                     </div>
 
-                    <div class="col-md-2 col-lg-3 no-padding">
-                        <div class="form-group autocomplete">
-                            <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html">
-                        </div>
-                    </div>
-                    <div class="col-custom-button">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" ng-click="searchservicestudio()">
-                                <span class="glyphicon glyphicon-search hidden-xs hidden-sm"></span><span class="hidden-md hidden-lg hidden-md">search</span>
-                            </button>
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-
-
-        </nav>
-    </header>
-
-    <div class="container-mapview">
-        <div class="mapview">
-            <div class="mappanel" id="googleMap">
-
-            </div>
+                </div>
+            </form>
         </div>
 
+
+    </nav>
+</header>
+
+<div class="container-mapview">
+    <div class="mapview">
+        <div class="mappanel" id="googleMap">
+
+        </div>
     </div>
 
-    <!-- List -->
-    <div class="list-box ">
-        <div class="listheader">
-            <label>We have found {%verbatim%} {{filteredstudio.length}}{%endverbatim%} results for you</label>
-            <span class="pull-right hiddenxsprt">
+</div>
+
+<!-- List -->
+<div class="list-box ">
+    <div class="listheader">
+        <label>We have found {%verbatim%} {{filteredstudio.length}}{%endverbatim%} results for you</label>
+        <span class="pull-right hiddenxsprt">
                         <span class="icon icon-socialmedia-25 icon-active">Map</span>
-            <span class="sep">|</span>
-            <span class="icon icon-text-hierarchy-06">List</span>
-            </span>
-        </div>
-        <div class="form-group">
-            <input size="5" type="text" class="form-control" id="namesearch" ng-model="query.name" placeholder="Search by name">
-        </div>
-        <div class="form-group">
-            <span><select   class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice">   
+        <span class="sep">|</span>
+        <span class="icon icon-text-hierarchy-06">List</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <input size="5" type="text" class="form-control" id="namesearch" ng-model="query.name" placeholder="Search by name">
+    </div>
+    <div class="form-group">
+        <span><select   class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice">   
                      <option value="priceasc" selected="selected">Price</option>
                     <option value="pricedsc">Price dsc</option>
                     <option value="distanceasc">A-Z</option>
                     <option value="ratingdsc">Rating</option>
             </select></span>
-            <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span>
-        </div>
-        <div class="list-view">
+        <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span>
+    </div>
+    <div class="list-view">
 
-            <ul>
-                <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="studiodetails(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
-                    <a class="list-item" href="#">
-                        <div class="details">
-                            <img class="image loaded" style="height:100px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
-                            <div class="info">
-                                <div class="heading">
-                                    <span>{%verbatim%}{{stu.name}}{%endverbatim%}</span>
-                                </div>
-                                <div class="landmark_details">{%verbatim%}{{stu.area}}{%endverbatim%}</div>
-                                <div class="sub-line-1">
-                                    {%verbatim%}{{stu.studio_type.type_desc}}{%endverbatim%}-{%verbatim%}{{stu.studio_kind.kind_desc}}{%endverbatim%}
-                                    <img class="image loaded staricon {%verbatim%}{{stu.staricon}}{%endverbatim%}" alt=""/></div>
-                                <div class="sub-line-2">
-                                    <span>{%verbatim%}{{stu.distance}}{%endverbatim%}-{%verbatim%}{{stu.staricon}}{%endverbatim%} km</span>
-                                    <span class="price">
+        <ul>
+            <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="studiodetails(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
+                <a class="list-item" style="cursor:pointer;">
+                    <div class="details">
+                        <img class="image loaded" style="height:100px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
+                        <div class="info">
+                            <div class="heading">
+                                <span>{%verbatim%}{{stu.name}}{%endverbatim%}</span>
+                            </div>
+                            <div class="landmark_details">{%verbatim%}{{stu.area}}{%endverbatim%}</div>
+                            <div class="sub-line-1">
+                                {%verbatim%}{{stu.studio_type.type_desc}}{%endverbatim%}-{%verbatim%}{{stu.studio_kind.kind_desc}}{%endverbatim%}
+                                <img class="image loaded staricon {%verbatim%}{{stu.staricon}}{%endverbatim%} pull-right" alt="" /></div>
+                            <div class="sub-line-2">
+                                <span>{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
+                                <span class="price">
                 <span class="icon-rupee rupee"></span><span class="info-rate">₹ {%verbatim%}{{stu.price}}{%endverbatim%}</span>
-                                    </span>
-                                </div>
+                                </span>
                             </div>
                         </div>
-                    </a>
-                </li>
+                    </div>
+                </a>
+            </li>
 
 
 
-            </ul>
-            <div style="padding: 10px 12px;">
-                <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="currentPage" num-pages="smallnumPages"></pagination>
-            </div>
-
+        </ul>
+        <div style="padding: 10px 12px;">
+            <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="currentPage" num-pages="smallnumPages"></pagination>
         </div>
-    </div>
 
-    <!-- List Details -->
-    <div id="studiodetails" class="list-detail-box-panel" style="display:none">
-        <a href="#" ng-click="closeslider()" class="listclose">X</a>
-        <div class="list-detail-box">
-            <div class="rate-panel col-xs-12 no-padding">
-                <div class="col-sm-6 col-xs-4 btn btn-secondary">
-                    <span class="text">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
-                </div>
-                <div class="col-sm-6 col-xs-4 btn btn-primary">
-                    <span class="text">BOOK</span>
-                </div>
-                <div class="hidden-sm hidden-md hidden-lg col-xs-4 btn btn-primary btn-close">
-                    <span class="text"> <a href="#" ng-click="closeslider()" class="listclose">CLOSE
+    </div>
+</div>
+
+<!-- List Details -->
+<div id="studiodetails" class="list-detail-box-panel" style="display:none">
+    <a style="cursor:pointer;" ng-click="closeslider()" class="listclose">X</a>
+    <div class="list-detail-box">
+        <div class="rate-panel col-xs-12 no-padding">
+            <div class="col-sm-6 col-xs-4 btn btn-secondary">
+                <span class="text">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
+            </div>
+            <div class="col-sm-6 col-xs-4 btn btn-primary">
+                <span class="text" ng-click="book()">BOOK</span>
+            </div>
+            <div class="hidden-sm hidden-md hidden-lg col-xs-4 btn btn-primary btn-close">
+                <span class="text"> <a href="#" ng-click="closeslider()" class="listclose">CLOSE
                 </a></span>
-                </div>
             </div>
+        </div>
 
-            <div class="list-detail-header">
-                <div class="list-detail-image">
-                    <img alt="" src="assets/img/large1.jpg" style="height:300px;">
-                </div>
-                <div class="header-tabs">
-                    <ul class="nav tabs-container">
-                        <a class="detail-tab tab-street active" ng-click="easyscroll('street-info')">
-                            <span>DETAILS</span>
-                        </a>
-                        <a class="detail-tab tab-service" ng-click="easyscroll('service-list')">
-                            <span>SERVICES</span>
-                        </a>
-                        <a class="detail-tab tab-direction" ng-click="easyscroll('direction')">
-                            <span>DIRECTION</span>
-                        </a>
-                        <a class="detail-tab tab-review" ng-click="easyscroll('review-detail')">
-                            <span>REVIEW</span>
-                        </a>
-                    </ul>
-                </div>
+        <div class="list-detail-header">
+            <div class="list-detail-image">
+
+                <carousel no-wrap="true">
+                    <slide ng-repeat="pic in selectedstudio.pic_of_studio" active="slide.active">
+                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" style="margin:auto;height:300px;">
+
+                    </slide>
+                </carousel>
+
             </div>
-            <div class="list-detail-cnt">
-                <div class="street-info ">
-                    <h4>{%verbatim%}{{selectedstudio.name}}{%endverbatim%}<span class="paddlft10" ng-class="selectedstudio.type_icon_class"></span> <span class = "pull-right fa" ng-class="selectedstudio.kind_icon_class"></span></h4>
-                    <p>{%verbatim%}{{selectedstudio.landmark}}{%endverbatim%}</p>
-                    <p>{%verbatim%}{{selectedstudio.address_1}}{%endverbatim%}</p>
-                    <p>{%verbatim%}{{selectedstudio.address_2}}{%endverbatim%} {%verbatim%}{{selectedstudio.city}}{%endverbatim%}</p>
+            <div class="header-tabs">
+                <ul class="nav tabs-container">
+                    <a class="detail-tab tab-street active" ng-click="easyscroll('street-info')">
+                        <span>DETAILS</span>
+                    </a>
+                    <a class="detail-tab tab-service" ng-click="easyscroll('service-list')">
+                        <span>SERVICES</span>
+                    </a>
+                    <a class="detail-tab tab-direction" ng-click="easyscroll('direction')">
+                        <span>DIRECTION</span>
+                    </a>
+                    <a class="detail-tab tab-review" ng-click="easyscroll('review-detail')">
+                        <span>REVIEWS</span>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <div class="list-detail-cnt">
+            <div class="street-info ">
+                <h4>{%verbatim%}{{selectedstudio.name}}{%endverbatim%}<span class="paddlft10" ng-class="selectedstudio.type_icon_class"></span> <span class = "pull-right fa" ng-class="selectedstudio.kind_icon_class"></span></h4>
+                <p>{%verbatim%}{{selectedstudio.landmark}}{%endverbatim%}</p>
+                <p>{%verbatim%}{{selectedstudio.address_1}}{%endverbatim%}</p>
+                <p>{%verbatim%}{{selectedstudio.address_2}}{%endverbatim%} {%verbatim%}{{selectedstudio.city}}{%endverbatim%}</p>
 
-                </div>
-                <div class="contact">
-                    <span>{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}, </span>&nbsp; <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</span><span class="fa fa-phone paddlft10"></span>
-                </div>
-                <p class="red">Closed on {%verbatim%}{{selectedstudio.closed_on_dates.closed_day}}{%endverbatim%}</p>
-                <p>Time - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
+            </div>
+            <div class="contact">
+                <span>{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}, </span>&nbsp; <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</span><span class="fa fa-phone paddlft10"></span>
+            </div>
+            <p class="red">Closed on - {%verbatim%}{{selectedstudio.studio_closed_details.closed_on.closed_on_day}}{%endverbatim%}</p>
+            <p>Time - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
 
-                <div class="service-list">
-                    <h3>Services</h3>
+            <div class="service-list">
+                <h3>Services</h3>
 
-                    <div class="checkboxcolumn">
+                <div class="checkboxcolumn">
 
-                        <div class="todo">
-                            <ul>
-                                <li ng-repeat="ser in servicelist | limitTo:4" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
-                                    <div class="todo-content">
-                                        {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
-                                    </div>
-                                </li>
-                                <li href="#" data-toggle="modal" data-target="#servicemodel">
-                                    <div class="todo-content"> Click to add more services...</div>
-                                </li>
-                            </ul>
-                        </div>
-
+                    <div class="todo">
+                        <ul>
+                            <li ng-repeat="ser in servicelist | limitTo:4" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
+                                <div class="todo-content">
+                                    {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                                </div>
+                            </li>
+                            <li href="#" data-toggle="modal" data-target="#servicemodel">
+                                <div class="todo-content"> Click to add more services...</div>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div class="servicemore"></div>
-
                 </div>
-                <div class="direction">
-                    <h3>Direction</h3>
-                    <p>Enter from Location <span class="pull-right hidden-md hidden-lg">{%verbatim%} {{shopdistance}}{%endverbatim%}km</span></p>
-                    <div class="searchloc">
-                        <span class="service-icon"><i class="icon icon-socialmedia-25 icon-loc"></i></span>
-                        <div class="form-group autocomplete">
-                            <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="directionlocation" placeholder="Location: Porur" ng-keyup="areacomplete(directionlocation)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
-                            <button type="button" class="btn btn-primary" ng-click="changedirection()">
-                                <span class="glyphicon glyphicon-search"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="distance hidden-xs">{%verbatim%} {{shopdistance}}{%endverbatim%}km</div>
-                    <div class="mapview-mob hidden-md hidden-lg col-sm-12"></div>
 
-                </div>
-                <div class="review-detail">
-                    <h3>Review</h3>
-                    <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
+                <div class="servicemore"></div>
 
-                    <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
-                        <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img alt="" src="assets/img/star.png" class="pull-right"></div>
-                        <p>{%verbatim%}{{rev.comment}}{%endverbatim%}</p>
-                    </div>
-                    <div class="pull-right"><a href="#" style="font-size: 11px;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
-
-                </div>
-                <div style="clear: both;"></div>
             </div>
+            <div class="direction">
+                <h3>Direction</h3>
+                <p>Enter from Location <span class="pull-right hidden-md hidden-lg">{%verbatim%} {{shopdistance}}{%endverbatim%}km</span></p>
+                <div class="searchloc">
+                    <span class="service-icon"><i class="icon icon-socialmedia-25 icon-loc"></i></span>
+                    <div class="form-group autocomplete">
+                        <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="directionlocation" placeholder="Location: Porur" ng-keyup="areacomplete(directionlocation)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
+                        <button type="button" class="btn btn-primary" ng-click="changedirection()">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="distance hidden-xs">{%verbatim%} {{shopdistance}}{%endverbatim%}km</div>
+                <div class="mapview-mob hidden-md hidden-lg col-sm-12"></div>
+
+            </div>
+            <div class="review-detail">
+                <h3>Reviews</h3>
+                <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
+
+                <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
+                    <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
+                    <p>{%verbatim%}{{rev.comment}}</p>
+                </div>
+                <span ng-if="(selectedstudio.studio_review).length <1;" class="reviewer"><p>No reviews yet!</p></span>
+                <div ng-if="(selectedstudio.studio_review).length > 0;" class="pull-right"><a  style="font-size: 11px;cursor:pointer;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
+                <div ng-if="(selectedstudio.studio_review).length > 0;" class="pull-right"><a  ng-click="firstreview()" style="font-size: 11px;cursor:pointer;" ng-show="reviewtotalpage==reviewPage">FIRST</a></div>
+
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/ng-template" id="service.html">
+    <a>
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+    </a>
+
+</script>
+<script type="text/ng-template" id="location.html">
+    <a>
+        <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>   </i>
+    </a>
+
+</script>
+
+
+
+<!-- Modal -->
+
+<!-- Modal -->
+<div id="infomodal" class=" modal fade" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Select your More Services
+        </div>
+        <div class="service-checkboxcolumn col-sm-12">
+            <div class="todo">
+                Please select atleast one service to book;
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <!-- <div class="service-rate-panel col-sm-12 no-padding">
+            <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
+                <i class="icon icon-contact"></i>
+                <span class="text">₹ 240</span>
+            </div> -->
+
         </div>
     </div>
 
+</div>
+
+<!-- Modal -->
+<div id="signupmodel" class=" modal fade" role="dialog">
+    <div data-facebook={ %verbatim%}{{fb_key}}{%endverbatim%}> </div>
+    <div id="fb-root"></div>
+    <div class="modal-content signup">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Login</h4>
+        </div>
+        <div class="modal-body register">
+            <div class="socialpanel">
+                <button data-ng-click='fetch();' class="btn btn-block btn-social btn-facebook">
+                    <i class="icon icon-socialmedia-08"></i>Login using Facebook</button>
+
+            </div>
+            <p class="hidden-xs"><i>* We remember our promise of no posts on your wall</i></p>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="servicemodel" class=" modal fade" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Select your More Services
+            <span class="service-totamnt">Total Amount - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
+        </div>
+        <div class="service-checkboxcolumn col-sm-12">
+            <div class="todo">
+                <ul>
+                    <li ng-repeat="ser in servicelist" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
+                        <div class="todo-content">
+                            {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
+                <i class="icon icon-contact"></i>
+                <span class="text" ng-click="book()">BOOK</span>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <!-- <div class="service-rate-panel col-sm-12 no-padding">
+            <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
+                <i class="icon icon-contact"></i>
+                <span class="text">₹ 240</span>
+            </div> -->
+
+        </div>
     </div>
 
-
-    <script type="text/ng-template" id="service.html">
-        <a>
-            <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>     
-  </a>
-
-  </script>
-  <script type="text/ng-template" id="location.html">
-  <a>
-     <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>   </i>   
-  </a>
-
-  </script>
-
-   <!-- js libs -->
-  <script type="text/javascript" src='{% static "js/jquery/jquery.min.js"%}'></script> 
-  <script type="text/javascript" src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
-  <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.4/jquery-ui.min.js"></script>
-  <script type="text/javascript" src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
-  <script type="text/javascript" src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
-  <script type="text/javascript" src='{% static "js/ng-lodash.js" %}'></script>
-  <script type="text/javascript" src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
-  <script type="text/javascript"  src='{% static "js/bootstrap/ui-bootstrap-tpls-0.13.0.js"%}'></script>  
-  <script type="text/javascript"  src='{% static "js/app.js" %}'></script>
-  <script type="text/javascript"  src='{% static "js/services/httpservices.js" %}'></script>
-  <script type="text/javascript"  src='{% static "js/controllers/home_page_controller.js" %}'></script>
-  <script type="text/javascript" src='{% static "js/controllers/resultController.js" %}'></script>
-  <script type="text/javascript" src='{% static "js/directives/fb_login_directive.js" %}'></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
-  <!-- Bootstrap Js -->
-  <!-- loader -->
-  <script type="text/javascript" src='{% static "js/scripts.js"%}'></script>
-  <script type="text/javascript">
+</div>
+</div>
+</div>
+<script type="text/javascript">
         $(document).ready(function () {
             $(".list-detail-box").scroll(function () {
                 var window_top = $('.list-detail-box').scrollTop();
@@ -411,68 +464,3 @@
             });
         });
     </script>
-
-
-
-    <!-- Modal -->
-    <div id="signupmodel" class=" modal fade" role="dialog">
-        <div class="modal-content signup">
-            <div class="modal-header modal-register-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Login</h4>
-            </div>
-            <div class="modal-body register">
-                <div class="socialpanel">
-                    <form>
-                        <button class="btn btn-block btn-social btn-facebook">
-                            <i class="icon icon-socialmedia-08"></i>Login using Facebook
-                        </button>
-                    </form>
-                </div>
-                <p class="hidden-xs"><i>* we remember our promise of no posts on your wall</i></p>
-            </div>
-        </div>
-    </div>
-
-
-        <!-- Modal -->
-    <div id="servicemodel" class=" modal fade" role="dialog">
-        <div class="modal-content">
-            <div class="modal-header modal-register-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                Select your More Services
-                <span class="service-totamnt">Total Amount - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
-            </div>
-            <div class="service-checkboxcolumn col-sm-12">
-                <div class="todo">
-                    <ul>
-                        <li ng-repeat="ser in servicelist" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
-                            <div class="todo-content">
-                                {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
-                    <i class="icon icon-contact"></i>
-                    <span class="text">BOOK</span>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <!-- <div class="service-rate-panel col-sm-12 no-padding">
-            <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
-                <i class="icon icon-contact"></i>
-                <span class="text">₹ 240</span>
-            </div> -->
-
-            </div>
-        </div>
-
-    </div>
-
-
-
-</body>
-  
-</html>

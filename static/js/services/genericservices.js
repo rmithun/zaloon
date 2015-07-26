@@ -28,3 +28,25 @@ noqapp.factory('genericServices', function($q)
 	}
 	return autocompData;
 });
+
+noqapp.factory('putResultService', function(){
+    var putresult = {}
+    var result=[];
+    putresult.setresult= function(obj){
+        console.log(obj);
+        result=obj;
+    };        
+    putresult.getresult = function(){
+        return result;
+    };  
+    var selectedservices = []
+    putresult.setSelectedservice = function(dat)
+    {
+        selectedservices = dat;
+    }
+    putresult.getSelectedservice = function()
+    {
+        return selectedservices;
+    }
+    return putresult; 
+});

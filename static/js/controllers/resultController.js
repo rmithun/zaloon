@@ -12,7 +12,7 @@
 
 
 
-noqapp.controller('resultCtrl', function ($scope, $compile, $filter,$cookies,lodash,httpServices,sessionService) {
+noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,lodash,httpServices,sessionService,putResultService) {
     $scope.studio = [];
     $scope.filteredstudio = [];
     $scope.servicelist = [];
@@ -32,7 +32,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile, $filter,$cookies,lod
     $scope.studioratingfilter = [];
     $scope.studioservicefilter = [];
     $scope.is_logged = sessionService.isLogged();
-
+    $scope.selected_service = [];
+    $scope.to_booking_flag = 0;
     var acService = new google.maps.places.AutocompleteService();
     var directionsService = new google.maps.DirectionsService();
     var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -51,7 +52,6 @@ noqapp.controller('resultCtrl', function ($scope, $compile, $filter,$cookies,lod
     $scope.map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
     $scope.markers = [];
     var latlongcollection = [];
-    $scope.sampledestination = "Sholinganallur, Chennai, Tamil Nadu, India";
     $scope.shopdistance;
     $scope.reviewPage = 1;
     $scope.reviewtotalpage;
@@ -61,7 +61,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile, $filter,$cookies,lod
     var top;
     var data;
     $scope.searchdata=$cookies.getObject('searchdata');    
-    data = $cookies.getObject('data');
+    //data = $cookies.getObject('data');
+    data=putResultService.getresult();
     console.log(data);
 
      $scope.getservice = function (studio) {
@@ -449,6 +450,7 @@ $scope.bindstudio=function(data){
         $('#studiodetails').toggle('slide', { direction: 'right' }, 100);
         directionsDisplay.setMap(null);
         clearlatlongbound();
+        $scope.selected_service = []
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
         autozoom();
     }
@@ -460,6 +462,11 @@ $scope.bindstudio=function(data){
 
     $scope.morereview = function () {
         $scope.reviewPage = $scope.reviewPage + 1;
+    }
+
+    $scope.firstreview = function()
+    {
+        $scope.reviewPage = 1;   
     }
 
     $scope.changedirection=function(){
@@ -480,6 +487,7 @@ $scope.bindstudio=function(data){
         $scope.servicelist = [];
         var res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: $scope.searchdata.service } });
         $scope.servicelist.push({ servicename: res[0].service.service_name, price: res[0].price, flag: true });
+        $scope.selected_service.push($scope.servicelist[0]);
         $scope.serviceprice = res[0].price;
         angular.forEach($scope.studioservicefilter, function (service, key) {
             res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: service } });
@@ -489,21 +497,26 @@ $scope.bindstudio=function(data){
         });
         angular.forEach($scope.selectedstudio.studio_detail_for_activity, function (service, key) {
             if (lodash.findIndex($scope.servicelist, { 'servicename': service.service.service_name }) == -1) {
-                $scope.servicelist.push({ servicename: service.service.service_name, price: service.price, flag: false });
+                $scope.servicelist.push({ servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes });
             }
         });
     }
     $scope.addservice = function (service) {
-        console.log(service);
+        console.log(service);       
         var index = lodash.findIndex($scope.servicelist, service);
         var flag = $scope.servicelist[index].flag;
         $scope.servicelist[index].flag = !$scope.servicelist[index].flag;
-        if (flag) {
+        if (flag) {            
+            var inx=lodash.findIndex($scope.selected_service, { 'servicename': service.servicename });
+            $scope.selected_service.splice(inx, 1);
             $scope.serviceprice = $scope.serviceprice - service.price;
         }
-        else {
+        else 
+        {   
+            $scope.selected_service.push(service);            
             $scope.serviceprice = $scope.serviceprice + service.price;
         }
+        console.log($scope.selected_service);
     }
 
     //Pagination
@@ -572,4 +585,199 @@ $scope.bindstudio=function(data){
         });
     }    
     $scope.bindstudio(data);
+
+
+//set booking details
+$scope.book = function()
+{
+    if($scope.selected_service.length == 0)
+    {
+        $('#infomodal').modal('show');
+        return false;    
+    }
+    $scope.to_booking_flag = 1;
+    $('#servicemodel').modal('hide');
+    if($scope.is_logged != 1)
+    {
+        $('#signupmodel').modal('show');
+        //emit booking services and studio details
+    }
+    else
+    {
+        var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service}
+        putResultService.setSelectedservice(booking_data)
+        $location.path('/booking')
+    }
+}
+
+//fb keys
+
+httpServices.getFBKey().then(function(data)
+{
+    $scope.fb_key = data['fb_key'].data
 });
+
+$scope.fbLogin = function(dummy)
+{
+
+    httpServices.loginUsingFB(dummy).then(function(data)
+    {
+        if(data)
+        {
+            sessionService.setAuthToken(data)
+            httpServices.getUsrDetails().then(function(dataz)
+            {
+                $scope.is_logged = sessionService.isLogged()
+                $scope.user_name = dataz['user_details'].data[0].first_name
+                $('#signupmodel').modal('hide');
+                //redirect to booking page if clicked book
+                if ($scope.to_booking_flag == 1)
+                {
+                    var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service}
+                    putResultService.setSelectedservice(booking_data)
+                    $location.path('/booking')
+                }
+
+            }, function()
+            {
+                $scope.is_logged = sessionService.isLogged()
+                console.log("Error getting user data")
+            })
+        }
+    },function()
+    {
+        //cannot login to fb try again
+        console.log("Cannot login to FB")
+    });
+}
+
+if(sessionService.isLogged())
+{
+    httpServices.getUsrDetails().then(function(dataz)
+    {
+        $scope.user_name = dataz['user_details'].data[0].first_name
+    }, function()
+    {
+        console.log("Error getting user data")  
+    })  
+}
+
+
+$scope.logOut = function()
+    {   
+        httpServices.logOut().then(function(logout_data)
+        {
+            alert("Here")
+            //$cookies.remove('token')
+            //$scope.is_logged = sessionService.isLogged()
+            var cookies = $cookies.getAll();
+            angular.forEach(cookies, function (v, k) {
+                $cookies.remove(k,{path:'/'});
+            });
+            console.log("Logged out successfully")
+            $scope.is_logged = sessionService.isLogged();
+            $window.location.href = "/"
+            
+        },
+        function()
+        {
+            console.log("Logout Error")
+        })
+    }
+
+});
+
+noqapp.controller('paymentcontroller', function ($scope, putResultService) {
+
+$scope.serviceschosen = putResultService.getSelectedservice()
+
+});
+
+noqapp.controller('accountscontroller',function($scope, httpServices){
+
+    $scope.active_booking_count = 10;
+    $scope.getBookings = function()
+    {
+        httpServices.getDetails().then(function(data)
+        {
+            $scope.user_details = data.user_details.data[0]
+            $scope.booking_details = data.booking.data
+            httpServices.splitBookings($scope.booking_details).then(function(data)
+            {
+                $scope.active_bookings = data.active_booking
+                $scope.expired_bookings = data.inactive_booking
+            },
+            function()
+            {
+                console.log("Error splitting bookings")
+            });
+        },
+        function()
+        {
+            console.log("Error getting user Details and booking")   
+        })
+    }
+
+    $scope.getBookings();
+
+    $scope.booking_cancel = function(id)
+    {
+        httpServices.cancelBooking(id).then(function(data)
+        {
+            $scope.getBookings();
+            console.log("Booking successfully cancelled")
+        },
+        function()
+        {
+            console.log("Logout Error") 
+        })
+    }
+
+    $scope.change_usr_details = function()
+    {
+        $scope.usr_data = null
+        httpServices.updateUserProfile($scope.usr_data).then(function(data)
+        {
+            console.log("Details updated")
+        },
+        function()
+        {
+            console.log("Could not update try again.")  
+        })
+    }
+
+    $scope.add_review = function()
+    {
+        $scope.review_data = null
+        httpServices.addReview($scope.review_data).then(function(data)
+        {
+            console.log("Review added")
+        },
+        function()
+        {
+            console.log("Error occurred;Please,Try again.") 
+        })
+    }
+
+
+    $scope.timeFilter =  function (value) {
+        if(typeof value != 'undefined')
+        {
+            var split = value.split(':');
+            if (split[0] - 12 > 0) {
+                returnval = split[0] - 12 + ":" + split[1] + " PM";
+            }
+            else {
+                returnval = split[0] + ":" + split[1] + " AM";
+            }                
+            return returnval;
+        }
+        else
+        {
+            return ""
+        }
+    }
+
+
+});
+    

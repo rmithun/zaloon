@@ -66,7 +66,7 @@ def get_studios(location,service,date=None):
         #)for query in location])
         closed_on_day = (datetime.today().date().weekday() + 1)
         open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
-        if settings.DB:
+        if settings.DEBUG:
             studios = StudioProfile.objects.filter(city = 'Chennai', is_closed = 0 ,  \
             id__in = open_studios).values('id')
             services = Service.objects.filter(service_name__iregex = r'\b{0}\b'.format(service)).values('id')
@@ -84,7 +84,7 @@ def get_studios(location,service,date=None):
         ##call for booking logic
     except Exception,e:
         logger_error.error(traceback.format_exc())
-        return None
+        return []
     else:
         logger_studios.info("Found - "+str(len(filtered_studios))+" studios")
         return filtered_studios

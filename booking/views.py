@@ -42,6 +42,11 @@ from utils.permission_class import ReadWithoutAuthentication, PostWithoutAuthent
 logger_booking = logging.getLogger('log.booking')
 logger_error = logging.getLogger('log.errors')
 
+@login_required
+def booking_page(request):
+    """returns booking page html"""
+    return render(request,'user_accounts/payment.html',{})
+
 class ActiveBookingMixin(object):
     authentication_classes = [OAuth2Authentication]
     permission_classes = (TokenHasScope,)

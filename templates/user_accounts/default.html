@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" ng-app = "accountApp" >
+  <head>
+
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Your Parlor on Your Hand -  Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
+    <title>Onepass</title>    
+    {% load static from staticfiles %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
+    <!-- Font -->
+    <link rel="stylesheet" href='{% static "css/font-lineicons.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
+    <!-- loading django static files -->
+   <style type="text/css">
+
+.loader-overlay {
+position: fixed;
+left: 0;
+top: 0;
+bottom: 0;
+right: 0;
+background: #000;
+opacity: 0.8;
+filter: alpha(opacity=80);
+z-index: 999;
+}
+   </style>
+    
+  </head>
+
+
+<body>
+      <!-- csrf token-->{% csrf_token %}
+    <!--  FB KEY --> 
+<div id="mask">
+        <div id="loader"></div>
+    </div>
+
+<div ng-view></div>
+
+
+
+   <!-- js libs -->
+  <script src='{% static "js/jquery/jquery.min.js"%}'></script> 
+  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.4/jquery-ui.min.js"></script>
+  <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+  <script src='{% static "js/bootstrap/ui-bootstrap-tpls-0.13.0.js"%}'></script>  
+  <script type="text/javascript" src='{% static "js/ng-lodash.js" %}'></script>
+  <script src='{% static "js/app.js" %}'></script>
+  <script src='{% static "js/services/httpservices.js" %}'></script>
+  <script src='{% static "js/services/genericservices.js" %}'></script>
+  <script src='{% static "js/controllers/home_page_controller.js" %}'></script>
+  <script type="text/javascript" src='{% static "js/controllers/resultController.js" %}'></script>
+  <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
+ 
+
+ <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places"></script>
+  <!-- Bootstrap Js -->
+  
+  <!-- loader -->
+  <script type="text/javascript" src='{% static "js/scripts.js"%}'></script>
+
+  </body>
+</html>

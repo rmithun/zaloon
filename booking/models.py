@@ -72,6 +72,8 @@ class BookingDetails(models.Model):
 	#total_duration = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+	def __unicode__(self):
+		return self.booking_code
 
 class Refund(models.Model):
 
@@ -132,6 +134,7 @@ class StudioReviews(models.Model):
 	has_reviewed = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
 
 
 class MerchantDailyReportStatus(models.Model):

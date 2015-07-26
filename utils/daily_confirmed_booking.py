@@ -67,7 +67,7 @@ def daily_confirmed_booking():
                 obj['studio_name'] = stud.studio.name
                 obj['booking_id'] = stud.id
                 obj['services_booked'] = services[:]
-                obj['appointment_date   '] = today
+                obj['appointment_date'] = today
                 obj['appointment_time'] = stud.appointment_start_time
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:

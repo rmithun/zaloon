@@ -19,4 +19,5 @@ urlpatterns = patterns('',
     url(r'^get_slots/$', views.GetSlots.as_view(), name = 'get_slots'),
     url(r'^review_from_email/$', views.ReviewLinkValidate.as_view(), name = 'review_from_email'),
     url(r'^add_review_from_email/$', views.ReviewFromEmail.as_view(), name = 'add_review_from_email'),
+    url(r'^booking_page/$', views.booking_page, name = 'booking_page'),
  )

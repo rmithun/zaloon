@@ -1,7 +1,10 @@
 from django.contrib import admin
 from models import * 
 # Register your models here.
-admin.site.register(BookingDetails)
+class BookingDetailsAdmin(admin.ModelAdmin):
+	list_display = ['booking_code']
+
+admin.site.register(BookingDetails,BookingDetailsAdmin)
 admin.site.register(Purchase)
 admin.site.register(BookingServices)
 admin.site.register(StudioReviews)
