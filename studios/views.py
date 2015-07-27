@@ -60,7 +60,7 @@ def get_studios(location,service,date=None):
     """function which filters the list of studios 
     based on location and services"""
     try:
-        #import pdb;pdb.set_trace();
+        import pdb;pdb.set_trace();
         #location_set =  reduce(operator.__or__, [Q(area__icontains=query)  \
         #| Q(address_1__icontains=query) | Q(address_2__icontains=query  \
         #)for query in location])
