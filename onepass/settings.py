@@ -115,7 +115,7 @@ MEDIA_URL = "http://%s/%s/" % (AWS_CDN_URL, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 if DEBUG:
-    """STATICFILES_DIRS = (
+    STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
@@ -133,8 +133,8 @@ if DEBUG:
         }
     }
     ALLOWED_HOSTS = []
-    HOST_NAME = 'http://127.0.0.1:8000'"""##AWS DEV DB
-
+    """##AWS DEV DB
+    HOST_NAME = 'http://127.0.0.1:8000'
     STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -147,8 +147,8 @@ if DEBUG:
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
     }
-    ALLOWED_HOSTS = []
-    HOST_NAME = 'http://127.0.0.1:8000'
+    ALLOWED_HOSTS = []"""
+    HOST_NAME = 'http://www.dev.zaloon.in'
 else:
     # Additional locations of static files
     STATICFILES_DIRS = (
