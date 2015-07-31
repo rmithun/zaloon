@@ -86,3 +86,100 @@
 {
     display: none;
 }
+
+/*XEditable*/
+.editable-input {
+ display: inline-block;
+}
+
+.editable-input.editable-has-buttons {
+ width: auto;
+}
+
+.editable-buttons {
+ display: inline-block;
+ vertical-align: top;
+}
+
+.editable-buttons button {
+ margin-left: 5px;
+}
+
+
+/*datepicker*
+
+
+/* Custom CSS */
+
+.datepicker td.active, .datepicker td.active:hover {
+  background-image:none !important;
+   background-color: #07997B !important;
+}
+
+.day:hover {
+  background-image:none !important;
+   background-color: #1bbc9b !important;
+   color:white !important;
+}
+
+
+.datepicker {
+    width: 570px !important;
+}
+
+
+
+.datepicker td, .datepicker th{
+  border: 1px solid #FFCECE;
+  border-collapse: collapse;
+  width: 200px;
+ -webkit-border-radius : 0px !important;
+}
+
+.datepicker table tr td.disabled:hover{
+background-color: white !important;
+color: gray !important;
+}
+
+.table-condensed th, .table-condensed td{
+  padding : 10px 25px;
+}
+
+.dow{
+  background-color: #f06471 !important;
+  color: white;
+}
+
+.reddow{
+  background-color: red !important;
+  color: white !important;
+}
+
+.prev{
+  border:none !important;
+  border-left-style:hidden !important;
+  border-right-style:hidden !important;
+                
+}
+
+.datepicker-switch{
+  cursor: default !important;
+  border:none !important;
+  border-left-style:hidden !important;
+  border-right-style:hidden !important;
+  
+}
+
+.datepicker thead tr:first-child th:hover{
+  background-color:white !important;
+  background-image:none !important;
+}
+
+
+
+.next{
+  border:none !important;
+  border-left-style:hidden !important;
+  border-right-style:hidden !important;
+  
+}

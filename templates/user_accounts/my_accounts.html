@@ -1,4 +1,4 @@
-<header class="searchheader">
+  <header class="searchheader">
         <nav class="navigation">
             
                 <div class="navigation-brand">
@@ -45,12 +45,13 @@
     </div>
     
     <div class="profile-panel"> 
-      <h3>Profile</h3>
+      <h3>Profile</h3>      
       <p><span>Name:</span> {%verbatim%}{{user_details.user_acc.first_name}}{{user_details.user_acc.last_name}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p>  
       <p><span>Email:</span> {%verbatim%}{{user_details.user_acc.email}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p> 
-      <p><span>Area:</span> {%verbatim%}{{user_details.area}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p>
-      <p><span>Mobile:</span> {%verbatim%}{{user_details.mobile}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p>   
+      <p><span>Area:</span><txt-editable editable-model="user_details.area" editable-key="area"></txt-editable></p>
+      <p><span>Mobile:</span><txt-editable editable-model="user_details.mobile" editable-key="mobile"></txt-editable></p>   
     </div>
+    <input type="button" value="Update" ng-click="updateprofile()"/>
   </div>    
   
   <div class="booking-panel-list-box">

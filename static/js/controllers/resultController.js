@@ -691,6 +691,42 @@ noqapp.controller('paymentcontroller', function ($scope, putResultService) {
 
 $scope.serviceschosen = putResultService.getSelectedservice()
 
+$scope.total_duration = 45;
+$scope.closed_days = [0,6]
+var closed_days = $scope.closed_days
+$scope.start_date = new Date()
+
+if ($scope.start_date.getHours() > 11 && $scope.start_date.getMinutes() > 58)
+{
+    $scope.start_date.setDate($scope.start_date.getDate() + 1);
+}
+$scope.end_date = angular.copy($scope.start_date)
+$scope.end_date.setDate($scope.start_date.getDate() + 30);
+
+$scope.openToggle = function(which_toggle)
+{
+    $('#'+which_toggle).collapse('toggle');
+    $('.panel-collapse.in').collapse('hide');
+}
+
+
+var disabled_dates = [];
+                $('#datepicker').datepicker({
+                   
+                    format: "yyyy-mm-dd",
+                    startDate: $scope.start_date,
+                    endDate: $scope.end_date,
+                    daysOfWeekDisabled: $scope.closed_days,
+                });
+
+
+$("#datepicker").on("changeDate", function(event) {
+    $scope.date_selected = $("#datepicker").datepicker('getFormattedDate')
+    $scope.$apply();
+});
+
+
+
 });
 
 noqapp.controller('accountscontroller',function($scope, httpServices){
@@ -759,7 +795,6 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
         })
     }
 
-
     $scope.timeFilter =  function (value) {
         if(typeof value != 'undefined')
         {
@@ -778,6 +813,11 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
         }
     }
 
+    $scope.updateprofile=function(){
+        
+        var obj={area:$scope.user_details.area,mobile:$scope.user_details.mobile};
+        console.log(obj);
+    }
 
 });
     

@@ -125,13 +125,11 @@ class GetUserDetail(UserMixin, ListAPIView, RetrieveUpdateAPIView):
         try:
             user = self.request.user
             data = self.request.DATA
-            mobile = data['mobile_no']
-            area = data['area']
-            first_name = data['first_name']
+            if data.has_key('mobile'):
+                UserProfile.objects.filter(user_acc = user).update(mobile = data['mobil'])
+            if data.has_key('area'):
+                UserProfile.objects.filter(user_acc = user).update(area = data['area'])
             logger_user.info("updated user data "+str(data))
-            UserProfile.objects.filter(user_acc_id = user).update(area = area,  \
-                mobile = mobile)
-            User.objects.filter(email = user).update(first_name = first_name)
         except Exception,e:
             logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
