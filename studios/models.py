@@ -309,7 +309,7 @@ class CloseDates(models.Model):
 class StudioClosedDetails(models.Model):
 
 	"""days on which the studio is closed"""
-	studio = models.OneToOneField(StudioProfile, related_name = "studio_closed_details")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_closed_details")
 	closed_on = models.ForeignKey(CloseDates, related_name = "studio_close_dates")
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)

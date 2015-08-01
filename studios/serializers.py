@@ -108,7 +108,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 	studio_amenities = StudioAmenitiesSerializer(many = True, required = False)
 	studio_type = StudioTypeSerializer()
 	studio_kind = StudioKindSerializer()
-	studio_closed_details = StudioClosedDatesSerializer()
+	studio_closed_details = StudioClosedDatesSerializer(many = True)
 	class Meta:
 		model = StudioProfile
 		fields = ('id', 'studio_group','studio_type', 'name', 'address_1', 'address_2',  \

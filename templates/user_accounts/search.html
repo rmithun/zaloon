@@ -269,7 +269,8 @@
             <div class="contact">
                 <span>{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}, </span>&nbsp; <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</span><span class="fa fa-phone paddlft10"></span>
             </div>
-            <p class="red">Closed on - {%verbatim%}{{selectedstudio.studio_closed_details.closed_on.closed_on_day}}{%endverbatim%}</p>
+            <p class="red">Closed on - <span ng-repeat="leav in selectedstudio.studio_closed_details">
+                {%verbatim%}{{leav.closed_on.closed_on_day}}<span ng-if="$last != true">,</span>{%endverbatim%}</span></p>
             <p>Time - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
 
             <div class="service-list">
@@ -356,7 +357,7 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             Select your More Services
         </div>
-        <div class="service-checkboxcolumn col-sm-12">
+        <div class="modal-body">
             <div class="todo">
                 Please select atleast one service to book;
             </div>

@@ -30,6 +30,30 @@
 	padding-left: 5px;
 }
 
+.acconts ul.dropdown-menu{
+  margin-top: 0px !important;
+  border: none;
+  width: 200px;
+  padding: 0px;
+  overflow-x:hidden;
+}
+
+.acconts ul.dropdown-menu>li>a{
+  line-height: 36px;
+  cursor:default;
+  padding: 3px 10px !important;
+}
+.acconts ul.dropdown-menu>.active>a, .acconts ul.dropdown-menu>.active>a:hover, .acconts ul.dropdown-menu>.active>a:focus{
+  background-color: #22ab81;
+}
+
+.acconts ul.dropdown-menu>li>a>.icon>span,.acconts ul.dropdown-menu>.active>a>.icon>span{
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+  font-style: initial;
+  padding-left: 5px;
+}
+
 /*.layer {
     background-color: rgba(248, 247, 216, 0.7);
     position: absolute;

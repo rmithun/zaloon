@@ -92,6 +92,12 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		return $q.all({'add_review':add_review})
 	}
 
+	loginData.applyCoupon = function(coupondata)
+	{
+		var apply_coupon = $http.get(bookingURL+"apply_coupon/",{params:coupondata})
+		return $q.all({'apply_coupon':apply_coupon})
+	}
+
 	loginData.splitBookings = function(bookings)
 	{
 		var active_booking = [], inactive_booking = [];
@@ -170,6 +176,7 @@ noqapp.factory('authInterceptor', [
       },
       responseError: function(rejection) {
         // your error handler
+        return $q.reject(rejection);
       }
     };
   }

@@ -48,10 +48,53 @@
       <h3>Profile</h3>      
       <p><span>Name:</span> {%verbatim%}{{user_details.user_acc.first_name}}{{user_details.user_acc.last_name}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p>  
       <p><span>Email:</span> {%verbatim%}{{user_details.user_acc.email}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p> 
-      <p><span>Area:</span><txt-editable editable-model="user_details.area" editable-key="area"></txt-editable></p>
-      <p><span>Mobile:</span><txt-editable editable-model="user_details.mobile" editable-key="mobile"></txt-editable></p>   
+      <p><span>Area:</span>
+          <span ng-show="locationshow"><span style="font-size: 15px;font-weight:400;" ng-model="location" class="ng-scope ng-binding editable editable-click">
+            {%verbatim%} {{location || ""}}{%endverbatim%}</span>&nbsp;<i ng-click="editlocation()" style="cursor: pointer;
+                font-size: 12px;" class="glyphicon glyphicon-pencil"></i></span>
+        <div ng-show="!locationshow" class="editable-controls form-group acconts" style="margin-bottom: 0px;">
+            <form name="formlocation" novalidate>
+            <input name="location" type="text" class="editable-has-buttons editable-input" style="height: 34px; padding: 6px 12px; margin-top: 2px;" ng-model="txtlocation" ng-keyup="areacomplete()" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" required />
+            <span class="editable-buttons">
+                <button type="submit" style="padding: 8px;min-width: 50px;" class="btn btn-primary" ng-click="loceditableok(formlocation)">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button type="button" style="padding: 8px;min-width: 50px;" class="btn btn-default" ng-click="loceditablecancel()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+            <br />
+            <span class="red" ng-show="locationsubmit && formlocation.location.$error.required">
+                Location is required</span>
+            </form>
+        </div>
+      </p>
+      <p><span>Mobile:</span>
+        <span ng-show="phoneshow"><span style="font-size: 15px;font-weight:400;" ng-model="phoneno" class="ng-scope ng-binding editable editable-click">
+           {%verbatim%} {{phoneno || ""}}{%endverbatim%}</span>&nbsp;<i ng-click="editphone()" style="cursor: pointer;
+                font-size: 12px;" class="glyphicon glyphicon-pencil"></i></span>
+        <div ng-show="!phoneshow" class="editable-controls form-group" style="margin-bottom: 0px;">
+            <form name="formphone" novalidate>
+            <input name="mobile" type="text" class="editable-has-buttons editable-input" style="height: 34px;
+                padding: 6px 12px; margin-top: 2px;" ng-model="txtphone" ng-pattern="/^[7-9][0-9]{9}$/"
+                required />
+            <span class="editable-buttons">
+                <button type="submit" style="padding: 8px;min-width: 50px;" class="btn btn-primary" ng-click="pheditableok(formphone)">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button type="button" style="padding: 8px;min-width: 50px;" class="btn btn-default" ng-click="pheditablecancel()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+            <br />
+            <span class="red" ng-show="phonesubmit && formphone.mobile.$error.required">Mobile is
+                required</span> <span ng-show="phonesubmit"><span class="red" ng-show="formphone.mobile.$error.number || formphone.mobile.$error.pattern">
+                    Enter valid mobile</span></span>
+            </form>
+        </div>
+      </p>   
     </div>
-    <input type="button" value="Update" ng-click="updateprofile()"/>
+    <!--<input type="button" value="Update" ng-click="updateprofile()"/>-->
   </div>    
   
   <div class="booking-panel-list-box">
@@ -59,14 +102,14 @@
   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#booking" aria-controls="booking" role="tab" data-toggle="tab">Booking</a></li>
-      <li role="presentation"><a href="#booking-history" aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
+      <li role="presentation" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Booking{%verbatim%}{{tabx}}{%endverbatim%}</a></li>
+      <li role="presentation"><a ng-click="tabx = 2" aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
       </ul>
 
       <!-- Tab panes -->
   <div class="tab-content">     
     
-    <div role="tabpanel" class="booking-panel-list-view tab-pane active" id="booking">
+    <div role="tabpanel" class="booking-panel-list-view tab-pane active" ng-show="tabx == 1" id="booking">
     <ul>
     
     <li class="booking-list-item-container" ng-repeat="buking in active_bookings">
@@ -86,7 +129,8 @@
   <div class="landmark_details">{{buking.studio.area}},
   {{buking.studio.city}}
   {%endverbatim%}</div>
-        <div class="landmark_details"><span>Anil:</span> 789567849</div>    
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</div> 
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</div>    
       </div>
       <div class="info1">
         <div class="landmark_details"><span>Service Booked:</span> Haircut, Shaving</div>       
@@ -99,7 +143,7 @@
     </ul>
   </div>
     
-  <div role="tabpanel" class="booking-panel-list-view tab-pane" id="booking-history">
+  <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-show="tabx == 2" id="booking-history">
     <ul>
     
     <li class="booking-list-item-container" ng-repeat="buking in expired_bookings">
@@ -118,7 +162,8 @@
   <div class="landmark_details">{{buking.studio.area}},
   {{buking.studio.city}}
   {%endverbatim%}</div>
-        <div class="landmark_details"><span>Anil:</span> 789567849</div>    
+       <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</div> 
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</div>    
       </div>
       <div class="info1">
         <div class="landmark_details"><span>Service Booked:</span> Haircut, Shaving</div>       
@@ -186,6 +231,11 @@
     </div>  
   </div>  
    
+<script type="text/ng-template" id="location.html">
+  <a>
+     <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
+  </a>
 
+  </script>
    
 

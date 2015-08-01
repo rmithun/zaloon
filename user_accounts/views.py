@@ -126,7 +126,7 @@ class GetUserDetail(UserMixin, ListAPIView, RetrieveUpdateAPIView):
             user = self.request.user
             data = self.request.DATA
             if data.has_key('mobile'):
-                UserProfile.objects.filter(user_acc = user).update(mobile = data['mobil'])
+                UserProfile.objects.filter(user_acc = user).update(mobile = data['mobile'])
             if data.has_key('area'):
                 UserProfile.objects.filter(user_acc = user).update(area = data['area'])
             logger_user.info("updated user data "+str(data))

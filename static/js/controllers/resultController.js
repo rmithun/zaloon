@@ -20,7 +20,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.searchdata={};
     $scope.serviceprice;    
     $scope.morefilter = false;
-    $scope.stariconset={1:'star1',2:'star2',3:'star3',4:'star4',5:'star5'}
+    $scope.stariconset={1:'star1',2:'star2',3:'star3',4:'star4',5:'star5'};
     $scope.studiotype = [{ name: "Spa", active: false, icon: "icon icon-medical-19" }, { name: "Studio", active: false, icon: "icon icon-shopping-23" }, { name: "Saloon", active: false, icon: "fa fa-scissors" }];
     $scope.studiokind = [{ name: "Men", active: false, icon: "fa-mars" }, { name: "Women", active: false, icon: "fa-venus" }, { name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
@@ -59,12 +59,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.itemLimit = 2;
     $scope.currentPage = 1;
     var top;
-    var data;
-    $scope.searchdata=$cookies.getObject('searchdata');    
-    //data = $cookies.getObject('data');
-    data=putResultService.getresult();
-    console.log(data);
-
+    var data;    
+    
      $scope.getservice = function (studio) {
         angular.forEach(studio.studio_detail_for_activity, function (value, key) {
             if ($scope.studioservice.indexOf(value.service.service_name) == -1) {
@@ -486,18 +482,18 @@ $scope.bindstudio=function(data){
     $scope.sortservicebyfilter = function () {
         $scope.servicelist = [];
         var res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: $scope.searchdata.service } });
-        $scope.servicelist.push({ servicename: res[0].service.service_name, price: res[0].price, flag: true });
+        $scope.servicelist.push({id:res[0].service.id, servicename: res[0].service.service_name, price: res[0].price, flag: true, duration:res[0].mins_takes  });
         $scope.selected_service.push($scope.servicelist[0]);
         $scope.serviceprice = res[0].price;
         angular.forEach($scope.studioservicefilter, function (service, key) {
             res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: service } });
             if (lodash.findIndex($scope.servicelist, { 'servicename': res[0].service.service_name }) == -1) {
-                $scope.servicelist.push({ servicename: res[0].service.service_name, price: res[0].price, flag: false });
+                $scope.servicelist.push({id:res[0].service.id,servicename: res[0].service.service_name, price: res[0].price, flag: false , duration:res[0].mins_takes });
             }
         });
         angular.forEach($scope.selectedstudio.studio_detail_for_activity, function (service, key) {
             if (lodash.findIndex($scope.servicelist, { 'servicename': service.service.service_name }) == -1) {
-                $scope.servicelist.push({ servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes });
+                $scope.servicelist.push({id:service.service.id, servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes });
             }
         });
     }
@@ -583,9 +579,32 @@ $scope.bindstudio=function(data){
         {
             console.log("Try again to get service")
         });
-    }    
-    $scope.bindstudio(data);
+    }
 
+    $scope.searchdata=$cookies.getObject('searchdata');    
+    if(typeof $scope.searchdata == "undefined"){
+        $location.path("/");
+    }
+    else
+    {
+        if(putResultService.getresult().length ==0){
+            httpServices.getstudioDetails($scope.searchdata).then(function(res)
+                {       
+                    //console.log(res.studio_details.data);
+                    data=res.studio_details.data;
+                    putResultService.setresult(res.studio_details.data);  
+                    $scope.bindstudio(data);                              
+                },function()
+                {
+                    console.log("Try again to get service");
+                    $location.path("/");
+                });
+        }
+        else{
+           data=putResultService.getresult(); 
+           $scope.bindstudio(data);
+        }
+    }
 
 //set booking details
 $scope.book = function()
@@ -687,24 +706,63 @@ $scope.logOut = function()
 
 });
 
-noqapp.controller('paymentcontroller', function ($scope, putResultService) {
-
-$scope.serviceschosen = putResultService.getSelectedservice()
-
-$scope.total_duration = 45;
-$scope.closed_days = [0,6]
+noqapp.controller('paymentcontroller', function ($scope, $cookies, $location, lodash, putResultService, httpServices) {
+$scope.serviceschosen = [];
+$scope.total_duration;
+$scope.closed_days = []
 var closed_days = $scope.closed_days
 $scope.start_date = new Date()
 
-if ($scope.start_date.getHours() > 11 && $scope.start_date.getMinutes() > 58)
+console.log($scope.serviceschosen)
+if(putResultService.getSelectedservice().length !=0){
+    $scope.serviceschosen = putResultService.getSelectedservice();
+}
+else{
+    if(typeof $cookies.getObject('searchdata') == "undefined"){
+        $location.path("/");
+    }
+    else{
+        $location.path("/search");
+    }
+}
+$scope.total_duration=lodash.sum($scope.serviceschosen.services,'duration');
+$scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
+$scope.selected_services = lodash.pluck($scope.serviceschosen.services, 'id');
+$scope.promo_amount = 0
+$scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
+
+console.log($scope.serviceschosen.studio);
+angular.forEach($scope.serviceschosen.studio.studio_closed_details, function(value, key) {    
+    $scope.closed_days.push(value.closed_on.id-1);    
+});
+if ($scope.start_date.getHours() > 12)
 {
     $scope.start_date.setDate($scope.start_date.getDate() + 1);
 }
 $scope.end_date = angular.copy($scope.start_date)
 $scope.end_date.setDate($scope.start_date.getDate() + 30);
 
+
+ $scope.avail = []
+
+
+
 $scope.openToggle = function(which_toggle)
 {
+    if((which_toggle == 'collapseThree') && !($scope.date_selected) && !($scope.from_time))
+    {
+        return false
+    }
+    if((which_toggle == 'collapseFour') && !($scope.mobileno))
+    {
+        
+        return false
+    }
+    if((which_toggle == 'collapseFour') && ($scope.mobileno))
+    {
+        val = $scope.makepayment()
+        return val
+    }
     $('#'+which_toggle).collapse('toggle');
     $('.panel-collapse.in').collapse('hide');
 }
@@ -722,9 +780,101 @@ var disabled_dates = [];
 
 $("#datepicker").on("changeDate", function(event) {
     $scope.date_selected = $("#datepicker").datepicker('getFormattedDate')
-    $scope.$apply();
+    var slot_data = {}
+    slot_data['services'] = $scope.selected_services
+    slot_data['date'] = $scope.date_selected
+    slot_data['duration'] = $scope.total_duration
+    slot_data['studio_id'] = $scope.serviceschosen.studio.id
+    httpServices.getSlots(slot_data).then(function(sdata)
+    {
+        $scope.avail = sdata.available_slots.data
+    },function()
+    {
+        console.log("Not slots available.Try another date")
+    })
+    $scope.$apply()
 });
 
+
+$scope.applyPromo = function()
+{
+    var coupon_data = {};
+    coupon_data['coupon_code'] = $scope.coupon_code
+    coupon_data['studio_id']  = $scope.serviceschosen.studio.id
+    coupon_data['amount'] = $scope.total_amount
+    httpServices.applyCoupon(coupon_data).then(function(cdata)
+    {
+        $scope.promo_amount = parseInt(cdata.apply_coupon.data)
+        $scope.coupon_resp = "Coupon applied"
+        $scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
+        //$scope.promo_amount = cdata.
+    },function(cdata)
+    {   
+        $scope.coupon_resp = cdata.data
+        console.log("Error applying coupon data")
+    })
+}
+
+$scope.booking_class1 = "panel panel-default bookingdetails panel-closed"
+$scope.booking_class2 = ""
+$scope.booking_class3 = "panel-heading"
+$scope.selectTime = function(hour,min)
+{
+    $scope.from_time = hour+":"+min
+    if ($.inArray(min, $scope.avail[hour]) == -1)
+    {
+        return false;
+    }
+    if ($scope.from_time && $scope.date_selected)
+    {
+        $scope.booking_class1 = "panel panel-default"
+        $scope.booking_class2 = "panel-open"
+        $scope.booking_class3 = "panel-heading progress-done"
+        $('#collapseThree').collapse('toggle');
+        $('.panel-collapse.in').collapse('hide');
+    }
+
+}
+$scope.payment_class1 = "panel panel-default panel-closed"
+$scope.payment_class2 = ""
+$scope.payment_class3 = "panel-heading"
+
+$scope.makepayment = function()
+{
+    if ($scope.from_time && $scope.date_selected && $scope.mobileno)
+    {
+        $scope.payment_class1 = "panel panel-default"
+        $scope.payment_class2 = "panel-open"
+        $scope.payment_class3 = "panel-heading progress-done"
+        $('#collapseFour').collapse('toggle');
+        $('.panel-collapse.in').collapse('hide');
+        return true
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//am/pm convertor
+
+$scope.timeFilter =  function (value) {
+        if(typeof value != 'undefined')
+        {
+            var split = value.split(':');
+            if (split[0] - 12 > 0) {
+                returnval = split[0] - 12 + ":" + split[1] + " PM";
+            }
+            else {
+                returnval = split[0] + ":" + split[1] + " AM";
+            }                
+            return returnval;
+        }
+        else
+        {
+            return ""
+        }
+    }
 
 
 });
@@ -737,6 +887,8 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
         httpServices.getDetails().then(function(data)
         {
             $scope.user_details = data.user_details.data[0]
+            $scope.location = $scope.user_details.area
+            $scope.phoneno = $scope.user_details.mobile
             $scope.booking_details = data.booking.data
             httpServices.splitBookings($scope.booking_details).then(function(data)
             {
@@ -819,5 +971,86 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
         console.log(obj);
     }
 
+    //For mobile
+    $scope.phoneno = "";
+    $scope.phoneshow = true;
+    $scope.editphone = function () {
+        $scope.phoneshow = !$scope.phoneshow;
+        $scope.txtphone = $scope.phoneno;
+    }
+    $scope.pheditableok = function (formphone) {
+        $scope.phonesubmit = true;
+        if (!formphone.$invalid) {
+            data = {}
+            data['mobile'] = $scope.txtphone
+            httpServices.updateUserProfile(data).then(function(pdata)
+            {
+                $scope.phoneshow = true;
+                $scope.phoneno = $scope.txtphone;
+            },function()
+            {
+                console.log("Cannot update phone no")
+            })
+
+        }
+    }
+    $scope.pheditablecancel = function () {
+        $scope.phoneshow = true;
+    }
+    //For location
+    $scope.location = "";
+    $scope.locationshow = true;
+    $scope.editlocation = function () {
+        $scope.locationshow = !$scope.locationshow;
+        $scope.txtlocation = $scope.location;
+    }
+    $scope.loceditableok = function (formlocation) {
+        $scope.locationsubmit = true;
+        if (!formlocation.$invalid) {
+            data = {}
+            data['area'] = $scope.txtlocation
+            httpServices.updateUserProfile(data).then(function(adata)
+            {
+                $scope.location = $scope.txtlocation;
+                $scope.locationshow = true;
+            },function()
+            {
+                console.log("Cannot update area")
+            })
+
+        }
+    }
+    $scope.loceditablecancel = function () {
+        $scope.locationshow = true;
+    }
+    //AutoComplete
+    $scope.searchdata_ = {};    
+    $scope.searchdata_['arealist'] = [];    
+    var acService = new google.maps.places.AutocompleteService();
+    $scope.areacomplete = function () {        
+        if ($scope.txtlocation != "" && typeof $scope.txtlocation != 'undefined') {
+            acService.getPlacePredictions({
+                input: $scope.txtlocation,
+                types: ['(regions)'],
+                componentRestrictions: { 'country': 'in' }
+            }, function (places, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {                    
+                    var _places = [];                    
+                    for (var i = 0; i < places.length; ++i) {
+                        _places.push({
+                            id: places[i].place_id,
+                            value: places[i].description,
+                            label: places[i].description
+                        });
+                    }                  
+                    console.log(_places); 
+                    $scope.searchdata_['arealist'] = _places;     
+                }
+            });
+        }
+    }
+    $scope.onlocationselect = function ($item, $model, $label) {
+        $scope.txtlocation=$label;
+    };
 });
     

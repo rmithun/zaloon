@@ -407,8 +407,7 @@ class  GetSlots(APIView):
             slots = copy.deepcopy(responses.HOURS_DICT)
             #logger_booking.info("Studio time details - "+ str(start),str(end),str(closed_from),str(closed_to))
             #check  total duration not to cross closed hours or other bookings
-            import pdb;pdb.set_trace();
-
+            #import pdb;pdb.set_trace();
             if start.minute != 0:
                 slots[start.hour] =  [i for i in slots[start.hour] if i >= start.minute]
             cl_end_hour = end.hour
@@ -500,7 +499,7 @@ class ApplyCoupon(APIView):
     serializer_class = CouponSerializer
     def get(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()
             data  = self.request.GET
             #services = data['services']
             coupon_code = data['coupon_code']
@@ -510,6 +509,11 @@ class ApplyCoupon(APIView):
             user = request.user
             #check coupon code is there
             logger_booking.info("Coupon request -" +str(data))
+            try:
+                coupon_detail = Coupon.objects.get(coupon_code = coupon_code)
+            except:
+                response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['INVALID_COUPON'])
+                return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
             try:
                 coupon_detail = Coupon.objects.get(coupon_code = coupon_code, is_active = 1,   \
                 expiry_date__gte =  datetime.today().date())

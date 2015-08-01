@@ -10,6 +10,7 @@ noqapp.run(function($http,$cookies,sessionService) {
 noqapp.config(function($routeProvider,$httpProvider) {
 
 	$httpProvider.interceptors.push('authInterceptor');
+  
 
 		$routeProvider
 			// route for the home page

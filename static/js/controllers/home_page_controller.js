@@ -70,7 +70,7 @@ httpServices.getUsrDetails().then(function(dataz)
 	$scope.searchdata_ = {};	
 	$scope.searchdata_['arealist'] = [];	
 	var acService = new google.maps.places.AutocompleteService();
-	$scope.areacomplete = function () {		
+	$scope.areacomplete = function () {				
     	if ($scope.searchdata_['searchlocation'] != "" && typeof $scope.searchdata_['searchlocation'] != 'undefined') {
             acService.getPlacePredictions({
                 input: $scope.searchdata_['searchlocation'],
