@@ -239,7 +239,7 @@ def getIframeFromPG(order_data):
         iframe = (""" <center>
         <!-- width required mininmum 482px -->
            <iframe  width="482" height="500" scrolling="No" frameborder="0"  id="paymentFrame"
-           src="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&merchant_id=%s&encRequest=%s&access_code=%s">
+           src="https://ccavenue.com/transaction/transaction.do?command=initiateTransaction&merchant_id=%s&encRequest=%s&access_code=%s">
            </iframe>
         </center>""")%(settings.MERCHANT_ID,encryption,settings.ACCESS_CODE)
     except Exception:
