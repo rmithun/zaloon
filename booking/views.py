@@ -84,7 +84,9 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             services_chosen = data['services']
             studio_id = data['studio']
             status_code = responses.BOOKING_CODES['BOOKING']
-            promo_code = data['promo_code']
+            promo_code = None
+            if data.has_key('promo_code'):
+                promo_code = data['promo_code']
             ##check purchase amount is not changed
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
@@ -102,8 +104,8 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                             data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
                             return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
             logger_booking.info("New booking - "+str(data))
-            total_duration = StudioServices.objects.filter(service_id__in = services_chosen  \
-                ).values('mins_takes').aggregate(Sum('mins_takes'))
+            total_duration = StudioServices.objects.filter(service_id__in = services_chosen,  \
+                studio_profile_id = studio_id).values('mins_takes').aggregate(Sum('mins_takes'))
             new_purchase = Purchase(customer = user,  \
                 purchase_amount = purchase_amount, actual_amount = actual_amount,  \
                 purchase_status = 'BOOKING', service_updated = 'new booking',  \
@@ -278,7 +280,7 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
     @transaction.commit_manually
     def put(self,request,*args,**kwars):
         try:
-            import pdb;pdb.set_trace();
+            #import pdb;pdb.set_trace();
             booking_code = self.request.DATA['booking_code']
             studio_pin = self.request.DATA['studio_pin']
             #studio = StudioProfile.objects.filter(studio_id = studio_pin)
@@ -318,22 +320,22 @@ class AddReviews(CreateAPIView):
 
     def create(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace();
+            #import pdb;pdb.set_trace();
             data = self.request.DATA
             booking_id = data['booking_id']
             comment = data['comment']
             rating = data['rating']
             user = self.request.user
-            logger_booking.info("Review data by user- "+ user +" -- " +str(data))
-            is_used = BookingDetails.objects.values('status_code','studio_id').get(id = booking_id)
-            is_reviewed = StudioReviews.objects.values('is_reviewed').get(booking_id = booking_id,  \
-                user = user)
+            logger_booking.info("Review data by user- "+ user.email +" -- " +str(data))
+            is_used = BookingDetails.objects.values('status_code','studio_id','is_reviewed').get(Q(id = booking_id),  \
+                ~Q(is_reviewed = 1), Q(status_code = 'B004'))
             if is_used['status_code'] == responses.BOOKING_CODES['USED'] and   \
-            is_reviewed['is_reviewed'] == 0:
+            is_used['is_reviewed'] == 0:
                 new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
                 comment = comment, rating = rating, user = user, service_updated = 'add review')
                 new_review.save()
                 ReviewLink.objects.filter(booking_id = booking_id).update(is_reviewed = 1)
+                BookingDetails.objects.filter(id = booking_id).update(is_reviewed = 1)
             else:
                 logger_booking.info("Review not added")
                 return Response(status = status.HTTP_304_NOT_MODIFIED)
@@ -344,6 +346,7 @@ class AddReviews(CreateAPIView):
             logger_booking.info("Review added")
             return Response(status = status.HTTP_201_CREATED)
 
+
 class ReviewFromEmail(CreateAPIView):
     permission_classes = (PostWithoutAuthentication,)
     serializer_class = StudioReviewSerializer
@@ -353,15 +356,15 @@ class ReviewFromEmail(CreateAPIView):
             data = self.request.DATA
             booking_id = data['booking_id']
             review_code = data['review_key']
-            is_used = BookingDetails.objects.values('status_code','studio_id').get(id = booking_id)
-            is_reviewed = StudioReviews.objects.values('is_reviewed').get(booking_id = booking_id,  \
-                user = user)
+            is_used = BookingDetails.objects.values('status_code','studio_id','is_reviewed').get(Q(id = booking_id),  \
+                ~Q(is_reviewed = 1), Q(status_code = 'B004'))
             if is_used['status_code'] == responses.BOOKING_CODES['USED'] and   \
-            is_reviewed['is_reviewed'] == 0:
+            is_used['is_reviewed'] == 0:
                 new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
                 comment = comment, rating = rating, user = user, service_updated = 'add review')
                 new_review.save()
                 ReviewLink.objects.filter(booking_id = booking_id).update(is_reviewed = 1)
+                BookingDetails.objects.filter(id = booking_id).update(is_reviewed = 1)
             else:
                 transaction.rollback()
                 logger_booking.info("Review not added")
@@ -374,12 +377,6 @@ class ReviewFromEmail(CreateAPIView):
             transaction.commit()
             logger_booking.info("Review added")
             return Response(status = status.HTTP_201_CREATED)
-
-
-            
-
-
-
 
 class  GetSlots(APIView):
     authentication_classes = (OAuth2Authentication,)

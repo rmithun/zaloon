@@ -706,12 +706,14 @@ $scope.logOut = function()
 
 });
 
-noqapp.controller('paymentcontroller', function ($scope, $cookies, $location, lodash, putResultService, httpServices) {
+noqapp.controller('paymentcontroller', function ($scope, $cookies, $location, $sce, lodash, putResultService, httpServices) {
 $scope.serviceschosen = [];
 $scope.total_duration;
 $scope.closed_days = []
 var closed_days = $scope.closed_days
 $scope.start_date = new Date()
+$scope.continueclick=false;
+$scope.isdisable = false;
 
 console.log($scope.serviceschosen)
 if(putResultService.getSelectedservice().length !=0){
@@ -749,6 +751,10 @@ $scope.end_date.setDate($scope.start_date.getDate() + 30);
 
 $scope.openToggle = function(which_toggle)
 {
+    if($scope.isdisable == true)
+    {
+        return false;
+    }
     if((which_toggle == 'collapseThree') && !($scope.date_selected) && !($scope.from_time))
     {
         return false
@@ -841,18 +847,41 @@ $scope.payment_class3 = "panel-heading"
 
 $scope.makepayment = function()
 {
-    if ($scope.from_time && $scope.date_selected && $scope.mobileno)
-    {
-        $scope.payment_class1 = "panel panel-default"
-        $scope.payment_class2 = "panel-open"
-        $scope.payment_class3 = "panel-heading progress-done"
-        $('#collapseFour').collapse('toggle');
-        $('.panel-collapse.in').collapse('hide');
-        return true
-    }
-    else
-    {
-        return false;
+    $scope.continueclick=true;
+    if (!bookingForm.$invalid) {
+        if ($scope.from_time && $scope.date_selected && $scope.mobileno)
+        {
+            $scope.isdisable=true;
+            var booking_data = {}
+            booking_data['appnt_date'] = $scope.date_selected
+            booking_data['appnt_time'] = $scope.from_time
+            booking_data['actual_amount'] = $scope.total_amount
+            booking_data['purchase_amount'] = $scope.amount_to_pay
+            booking_data['mobile_no'] = $scope.mobileno
+            booking_data['services'] = $scope.selected_services
+            booking_data['studio'] = $scope.serviceschosen.studio.id
+            booking_data['promo_code'] = $scope.coupon_code
+
+            httpServices.newBooking(booking_data).then(function(bukdata)
+            {
+                $scope.paymentresponse = bukdata.new_booking.data
+                $scope.payment_frame = $sce.trustAsHtml($scope.paymentresponse);
+                $scope.payment_class1 = "panel panel-default"
+                $scope.payment_class2 = "panel-open"
+                $scope.payment_class3 = "panel-heading progress-done"
+                $('#collapseFour').collapse('toggle');
+                $('.panel-collapse.in').collapse('hide');
+                return true
+            }, function()
+            {
+
+            })
+            
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 
@@ -907,6 +936,12 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
     }
 
     $scope.getBookings();
+
+    $(document).on("click", ".bookbtn", function () {
+     var myBookId = $(this).data('id');
+     $scope.cancel_booking_id = myBookId
+     $scope.$apply()
+    }); 
 
     $scope.booking_cancel = function(id)
     {
@@ -1052,5 +1087,28 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
     $scope.onlocationselect = function ($item, $model, $label) {
         $scope.txtlocation=$label;
     };
+
+//rating & review
+$(document).on("click", ".reviewbtn", function () {
+     var myBookId = $(this).data('id');
+     $scope.booking_id = myBookId
+     $scope.$apply()
+    });  
+
+$scope.add_review = function()
+{
+    var review_data = {}
+    review_data['comment'] = $scope.comment
+    review_data['rating'] = $scope.rate
+    review_data['booking_id'] = $scope.booking_id
+    httpServices.addReview(review_data).then(function(rdata)
+    {
+        //review added
+        console.log(rdata)
+    },function()
+    {
+        console.log("Could not add review.")
+    })
+}
 });
     

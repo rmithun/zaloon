@@ -198,9 +198,9 @@
             <p class="mobspan">Mobile No: <span>
             <input ng-model="mobileno" name="mobile" type="tel" ng-pattern="/^[7-9][0-9]{9}$/"
                 required></span></p>
-              <span ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
-                    Enter your mobile number ex:9213233423</span>
-                  
+                <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
+                    Enter your mobile number ex:9213233423</span></span>
+              
             <div class="promobox"><p>Promo code:</p> <input type="text" ng-model="coupon_code">
               {%verbatim%}{{coupon_resp}}{%endverbatim%}
               <button ng-click="applyPromo()" ng-disabled="coupon_code == null" class="btn btn-primary promoapply">Apply</button></div>           
@@ -222,7 +222,7 @@
             </div>
           </div>
         </div>
-        <p class="col-sm-12 col-xs-12 continuebtn"><button ng-click="makepayment()" ng-disabled=""  class="btn btn-primary">Continue</button></p>
+        <p class="col-sm-12 col-xs-12 continuebtn"><button ng-click="makepayment()" ng-disabled="isdisable"  class="btn btn-primary">Continue</button></p>
                 </div> 
         
             </div>
@@ -240,7 +240,7 @@
             </div>
             <div id="collapseFour" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <div>PAYMENT DETAILS</div>
+                    <div ng-bind-html="payment_frame"></div>
                 </div>
             </div>
           </div>

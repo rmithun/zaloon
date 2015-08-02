@@ -219,7 +219,6 @@ def decrypt(cipherText,workingKey):
 ##@login_required
 def getIframeFromPG(order_data):
     try:
-        import pdb;pdb.set_trace();
         merchant_id = str(settings.MERCHANT_ID)
         order_id = str(order_data['purchase_id'])
         currency = settings.CURRENCY

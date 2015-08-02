@@ -102,14 +102,14 @@
   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Booking{%verbatim%}{{tabx}}{%endverbatim%}</a></li>
+      <li role="presentation" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Booking</a></li>
       <li role="presentation"><a ng-click="tabx = 2" aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
       </ul>
 
       <!-- Tab panes -->
   <div class="tab-content">     
     
-    <div role="tabpanel" class="booking-panel-list-view tab-pane active" ng-show="tabx == 1" id="booking">
+    <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-class="{'active':tabx == 1}" ng-show="tabx == 1" id="booking">
     <ul>
     
     <li class="booking-list-item-container" ng-repeat="buking in active_bookings">
@@ -133,17 +133,18 @@
         <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</div>    
       </div>
       <div class="info1">
-        <div class="landmark_details"><span>Service Booked:</span> Haircut, Shaving</div>       
+        <div class="landmark_details"><span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
+          ,</span></span></div>       
         <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>             
       </div>
       </div>
-      <button class="bookbtn btn" ng-click="booking_cancel(buking.id)">Cancel</button>       
+      <button class="bookbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}"  data-target="#cancelmodal">Cancel</button>       
     </li>
         
     </ul>
   </div>
     
-  <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-show="tabx == 2" id="booking-history">
+  <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-class="{'active':tabx == 2}" ng-show="tabx == 2" id="booking-history">
     <ul>
     
     <li class="booking-list-item-container" ng-repeat="buking in expired_bookings">
@@ -166,12 +167,15 @@
         <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</div>    
       </div>
       <div class="info1">
-        <div class="landmark_details"><span>Service Booked:</span> Haircut, Shaving</div>       
+        <div class="landmark_details"><span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
+          ,</span></span></div>       
         <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>               
       </div>      
       </div>
         <!-- <button class="rebookbtn btn">Rebook</button> -->
-        <button class="reviewbtn btn" data-toggle="modal" data-target="#bookingmodel">Write a review</button>
+        <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#bookingmodel">Write a review</button>
+        <span ng-if="buking.status_code != 'B004'">Cancelled </span>
+        <span ng-if="buking.is_reviewed == 1">Reviewed </span>
               
     </li>
     </ul>
@@ -201,7 +205,7 @@
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 ">Your Rating</label>
           <div class="col-md-7 col-sm-8 col-xs-11">
-          ----
+          <rating ng-model="rate" max="5" readonly="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null"></rating>
           </div>
         </div>
       </div>
@@ -211,7 +215,7 @@
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 ">Your Review</label>
           <div class="col-md-7 col-sm-8 col-xs-11">
-          <textarea name="" type="text" class="form-control"></textarea>
+          <textarea name="" ng-model="comment" type="text" class="form-control"></textarea>
           </div>
         </div>
       </div>
@@ -221,7 +225,7 @@
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 "></label>
           <div class="col-md-7 col-sm-6 col-xs-11">
-          <button class="rebookbtn btn">submit</button>
+          <button ng-click="add_review()" class="rebookbtn btn">submit</button>
           </div>
         </div>
       </div>
@@ -231,11 +235,32 @@
     </div>  
   </div>  
    
+<!--cancel confirmation modal-->
+
+  <div  id="cancelmodal" class=" modal fade" role="dialog">
+    <div class="modal-content signup">
+     <div class="modal-header modal-register-header">
+     <button type="button" class="close" data-dismiss="modal">&times;</button> 
+     <h4 class="modal-title">Do you really want to cancel the booking?</h4>
+    </div> 
+      <div class="modal-body register">   
+      <div class="socialpanel">
+          <form>
+     <button type="button" class="close"  ng-click="booking_cancel(cancel_booking_id)">Yes, Cancel it</button> 
+     <button type="button" class="close" data-dismiss="modal">No, Dont cancel</button> 
+          </form>
+      </div>        
+      </div>
+    </div>  
+  </div>   
+
+
 <script type="text/ng-template" id="location.html">
   <a>
      <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
   </a>
 
   </script>
+ 
    
 

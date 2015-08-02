@@ -27,7 +27,7 @@ class ActiveBookingSerializer(serializers.ModelSerializer):
 		model = BookingDetails
 		fields = ('id', 'user', 'booked_date', 'appointment_date', 'appointment_start_time',  \
 			'booking_code','studio','booking_status', 'status_code', \
-			'service_booked_with','appointment_end_time')
+			'service_booked_with','appointment_end_time','is_reviewed')
 
 class CouponSerializer(serializers.ModelSerializer):
 
