@@ -80,7 +80,7 @@ class AuthView(APIView ):
             permission_classes = (TokenHasScope,)
             required_scopes = ['read']
             data = User.objects.filter(email = self.request.user)
-            serializer = UserNameOnlySerializer(data, many = True)
+            serializer = UserSerializer(data, many = True)
         except Exception,e:
             print repr
             return None

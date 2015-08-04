@@ -27,7 +27,6 @@ noqapp.directive('facebook', function($http,httpServices) {
 
     
       $scope.fetch = function() {
-        alert("here")
         if ($scope.login_status != 'connected') {
           login()
         } 

@@ -627,7 +627,8 @@ $scope.book = function()
     }
     else
     {
-        var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service}
+        var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service,  
+        'user_details':$scope.user_details}
         putResultService.setSelectedservice(booking_data)
         $location.path('/booking')
     }
@@ -651,12 +652,14 @@ $scope.fbLogin = function(dummy)
             httpServices.getUsrDetails().then(function(dataz)
             {
                 $scope.is_logged = sessionService.isLogged()
-                $scope.user_name = dataz['user_details'].data[0].first_name
+                $scope.user_details = dataz['user_details'].data[0]
+                $scope.user_name = $scope.user_details['first_name']
                 $('#signupmodel').modal('hide');
                 //redirect to booking page if clicked book
                 if ($scope.to_booking_flag == 1)
                 {
-                    var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service}
+                    var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service,  
+                'user_details':$scope.user_details}
                     putResultService.setSelectedservice(booking_data)
                     $location.path('/booking')
                 }
@@ -678,7 +681,8 @@ if(sessionService.isLogged())
 {
     httpServices.getUsrDetails().then(function(dataz)
     {
-        $scope.user_name = dataz['user_details'].data[0].first_name
+        $scope.user_details = dataz['user_details'].data[0]
+        $scope.user_name = $scope.user_details['first_name']
     }, function()
     {
         console.log("Error getting user data")  
@@ -690,7 +694,7 @@ $scope.logOut = function()
     {   
         httpServices.logOut().then(function(logout_data)
         {
-            alert("Here")
+            //alert("Here")
             //$cookies.remove('token')
             //$scope.is_logged = sessionService.isLogged()
             var cookies = $cookies.getAll();
@@ -718,8 +722,6 @@ var closed_days = $scope.closed_days
 $scope.start_date = new Date()
 $scope.continueclick=false;
 $scope.isdisable = false;
-
-console.log($scope.serviceschosen)
 if(putResultService.getSelectedservice().length !=0){
     $scope.serviceschosen = putResultService.getSelectedservice();
 }
@@ -731,6 +733,17 @@ else{
         $location.path("/search");
     }
 }
+if ($scope.serviceschosen['services'].length > 1)
+{
+    $scope.rp_service_txt = $scope.serviceschosen['services'][0].servicename +" & "+String(($scope.serviceschosen['services'].length) - 1) +' more services'
+    
+}
+else
+{
+    $scope.rp_service_txt = $scope.serviceschosen['services'][0].servicename   
+}
+console.log($scope.rp_service_txt)
+$scope.user_details = $scope.serviceschosen['user_details']
 $scope.total_duration=lodash.sum($scope.serviceschosen.services,'duration');
 $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
 $scope.selected_services = lodash.pluck($scope.serviceschosen.services, 'id');
@@ -865,21 +878,46 @@ $scope.makepayment = function()
             booking_data['services'] = $scope.selected_services
             booking_data['studio'] = $scope.serviceschosen.studio.id
             booking_data['promo_code'] = $scope.coupon_code
+            var options = {
+                "key": "rzp_test_bKVgZ668B7jtSR",
+                "amount": ($scope.amount_to_pay * 100),
+                "name": $scope.user_details.first_name, //inser user name here
+                "description": $scope.rp_service_txt,
+                "image": "static/img/logo.png",
+                "handler": function (response){
+                    console.log(response)
+                    alert(response.razorpay_payment_id);
+                    booking_data['razorpay_payment_id'] = response.razorpay_payment_id
+                    httpServices.newBooking(booking_data).then(function(paydata)
+                    {
+                        alert("booked") // redirect to account page and show booking details
+                    }, function()
+                    {
+                        alert("Failed") //hide and show rzrpay again
+                        $scope.isdisable=false;
+                    });
+            },
+                "prefill": {
+                "name": $scope.user_details.first_name, //user name
+                "email": $scope.user_details.email, // user email
+                "contact" : $scope.mobileno
+                },
+                "notes": {
+                "address": $scope.user_details.email
+                }
+                }
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+                e.preventDefault();
 
-            httpServices.newBooking(booking_data).then(function(bukdata)
-            {
-                $scope.paymentresponse = bukdata.new_booking.data
-                $scope.payment_frame = $sce.trustAsHtml($scope.paymentresponse);
+                /*$scope.payment_frame = $sce.trustAsHtml($scope.paymentresponse);
                 $scope.payment_class1 = "panel panel-default"
                 $scope.payment_class2 = "panel-open"
                 $scope.payment_class3 = "panel-heading progress-done"
                 $('#collapseFour').collapse('toggle');
-                $('.panel-collapse.in').collapse('hide');
+                $('.panel-collapse.in').collapse('hide');*/
                 return true
-            }, function()
-            {
-
-            })
+            
             
         }
         else
@@ -892,7 +930,6 @@ $scope.makepayment = function()
 //am/pm convertor
 
 $scope.timeFilter =  function (value) {
-    console.log(value);
         if(typeof value != 'undefined')
         {
             var split = value.split(':');

@@ -11,6 +11,7 @@ import simplejson
 import logging
 import traceback
 import copy
+import requests
 
 #third party imports
 from django.shortcuts import get_object_or_404, render_to_response,redirect, \
@@ -62,13 +63,13 @@ class GetActiveBookings(ActiveBookingMixin, ListAPIView):
     pass
 
 
-class NewBooking(CreateAPIView,UpdateAPIView):
+class NewBookingRZP(CreateAPIView,UpdateAPIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = (TokenHasScope,)
     required_scopes = ['write','read']
     serializer_class = ActiveBookingSerializer
 
-    
+
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
@@ -83,8 +84,9 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             mobile_no = data['mobile_no']
             services_chosen = data['services']
             studio_id = data['studio']
-            status_code = responses.BOOKING_CODES['BOOKING']
+            rzp_payment_id = data['razorpay_payment_id']
             promo_code = None
+            payment_success = 0
             if data.has_key('promo_code'):
                 promo_code = data['promo_code']
             ##check purchase amount is not changed
@@ -106,9 +108,23 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             logger_booking.info("New booking - "+str(data))
             total_duration = StudioServices.objects.filter(service_id__in = services_chosen,  \
                 studio_profile_id = studio_id).values('mins_takes').aggregate(Sum('mins_takes'))
+            ##capture payment in razor pay
+            if rzp_payment_id:
+                #capture payment from razor pay
+                url = ('https://api.razorpay.com/v1/payments/%s/capture')%(rzp_payment_id)
+                resp = requests.post(url, data={'amount':int(purchase_amount)*100}, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                print resp
+                if resp.status_code == 200:
+                    payment_success = 1
+            if payment_success == 1:
+                status_code = responses.BOOKING_CODES['BOOKED']
+            else:
+                status_code = responses.BOOKING_CODES['FAILED']
+                transaction.rollback();
+                return Response(data = None, status = status.HTTP_400_BAD_REQUEST)
             new_purchase = Purchase(customer = user,  \
                 purchase_amount = purchase_amount, actual_amount = actual_amount,  \
-                purchase_status = 'BOOKING', service_updated = 'new booking',  \
+                purchase_status = 'BOOKED', service_updated = 'new booking',  \
                 status_code = status_code)
             new_purchase.save()
             logger_booking.info("New purchase id - "+str(new_purchase.id))
@@ -117,7 +133,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             new_booking = BookingDetails(user = user, booked_date =
                 datetime.now(), appointment_date = appnt_date,  \
                 appointment_start_time = appointment_start_time, booking_code = booking_code,  \
-                studio_id = studio_id, booking_status = 'BOOKING',  \
+                studio_id = studio_id, booking_status = 'BOOKED',  \
                 service_updated = 'new booking', purchase = new_purchase,status_code = status_code,  \
                 appointment_end_time = appointment_end_time, mobile_no = mobile_no)
             new_booking.save()
@@ -125,50 +141,17 @@ class NewBooking(CreateAPIView,UpdateAPIView):
             sms_bms = BookedMessageSent(booking = new_booking, type_of_message = 'book',   \
                 mode = 'sms', service_updated = 'new booking', message = '')
             sms_bms.save();
+            rzp_pay = RZPayment(purchase = new_purchase, rzp_payment_id = rzp_payment_id,  \
+                rzp_status = 'CAPTURE', service_updated = 'new booking')
+            rzp_pay.save()
             logger_booking.info("New bookmessage send id - "+str(sms_bms.id))
             for service in services_chosen:
                 service_booked = BookingServices(booking = new_booking,service_id = service, service_updated = 'new booking')
                 service_booked.save()
-            #services_class = ActiveBookingSerializer(new_booking)
-            ##send query to PG to load iframe
-            iframe_req = {'booking_id':new_booking.id,'purchase_id':new_purchase.id,  \
-            'amount':purchase_amount,'user_id':user.id}
-            if iframe_req:
-                iframe_resp = getIframeFromPG(iframe_req)
-            else:
-                transaction.rollback()
-                return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
-            #data = simplejson.dumps(response)
-        except Exception,e:
-            logger_error.error(traceback.format_exc())
-            transaction.rollback()
-            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else:
-            transaction.commit()
-            return Response(data = iframe_resp, status = status.HTTP_201_CREATED)
-    
-    @transaction.commit_manually
-    def put(self,request,*args,**kwargs):
-        try:
-            user = self.request.user
-            data = self.request.DATA
-            booking_status = data['booking_status']
-            booking_id = data['booking_id']
-            purchase_id = data['purchase_id']
-            payment_status = data['payment_status']
-            logger_booking.info("Updated booking data - "+str(data))
-            if booking_status == 'BOOKED':
-                status_code = responses.BOOKING_CODES['BOOKED']
-            else:
-                status_code = responses.BOOKING_CODES['FAILED']
-            BookingDetails.objects.filter(id = booking_id).update(booking_status =   \
-            booking_status,service_updated = 'payment response', status_code = status_code,  \
-            updated_date_time = datetime.now() )
+            ##services_class = ActiveBookingSerializer(new_booking)
+            booking_id = new_booking.id
             studio_id = BookingDetails.objects.get(id = booking_id)
-            Purchase.objects.filter(id = purchase_id).update(\
-            purchase_status =  payment_status, service_updated = 'payment response', \
-            status_code = status_code, updated_date_time = datetime.now())
-            if booking_status == 'BOOKED' and studio_id.notification_send == 0:
+            if payment_success == 1 and studio_id.notification_send == 0:
                 services_booked = BookingServices.objects.filter(booking_id = booking_id)
                 services_booked_list = [ser.service.service_name for ser in services_booked]
                 user = User.objects.values('first_name','email').get(email = user)
@@ -213,16 +196,15 @@ class NewBooking(CreateAPIView,UpdateAPIView):
                 except Exception, DBerr:
                     logger_error.error(traceback.format_exc())
                     transaction.commit();
-                    return Response(status = status.HTTP_304_NOT_MODIFIED)
+                    return Response(data = None, status = status.HTTP_200_OK)
                 data = simplejson.dumps(booking_details)
         except Exception,e:
-            transaction.rollback()
             logger_error.error(traceback.format_exc())
-            return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+            transaction.rollback()
+            return Response(data = None,status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             transaction.commit()
-            return Response(data = data,status = status.HTTP_200_OK)
-
+            return Response(data = data, status = status.HTTP_201_CREATED)
 
 class CancelBooking(ActiveBookingMixin,UpdateAPIView):
     def get_queryset(self):
@@ -237,16 +219,41 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
         try:
             booking_id = self.request.DATA
             user = self.request.user
+            ##chk cancellation not happening on the same day after sending confirmation
             is_booking = BookingDetails.objects.filter(id = booking_id, user_id = user \
                 , is_valid = True, booking_status = 'BOOKED').update(booking_status =  \
                 'CANCELLED', service_updated = 'cancel booking',  \
                 status_code = responses.BOOKING_CODES['CANCELLED'],  \
                 updated_date_time = datetime.now(), is_valid = False)
+            rzp_payment_id = None
             if is_booking:
                 purchase = BookingDetails.objects.values('purchase_id').get(id = booking_id)
                 Purchase.objects.filter(id = purchase['purchase_id']).update(purchase_status = 'REFUND_REQUESTED',  \
                 status_code = responses.PAYMENT_CODES['REFUND_REQUESTED'],  \
                 service_updated = 'cancel booking', updated_date_time = datetime.now())
+                rzr_pay = RZPayment.objects.values('rzp_payment_id').get(purchase_id =  \
+                    purchase['purchase_id'])
+                rzp_payment_id = rzr_pay['rzp_payment_id']
+                if rzp_payment_id:
+                    #capture payment from razor pay
+                    url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                    ##change refund amount if neede in future
+                    resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                    print resp
+                    if resp.status_code == 200:
+                        dat = eval(resp.text)
+                        refund_id = dat['id']
+                        update = RZPayment.objects.filter(purchase_id = purchase['purchase_id']).update(  \
+                            rzp_status = 'REFUND_INI',refund_id = refund_id, updated_date_time = \
+                            datetime.now(),service_updated = 'cancel booking')
+                        if not update:
+                            transaction.rollback()
+                            logger_booking.info("Refund failed - "+str(is_booking))
+                            return Response(status = status.HTTP_304_NOT_MODIFIED)
+                    else:
+                        transaction.rollback()
+                        logger_booking.info("Refund failed - "+str(is_booking))
+                        return Response(status = status.HTTP_304_NOT_MODIFIED)
             else:
                 transaction.rollback()
                 logger_booking.info("No booking with booking id - "+str(is_booking))
@@ -433,8 +440,8 @@ class  GetSlots(APIView):
                     end_min = bks.appointment_end_time.minute
                     time_diff = end_hour-start_hour
                     if time_diff > 1:
-                        for i in range((start_hour+dt.timedelta(hour = 1)).hour,  \
-                            (end_hour-dt.timedelta(hour = 1)).hour):
+                        for i in range((start_hour+1),  \
+                            (end_hour- 1)):
                             slots.pop(i,None)
                     if time_diff == 0:
                         slots[start_hour]  = [mins for mins in slots[start_hour] if mins  < start_min]
@@ -582,4 +589,176 @@ class ReviewLinkValidate(APIView):
         except Exception,e:
             print repr(e)
             return render(request, 'booking/review_from_email.html',{'can_review':0})
+
+
+
+
+
+"""
+class NewBooking(CreateAPIView,UpdateAPIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = (TokenHasScope,)
+    required_scopes = ['write','read']
+    serializer_class = ActiveBookingSerializer
+    
+    @transaction.commit_manually
+    def create(self,request,*args,**kwargs):
+        try:
+            import pdb;pdb.set_trace();
+            user = self.request.user
+            data = self.request.DATA
+            appnt_date = datetime.strptime(data['appnt_date'],'%Y-%m-%d')
+            appnt_time = data['appnt_time']
+            chars=string.ascii_uppercase + string.digits
+            booking_code = ''.join(random.choice(chars) for _ in range(6))
+            actual_amount = data['actual_amount']
+            purchase_amount = data['purchase_amount']
+            mobile_no = data['mobile_no']
+            services_chosen = data['services']
+            studio_id = data['studio']
+            status_code = responses.BOOKING_CODES['BOOKING']
+            promo_code = None
+            if data.has_key('promo_code'):
+                promo_code = data['promo_code']
+            ##check purchase amount is not changed
+            ##set total duration for the booking taking all duration on the studio
+            ##make entry in purchase table
+            appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
+            if appnt_date.date() < datetime.today().date():
+                data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
+                return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+            if appnt_date.date() == datetime.today().date():
+                if datetime.now().hour > 5:
+                    if appointment_start_time.hour < 12:
+                        data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
+                        return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+                    else:
+                        if datetime.now().hour > 12:
+                            data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
+                            return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+            logger_booking.info("New booking - "+str(data))
+            total_duration = StudioServices.objects.filter(service_id__in = services_chosen,  \
+                studio_profile_id = studio_id).values('mins_takes').aggregate(Sum('mins_takes'))
+            new_purchase = Purchase(customer = user,  \
+                purchase_amount = purchase_amount, actual_amount = actual_amount,  \
+                purchase_status = 'BOOKING', service_updated = 'new booking',  \
+                status_code = status_code)
+            new_purchase.save()
+            logger_booking.info("New purchase id - "+str(new_purchase.id))
+            appointment_end_time = appointment_start_time + timedelta(minutes = total_duration['mins_takes__sum'])
+            ##check has slots available by passing start time with duration
+            new_booking = BookingDetails(user = user, booked_date =
+                datetime.now(), appointment_date = appnt_date,  \
+                appointment_start_time = appointment_start_time, booking_code = booking_code,  \
+                studio_id = studio_id, booking_status = 'BOOKING',  \
+                service_updated = 'new booking', purchase = new_purchase,status_code = status_code,  \
+                appointment_end_time = appointment_end_time, mobile_no = mobile_no)
+            new_booking.save()
+            logger_booking.info("New booking id - "+str(new_booking.id))
+            sms_bms = BookedMessageSent(booking = new_booking, type_of_message = 'book',   \
+                mode = 'sms', service_updated = 'new booking', message = '')
+            sms_bms.save();
+            logger_booking.info("New bookmessage send id - "+str(sms_bms.id))
+            for service in services_chosen:
+                service_booked = BookingServices(booking = new_booking,service_id = service, service_updated = 'new booking')
+                service_booked.save()
+            services_class = ActiveBookingSerializer(new_booking)
+        except Exception,e:
+            logger_error.error(traceback.format_exc())
+            transaction.rollback()
+            return Response(data = None,status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            transaction.commit()
+            return Response(data = None, status = status.HTTP_201_CREATED)
+    
+    @transaction.commit_manually
+    def put(self,request,*args,**kwargs):
+        try:
+            user = self.request.user
+            data = self.request.DATA
+            booking_status = data['booking_status']
+            booking_id = data['booking_id']
+            purchase_id = data['purchase_id']
+            rzp_payment_id = rzp_data['razorpay_payment_id']
+            payment_success = 0
+            ##payment_status = data['payment_status']
+            amt_paid = Purchase.objects.values('purchase_amount').get(id = Purchase)
+            purchase_amount = int(amt_paid['purchase_amount']) * 100 ##only for razor pay
+            logger_booking.info("Updated booking data - "+str(data))
+            if rzp_payment_id:
+                #capture payment from razor pay
+                url = ('https://api.razorpay.com/v1/payments/%s/capture')%(rzp_payment_id)
+                resp = requests.post(url, data={'amount':purchase_amount}, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                print resp
+                if resp == 'OK':
+                    payment_success = 1
+            if payment_success == 1:
+                status_code = responses.BOOKING_CODES['BOOKED']
+            else:
+                status_code = responses.BOOKING_CODES['FAILED']
+                transaction.rollback();
+                return Response(data = None, status = status.HTTP_400_BAD_REQUEST)
+            BookingDetails.objects.filter(id = booking_id).update(booking_status =   \
+            'BOOKED',service_updated = 'rzp payment capture', status_code = status_code,  \
+            updated_date_time = datetime.now() )
+            payment_status_code = responses.PAYMENT_CODES['PAID']
+
+            studio_id = BookingDetails.objects.get(id = booking_id)
+            Purchase.objects.filter(id = purchase_id).update(\
+            purchase_status =  'PAID', service_updated = 'rzp payment capture', \
+            status_code = payment_status_code, updated_date_time = datetime.now())
+            if payment_success == 1 and studio_id.notification_send == 0:
+                services_booked = BookingServices.objects.filter(booking_id = booking_id)
+                services_booked_list = [ser.service.service_name for ser in services_booked]
+                user = User.objects.values('first_name','email').get(email = user)
+                studio = StudioProfile.objects.values('name','address_1', \
+                'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
+                'incharge_mobile_no','city').get(id = studio_id.studio.id)
+                contacts = {'in_charge_person':{'name':studio['in_charge_person'],'mobile_no': \
+                studio['incharge_mobile_no']},'contact_person':{'name':studio['contact_person'],\
+                'mobile_no':studio['contact_mobile_no']}}
+                studio_address = {'address_1':studio['address_1'],'address_2':studio['address_2'],  \
+                'area':studio['area'],'city':studio['city']}
+                appnt_time =  studio_id.appointment_start_time.strftime('%H:%M')
+                appnt_date = studio_id.appointment_date.strftime('%d-%m-%Y')
+                booking_details = {'first_name':user['first_name'],'code':studio_id.booking_code,  \
+                'date':appnt_date, 'appnt_time':appnt_time,  \
+                'services':services_booked_list,  \
+                'studio':studio['name'],'studio_address':studio_address,  \
+                'contact':contacts}
+                logger_booking.info("Booking email data - "+str(booking_details))
+                message = get_template('emails/booking.html').render(Context(booking_details))
+                to_user = user['email']
+                subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
+                sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
+                sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
+                #email = sendEmail(to_user,subject,message)
+                #sms = sendSMS(studio_id.mobile_no,sms_message)
+                email = 1
+                sms_bms = 1
+                try:
+                    email_bms = BookedMessageSent(booking_id = booking_id,is_successful = email,  \
+                        type_of_message = 'book', mode = 'email', service_updated =  \
+                    'new booking')
+                    sms_bms = BookedMessageSent.objects.filter(booking_id = booking_id, is_successful = 0,   \
+                    type_of_message = 'book', mode = 'sms', service_updated =  \
+                    'new booking', message = '').update(is_successful = sms_bms,  \
+                    service_updated = 'booking confirmed')
+                    email_bms.save()
+                    notification_send = 1
+                    logger_booking.info("Notification sent - "+str(notification_send))
+                    BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
+                    notification_send)
+                except Exception, DBerr:
+                    logger_error.error(traceback.format_exc())
+                    transaction.commit();
+                    return Response(data = None, status = status.HTTP_200_OK)
+                data = simplejson.dumps(booking_details)
+        except Exception,e:
+            transaction.rollback()
+            logger_error.error(traceback.format_exc())
+            return Response(data = None,status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            transaction.commit()
+            return Response(data = data,status = status.HTTP_200_OK)"""
 

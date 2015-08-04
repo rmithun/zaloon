@@ -76,6 +76,16 @@ class BookingDetails(models.Model):
 	def __unicode__(self):
 		return self.booking_code
 
+class RZPayment(models.Model):
+	"""table holding razropay keys"""
+	purchase = models.ForeignKey(Purchase, related_name = "purchase_id_rzp")
+	rzp_payment_id = models.CharField(max_length = 100)
+	rzp_status = models.CharField(max_length = 30)
+	service_updated = models.CharField(max_length = 25)
+	refund_id = models.CharField(max_length = 100, null = True)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+	
+
 class Refund(models.Model):
 
 	"""table holding all refund data"""
