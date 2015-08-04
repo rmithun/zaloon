@@ -258,6 +258,7 @@ class StudioAccountDetails(models.Model):
 	bank_acc_number = models.CharField(max_length = 120)
 	min_deposit = models.PositiveIntegerField()
 	max_deposit = models.PositiveIntegerField()
+	transaction_percent = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 

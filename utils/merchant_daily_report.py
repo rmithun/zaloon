@@ -45,6 +45,9 @@ def daily_merchant_report():
             #if stud not in studios_visited:
             try:
                 services_booked = BookingServices.objects.filter(booking_id = stud.id)
+                transaction_charge = StudioAccountDetails.objects.values('transaction_percent').get( \
+                    studio_id = stud.studio_id)
+                transaction_percent = int(transaction_charge['transaction_percent'])
                 services = []
                 for sun in services_booked:
                     services.append(sun.service.service_name)
@@ -58,7 +61,7 @@ def daily_merchant_report():
                 obj['offer_code'] = stud.promo.promo_code
                 obj['booking_amount'] = stud.purchase.purchase_amount
                 obj['actual_amount'] = stud.purchase.actual_amount
-                obj['amount_to_pay'] = (obj['booking_amount'] - (obj['booking_amount']/10))
+                obj['amount_to_pay'] = (obj['booking_amount'] - (obj['booking_amount']/transaction_percent  ))
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:
                     studios_visited.append(stud.studio_id)

@@ -145,7 +145,7 @@ class StudioAccountDetailsSerializer(serializers.ModelSerializer):
 		model = StudioAccountDetails
 		fields = ('id', 'studio', 'mode_of_payment', 'bank_name', 'bank_branch',  \
 			'bank_ifsc', 'bank_city', 'bank_acc_number', 'min_deposit', 'max_deposit'
-			)
+			'trasaction_percent')
 
 class StudioPaymentSerializer(serializers.ModelSerializer):
 	
