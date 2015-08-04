@@ -369,15 +369,15 @@ LOGGING = {
 
 ##CCAVENUE SETTINGS
 MERCHANT_ID = 71637
-WORKING_KEY = 'BB8279BFF481AF452ADA6C6384B3AB32'
+WORKING_KEY = '1A69CD164CBEB1F1822010B3E0495369'
 ACCESS_CODE = 'AVNI05CG68BJ32INJB'
 CURRENCY = 'INR'
 if DEBUG:
-    REDIRECT_URL = '127.0.0.1:8000/paymentsuccess/'
-    CANCEL_URL =  '127.0.0.1:8000/paymentfailed/'
+    REDIRECT_URL = 'www.zaloon.in/paymentsuccess/'
+    CANCEL_URL =  'www.zaloon.in/paymentfailed/'
 else:
     REDIRECT_URL = 'www.zaloon.in/paymentsuccess/'
-    CANCEL_URL =  '127.0.0.1:8000/paymentfailed/'
+    CANCEL_URL =  'www.zaloon.in/paymentfailed/'
 LANGUAGE = 'EN'
 INTEGRATION_TYPE = "iframe_normal"
 

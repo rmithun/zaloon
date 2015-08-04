@@ -160,6 +160,14 @@
  -webkit-border-radius : 0px !important;
 }
 
+.datepicker table tr td.disabled{
+  background-color: white !important;
+  color: gray !important;
+  background-image: -moz-linear-gradient(top, #fff, #fff 60%, #fff);
+  background-image: -o-linear-gradient(top, #fff, #fff 60%, #fff);
+  background-image: linear-gradient(to bottom, #fff, #fff 60%, #fff);
+}
+
 .datepicker table tr td.disabled:hover{
 background-color: white !important;
 color: gray !important;
@@ -167,6 +175,10 @@ color: gray !important;
 
 .table-condensed th, .table-condensed td{
   padding : 10px 25px;
+}
+
+.datepicker table thead tr th{
+  text-align: center;
 }
 
 .dow{

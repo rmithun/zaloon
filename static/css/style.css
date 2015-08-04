@@ -417,7 +417,7 @@ content: ' ';
  .map-tooltip-panel{background: white;
   display: inline-block;
   list-style: none;
-  position: absolute;
+  /*position: absolute;*/
   width: 310px;  
   min-height: 88px;
   top:100px;

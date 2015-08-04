@@ -320,7 +320,7 @@ class AddReviews(CreateAPIView):
 
     def create(self,request,*args,**kwargs):
         try:
-            #import pdb;pdb.set_trace();
+            #import pdb;pdb .set_trace();
             data = self.request.DATA
             booking_id = data['booking_id']
             comment = data['comment']

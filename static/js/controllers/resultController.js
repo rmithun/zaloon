@@ -24,8 +24,9 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.studiotype = [{ name: "Spa", active: false, icon: "icon icon-medical-19" }, { name: "Studio", active: false, icon: "icon icon-shopping-23" }, { name: "Saloon", active: false, icon: "fa fa-scissors" }];
     $scope.studiokind = [{ name: "Men", active: false, icon: "fa-mars" }, { name: "Women", active: false, icon: "fa-venus" }, { name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
-    $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false }, { property: "price", value: "priceasc", direction: false }, { property: "price", value: "pricedsc", direction: true }, { property: "rating", value: "ratingdsc", direction: true }];
-    $scope.sortservice = $scope.studiosort[1].value;
+    $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "price", value: "priceasc", direction: false ,name:"Price"}, { property: "price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: true,name:"Rating" }];
+    $scope.orderProp = 'price';
+    $scope.direction = false;    
     $scope.studioservice = [];
     $scope.studiotypefilter = [];
     $scope.studiokindfilter = [];
@@ -97,8 +98,11 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         }
         for (var j = 0; j < studio.studio_review.length; j++) {
             rating = rating + studio.studio_review[j].rating;
+        }        
+        if(rating!=0){
+            rating = Math.round(rating / studio.studio_review.length);            
         }
-        rating = Math.round(rating / studio.studio_review.length);
+        console.log(rating);
         $scope.studio[index].rating = rating;
         $scope.filteredstudio[index].rating = rating;
         $scope.studio[index].price = price;
@@ -109,10 +113,10 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
 
         //Google Maps    
     var imagUrls = {
-        oneOn: 'http://maps.google.com/mapfiles/kml/pal3/icon47.png',
-        oneOff: 'http://maps.google.com/mapfiles/kml/pal3/icon39.png'
-        //oneOff: 'assets/img/blue24.png',
-        //oneOn: 'assets/img/green24.png'
+        //oneOn: 'http://maps.google.com/mapfiles/kml/pal3/icon47.png',
+        //oneOff: 'http://maps.google.com/mapfiles/kml/pal3/icon39.png'
+        oneOff: 'static/img/blue24.png',
+        oneOn: 'static/img/green24.png'
     };
     var images = {
         oneOn: new google.maps.MarkerImage(imagUrls.oneOn),
@@ -125,8 +129,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             position: new google.maps.LatLng(studio.latitude, studio.longitude),
             title: studio.name,
             icon: images.oneOff
-        });
-        var compiled = $compile('<div class="noscrollbar" style="background:white;"><div style="color: #FC8638;">' + studio.name + '</div><div><span>₹ ' + studio.price + '</span></div></div>')($scope);
+        });        
+        var compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div class="landmark_details">'+ studio.address_1 +'</div><div class="sub-line-2"><span>'+ studio.distance +' KM</span><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.price +'</span></span></div></div></div></div>')($scope);        
         marker.content = compiled[0];
         google.maps.event.addListener(marker, 'click', function () {
             if (infoWindow) infoWindow.close();
@@ -214,15 +218,13 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         directionsService.route(request, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
                 $scope.distance = response.routes[0].legs[0].distance.text;
-                $scope.$apply();
-                console.log(response.routes[0].legs[0].distance.text);
+                $scope.$apply();                
                 directionsDisplay.setDirections(response);
             }
         });
     }
 
-$scope.bindstudio=function(data){
-    console.log(data);
+$scope.bindstudio=function(data){    
     $scope.studio=[];
     $scope.filteredstudio=[];
     angular.forEach(data, function (value, key) {
@@ -295,6 +297,10 @@ $scope.bindstudio=function(data){
     }
 
     $scope.applyfilter = function () {
+        if($('#studiodetails').css('display') == 'block')
+        {
+            $scope.closeslider();
+        }        
         var tempfilter = [];
         angular.forEach($scope.studio, function (studio, key) {
             var isfilter;
@@ -312,7 +318,7 @@ $scope.bindstudio=function(data){
         $scope.morefilter = !$scope.morefilter;
     }
 
-    $scope.resetfilter = function () {
+    $scope.resetfilter = function () {        
         angular.forEach($scope.studiotype, function (value, index) {
             value.active = false;
         });
@@ -404,23 +410,22 @@ $scope.bindstudio=function(data){
         return returntype;
     }
 
-    //Sort
-    $scope.$watch('sortservice', function () {
-        angular.forEach($scope.studiosort, function (sort, key) {
-            if (sort.value == $scope.sortservice) {
-                $scope.orderProp = sort.property;
-                $scope.direction = sort.direction;
-            }
-        });
+
+    
+
+    $scope.sortchange=function(selectitem){        
+        $scope.orderProp = selectitem.property;
+        $scope.direction = selectitem.direction;
         removemarker();
         clearlatlongbound();
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
         autozoom();
-    });
+    }
 
     $scope.studiodetails = function (id) {
         var studio = lodash.where($scope.studio, { 'id': id });
         if (studio.length > 0) {
+            $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
             $scope.selectedstudio['type_icon_class']  = lodash.where($scope.studiotype,{'name':$scope.selectedstudio.studio_type.type_desc})[0].icon;
             $scope.selectedstudio['kind_icon_class']  = lodash.where($scope.studiokind,{'name':$scope.selectedstudio.studio_kind.kind_desc})[0].icon;
@@ -429,26 +434,28 @@ $scope.bindstudio=function(data){
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
             $scope.reviewPage = 1;
             $scope.directionlocation=$scope.searchdata.location;
-            var page = Math.round($scope.selectedstudio.studio_review.length / 5);
-            page = page + ($scope.selectedstudio.studio_review.length % 5 > 0 ? 1 : 0);            
+            var page = Math.floor($scope.selectedstudio.studio_review.length / 5);            
+            page = page + ($scope.selectedstudio.studio_review.length % 5 > 0 ? 1 : 0);                  
             $scope.reviewtotalpage = page;            
-            $scope.shopdistance = $scope.selectedstudio.distance;
-            removemarker();
-            drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
-            setTimeout(function () {
-                top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };
-                console.log(JSON.stringify(top));
+            $scope.shopdistance = $scope.selectedstudio.distance;            
+            setTimeout(function(){
+                removemarker();
+                drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
+            },300);
+            setTimeout(function () {                
+                top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
             }, 1000);
-
         }
     }
-    $scope.closeslider = function () {
+    $scope.closeslider = function () {        
         $('#studiodetails').toggle('slide', { direction: 'right' }, 100);
-        directionsDisplay.setMap(null);
-        clearlatlongbound();
-        $scope.selected_service = []
-        $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
-        autozoom();
+        $scope.selected_service = [];
+        setTimeout(function(){
+            directionsDisplay.setMap(null);
+            clearlatlongbound();
+            $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
+            autozoom();
+        },300);                
     }
     $scope.easyscroll = function (clsname) {
         $('.list-detail-box').animate({
@@ -470,8 +477,7 @@ $scope.bindstudio=function(data){
         drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
         var request = { origin: new google.maps.LatLng($scope.selectedstudio.latitude, $scope.selectedstudio.longitude), destination: $scope.directionlocation, travelMode: google.maps.DirectionsTravelMode.DRIVING };
         directionsService.route(request, function (response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-                console.log(response.routes[0].legs[0].distance.text);
+            if (status == google.maps.DirectionsStatus.OK) {                
                 $scope.shopdistance = parseFloat(response.routes[0].legs[0].distance.text);
                 $scope.$apply();
             }
@@ -497,8 +503,7 @@ $scope.bindstudio=function(data){
             }
         });
     }
-    $scope.addservice = function (service) {
-        console.log(service);       
+    $scope.addservice = function (service) {       
         var index = lodash.findIndex($scope.servicelist, service);
         var flag = $scope.servicelist[index].flag;
         $scope.servicelist[index].flag = !$scope.servicelist[index].flag;
@@ -511,12 +516,11 @@ $scope.bindstudio=function(data){
         {   
             $scope.selected_service.push(service);            
             $scope.serviceprice = $scope.serviceprice + service.price;
-        }
-        console.log($scope.selected_service);
+        }        
     }
 
     //Pagination
-    $scope.pagechange = function () {
+    $scope.pagechange = function () {    
         removemarker();
         clearlatlongbound();
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
@@ -888,6 +892,7 @@ $scope.makepayment = function()
 //am/pm convertor
 
 $scope.timeFilter =  function (value) {
+    console.log(value);
         if(typeof value != 'undefined')
         {
             var split = value.split(':');

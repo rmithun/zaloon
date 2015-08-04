@@ -9,8 +9,8 @@
             <!--  <div class="brand-logo">
                         <a href="#" class="logo"></a>                       
                     </div>  -->
-            <a href="#"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png"> </a>
-            <a href="#"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
+            <a href="#/"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png"> </a>
+            <a href="#/"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
         </div>
         <!-- Login -->
 
@@ -156,7 +156,7 @@
 </div>
 
 <!-- List -->
-<div class="list-box ">
+<div class="list-box" ng-show="filteredstudio.length > 0">
     <div class="listheader">
         <label>We have found {%verbatim%} {{filteredstudio.length}}{%endverbatim%} results for you</label>
         <span class="pull-right hiddenxsprt">
@@ -166,15 +166,13 @@
         </span>
     </div>
     <div class="form-group">
-        <input size="5" type="text" class="form-control" id="namesearch" ng-model="query.name" placeholder="Search by name">
+        <input size="5" type="text" class="form-control" id="namesearch" ng-model="query.name" placeholder="Search by name">        
     </div>
-    <div class="form-group">
-        <span><select   class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice">   
-                     <option value="priceasc" selected="selected">Price</option>
-                    <option value="pricedsc">Price dsc</option>
-                    <option value="distanceasc">A-Z</option>
-                    <option value="ratingdsc">Rating</option>
+    <div class="form-group">        
+            <span><select   class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice" data-ng-options="studiosort as studiosort.name for studiosort in studiosort" ng-change="sortchange(sortservice)">
+                    <option value="">--Sort--</option> 
             </select></span>
+
         <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span>
     </div>
     <div class="list-view">
@@ -202,15 +200,15 @@
                     </div>
                 </a>
             </li>
-
-
-
         </ul>
         <div style="padding: 10px 12px;">
-            <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="currentPage" num-pages="smallnumPages"></pagination>
+            <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="$parent.currentPage" num-pages="smallnumPages"></pagination>
         </div>
 
     </div>
+</div>
+<div class="list-box" style="text-align:center;" ng-show="filteredstudio.length == 0">
+    No results found
 </div>
 
 <!-- List Details -->
@@ -280,7 +278,7 @@
 
                     <div class="todo">
                         <ul>
-                            <li ng-repeat="ser in servicelist | limitTo:4" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
+                            <li ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
                                     {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
@@ -315,7 +313,6 @@
             <div class="review-detail">
                 <h3>Reviews</h3>
                 <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
-
                 <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
                     <p>{%verbatim%}{{rev.comment}}</p>

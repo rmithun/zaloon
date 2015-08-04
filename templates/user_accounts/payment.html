@@ -194,10 +194,10 @@
          
                     <div class="promo">
             
-            <p class="bold">Date & Time: {{date_selected}}  {{from_time}}</p>
+            <p class="bold">Date & Time: <span>{%verbatim%}{{timeFilter(from_time)}}
+                    <span ng-if="from_time  ">,</span> {{date_selected | date: 'dd MMMM, yyyy'}}{%endverbatim%}</span></p>
             <p class="mobspan">Mobile No: <span>
-            <input ng-model="mobileno" name="mobile" type="tel" ng-pattern="/^[7-9][0-9]{9}$/"
-                required></span></p>
+            <input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required></span></p>
                 <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
                     Enter your mobile number ex:9213233423</span></span>
               
