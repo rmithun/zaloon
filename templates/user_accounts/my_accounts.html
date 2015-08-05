@@ -3,8 +3,8 @@
             
                 <div class="navigation-brand">
                       
-          <a href="#" ><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png">  </a>
-          <a href="#" ><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
+          <a href="#/" ><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png">  </a>
+          <a href="#/" ><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
                 </div>
         <!-- Login -->
         
@@ -19,7 +19,7 @@
               </button>          
              
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href = "#my_account" >My Account</a></li>
+                <li><a href = "#/" >Home</a></li>
                 <li><a href="#" ng-click = "logOut()">Signout</a></li>
               </ul>            
              </li>            
@@ -112,7 +112,7 @@
     <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-class="{'active':tabx == 1}" ng-show="tabx == 1" id="booking">
     <ul>
     
-    <li class="booking-list-item-container" ng-repeat="buking in active_bookings">
+    <li class="booking-list-item-container" ng-repeat="buking in active_bookings  | orderBy:'id':true">
       <div class="book-imgthumb">
         <img class="image loaded" alt="" src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
       </div>  
@@ -147,7 +147,7 @@
   <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-class="{'active':tabx == 2}" ng-show="tabx == 2" id="booking-history">
     <ul>
     
-    <li class="booking-list-item-container" ng-repeat="buking in expired_bookings">
+    <li class="booking-list-item-container" ng-repeat="buking in expired_bookings | orderBy:'id':true">
       <div class="book-imgthumb">
         <img class="image loaded" alt="" src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
       </div>  
@@ -173,7 +173,7 @@
       </div>      
       </div>
         <!-- <button class="rebookbtn btn">Rebook</button> -->
-        <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#bookingmodel">Write a review</button>
+        <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#reviewmodal">Write a review</button>
         <span ng-if="buking.status_code != 'B004'">Cancelled </span>
         <span ng-if="buking.is_reviewed == 1">Reviewed </span>
               
@@ -190,7 +190,7 @@
     
   
   <!-- Model -->
-   <div  id="bookingmodel" class=" modal fade" role="dialog">
+   <div  id="reviewmodal" class=" modal fade" role="dialog">
     <div class="modal-content signup">
      <div class="modal-header modal-booking-header">
      <button type="button" class="close" data-dismiss="modal">&times;</button> 
@@ -254,6 +254,40 @@
     </div>  
   </div>   
 
+
+
+  <div  id="bookingconfirm" class=" modal fade" role="dialog">
+    <div class="modal-content signup">
+     <div class="modal-header modal-register-header">
+     <button type="button" class="close" data-dismiss="modal">&times;</button> 
+     <h4 class="modal-title">Your booking is sucessful!</h4>
+    </div> 
+      <div class="modal-body register">   
+      <div class="socialpanel">
+          <div>
+            Booking details
+          </div>
+      </div>        
+      </div>
+    </div>  
+  </div>  
+
+
+<div  id="notificationmodal" class=" modal fade" role="dialog">
+    <div class="modal-content signup">
+     <div class="modal-header modal-register-header">
+     <button type="button" class="close" data-dismiss="modal">&times;</button> 
+     <h4 class="modal-title">{%verbatim%}{{titleMsg}}{%endverbatim%}</h4>
+    </div> 
+      <div class="modal-body register">   
+      <div class="socialpanel">
+          <div>
+           {%verbatim%}{{bodyMsg}}{%endverbatim%}
+          </div>
+      </div>        
+      </div>
+    </div>  
+  </div> 
 
 <script type="text/ng-template" id="location.html">
   <a>

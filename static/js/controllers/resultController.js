@@ -889,15 +889,22 @@ $scope.makepayment = function()
                 "image": "static/img/logo.png",
                 "handler": function (response){
                     console.log(response)
-                    alert(response.razorpay_payment_id);
+                    //modal showing processing your payment dont click
+                    $('#processingmodal').modal('show')
                     booking_data['razorpay_payment_id'] = response.razorpay_payment_id
                     httpServices.newBooking(booking_data).then(function(paydata)
                     {
-                        alert("booked") // redirect to account page and show booking details
+                        console.log(booking_data)
+                        booking_data['has_booked'] = 1
+                        booking_data['razorpay_payment_id'] = null
+                        putResultService.putBookingData(booking_data)
+                        $('#processingmodal').modal('hide')
+                        $location.path("/my_account");
                     }, function()
                     {
                         alert("Failed") //hide and show rzrpay again
-                        $scope.isdisable=false;
+                        $('#processingmodal').modal('hide')
+                        //$scope.isdisable=false;
                     });
             },
                 "prefill": {
@@ -955,9 +962,19 @@ $scope.timeFilter =  function (value) {
 
 });
 
-noqapp.controller('accountscontroller',function($scope, httpServices){
+noqapp.controller('accountscontroller',function($scope, httpServices,putResultService){
 
     $scope.active_booking_count = 10;
+
+    $scope.new_booking = putResultService.getBookingData()
+    console.log($scope.new_booking)
+    if($scope.new_booking)
+    {
+        if(($scope.new_booking['has_booked'] == 1) && ($scope.new_booking['razorpay_payment_id'] == null))
+        {
+            $('#bookingconfirm').modal('show')
+        }
+    }
     $scope.getBookings = function()
     {
         httpServices.getDetails().then(function(data)
@@ -992,13 +1009,20 @@ noqapp.controller('accountscontroller',function($scope, httpServices){
 
     $scope.booking_cancel = function(id)
     {
+        $('#cancelmodal').modal('hide')
         httpServices.cancelBooking(id).then(function(data)
         {
+            $('#notificationmodal').modal('show')
+            $scope.titleMsg = 'Success'; 
+            $scope.bodyMsg = 'Your booking successfully cancelled.'; 
             $scope.getBookings();
             console.log("Booking successfully cancelled")
         },
         function()
         {
+            $('#notificationmodal').modal('show')
+            $scope.titleMsg = 'Failed'; 
+            $scope.bodyMsg = 'Could not cancel your booking.Contact support@zaloon.in'; 
             console.log("Logout Error") 
         })
     }
@@ -1150,10 +1174,17 @@ $scope.add_review = function()
     review_data['booking_id'] = $scope.booking_id
     httpServices.addReview(review_data).then(function(rdata)
     {
-        //review added
+        $('#reviewmodal').modal('hide')
+        $('#notificationmodal').modal('show')
+        $scope.titleMsg = 'Successfully added review'; 
+        $scope.bodyMsg = 'Your rating and review successfully noted'; 
         console.log(rdata)
     },function()
     {
+        $('#reviewmodal').modal('hide')
+        $('#notificationmodal').modal('show')
+        $scope.titleMsg = 'Review not added'; 
+        $scope.bodyMsg = 'Could not add review try again'; 
         console.log("Could not add review.")
     })
 }

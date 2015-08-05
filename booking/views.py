@@ -330,7 +330,7 @@ class AddReviews(CreateAPIView):
 
     def create(self,request,*args,**kwargs):
         try:
-            #import pdb;pdb .set_trace();
+            import pdb;pdb .set_trace();
             data = self.request.DATA
             booking_id = data['booking_id']
             comment = data['comment']
@@ -395,6 +395,7 @@ class  GetSlots(APIView):
     serializer_class = ActiveBookingSerializer
     def get(self,request,*args,**kwargs):
         try:
+            #import pdb;pdb.set_trace();
             data = self.request.GET
             studio = data['studio_id']
             date = data['date']
@@ -446,11 +447,17 @@ class  GetSlots(APIView):
                         for i in range((start_hour+1),  \
                             (end_hour- 1)):
                             slots.pop(i,None)
+                        se_  = [s_min for s_min in slots[start_hour] if s_min  < start_min]
+                        ef_  = [e_min for e_min in slots[end_hour] if e_min  >= end_min]
+                        slots[start_hour] = se_
+                        slots[end_hour] = ef_
+                    if time_diff == 1:
+                        s_  = [mins for mins in slots[start_hour] if mins  > start_min]
+                        slots[start_hour] = s_
                     if time_diff == 0:
-                        slots[start_hour]  = [mins for mins in slots[start_hour] if mins  < start_min]
-                    else:
-                        slots[start_hour]  = [s_min for s_min in slots[start_hour] if s_min  < start_min]
-                        slots[end_hour]  = [e_min for e_min in slots[end_hour] if e_min  >= end_min]
+                        s_  = [mins for mins in slots[start_hour] if mins  >= end_min]
+                        slots[start_hour] = s_
+                        
             obj = {}
             needed_slots = duration / 15
             for key, values in  slots.iteritems():

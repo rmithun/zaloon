@@ -48,5 +48,14 @@ noqapp.factory('putResultService', function(){
     {
         return selectedservices;
     }
+    var booking_data = []
+    putresult.putBookingData = function(data)
+    {
+        booking_data = data
+    }
+    putresult.getBookingData = function()
+    {
+        return booking_data
+    }
     return putresult; 
 });
