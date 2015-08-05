@@ -72,7 +72,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
 
     $scope.timeFilter =  function (value) {
         if(typeof value != 'undefined')
-        {
+        {            
             var split = value.split(':');
             if (split[0] - 12 > 0) {
                 returnval = split[0] - 12 + ":" + split[1] + " PM";
@@ -444,6 +444,7 @@ $scope.bindstudio=function(data){
             },300);
             setTimeout(function () {                
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
+                console.log(top);
             }, 1000);
         }
     }
@@ -714,7 +715,7 @@ $scope.logOut = function()
 
 });
 
-noqapp.controller('paymentcontroller', function ($scope, $cookies, $location, $sce, lodash, putResultService, httpServices) {
+noqapp.controller('paymentcontroller', function ($scope, $cookies, $location, $window, $sce, lodash, putResultService, httpServices) {
 $scope.serviceschosen = [];
 $scope.total_duration;
 $scope.closed_days = []
@@ -800,7 +801,7 @@ var disabled_dates = [];
                     daysOfWeekDisabled: $scope.closed_days,
                 });
 
-
+//console.log($('.payment-wrapper').position().top);
 $("#datepicker").on("changeDate", function(event) {
     $scope.date_selected = $("#datepicker").datepicker('getFormattedDate')
     var slot_data = {}
@@ -810,7 +811,8 @@ $("#datepicker").on("changeDate", function(event) {
     slot_data['studio_id'] = $scope.serviceschosen.studio.id
     httpServices.getSlots(slot_data).then(function(sdata)
     {
-        $scope.avail = sdata.available_slots.data
+        $('html, body').animate({scrollTop: $('#collapseTwo').offset().top }, 'slow');
+        $scope.avail = sdata.available_slots.data;        
     },function()
     {
         console.log("Not slots available.Try another date")
@@ -864,6 +866,7 @@ $scope.payment_class3 = "panel-heading"
 
 $scope.makepayment = function()
 {
+    console.log($scope.serviceschosen);
     $scope.continueclick=true;
     if (!bookingForm.$invalid) {
         if ($scope.from_time && $scope.date_selected && $scope.mobileno)
@@ -908,7 +911,7 @@ $scope.makepayment = function()
                 }
                 var rzp1 = new Razorpay(options);
                 rzp1.open();
-                e.preventDefault();
+                //e.preventDefault();
 
                 /*$scope.payment_frame = $sce.trustAsHtml($scope.paymentresponse);
                 $scope.payment_class1 = "panel panel-default"
@@ -931,13 +934,15 @@ $scope.makepayment = function()
 
 $scope.timeFilter =  function (value) {
         if(typeof value != 'undefined')
-        {
+        {            
             var split = value.split(':');
+            var min = split[1] =="0"? "00":split[1];
             if (split[0] - 12 > 0) {
-                returnval = split[0] - 12 + ":" + split[1] + " PM";
+
+                returnval = split[0] - 12 + ":" + min + " PM";
             }
             else {
-                returnval = split[0] + ":" + split[1] + " AM";
+                returnval = split[0] + ":" + min + " AM";
             }                
             return returnval;
         }

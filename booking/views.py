@@ -200,6 +200,9 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 data = simplejson.dumps(booking_details)
         except Exception,e:
             logger_error.error(traceback.format_exc())
+            url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+            ##change refund amount if neede in future
+            resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
             transaction.rollback()
             return Response(data = None,status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
