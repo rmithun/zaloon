@@ -425,6 +425,8 @@ $scope.bindstudio=function(data){
     $scope.studiodetails = function (id) {
         var studio = lodash.where($scope.studio, { 'id': id });
         if (studio.length > 0) {
+            $('.detail-tab').removeClass('active');
+            $('.tab-street').addClass('active');
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
             $scope.selectedstudio['type_icon_class']  = lodash.where($scope.studiotype,{'name':$scope.selectedstudio.studio_type.type_desc})[0].icon;

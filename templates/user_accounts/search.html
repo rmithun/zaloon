@@ -436,7 +436,8 @@
                 var window_top = $('.list-detail-box').scrollTop();
                 var div_height = $('.list-detail-header').innerHeight();
                 var rate_height = $('.rate-panel').innerHeight();
-                if (window_top > div_height - 44) {
+                console.log(window_top+" - "+div_height - 94);
+                if (window_top > div_height - 94) {
                     $('.header-tabs').addClass('stick');
                     if ($('.street-info').position().top + $('.street-info').height() > 70) {
                        $('.detail-tab').removeClass('active');
