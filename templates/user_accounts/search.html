@@ -1,4 +1,5 @@
- <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
+ 
+ {% load static from staticfiles %}<div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
     <div id="fb-root"></div>
 <header class="searchheader">
 
@@ -9,8 +10,10 @@
             <!--  <div class="brand-logo">
                         <a href="#" class="logo"></a>                       
                     </div>  -->
-            <a href="#/"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png"> </a>
-            <a href="#/"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
+            <a href="#/"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="
+                {% static 'img/logo.png' %}"> </a>
+            <a href="#/"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="
+                {% static 'img/logo-mobile.png' %}"> </a>
         </div>
         <!-- Login -->
 
@@ -189,9 +192,9 @@
                             <div class="landmark_details">{%verbatim%}{{stu.area}}{%endverbatim%}</div>
                             <div class="sub-line-1">
                                 {%verbatim%}{{stu.studio_type.type_desc}}{%endverbatim%}-{%verbatim%}{{stu.studio_kind.kind_desc}}{%endverbatim%}
-                                <img class="image loaded staricon {%verbatim%}{{stu.staricon}}{%endverbatim%} pull-right" alt="" /></div>
+                                <img ng-if="stu.staricon" class="image loaded staricon {%verbatim%}{{stu.staricon}}{%endverbatim%} pull-right" alt="" /></div>
                             <div class="sub-line-2">
-                                <span>{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
+                                <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
                                 <span class="price">
                 <span class="icon-rupee rupee"></span><span class="info-rate">₹ {%verbatim%}{{stu.price}}{%endverbatim%}</span>
                                 </span>
@@ -283,7 +286,7 @@
                                     {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
                             </li>
-                            <li href="#" data-toggle="modal" data-target="#servicemodel">
+                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodel">
                                 <div class="todo-content"> Click to add more services...</div>
                             </li>
                         </ul>

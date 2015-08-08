@@ -158,26 +158,36 @@ noqapp.factory('sessionService', function($q,$cookies)
 	return sessionData
 
 })
-
 noqapp.factory('authInterceptor', [
-  "$q", "$window", "$location","sessionService", function($q, $window, $location, sessionService) {
-    return {
-      request: function(config) {
-        config.headers = config.headers || {};
-        if(sessionService.isLogged()) 
-        {
-	        config.headers.Authorization = 'Bearer ' + sessionService.getAccessToken(); // add your token from your service 
-        	//config.headers.Authorization = 'Bearer ' + 'rtPmqphRY60xPVbUO1gDYYZVYx0DE5';
-        }
-        return config;
-      },
-      response: function(response) {
-        return response || $q.when(response);
-      },
-      responseError: function(rejection) {
-        // your error handler
-        return $q.reject(rejection);
-      }
-    };
-  }
-]);
+ "$q", "$window","$cookies", "$location","sessionService", function($q, $window, $cookies,$location, sessionService) {
+   return {
+     request: function(config) {
+       config.headers = config.headers || {};
+       if(sessionService.isLogged()) 
+       {
+       config.headers.Authorization = 'Bearer ' + sessionService.getAccessToken(); // add your token from your service 
+       	//config.headers.Authorization = 'Bearer ' + 'rtPmqphRY60xPVbUO1gDYYZVYx0DE5';
+       }
+       return config;
+     },
+     response: function(response) {
+     	
+       return response || $q.when(response);
+     },
+     responseError: function(rejection) {
+       // your error handler
+       console.log(rejection)
+     	if(rejection.status == 401)
+     	{
+     	   var cookies = $cookies.getAll();
+           angular.forEach(cookies, function (v, k) {
+           $cookies.remove('token',{path:'/'});
+           });
+           console.log("Logged out successfully")
+           $window.location.href = "/"
+       }
+       return $q.reject(rejection);
+     }
+   };
+ }
+]);	
