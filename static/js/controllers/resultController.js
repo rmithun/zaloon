@@ -1,4 +1,4 @@
-﻿noqapp.filter('startFrom', function () {
+noqapp.filter('startFrom', function () {
     return function (input, start) {
         if (input) {
             start = +start;
@@ -13,6 +13,7 @@
 
 
 noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,lodash,httpServices,sessionService,putResultService) {
+    
     $scope.studio = [];
     $scope.filteredstudio = [];
     $scope.servicelist = [];
@@ -32,6 +33,10 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.studiokindfilter = [];
     $scope.studioratingfilter = [];
     $scope.studioservicefilter = [];
+    $scope.tempstudiotypefilter=[];
+    $scope.tempstudiokindfilter = [];
+    $scope.tempstudioratingfilter = [];
+    $scope.tempstudioservicefilter = [];
     $scope.is_logged = sessionService.isLogged();
     $scope.selected_service = [];
     $scope.to_booking_flag = 0;
@@ -253,7 +258,54 @@ $scope.bindstudio=function(data){
 
     //Filter
     $scope.clkmore = function () {
+        console.log($scope.morefilter);
+        if(!$scope.morefilter){            
+            $scope.tempstudiotypefilter= [];
+            $scope.tempstudiokindfilter = [];
+            $scope.tempstudioratingfilter = [];
+            $scope.tempstudioservicefilter = [];
+            $scope.tempstudiotypefilter = angular.copy($scope.studiotypefilter);
+            $scope.tempstudiokindfilter = angular.copy($scope.studiokindfilter);
+            $scope.tempstudioratingfilter = angular.copy($scope.studioratingfilter);
+            $scope.tempstudioservicefilter = angular.copy($scope.studioservicefilter);
+        }
+        else{            
+            $scope.undofilter();
+        }
         $scope.morefilter = !$scope.morefilter;
+    }
+
+    $scope.undofilter=function(){
+        $scope.studiotypefilter = angular.copy($scope.tempstudiotypefilter);
+        $scope.studiokindfilter = angular.copy($scope.tempstudiokindfilter);
+        $scope.studioratingfilter = angular.copy($scope.tempstudioratingfilter);
+        $scope.studioservicefilter = angular.copy($scope.tempstudioservicefilter);
+        angular.forEach($scope.studiotype,function(val,index){
+            $scope.studiotype[index].active=false;                
+            if ($scope.studiotypefilter.indexOf(val.name) != -1) {
+                $scope.studiotype[index].active=true;
+            }                
+        })
+        angular.forEach($scope.studiokind,function(val,index){
+            $scope.studiokind[index].active=false;                
+            if ($scope.studiokindfilter.indexOf(val.name) != -1) {
+                $scope.studiokind[index].active=true;
+            }                
+        })
+        angular.forEach($scope.studiostar,function(val,index){
+            $scope.studiostar[index].active=false;                
+            if ($scope.studioratingfilter.indexOf(val.star) != -1) {
+                $scope.studiostar[index].active=true;
+            }                
+        })
+        $('input:checkbox').removeAttr('checked');
+        $('input[type=checkbox]').each(function () {
+            //console.log($(this));
+            if ($scope.tempstudioservicefilter.indexOf($(this).next().text()) != -1) {
+                //$(this).addAttr('checked');
+                $(this).attr("checked","true");
+            }
+        });
     }
 
     $scope.studiotypeclick = function (type, index) {
@@ -292,8 +344,7 @@ $scope.bindstudio=function(data){
         }
         else {
             $scope.studioservicefilter.splice($scope.studioservicefilter.indexOf(service), 1);
-        }
-        console.log($scope.studioservicefilter);
+        }        
     }
 
     $scope.applyfilter = function () {
@@ -714,6 +765,16 @@ $scope.logOut = function()
             console.log("Logout Error")
         })
     }
+
+    $(document).click(function(e) {  
+        if($scope.morefilter){      
+            if (!$(e.target).is('#morefilter, #morefilter *')) {        
+                $scope.morefilter=false;
+                $scope.undofilter();
+                $scope.$apply();
+            }
+        }
+    });
 
 });
 
