@@ -1,5 +1,6 @@
  
- {% load static from staticfiles %}<div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
+ {% load static from staticfiles %}
+ <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
     <div id="fb-root"></div>
 <header class="searchheader">
 
@@ -316,7 +317,7 @@
             <div class="review-detail">
                 <h3>Reviews</h3>
                 <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
-                <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
+                <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*10 | limitTo:10">
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
                     <p>{%verbatim%}{{rev.comment}}</p>
                 </div>
@@ -329,7 +330,6 @@
         </div>
     </div>
 </div>
-
 
 
 
@@ -352,6 +352,7 @@
 
 <!-- Modal -->
 <div id="infomodal" class=" modal fade" role="dialog">
+    <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -372,19 +373,20 @@
 
         </div>
     </div>
-
+</div>
 </div>
 
 <!-- Modal -->
 <div id="signupmodel" class=" modal fade" role="dialog">
-    <div data-facebook={ %verbatim%}{{fb_key}}{%endverbatim%}> </div>
-    <div id="fb-root"></div>
+    
+    <div class="modal-dialog" style="width:400px;margin-top:15%;">    
     <div class="modal-content signup">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Login</h4>
         </div>
         <div class="modal-body register">
+            
             <div class="socialpanel">
                 <button data-ng-click='fetch();' class="btn btn-block btn-social btn-facebook">
                     <i class="icon icon-socialmedia-08"></i>Login using Facebook</button>
@@ -394,10 +396,12 @@
         </div>
     </div>
 </div>
+</div>
 
 
 <!-- Modal -->
 <div id="servicemodel" class=" modal fade" role="dialog">
+<div class="modal-dialog"> 
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -429,7 +433,6 @@
 
         </div>
     </div>
-
 </div>
 </div>
 </div>
@@ -439,18 +442,18 @@
                 var window_top = $('.list-detail-box').scrollTop();
                 var div_height = $('.list-detail-header').innerHeight();
                 var rate_height = $('.rate-panel').innerHeight();
-                console.log(window_top+" - "+div_height - 94);
+                console.log(window_top);
                 if (window_top > div_height - 94) {
                     $('.header-tabs').addClass('stick');
-                    if ($('.street-info').position().top + $('.street-info').height() > 70) {
+                    if ($('.street-info').position().top + $('.street-info').height() > 10) {
                        $('.detail-tab').removeClass('active');
                        $('.tab-street').addClass('active');
                    }
-                   else if ($('.service-list').position().top + $('.service-list').height() > 70) {
+                   else if ($('.service-list').position().top + $('.service-list').height() > 90) {
                        $('.detail-tab').removeClass('active');
                        $('.tab-service').addClass('active');
                    }
-                   else if ($('.direction').position().top + $('.direction').height() > 70) {
+                   else if ($('.direction').position().top + $('.direction').height() > 90) {
                        $('.detail-tab').removeClass('active');
                        $('.tab-direction').addClass('active');
                    }

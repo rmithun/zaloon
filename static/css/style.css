@@ -130,7 +130,7 @@ article { text-align: left; }
 
 
 /*Model*/
-#signupmodel { width: 400px;  margin: 15% auto;  overflow:hidden;}
+/*#signupmodel { width: 400px;  margin: 15% auto;  overflow:hidden;}*/
 .modal-content{border-radius:0px;}
 .modal-register-header {  background-color: #22ab81;  padding:5px 10px;  color: #F4F4F4;}
 .modal-register-header  input{width:50%;padding-left:10px;}

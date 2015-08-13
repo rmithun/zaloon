@@ -299,12 +299,12 @@ $scope.bindstudio=function(data){
             }                
         })
         $('input:checkbox').removeAttr('checked');
-        $('input[type=checkbox]').each(function () {
-            //console.log($(this));
-            if ($scope.tempstudioservicefilter.indexOf($(this).next().text()) != -1) {
-                //$(this).addAttr('checked');
-                $(this).attr("checked","true");
+        $('input[type=checkbox]').each(function () {  
+            //Start Added          
+            if ($scope.tempstudioservicefilter.indexOf($(this).next().text()) != -1) {                
+                $(this).prop('checked', true);
             }
+            //End Added
         });
     }
 
@@ -487,8 +487,8 @@ $scope.bindstudio=function(data){
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
             $scope.reviewPage = 1;
             $scope.directionlocation=$scope.searchdata.location;
-            var page = Math.floor($scope.selectedstudio.studio_review.length / 5);            
-            page = page + ($scope.selectedstudio.studio_review.length % 5 > 0 ? 1 : 0);                  
+            var page = Math.floor($scope.selectedstudio.studio_review.length / 10);            
+            page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
             $scope.reviewtotalpage = page;            
             $scope.shopdistance = $scope.selectedstudio.distance;            
             setTimeout(function(){
@@ -786,6 +786,9 @@ var closed_days = $scope.closed_days
 $scope.start_date = new Date()
 $scope.continueclick=false;
 $scope.isdisable = false;
+//Added
+$scope.coupon_code="";
+$("body").css("overflow-x", "hidden");
 if(putResultService.getSelectedservice().length !=0){
     $scope.serviceschosen = putResultService.getSelectedservice();
 }
@@ -898,10 +901,16 @@ $scope.applyPromo = function()
         //$scope.promo_amount = cdata.
     },function(cdata)
     {   
-        $scope.coupon_resp = cdata.data
+        $scope.coupon_resp = cdata.data;
+        $scope.coupon_code="";
         console.log("Error applying coupon data")
     })
 }
+//Start Added
+$scope.focus=function(){
+    $scope.coupon_resp="";
+}
+//End Added
 
 $scope.booking_class1 = "panel panel-default bookingdetails panel-closed"
 $scope.booking_class2 = ""
@@ -927,7 +936,7 @@ $scope.payment_class1 = "panel panel-default panel-closed"
 $scope.payment_class2 = ""
 $scope.payment_class3 = "panel-heading"
 
-$scope.makepayment = function()
+$scope.makepayment = function(bookingForm)
 {
     console.log($scope.serviceschosen);
     $scope.continueclick=true;
