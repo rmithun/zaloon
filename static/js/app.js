@@ -1,4 +1,4 @@
-var noqapp = angular.module('accountApp', ['ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable']);
+  var noqapp = angular.module('accountApp', ['ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable']);
 
 noqapp.run(function($http,$cookies,sessionService) {
 
@@ -88,3 +88,34 @@ angular.module("ui.editable", []).directive('txtEditable', function (httpService
        }
    };
 });
+
+noqapp.directive('clearIcon', ['$compile', function($compile) { 
+  return { 
+    restrict : 'A', 
+    link : function(scope, elem, attrs) { 
+      var model = attrs.ngModel; var template = '<span ng-click=\"clearText(\'' + model + '\')\" class="clearIcon" style="display:none;">x</span>'; 
+      elem.parent().append($compile(template)(scope)); 
+      var clearIconToggle = function(toggleParam) { 
+        if(elem.val().trim().length) 
+          elem.next().css("display", "inline"); 
+        else { 
+          if(elem.next().css("display") == "inline") 
+            elem.next().css("display", "none"); 
+        } 
+      }; 
+      var clearText = function(clearParam) { 
+        elem.val(''); 
+        clearIconToggle(clearParam); 
+      }; 
+      elem.on("focus", function(event) { 
+        clearIconToggle(model); 
+      }); 
+      elem.on("keyup", function(event) { 
+        clearIconToggle(model); 
+      }); 
+      elem.next().on("click", function(event) { 
+        elem.val(''); elem.next().css("display", "none"); 
+      }); 
+    } 
+  }; 
+}]);

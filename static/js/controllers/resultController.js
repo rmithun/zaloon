@@ -258,7 +258,11 @@ $scope.bindstudio=function(data){
 
     //Filter
     $scope.clkmore = function () {
-        console.log($scope.morefilter);
+        $('#searchdevice').hide();
+        $scope.searchicon=false;
+        if($('#studiodetails').css('display') != 'none'){
+            $scope.closeslider();
+        } 
         if(!$scope.morefilter){            
             $scope.tempstudiotypefilter= [];
             $scope.tempstudiokindfilter = [];
@@ -478,6 +482,8 @@ $scope.bindstudio=function(data){
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
             $('.tab-street').addClass('active');
+            $('#searchdevice').hide();
+            $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
             $scope.selectedstudio['type_icon_class']  = lodash.where($scope.studiotype,{'name':$scope.selectedstudio.studio_type.type_desc})[0].icon;
@@ -502,7 +508,7 @@ $scope.bindstudio=function(data){
         }
     }
     $scope.closeslider = function () {        
-        $('#studiodetails').toggle('slide', { direction: 'right' }, 100);
+        $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
         $scope.selected_service = [];
         setTimeout(function(){
             directionsDisplay.setMap(null);
@@ -627,6 +633,8 @@ $scope.bindstudio=function(data){
         $scope.directionlocation=$label;
     };
     $scope.searchservicestudio=function(){
+        $('#searchdevice').hide();
+        $scope.searchicon=false;
         var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location};
         httpServices.getstudioDetails(obj).then(function(data)
         {
@@ -766,6 +774,22 @@ $scope.logOut = function()
             console.log("Logout Error")
         })
     }
+$scope.searchicon=false;
+    $scope.showsearch=function(){
+        if($('#searchdevice').css('display') == 'none')
+        {
+            $('#searchdevice').show();
+            $scope.searchicon=true;
+        }
+        else{
+            $('#searchdevice').hide();
+            $scope.searchicon=false;
+        }
+        $scope.morefilter=false;
+        if($('#studiodetails').css('display') != 'none'){
+            $scope.closeslider();
+        }        
+    }
 
     $(document).click(function(e) {  
         if($scope.morefilter){      
@@ -790,6 +814,7 @@ $scope.isdisable = false;
 //Added
 $scope.coupon_code="";
 $("body").css("overflow-x", "hidden");
+$("body").css("overflow-y", "scroll");
 if(putResultService.getSelectedservice().length !=0){
     $scope.serviceschosen = putResultService.getSelectedservice();
 }

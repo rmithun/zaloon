@@ -1040,7 +1040,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 
   .searchpanel{ padding:20px 15px; border: 0; }
   .searchheader .navigation{padding:0 20px 0 0;background: #F06370;border-top:0px;height:55px;}
-  .searchdevice{position: absolute;width: 100%; height: auto; top: 60px; padding-right: 0; background-color: #F1F1F1; z-index: 2;}
+  .searchdevice{position: absolute;width: 100%; height: auto; top: 60px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display: none;}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 13px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
@@ -1203,7 +1203,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   
   .searchpanel{ padding:20px 15px; border: 0; }
   .searchheader .navigation{padding:0 20px 0 0;background: #F06370;border-top:0px;}
-  .searchdevice{position: absolute;width: 100%; height: auto; top: 60px; padding-right: 0; background-color: #F1F1F1; z-index: 2;}
+  .searchdevice{position: absolute;width: 100%; height: auto; top: 60px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display:none;}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding:17px 13px 16px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
@@ -1256,7 +1256,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 @media (min-width: 992px){  
 #landing-page .static-header-landing, #landing-page .static-header{height:400px;}
 .searchheader .navigation{background:#f8f8f8;padding:15px 20px 8px 0px ;border-top: 5px solid #f06471;}
-.searchdevice{position: initial;  background-color: transparent;}
+.searchdevice{position: initial;  background-color: transparent;display: block;}
 .searchpanel{padding:0px;}
 .searchpanel .form-group{margin-bottom:10px;}
 .navigation-bar-right >.btn.btnmore{ background:#f1f1f1; color:#1bbc9b;  padding: 12px 14px 12px 44px;}

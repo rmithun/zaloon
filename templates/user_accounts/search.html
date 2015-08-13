@@ -20,8 +20,8 @@
 
         <div class="navigation-navbar">
             <ul class="navigation-bar navigation-bar-right">
-                <li class="navsearch hidden-md hidden-lg">
-                    <a href="#" class="active"><span class="glyphicon glyphicon-search"></span></a>
+                <li class="navsearch hidden-md hidden-lg" ng-click="showsearch()">
+                    <a style="cursor:pointer;" class="" ng-class="{'active': searchicon == true}"><span class="glyphicon glyphicon-search"></span></a>
                 </li>
                 <li class="moresearch" id="morefilter">
                     <button class="btn btnmore" ng-click="clkmore()">
@@ -119,20 +119,20 @@
                 </li>
             </ul>
         </div>
-        <div class="searchdevice">
+        <div class="searchdevice" id="searchdevice">
 
             <!-- search -->
 
             <form role="form" name="searchForm" class="searchpanel">
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
-                        <input type="text" ng-model="searchdata.service" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:10" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
+                        <input type="text" clearIcon ng-model="searchdata.service" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
                     </div>
                 </div>
 
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
-                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html">
+                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:5   " typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html">
                     </div>
                 </div>
                 <div class="col-custom-button">
@@ -169,10 +169,10 @@
         <span class="icon icon-text-hierarchy-06">List</span>
         </span>
     </div>
-    <div class="form-group">
+    <div class="form-group hidden-xs">
         <input size="5" type="text" class="form-control" id="namesearch" ng-model="query.name" placeholder="Search by name">        
     </div>
-    <div class="form-group">        
+    <div class="form-group hidden-xs">        
             <span><select  class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice" data-ng-options="studiosort as studiosort.name for studiosort in studiosort" ng-change="sortchange(sortservice)">
                     <option value="">Sort by</option> 
             </select></span>
@@ -185,13 +185,13 @@
             <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="studiodetails(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
                 <a class="list-item" style="cursor:pointer;">
                     <div class="details">
-                        <img class="image loaded" style="height:100px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
+                        <img class="image loaded" style="height:80px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
                         <div class="info">
                             <div class="heading">
                                 <span>{%verbatim%}{{stu.name}}{%endverbatim%}</span>
                             </div>
                             <div class="landmark_details">{%verbatim%}{{stu.area}}{%endverbatim%}</div>
-                            <div class="sub-line-1">
+                            <div class="sub-line-1 hidden-xs">
                                 {%verbatim%}{{stu.studio_type.type_desc}}{%endverbatim%}-{%verbatim%}{{stu.studio_kind.kind_desc}}{%endverbatim%}
                                 <img ng-if="stu.staricon" class="image loaded staricon {%verbatim%}{{stu.staricon}}{%endverbatim%} pull-right" alt="" /></div>
                             <div class="sub-line-2">
@@ -217,7 +217,7 @@
 
 <!-- List Details -->
 <div id="studiodetails" class="list-detail-box-panel" style="display:none">
-    <a style="cursor:pointer;" ng-click="closeslider()" class="listclose">X</a>
+    <a style="cursor:pointer;" ng-click="closeslider()" class="listclose hidden-xs">X</a>
     <div class="list-detail-box">
         <div class="rate-panel col-xs-12 no-padding">
             <div class="col-sm-6 col-xs-4 btn btn-secondary">
@@ -227,7 +227,7 @@
                 <span class="text" ng-click="book()">BOOK</span>
             </div>
             <div class="hidden-sm hidden-md hidden-lg col-xs-4 btn btn-primary btn-close">
-                <span class="text"> <a href="#" ng-click="closeslider()" class="listclose">CLOSE
+                <span class="text"> <a style="cursor:pointer" ng-click="closeslider()" class="listclose">CLOSE
                 </a></span>
             </div>
         </div>
