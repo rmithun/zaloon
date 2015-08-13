@@ -8,7 +8,7 @@ noqapp.directive('facebook', function($http,httpServices) {
         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
         if (d.getElementById(id)) {return;}
         js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "//connect.facebook.net/en_US/all.js";
+        js.src = "https://connect.facebook.net/en_US/all.js";
         ref.parentNode.insertBefore(js, ref);
       }(document));
 
@@ -37,7 +37,7 @@ noqapp.directive('facebook', function($http,httpServices) {
       window.fbAsyncInit = function() {
         FB.init({
           appId      : attrs.facebook, // App ID
-          //channelUrl : '//localhost:3000/channel.html', // Channel File
+          channelUrl : '//localhost:8000/static/js/channel.html', // Channel File
           status     : true, // check login status
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML

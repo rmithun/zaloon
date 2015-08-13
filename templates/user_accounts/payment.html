@@ -74,8 +74,8 @@
             <div class="panel-heading progress-done"> 
 <div class="heading-bar">     
                 <h4 class="panel-title">
-                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion"  ng-click ="openToggle('collapseTwo');">CHOOSE DATE AND TIME <span class="pull-right">{%verbatim%}{{timeFilter(from_time)}}
-                    <span ng-if="from_time  ">,</span> {{date_selected | date: 'dd MMMM, yyyy'}}{%endverbatim%}</span></a>          
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion"  ng-click ="openToggle('collapseTwo');">CHOOSE DATE AND TIME <span class="pull-right">{%verbatim%}
+                     {{date_selected | date: 'dd MMMM'}}<span ng-if="from_time">,</span>{{timeFilter(from_time)}}{%endverbatim%}</span></a>          
                 </h4>     
             </div>
        </div>
@@ -98,7 +98,7 @@
 <!-- Time --> 
 
 
-  <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="avail.length != 0">
+  <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="avail.length != 0 && day_crossed">
   <p>TIME</p>
   <p>MORNING(A.M)</p>
   
@@ -191,8 +191,8 @@
          
                     <div class="promo">
             
-            <p class="bold">Date & Time: <span>{%verbatim%}{{timeFilter(from_time)}}
-                    <span ng-if="from_time  ">,</span> {{date_selected | date: 'dd MMMM, yyyy'}}{%endverbatim%}</span></p>
+            <p class="bold">Date & Time: <span>{%verbatim%}
+                    {{date_selected | date: 'dd MMMM'}}<span ng-if="from_time  ">,</span> {{timeFilter(from_time)}}{%endverbatim%}</span></p>
             <p class="mobspan">Mobile No: <span>
             <input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required></span></p>
             <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.required">

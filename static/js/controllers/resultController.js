@@ -707,7 +707,7 @@ $scope.fbLogin = function(dummy)
             {
                 $scope.is_logged = sessionService.isLogged()
                 $scope.user_details = dataz['user_details'].data[0]
-                $scope.user_name = $scope.user_details['first_name']
+                $scope.user_name = $scope.user_details.user_acc['first_name']
                 $('#signupmodel').modal('hide');
                 //redirect to booking page if clicked book
                 if ($scope.to_booking_flag == 1)
@@ -736,7 +736,8 @@ if(sessionService.isLogged())
     httpServices.getUsrDetails().then(function(dataz)
     {
         $scope.user_details = dataz['user_details'].data[0]
-        $scope.user_name = $scope.user_details['first_name']
+        console.log($scope.user_details)
+        $scope.user_name = $scope.user_details.user_acc['first_name']
     }, function()
     {
         console.log("Error getting user data")  
@@ -811,6 +812,8 @@ else
 }
 console.log($scope.rp_service_txt)
 $scope.user_details = $scope.serviceschosen['user_details']
+console.log($scope.user_details)
+$scope.mobileno = $scope.user_details.mobile
 $scope.total_duration=lodash.sum($scope.serviceschosen.services,'duration');
 $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
 $scope.selected_services = lodash.pluck($scope.serviceschosen.services, 'id');
@@ -821,7 +824,7 @@ console.log($scope.serviceschosen.studio);
 angular.forEach($scope.serviceschosen.studio.studio_closed_details, function(value, key) {    
     $scope.closed_days.push(value.closed_on.id-1);    
 });
-if ($scope.start_date.getHours() > 12)
+if ($scope.start_date.getHours() > 11)
 {
     $scope.start_date.setDate($scope.start_date.getDate() + 1);
 }
@@ -871,6 +874,18 @@ var disabled_dates = [];
 $("#datepicker").on("changeDate", function(event) {
     $scope.date_selected = $("#datepicker").datepicker('getFormattedDate')
     var slot_data = {}
+    is_today = new Date($scope.date_selected)
+    today = new Date()
+    $scope.day_crossed = 1;
+    console.log(is_today.getDate())
+    console.log(is_today.getMonth())
+    console.log(today.getDate())
+    console.log(today.getMonth())
+    console.log(today.getHours())
+    if(is_today.getDate() == today.getDate() && is_today.getMonth() == today.getMonth() && (parseInt(today.getHours()) > 4))
+    {
+        $scope.day_crossed = 0;
+    }
     slot_data['services'] = $scope.selected_services
     slot_data['date'] = $scope.date_selected
     slot_data['duration'] = $scope.total_duration
@@ -956,7 +971,7 @@ $scope.makepayment = function(bookingForm)
             var options = {
                 "key": "rzp_test_bKVgZ668B7jtSR",
                 "amount": ($scope.amount_to_pay * 100),
-                "name": $scope.user_details.first_name, //inser user name here
+                "name": $scope.user_details.user_acc['first_name'], //inser user name here
                 "description": $scope.rp_service_txt,
                 "image": "static/img/logo.png",
                 "handler": function (response){
@@ -980,12 +995,12 @@ $scope.makepayment = function(bookingForm)
                     });
             },
                 "prefill": {
-                "name": $scope.user_details.first_name, //user name
-                "email": $scope.user_details.email, // user email
+                "name": $scope.user_details.user_acc['first_name'], //user name
+                "email": $scope.user_details.user_acc['email'], // user email
                 "contact" : $scope.mobileno
                 },
                 "notes": {
-                "address": $scope.user_details.email
+                "address": $scope.user_details.user_acc['email']
                 }
                 }
                 var rzp1 = new Razorpay(options);
@@ -1034,7 +1049,7 @@ $scope.timeFilter =  function (value) {
 
 });
 
-noqapp.controller('accountscontroller',function($scope, httpServices,putResultService){
+noqapp.controller('accountscontroller',function($scope,httpServices,putResultService){
 
     $scope.active_booking_count = 10;
 
@@ -1044,6 +1059,15 @@ noqapp.controller('accountscontroller',function($scope, httpServices,putResultSe
     {
         if(($scope.new_booking['has_booked'] == 1) && ($scope.new_booking['razorpay_payment_id'] == null))
         {
+            $scope.$on('$routeChangeStart', function(scope, next, current)
+            {
+                if(next['templateUrl'] ='/booking/booking_page/')
+                {
+                    window.location.href = "http://localhost:8000";
+                    //window.location.href = "http://www.zaloon.in";                
+                }
+                
+            });
             $('#bookingconfirm').modal('show')
         }
     }

@@ -52,7 +52,7 @@ class ServiceMixin(object):
     queryset = Service.objects.all()
 
 class ServiceDetails(ServiceMixin, ListAPIView):
-	pass
+    pass
 
 
 def get_studios(location,service,date=None):
@@ -63,22 +63,21 @@ def get_studios(location,service,date=None):
         #location_set =  reduce(operator.__or__, [Q(area__icontains=query)  \
         #| Q(address_1__icontains=query) | Q(address_2__icontains=query  \
         #)for query in location])
-        closed_on_day = (datetime.today().date().weekday() + 1)
-        open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
+        #closed_on_day = (datetime.today().date().weekday() + 1)
+        #open_studios = StudioClosedDetails.objects.filter(~Q(closed_on = closed_on_day)).values('studio')
         if settings.DEBUG:
-            studios = StudioProfile.objects.filter(city = 'Chennai', is_closed = 0 ,  \
-            id__in = open_studios).values('id')
+            #studios = StudioProfile.objects.filter(city = 'Chennai', is_closed = 0 ,  \
+            #id__in = open_studios).values('id')
             services = Service.objects.filter(service_name__iregex = r'\b{0}\b'.format(service)).values('id')
         else:
             services = Service.objects.filter(service_name__iregex = r'\y{0}\y'.format(service)).values('id')
-            studios = StudioProfile.objects.filter(area__iregex = r'\y{0}\y'.format(location), is_closed = 0 ,  \
-            id__in = open_studios).values('id')
+            #studios = StudioProfile.objects.filter(area__iregex = r'\y{0}\y'.format(location), is_closed = 0 ,  \
+            #id__in = open_studios).values('id')
         if len(service) > 0:
             filtered_studios =  StudioServices.objects.filter(service_id__in =   \
-	        services, studio_profile_id__in = studios).values('studio_profile').distinct()
+            services).values('studio_profile').distinct()
         else:
-            filtered_studios =  StudioServices.objects.filter(studio_profile_id__in =   \
-                studios).values('studio_profile').distinct()
+            filtered_studios =  StudioServices.objects.all().distinct()
 
         ##call for booking logic
     except Exception,e:
@@ -108,16 +107,16 @@ class StudioProfileMixin(object):
             return None
         else:
             return queryset
-		
+        
 
 class StudioProfileDetail(StudioProfileMixin, ListAPIView):
     #import pdb;pdb.set_trace();
-    pass	
+    pass    
 
 class StudioServicesDetail(ListAPIView):
-	permission_classes = (ReadWithoutAuthentication,)
-	serializer_class = StudioServicesSerializer
-	queryset = StudioServices.objects.filter(studio_profile_id = 1)
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = StudioServicesSerializer
+    queryset = StudioServices.objects.filter(studio_profile_id = 1)
 
 
 class StudioReviewMixin(object):
@@ -131,7 +130,7 @@ class StudioReviewMixin(object):
         return queryset
 
 class StudioReviewDetails(StudioReviewMixin,ListCreateAPIView):
-	pass
+    pass
 
 
 class GetStudioTypes(ListAPIView):

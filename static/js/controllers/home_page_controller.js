@@ -1,4 +1,4 @@
-noqapp.controller('homepagecontroller',function($scope, $cookies, $location,httpServices,sessionService,putResultService){
+noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $location,httpServices,sessionService,putResultService){
 $scope.is_logged = sessionService.isLogged();
 $scope.formsubmit=false;
 
@@ -22,7 +22,7 @@ getFBKey()
 		  	httpServices.getUsrDetails().then(function(dataz)
 		  	{
 		  		$scope.is_logged = sessionService.isLogged()
-		  		$scope.user_name = dataz['user_details'].data[0].first_name
+		  		$scope.user_name = dataz['user_details'].data[0].user_acc['first_name']
 		  		//$('#signupmodel').modal('hide');
 		  	}, function()
 		  	{
@@ -42,7 +42,7 @@ if(sessionService.isLogged())
 {
 httpServices.getUsrDetails().then(function(dataz)
 {
-	$scope.user_name = dataz['user_details'].data[0].first_name
+	$scope.user_name = dataz['user_details'].data[0].user_acc['first_name']
 }, function()
 {
 	console.log("Error getting user data")	
@@ -54,10 +54,13 @@ httpServices.getUsrDetails().then(function(dataz)
 	{	
 		httpServices.logOut().then(function(logout_data)
 		{
-			$cookies.remove('token')
-			//$scope.is_logged = sessionService.isLogged()
-			console.log("Logged out successfully")
-			$window.location.href = "/"
+			var cookies = $cookies.getAll();
+            angular.forEach(cookies, function (v, k) {
+                $cookies.remove(k,{path:'/'});
+            });
+            console.log("Logged out successfully")
+            $scope.is_logged = sessionService.isLogged();
+            $window.location.href = "/"
 		},
 		function()
 		{

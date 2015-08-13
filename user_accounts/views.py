@@ -48,7 +48,7 @@ def login_view(request):
 @login_required
 def logout_view(request):
   auth.logout(request)
-  return HttpResponseRedirect("/")
+  return HttpResponse(200)
 
 class AuthView(APIView ):
     
@@ -58,7 +58,7 @@ class AuthView(APIView ):
 
     def delete(self, request,*args,**kwargs):
         auth.logout(request)
-        return Response({})
+        return Response(data = None, status = status.HTTP_200_OK)
 
     def post(self,request,*args,**kwargs):
         try:
@@ -79,8 +79,8 @@ class AuthView(APIView ):
         try:
             permission_classes = (TokenHasScope,)
             required_scopes = ['read']
-            data = User.objects.filter(email = self.request.user)
-            serializer = UserSerializer(data, many = True)
+            data = UserProfile.objects.filter(user_acc = self.request.user)
+            serializer = UserProfileSerializer(data, many = True)
         except Exception,e:
             print repr
             return None

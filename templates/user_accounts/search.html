@@ -173,8 +173,8 @@
         <input size="5" type="text" class="form-control" id="namesearch" ng-model="query.name" placeholder="Search by name">        
     </div>
     <div class="form-group">        
-            <span><select   class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice" data-ng-options="studiosort as studiosort.name for studiosort in studiosort" ng-change="sortchange(sortservice)">
-                    <option value="">--Sort--</option> 
+            <span><select  class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice" data-ng-options="studiosort as studiosort.name for studiosort in studiosort" ng-change="sortchange(sortservice)">
+                    <option value="">Sort by</option> 
             </select></span>
 
         <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span>
@@ -317,7 +317,7 @@
             <div class="review-detail">
                 <h3>Reviews</h3>
                 <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
-                <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*10 | limitTo:10">
+                <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
                     <p>{%verbatim%}{{rev.comment}}</p>
                 </div>

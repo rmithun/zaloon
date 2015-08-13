@@ -19,7 +19,7 @@
               </button>          
              
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href = "#/" >Home</a></li>
+                <li><a href = "#/search" >Home</a></li>
                 <li><a href="#" ng-click = "logOut()">Signout</a></li>
               </ul>            
              </li>            
@@ -46,8 +46,8 @@
     
     <div class="profile-panel"> 
       <h3>Profile</h3>      
-      <p><span>Name:</span> {%verbatim%}{{user_details.user_acc.first_name}}{{user_details.user_acc.last_name}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p>  
-      <p><span>Email:</span> {%verbatim%}{{user_details.user_acc.email}}{%endverbatim%} <a href="#" class="fa fa-pencil"></a></p> 
+      <p><span>Name:</span> {%verbatim%}{{user_details.user_acc.first_name}}{{user_details.user_acc.last_name}}{%endverbatim%} </p>  
+      <p><span>Email:</span> {%verbatim%}{{user_details.user_acc.email}}{%endverbatim%}</p> 
       <p><span>Area:</span>
           <span ng-show="locationshow"><span style="font-size: 15px;font-weight:400;" ng-model="location" class="ng-scope ng-binding editable editable-click">
             {%verbatim%} {{location || ""}}{%endverbatim%}</span>&nbsp;<i ng-click="editlocation()" style="cursor: pointer;
@@ -244,7 +244,7 @@
     <div class="modal-content signup">
      <div class="modal-header modal-register-header">
      <button type="button" class="close" data-dismiss="modal">&times;</button> 
-     <h4 class="modal-title">Cancel Booking</h4>
+     <h4 class="modal-title">Do you really want to cancel the booking?</h4>
     </div> 
       <div class="modal-body register" style="text-align:center;">  
       Do you really want to cancel the booking? 
