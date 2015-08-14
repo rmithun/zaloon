@@ -126,7 +126,7 @@
             <form role="form" name="searchForm" class="searchpanel">
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
-                        <input type="text" clearIcon ng-model="searchdata.service" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
+                        <input type="text" ng-model="searchdata.service" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
                     </div>
                 </div>
 
@@ -237,7 +237,7 @@
 
                 <carousel no-wrap="true">
                     <slide ng-repeat="pic in selectedstudio.pic_of_studio" active="slide.active">
-                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" style="margin:auto;height:300px;">
+                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" style="margin:auto;height:160px;">
 
                     </slide>
                 </carousel>
@@ -439,11 +439,30 @@
 <script type="text/javascript">
         $(document).ready(function () {
             $(".list-detail-box").scroll(function () {
+
+
                 var window_top = $('.list-detail-box').scrollTop();
                 var div_height = $('.list-detail-header').innerHeight();
                 var rate_height = $('.rate-panel').innerHeight();
                 console.log(window_top);
-                if (window_top > div_height - 94) {
+                var rate_panel_pos = $('.rate-panel').position();
+                rp_top = rate_panel_pos.top
+                var head_pos = $('.header-tabs').position();
+                det_head_top = head_pos.top
+                var header = $('.searchheader').position();
+                tp_head_top = header.top
+                var header_height = $('.navigation').height();
+                match_val = -94;
+                if(rp_top > det_head_top)
+                {
+                    match_val = 210;
+                }
+                if (window_top >  match_val) {
+                    if(rp_top > det_head_top)
+                    {   
+                       position_at = tp_head_top + header_height
+                       $(".stick").css({"top": position_at});
+                    }
                     $('.header-tabs').addClass('stick');
                     if ($('.street-info').position().top + $('.street-info').height() > 10) {
                        $('.detail-tab').removeClass('active');
@@ -465,6 +484,13 @@
                 else {
                     $('.header-tabs').removeClass('stick');
                 }
+
+                
+                //get position of rate panel 
+                //if rate panel position greater than header
+                    //stick header to ratepanel
+                //else get position of header 
+                    //stick header to top header
     
             });            
         });

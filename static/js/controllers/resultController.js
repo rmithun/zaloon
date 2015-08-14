@@ -258,7 +258,7 @@ $scope.bindstudio=function(data){
 
     //Filter
     $scope.clkmore = function () {
-        $('#searchdevice').hide();
+        //$('#searchdevice').hide();
         $scope.searchicon=false;
         if($('#studiodetails').css('display') != 'none'){
             $scope.closeslider();
@@ -519,7 +519,7 @@ $scope.bindstudio=function(data){
     }
     $scope.easyscroll = function (clsname) {
         $('.list-detail-box').animate({
-            scrollTop: top[clsname] - 140
+            scrollTop: top[clsname] - 157
         }, 200);
     }
 
