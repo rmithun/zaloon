@@ -25,7 +25,7 @@
                 </li>
                 <li class="moresearch" id="morefilter">
                     <button class="btn btnmore" ng-click="clkmore()">
-                        <i class="glyphicon glyphicon-filter"></i><span class="hidden-xs hidden-sm">More</span>
+                        <i class="glyphicon glyphicon-filter"></i><span id="devicefilter" class="hidden-xs hidden-sm">More</span>
                     </button>
 
                     <!-- More -->
@@ -237,7 +237,7 @@
 
                 <carousel no-wrap="true">
                     <slide ng-repeat="pic in selectedstudio.pic_of_studio" active="slide.active">
-                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" style="margin:auto;height:160px;">
+                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" style="margin:auto;height:300px;">
 
                     </slide>
                 </carousel>
@@ -437,61 +437,60 @@
 </div>
 </div>
 <script type="text/javascript">
-        $(document).ready(function () {
-            $(".list-detail-box").scroll(function () {
-
-
-                var window_top = $('.list-detail-box').scrollTop();
-                var div_height = $('.list-detail-header').innerHeight();
-                var rate_height = $('.rate-panel').innerHeight();
-                console.log(window_top);
-                var rate_panel_pos = $('.rate-panel').position();
-                rp_top = rate_panel_pos.top
-                var head_pos = $('.header-tabs').position();
-                det_head_top = head_pos.top
-                var header = $('.searchheader').position();
-                tp_head_top = header.top
-                var header_height = $('.navigation').height();
-                match_val = -94;
-                if(rp_top > det_head_top)
-                {
-                    match_val = 210;
-                }
-                if (window_top >  match_val) {
-                    if(rp_top > det_head_top)
-                    {   
-                       position_at = tp_head_top + header_height
-                       $(".stick").css({"top": position_at});
-                    }
-                    $('.header-tabs').addClass('stick');
-                    if ($('.street-info').position().top + $('.street-info').height() > 10) {
-                       $('.detail-tab').removeClass('active');
-                       $('.tab-street').addClass('active');
-                   }
-                   else if ($('.service-list').position().top + $('.service-list').height() > 90) {
-                       $('.detail-tab').removeClass('active');
-                       $('.tab-service').addClass('active');
-                   }
-                   else if ($('.direction').position().top + $('.direction').height() > 90) {
-                       $('.detail-tab').removeClass('active');
-                       $('.tab-direction').addClass('active');
-                   }
-                   else {
-                       $('.detail-tab').removeClass('active');
-                       $('.tab-review').addClass('active');
-                   }
-                } 
-                else {
+    $(document).ready(function () {
+        $(".list-detail-box").scroll(function () {
+            var window_top = $('.list-detail-box').scrollTop();
+            var div_height = $('.list-detail-header').innerHeight();
+            //var rate_height = $('.rate-panel').innerHeight();
+            //console.log(window_top);
+            var stick;
+            var street_info;
+            var service_list;
+            var direction;
+            if($(window).width() <= 480){
+                stick=44;
+                street_info=-50;
+                service_list=30;
+                direction=20;
+            }
+            else{
+                stick=94;
+                street_info=10;
+                service_list=90;
+                direction=90;
+            }
+            //End Mobile
+            if (window_top > div_height - stick) { 
+                if(stick==44){
+                    $('.header-tabs').addClass('stick-mobile');
                     $('.header-tabs').removeClass('stick');
+                } 
+                else{
+                    $('.header-tabs').addClass('stick');
+                    $('.header-tabs').removeClass('stick-mobile');
+                }           
+                console.log($('.street-info').position().top + $('.street-info').height());
+                if ($('.street-info').position().top + $('.street-info').height() > street_info) {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-street').addClass('active');
                 }
-
-                
-                //get position of rate panel 
-                //if rate panel position greater than header
-                    //stick header to ratepanel
-                //else get position of header 
-                    //stick header to top header
-    
-            });            
-        });
-    </script>
+                else if ($('.service-list').position().top + $('.service-list').height() > service_list) {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-service').addClass('active');
+                }
+                else if ($('.direction').position().top + $('.direction').height() > direction) {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-direction').addClass('active');
+                }
+                else {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-review').addClass('active');                   
+                }                                
+            }                  
+            else {
+                    $('.header-tabs').removeClass('stick');
+                    $('.header-tabs').removeClass('stick-mobile');
+            } 
+        });                        
+    });
+</script>

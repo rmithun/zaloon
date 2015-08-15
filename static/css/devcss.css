@@ -69,6 +69,12 @@
     top: 126px;
     z-index: 3;
 }
+.stick-mobile
+{
+    position: fixed;
+    top: 55px;
+    z-index: 3;
+}
 .noscrollbar {
 	line-height: 1.35;
 	overflow: hidden;

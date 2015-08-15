@@ -258,7 +258,9 @@ $scope.bindstudio=function(data){
 
     //Filter
     $scope.clkmore = function () {
-        //$('#searchdevice').hide();
+        if($('#devicefilter').css('display') == 'none'){
+            $('#searchdevice').hide();
+        }
         $scope.searchicon=false;
         if($('#studiodetails').css('display') != 'none'){
             $scope.closeslider();
@@ -490,6 +492,7 @@ $scope.bindstudio=function(data){
             $scope.selectedstudio['kind_icon_class']  = lodash.where($scope.studiokind,{'name':$scope.selectedstudio.studio_kind.kind_desc})[0].icon;
             $scope.sortservicebyfilter();
             $('.header-tabs').removeClass('stick');
+            $('.header-tabs').removeClass('stick-mobile');
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
             $scope.reviewPage = 1;
             $scope.directionlocation=$scope.searchdata.location;
@@ -518,8 +521,15 @@ $scope.bindstudio=function(data){
         },300);                
     }
     $scope.easyscroll = function (clsname) {
+        var scrollheight;
+        if($(window).width() <= 480){
+            scrollheight=88;
+        }
+        else{
+            scrollheight=140;
+        }
         $('.list-detail-box').animate({
-            scrollTop: top[clsname] - 157
+            scrollTop: top[clsname] - scrollheight
         }, 200);
     }
 
