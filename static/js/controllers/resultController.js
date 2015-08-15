@@ -1137,23 +1137,21 @@ noqapp.controller('accountscontroller',function($scope,httpServices,putResultSer
      $scope.cancel_booking_id = myBookId
      $scope.$apply()
     }); 
-
+    $scope.is_cancelling = 0;
+    $scope.has_cancelled = null
     $scope.booking_cancel = function(id)
     {
-        $('#cancelmodal').modal('hide')
+        $scope.is_cancelling = 1;
         httpServices.cancelBooking(id).then(function(data)
         {
-            $('#notificationmodal').modal('show')
-            $scope.titleMsg = 'Success'; 
-            $scope.bodyMsg = 'Your booking successfully cancelled.'; 
+            $scope.has_cancelled = 1
+            $scope.is_cancelling = null
             $scope.getBookings();
             console.log("Booking successfully cancelled")
         },
         function()
         {
-            $('#notificationmodal').modal('show')
-            $scope.titleMsg = 'Failed'; 
-            $scope.bodyMsg = 'Could not cancel your booking.Contact support@zaloon.in'; 
+            $scope.has_cancelled = 0
             console.log("Logout Error") 
         })
     }

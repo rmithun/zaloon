@@ -244,15 +244,39 @@
     <div class="modal-content signup">
      <div class="modal-header modal-register-header">
      <button type="button" class="close" data-dismiss="modal">&times;</button> 
-     <h4 class="modal-title">Do you really want to cancel the booking?</h4>
+     <h4 class="modal-title" ng-if="is_cancelling  == 0" >Do you really want to cancel the booking?</h4>
+     <h4 class="modal-title" ng-if="is_cancelling  == 1">We are cancelling</h4>
+     <h4 class="modal-title" ng-if="has_cancelled == 1" >Sucess!</h4>
+     <h4 class="modal-title" ng-if="has_cancelled == 0">Failed</h4>
     </div> 
-      <div class="modal-body register" style="text-align:center;">  
+      <div ng-if="is_cancelling  == 0" class="modal-body register" style="text-align:center;">  
       Do you really want to cancel the booking? 
       <div>
           <form>
      <button type="button" class=""  ng-click="booking_cancel(cancel_booking_id)">Yes, Cancel it</button> 
      <button type="button" class="" data-dismiss="modal">No, Dont cancel</button> 
           </form>
+      </div> 
+      <div style="clear:both;"></div>       
+      </div>
+      <div ng-if="is_cancelling == 1" class="modal-body register" style="text-align:center;">  
+      Cancelling
+      <div>
+         <i class="fa fa-spinner fa-spin"></i>
+      </div> 
+      <div style="clear:both;"></div>       
+      </div>
+      <div ng-if="has_cancelled == 1" class="modal-body register" style="text-align:center;">  
+      Cancellation sucessfull
+      <div>
+         Want to reschedule?<a href="#search"> Click here</a>
+      </div> 
+      <div style="clear:both;"></div>       
+      </div>
+      <div ng-if="has_cancelled == 0" class="modal-body register" style="text-align:center;">  
+      Could not cancel
+      <div>
+         Please contact zaloon<a href="mailto:support@zaloon.in">support</a>
       </div> 
       <div style="clear:both;"></div>       
       </div>
@@ -281,23 +305,6 @@
 </div>
 
 
-<div  id="notificationmodal" class=" modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content signup">
-     <div class="modal-header modal-register-header">
-     <button type="button" class="close" data-dismiss="modal">&times;</button> 
-     <h4 class="modal-title">{%verbatim%}{{titleMsg}}{%endverbatim%}</h4>
-    </div> 
-      <div class="modal-body register">   
-      <div class="socialpanel">
-          <div>
-           {%verbatim%}{{bodyMsg}}{%endverbatim%}
-          </div>
-      </div>        
-      </div>
-    </div>  
-  </div> 
-</div>
 
 <script type="text/ng-template" id="location.html">
   <a>
