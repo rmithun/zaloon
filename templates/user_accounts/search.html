@@ -98,6 +98,11 @@
                         <i class="icon icon-socialmedia-08"></i>Login using Facebook
                     </button>
                 </li>
+                <li ng-show="is_logged == 0" class="hidden-md hidden-lg">
+                    <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook">
+                        <i class="icon icon-socialmedia-08"></i>
+                    </button>
+                </li>
                 <li ng-show="is_logged == 1" class="dropdown logindetails">
                     <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Hi {%verbatim%}{{user_name}}{%endverbatim%}
