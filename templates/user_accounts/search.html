@@ -323,8 +323,9 @@
                 <h3>Reviews</h3>
                 <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
                 <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
+
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
-                    <p>{%verbatim%}{{rev.comment}}</p>
+                    <p>{%verbatim%}{{rev.comment}}{%endverbatim%}</p>
                 </div>
                 <span ng-if="(selectedstudio.studio_review).length <1;" class="reviewer"><p>No reviews yet!</p></span>
                 <div ng-if="(selectedstudio.studio_review).length > 0;" class="pull-right"><a  style="font-size: 11px;cursor:pointer;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
@@ -410,7 +411,7 @@
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            Select your More Services
+            Select  More Services
             <span class="service-totamnt">Total Amount - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
         </div>
         <div class="service-checkboxcolumn col-sm-12">

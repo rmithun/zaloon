@@ -870,7 +870,9 @@ $scope.end_date.setDate($scope.start_date.getDate() + 30);
  $scope.avail = []
 
 
-
+$scope.date_accordion = "accordion-toggle"
+$scope.booking_accordion = "accordion-toggle collapsed"
+$scope.service_accordion  = "accordion-toggle collapsed"
 $scope.openToggle = function(which_toggle)
 {
     if($scope.isdisable == true)
@@ -883,7 +885,6 @@ $scope.openToggle = function(which_toggle)
     }
     if((which_toggle == 'collapseFour') && !($scope.mobileno))
     {
-        
         return false
     }
     if((which_toggle == 'collapseFour') && ($scope.mobileno))
@@ -893,6 +894,50 @@ $scope.openToggle = function(which_toggle)
     }
     $('#'+which_toggle).collapse('toggle');
     $('.panel-collapse.in').collapse('hide');
+    
+    if(which_toggle == 'collapseOne')
+    {
+        if($scope.service_accordion == "accordion-toggle collapsed")
+        {
+            $scope.service_accordion  = "accordion-toggle"
+        }
+        else
+        {
+            $scope.service_accordion = "accordion-toggle collapsed"   
+        }
+        $scope.date_accordion = "accordion-toggle collapsed"
+        $scope.booking_accordion = "accordion-toggle collapsed"
+        //$scope.payment_accordion = "accordion-toggle"
+    }
+    if(which_toggle == 'collapseTwo')
+    {
+        if($scope.date_accordion == "accordion-toggle collapsed")
+        {
+            $scope.date_accordion  = "accordion-toggle"
+        }
+        else
+        {
+            $scope.date_accordion = "accordion-toggle collapsed"   
+        }
+        $scope.service_accordion == "accordion-toggle collapsed"
+        $scope.booking_accordion = "accordion-toggle collapsed"
+        //$scope.payment_accordion = "accordion-toggle"
+    }
+    if(which_toggle == 'collapseThree')
+    {
+        if($scope.booking_accordion == "accordion-toggle collapsed")
+        {
+            $scope.booking_accordion  = "accordion-toggle"
+        }
+        else
+        {
+            $scope.booking_accordion = "accordion-toggle collapsed"   
+        }
+        $scope.date_accordion = "accordion-toggle collapsed"
+        $scope.service_accordion = "accordion-toggle collapsed"
+        //$scope.payment_accordion = "accordion-toggle"
+    }
+
 }
 
 
