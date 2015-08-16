@@ -546,7 +546,6 @@ $scope.bindstudio=function(data){
         if($scope.which_device ==1 ) //open apple maps in apple devices
         {
             //http://www.google.com/maps/place/49.46800006494457,17.11514008755796/@49.46800006494457,17.11514008755796,17z
-            //console.log("http://maps.apple.com/?daddr="+lat+","+longt+"&saddr="+start_add)
             window.open("http://maps.apple.com/?z=12&q="+lat+","+longt)
             //window.open("comgooglemaps://?saddr=Google+Inc,+8th+Avenue,+New+York,+NY&daddr=John+F.+Kennedy+International+Airport,+Van+Wyck+Expressway,+Jamaica,+New+York&directionsmode=transit");
         }
