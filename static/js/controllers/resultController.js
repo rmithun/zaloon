@@ -551,19 +551,13 @@ $scope.bindstudio=function(data){
         }
         else if($scope.which_device ==2) //open google maps in android
         {
-            window.open("maps://maps.google.com/maps?saddr="+start_add+"+&amp;daddr="+lat+","+longt+"&amp;ll="+start_add);
+            window.open("comgooglemaps://?saddr="+lat+","+longt+"&amp;ll=");
         }
         else
         {
             return false
         }
-        var beforeSwitch = Date.now();
-        // schedule check if app was opened
-        setTimeout(function() {
-            // if this is called after less than 30ms
-            if (Date.now() - beforeSwitch < 30) {
-            alert("Could not open app")
-        }
+        
     });
     }
     $scope.closeslider = function () {     
