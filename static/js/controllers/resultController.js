@@ -16,6 +16,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     
     //detect device
     $scope.device = navigator.platform
+    alert($scope.device)
     if($scope.device.indexOf("iPhone") != -1 || $scope.device.indexOf("iPod") != -1 || $scope.device.indexOf("iPad") != -1)
     {
         $scope.which_device = 1
