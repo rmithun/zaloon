@@ -114,9 +114,9 @@
     
     <li class="booking-list-item-container" ng-repeat="buking in active_bookings  | orderBy:'id':true">
       <div class="book-imgthumb">
-        <img class="image loaded" alt="" src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
+        <img class="image loaded" alt="" ng-src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
       </div>  
-      <div class="book-details">
+      <div class="book-details" >
         <h4>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%}
         {%verbatim%}{{buking.appnt_day}}{%endverbatim%}
         <span ng-bind="timeFilter(buking.appointment_start_time)"></span></h4>
@@ -138,7 +138,7 @@
         <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>             
       </div>
       </div>
-      <button class="bookbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}"  data-target="#cancelmodal">Cancel</button>       
+      <button class="bookbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}"   data-target="#cancelmodal">Cancel</button>       
     </li>
         
     </ul>
@@ -149,7 +149,7 @@
     
     <li class="booking-list-item-container" ng-repeat="buking in expired_bookings | orderBy:'id':true">
       <div class="book-imgthumb">
-        <img class="image loaded" alt="" src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
+        <img class="image loaded" alt="" ng-src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
       </div>  
       <div class="book-details">
         <h4>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%} {%verbatim%}{{buking.appointment_start_time}}{%endverbatim%}
@@ -226,7 +226,9 @@
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 "></label>
           <div class="col-md-7 col-sm-6 col-xs-11">
-          <button ng-click="add_review()" class="rebookbtn btn">submit</button>
+          <button ng-click="add_review()" ng-disabled="is_adding==1" class="rebookbtn btn" ng-switch on="is_adding">
+            <span ng-switch-when="0">Submit</span>
+            <span ng-switch-when="1">Submitting...</span></button>
           </div>
         </div>
       </div>

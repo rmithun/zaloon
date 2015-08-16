@@ -654,7 +654,7 @@ h3.more-panel-title{color: #4c4c4c;
   font-size: 17px;
   font-weight: normal;float:left;
  }
- .checkboxcolumn{color:#5C5C5C;padding:10px 10px 0 10px;}
+ .checkboxcolumn{color:#5C5C5C;padding:0px 10px 0 10px;}
  .checkboxcolumn-more{color:#5C5C5C;padding:10px 10px 0 10px;column-count:3;-webkit-column-count:3;-moz-column-count:3;}
  .service-checkboxcolumn {overflow-x: hidden; overflow-y: auto;  height: 280px;padding-top: 10px;}
  .service-checkboxcolumn label{font-weight:500;font-size:13px;}
@@ -1164,7 +1164,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   .list-detail-box-panel{width:100%;} 
   .direction button{min-width:12%;}
   .direction input.form-control { width: 88%;}
-  #signupmodel{width:300px;}
+  /*#signupmodel{width:300px;}*/
   .list-detail-image{height:auto;}
   .securepay{padding-bottom: 6px;padding-top:0px;width: 63px;border-right: 1px solid #FFFFFF;}
   .freecancelation {width: 78px;padding-top:0px;padding-bottom: 7px;border-right: 1px solid #FFFFFF;}

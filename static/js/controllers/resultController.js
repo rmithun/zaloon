@@ -43,6 +43,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     var acService = new google.maps.places.AutocompleteService();
     var directionsService = new google.maps.DirectionsService();
     var directionsDisplay = new google.maps.DirectionsRenderer();
+    var mdirectionsDisplay = new google.maps.DirectionsRenderer();
     var infoWindow = new google.maps.InfoWindow();
     var mapOptions = {
         zoom: 4,
@@ -56,6 +57,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         }
     }
     $scope.map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
+    //$scope.mobilemap = new google.maps.Map(document.getElementById('mobgooglemap'), mapOptions);
+    $scope.mobilemap;
     $scope.markers = [];
     var latlongcollection = [];
     $scope.shopdistance;
@@ -213,8 +216,10 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             latlongcollection.splice(0, 1);
         }
     }
-    function drawdirection(lat, lon) {        
+    function drawdirection(lat, lon) {      
+        $scope.mobilemap = new google.maps.Map(document.getElementById('mobgooglemap'), mapOptions);  
         directionsDisplay.setMap($scope.map);
+        mdirectionsDisplay.setMap($scope.mobilemap);
         var request = {
             origin: new google.maps.LatLng(lat, lon),
             destination: $scope.directionlocation,
@@ -224,7 +229,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             if (status == google.maps.DirectionsStatus.OK) {
                 $scope.distance = response.routes[0].legs[0].distance.text;
                 $scope.$apply();                
-                directionsDisplay.setDirections(response);
+                directionsDisplay.setDirections(response);                
+                mdirectionsDisplay.setDirections(response);                    
             }
         });
     }
@@ -479,7 +485,7 @@ $scope.bindstudio=function(data){
         autozoom();
     }
 
-    $scope.studiodetails = function (id) {
+    $scope.studiodetails = function (id) {        
         var studio = lodash.where($scope.studio, { 'id': id });
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
@@ -493,6 +499,8 @@ $scope.bindstudio=function(data){
             $scope.sortservicebyfilter();
             $('.header-tabs').removeClass('stick');
             $('.header-tabs').removeClass('stick-mobile');
+            $('.header-tabs').removeClass('stick-tablet');
+            $('.header-tabs').removeClass('stick-lap');
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
             $scope.reviewPage = 1;
             $scope.directionlocation=$scope.searchdata.location;
@@ -501,36 +509,58 @@ $scope.bindstudio=function(data){
             $scope.reviewtotalpage = page;            
             $scope.shopdistance = $scope.selectedstudio.distance;            
             setTimeout(function(){
-                removemarker();
+                removemarker();                
                 drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
             },300);
             setTimeout(function () {                
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
-                console.log(top);
-            }, 1000);
+            }, 500);
         }
     }
-    $scope.closeslider = function () {        
+
+    //function to open maps app in touch devices
+    $scope.openMaps = function()
+    {
+        $scope.selectedstudio.latitude, $scope.selectedstudio.longitude
+        if( (navigator.platform.indexOf("iPhone") != -1) || (navigator.platform.indexOf("iPod") != -1) || (navigator.platform.indexOf("iPad") != -1)) window.open("maps://maps.google.com/maps?daddr="+$scope.selectedstudio.latitude+","+$scope.selectedstudio.longitude+"&amp;ll="); else window.open("http://maps.google.com/maps?daddr=lat,long&amp;ll=");
+    }
+    $scope.closeslider = function () {     
+        $scope.selectedstudio = {}   
         $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
         $scope.selected_service = [];
         setTimeout(function(){
             directionsDisplay.setMap(null);
+            mdirectionsDisplay.setMap(null);
             clearlatlongbound();
             $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
             autozoom();
         },300);                
     }
-    $scope.easyscroll = function (clsname) {
-        var scrollheight;
-        if($(window).width() <= 480){
-            scrollheight=88;
+    $scope.easyscroll = function (clsname,tab) {          
+        if($(window).width() <= 480){            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 92
+            }, 100);
+        }        
+        else if($(window).width() >= 481 && $(window).width() <= 767){            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 100
+            }, 100);
         }
-        else{
-            scrollheight=140;
+        else if($(window).width() >= 768 && $(window).width() <= 991){            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 105
+            }, 200);
         }
-        $('.list-detail-box').animate({
-            scrollTop: top[clsname] - scrollheight
-        }, 200);
+        else{            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 140
+            }, 200);
+        } 
+        setTimeout(function(){
+            $('.detail-tab').removeClass('active');
+            $('.'+tab).addClass('active');   
+        },250);        
     }
 
     $scope.morereview = function () {
@@ -544,6 +574,7 @@ $scope.bindstudio=function(data){
 
     $scope.changedirection=function(){
         directionsDisplay.setMap(null);
+        mdirectionsDisplay.setMap(null);
         drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
         var request = { origin: new google.maps.LatLng($scope.selectedstudio.latitude, $scope.selectedstudio.longitude), destination: $scope.directionlocation, travelMode: google.maps.DirectionsTravelMode.DRIVING };
         directionsService.route(request, function (response, status) {
@@ -715,9 +746,11 @@ httpServices.getFBKey().then(function(data)
 
 $scope.fbLogin = function(dummy)
 {
-
+    $('.loader-overlay').show();
+    $('#signupmodel').modal('hide')
     httpServices.loginUsingFB(dummy).then(function(data)
     {
+        $('.loader-overlay').hide();
         if(data)
         {
             sessionService.setAuthToken(data)
@@ -905,7 +938,7 @@ $scope.openToggle = function(which_toggle)
         {
             $scope.service_accordion = "accordion-toggle collapsed"   
         }
-        $scope.date_accordion = "accordion-toggle collapsed"
+        $scope.date_accordion = "accordion-toggle collapsed"   
         $scope.booking_accordion = "accordion-toggle collapsed"
         //$scope.payment_accordion = "accordion-toggle"
     }
@@ -919,7 +952,7 @@ $scope.openToggle = function(which_toggle)
         {
             $scope.date_accordion = "accordion-toggle collapsed"   
         }
-        $scope.service_accordion == "accordion-toggle collapsed"
+        $scope.service_accordion = "accordion-toggle collapsed"
         $scope.booking_accordion = "accordion-toggle collapsed"
         //$scope.payment_accordion = "accordion-toggle"
     }
@@ -957,11 +990,6 @@ $("#datepicker").on("changeDate", function(event) {
     is_today = new Date($scope.date_selected)
     today = new Date()
     $scope.day_crossed = 1;
-    console.log(is_today.getDate())
-    console.log(is_today.getMonth())
-    console.log(today.getDate())
-    console.log(today.getMonth())
-    console.log(today.getHours())
     if(is_today.getDate() == today.getDate() && is_today.getMonth() == today.getMonth() && (parseInt(today.getHours()) > 4))
     {
         $scope.day_crossed = 0;
@@ -972,13 +1000,17 @@ $("#datepicker").on("changeDate", function(event) {
     slot_data['studio_id'] = $scope.serviceschosen.studio.id
     httpServices.getSlots(slot_data).then(function(sdata)
     {
-        $('html, body').animate({scrollTop: $('#collapseTwo').offset().top }, 'slow');
         $scope.avail = sdata.available_slots.data;        
+        //$('html, body').animate({scrollTop: $('#scrollhere').offset().top }, 'slow');
+         $('html, body').animate({
+        scrollTop: $('#scrollhere').offset().top + ($(window).height() + $('#scrollhere').outerHeight(true)) 
+    }, 200);
     },function()
     {
         console.log("Not slots available.Try another date")
     })
     $scope.$apply()
+
 });
 
 
@@ -1024,6 +1056,9 @@ $scope.selectTime = function(hour,min)
         $scope.booking_class3 = "panel-heading progress-done"
         $('#collapseThree').collapse('toggle');
         $('.panel-collapse.in').collapse('hide');
+        $scope.date_accordion = "accordion-toggle collapsed"
+        $scope.service_accordion = "accordion-toggle collapsed"
+        $scope.booking_accordion = "accordion-toggle"
     }
 
 }
@@ -1107,7 +1142,7 @@ $scope.makepayment = function(bookingForm)
 //am/pm convertor
 
 $scope.timeFilter =  function (value) {
-        if(typeof value != 'undefined')
+        if(typeof value != 'undefined' && value!="")
         {            
             var split = value.split(':');
             var min = split[1] =="0"? "00":split[1];
@@ -1129,7 +1164,7 @@ $scope.timeFilter =  function (value) {
 
 });
 
-noqapp.controller('accountscontroller',function($scope,httpServices,putResultService){
+noqapp.controller('accountscontroller',function($scope,$cookies,httpServices,putResultService,sessionService,$window){
 
     $scope.active_booking_count = 10;
 
@@ -1151,6 +1186,31 @@ noqapp.controller('accountscontroller',function($scope,httpServices,putResultSer
             $('#bookingconfirm').modal('show')
         }
     }
+
+
+    $scope.logOut = function()
+    {   
+        httpServices.logOut().then(function(logout_data)
+        {
+            //alert("Here")
+            //$cookies.remove('token')
+            //$scope.is_logged = sessionService.isLogged()
+            var cookies = $cookies.getAll();
+            angular.forEach(cookies, function (v, k) {
+                $cookies.remove(k,{path:'/'});
+            });
+            console.log("Logged out successfully")
+            $scope.is_logged = sessionService.isLogged();
+            $window.location.href = "/"
+            
+        },
+        function()
+        {
+            console.log("Logout Error")
+        })
+    }
+
+
     $scope.getBookings = function()
     {
         httpServices.getDetails().then(function(data)
@@ -1197,7 +1257,6 @@ noqapp.controller('accountscontroller',function($scope,httpServices,putResultSer
         function()
         {
             $scope.has_cancelled = 0
-            console.log("Logout Error") 
         })
     }
 
@@ -1211,19 +1270,6 @@ noqapp.controller('accountscontroller',function($scope,httpServices,putResultSer
         function()
         {
             console.log("Could not update try again.")  
-        })
-    }
-
-    $scope.add_review = function()
-    {
-        $scope.review_data = null
-        httpServices.addReview($scope.review_data).then(function(data)
-        {
-            console.log("Review added")
-        },
-        function()
-        {
-            console.log("Error occurred;Please,Try again.") 
         })
     }
 
@@ -1340,14 +1386,18 @@ $(document).on("click", ".reviewbtn", function () {
      $scope.$apply()
     });  
 
+
+$scope.is_adding = 0
 $scope.add_review = function()
 {
     var review_data = {}
     review_data['comment'] = $scope.comment
     review_data['rating'] = $scope.rate
     review_data['booking_id'] = $scope.booking_id
+    $scope.is_adding = 1
     httpServices.addReview(review_data).then(function(rdata)
     {
+        $scope.is_adding = 0
         $('#reviewmodal').modal('hide')
         $('#notificationmodal').modal('show')
         $scope.titleMsg = 'Successfully added review'; 
@@ -1361,6 +1411,12 @@ $scope.add_review = function()
         $scope.bodyMsg = 'Could not add review try again'; 
         console.log("Could not add review.")
     })
+}
+
+//function which tells whether we can show cancel button for th booking
+$scope.has_cancel = function(buk_id)
+{
+
 }
 });
     

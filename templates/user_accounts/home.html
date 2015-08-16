@@ -7,8 +7,13 @@
  
      <!-- Preloader -->
     
-    <div class="loader-overlay" style="display:none;">
-      <div style="position:absolute;color:white;top:50%;width:100%;text-align:center;">Loading..</div>
+
+   
+   <div class="finder-overlay" style="display:none;">
+      <div style="position:absolute;color:#000;top:50%;width:100%;text-align:center;">
+        <i class="fa fa-spinner fa-spin"></i>
+        Loading best results for you
+    </div>
     </div>
    
     
@@ -62,7 +67,7 @@
     <div class="container">
       <div class="signup-wrapper animated " data-animation="bounceInUp" data-delay="0">
         <div class="row">
-            <form name ="searchservice" class="form-register form-register-small col-lg-12 no-padding">
+            <form name ="searchservice" class="form-register form-register-small col-lg-12 no-padding" novalidate>
             <div class="col-xs-12 col-md-4 col-lg-4 no-padding">
               <div class="form-group autocomplete">
               <span class="service-icon"><i class="icon icon-shopping-23 icon-active"></i></span>             
@@ -121,25 +126,6 @@
     </section>
     
 
-  <div  id="signupmodel" class=" modal fade" role="dialog">
-    <div class="modal-content signup">
-     <div class="modal-header modal-register-header">
-     <button type="button" class="close" data-dismiss="modal">&times;</button> 
-     <h4 class="modal-title">Login</h4>
-    </div> 
-      <div class="modal-body register">   
-      <div class="socialpanel">
-          <form>
-            <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook">
-              <i class="icon icon-socialmedia-08"></i>Login using Facebook
-            </button>         
-          </form>
-      </div>        
-      <p class="hidden-xs"><i>* we remember our promise of no posts on your wall</i></p>
-      </div>
-    </div>  
-  </div>    
-   
 
   </div> 
   </div>

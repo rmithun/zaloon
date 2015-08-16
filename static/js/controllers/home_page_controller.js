@@ -13,9 +13,10 @@ getFBKey()
 
 	$scope.fbLogin = function(dummy)
 	{
-
+		$('.loader-overlay').show();
 		httpServices.loginUsingFB(dummy).then(function(data)
 		{
+		  $('.loader-overlay').hide();
 		  if(data)
 		  {
 		  	sessionService.setAuthToken(data)
@@ -34,6 +35,7 @@ getFBKey()
 		},function()
 		{
 		   //cannot login to fb try again
+		   $scope.is_logging = 1
 		   console.log("Cannot login to FB")
 		});
 	}
@@ -111,7 +113,7 @@ httpServices.getUsrDetails().then(function(dataz)
     	if(form.$valid)
 		{ 			
 			var obj={'service':$scope.searchdata_.service_name,'location':$scope.searchdata_.searchlocation};
-			$('.loader-overlay').show();
+			$('.finder-overlay').show();
 			 httpServices.getstudioDetails(obj).then(function(data)
 		    	{		
 		    		$cookies.putObject('searchdata',obj,{path:'/'})    	

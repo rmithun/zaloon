@@ -103,6 +103,7 @@
                         <i class="icon icon-socialmedia-08"></i>
                     </button>
                 </li>
+
                 <li ng-show="is_logged == 1" class="dropdown logindetails">
                     <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Hi {%verbatim%}{{user_name}}{%endverbatim%}
@@ -232,7 +233,7 @@
                 <span class="text" ng-click="book()">BOOK</span>
             </div>
             <div class="hidden-sm hidden-md hidden-lg col-xs-4 btn btn-primary btn-close">
-                <span class="text"> <a style="cursor:pointer" ng-click="closeslider()" class="listclose">CLOSE
+                <span class="text"> <a style="cursor:pointer;color:#fff;" ng-click="closeslider()" class="">CLOSE
                 </a></span>
             </div>
         </div>
@@ -250,16 +251,16 @@
             </div>
             <div class="header-tabs">
                 <ul class="nav tabs-container">
-                    <a class="detail-tab tab-street active" ng-click="easyscroll('street-info')">
+                    <a class="detail-tab tab-street active" ng-click="easyscroll('street-info','tab-street')">
                         <span>DETAILS</span>
                     </a>
-                    <a class="detail-tab tab-service" ng-click="easyscroll('service-list')">
+                    <a class="detail-tab tab-service" ng-click="easyscroll('service-list','tab-service')">
                         <span>SERVICES</span>
                     </a>
-                    <a class="detail-tab tab-direction" ng-click="easyscroll('direction')">
+                    <a class="detail-tab tab-direction" ng-click="easyscroll('direction','tab-direction')">
                         <span>DIRECTION</span>
                     </a>
-                    <a class="detail-tab tab-review" ng-click="easyscroll('review-detail')">
+                    <a class="detail-tab tab-review" ng-click="easyscroll('review-detail','tab-review')">
                         <span>REVIEWS</span>
                     </a>
                 </ul>
@@ -316,8 +317,9 @@
                     </div>
                 </div>
                 <div class="distance hidden-xs">{%verbatim%} {{shopdistance}}{%endverbatim%}km</div>
-                <div class="mapview-mob hidden-md hidden-lg col-sm-12"></div>
-
+                <div id="mobgooglemap" class="mapview-mob hidden-md hidden-lg col-sm-12">
+                </div>
+                <div class="hidden-lg hidden-md"><a href="comgooglemaps://?center={%verbatim%}{{selectedstudio.latitude}}{%endverbatim%},{%verbatim%}{{selectedstudio.longitude}}{%endverbatim%}&zoom=14&views=traffic">Click here</a></div>
             </div>
             <div class="review-detail">
                 <h3>Reviews</h3>
@@ -385,7 +387,7 @@
 <!-- Modal -->
 <div id="signupmodel" class=" modal fade" role="dialog">
     
-    <div class="modal-dialog" style="width:400px;margin-top:15%;">    
+    <div class="modal-dialog" style="margin-top:15%;">    
     <div class="modal-content signup">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -444,11 +446,9 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".list-detail-box").scroll(function () {
+        $(".list-detail-box").scroll(function () {            
             var window_top = $('.list-detail-box').scrollTop();
-            var div_height = $('.list-detail-header').innerHeight();
-            //var rate_height = $('.rate-panel').innerHeight();
-            //console.log(window_top);
+            var div_height = $('.list-detail-header').innerHeight();            
             var stick;
             var street_info;
             var service_list;
@@ -459,6 +459,18 @@
                 service_list=30;
                 direction=20;
             }
+            else if($(window).width() >= 481 && $(window).width() <= 767){
+                stick=44;
+                street_info=-40;
+                service_list=37;
+                direction=20;
+            }
+            else if($(window).width() >= 768 && $(window).width() <= 991){
+                stick=44;
+                street_info=-40;
+                service_list=37;
+                direction=20;
+            }
             else{
                 stick=94;
                 street_info=10;
@@ -467,15 +479,22 @@
             }
             //End Mobile
             if (window_top > div_height - stick) { 
-                if(stick==44){
-                    $('.header-tabs').addClass('stick-mobile');
-                    $('.header-tabs').removeClass('stick');
+                if($(window).width() <= 480){
+                    removestick();
+                    $('.header-tabs').addClass('stick-mobile');                    
                 } 
+                else if($(window).width() >= 481 && $(window).width() <= 767){
+                    removestick();
+                    $('.header-tabs').addClass('stick-tablet');                    
+                }
+                else if($(window).width() >= 768 && $(window).width() <= 991){
+                    removestick();
+                    $('.header-tabs').addClass('stick-lap');                    
+                }
                 else{
-                    $('.header-tabs').addClass('stick');
-                    $('.header-tabs').removeClass('stick-mobile');
-                }           
-                console.log($('.street-info').position().top + $('.street-info').height());
+                    removestick();
+                    $('.header-tabs').addClass('stick');                    
+                }                       
                 if ($('.street-info').position().top + $('.street-info').height() > street_info) {
                     $('.detail-tab').removeClass('active');
                     $('.tab-street').addClass('active');
@@ -496,7 +515,14 @@
             else {
                     $('.header-tabs').removeClass('stick');
                     $('.header-tabs').removeClass('stick-mobile');
-            } 
-        });                        
+                    $('.header-tabs').removeClass('stick-tablet');
+            }         
+        });  
+        function removestick(){
+            $('.header-tabs').removeClass('stick');
+            $('.header-tabs').removeClass('stick-mobile');
+            $('.header-tabs').removeClass('stick-tablet');
+            $('.header-tabs').removeClass('stick-lap');                    
+        }                      
     });
 </script>
