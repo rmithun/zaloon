@@ -81,7 +81,7 @@
 <div id="scrollhere">
   <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="avail.length != 0 && day_crossed">
   <p >TIME</p>
-  <p>MORNING(A.M)</p>
+  <p ng-if="hrs<12">MORNING(A.M)</p>
   
   <div class="time-meridiam"></div>
     <div class="time-wrap timepanel">       

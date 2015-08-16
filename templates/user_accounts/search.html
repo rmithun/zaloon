@@ -229,8 +229,9 @@
             <div class="col-sm-6 col-xs-4 btn btn-secondary">
                 <span class="text">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
             </div>
-            <div class="col-sm-6 col-xs-4 btn btn-primary">
-                <span class="text" ng-click="book()">BOOK</span>
+            <div class="col-sm-6 col-xs-4 btn btn-primary" >
+                <span class="text"  ng-click="book()" ng-if="has_online_payment">BOOK</span>
+                <span class="text" ng-if="has_online_payment == 0">No online booking for this.</span>
             </div>
             <div class="hidden-sm hidden-md hidden-lg col-xs-4 btn btn-primary btn-close">
                 <span class="text"> <a style="cursor:pointer;color:#fff;" ng-click="closeslider()" class="">CLOSE
@@ -275,12 +276,12 @@
 
             </div>
             <div class="contact">
-                <span>{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}, </span>&nbsp; <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - {%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</span><span class="fa fa-phone paddlft10"></span>
+                <span>{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}</a></span>&nbsp; <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</a></span><span class="fa fa-phone paddlft10"></span>
             </div>
+            <p>Timing - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
             <p class="red">Closed on - <span ng-repeat="leav in selectedstudio.studio_closed_details">
                 {%verbatim%}{{leav.closed_on.closed_on_day}}<span ng-if="$last != true">,</span>{%endverbatim%}</span></p>
-            <p>Time - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
-
+            
             <div class="service-list">
                 <h3>Services</h3>
 
@@ -319,7 +320,7 @@
                 <div class="distance hidden-xs">{%verbatim%} {{shopdistance}}{%endverbatim%}km</div>
                 <div id="mobgooglemap" class="mapview-mob hidden-md hidden-lg col-sm-12">
                 </div>
-                <div class="hidden-lg hidden-md"><a href="comgooglemaps://?center={%verbatim%}{{selectedstudio.latitude}}{%endverbatim%},{%verbatim%}{{selectedstudio.longitude}}{%endverbatim%}&zoom=14&views=traffic">Click here</a></div>
+                <div class="hidden-lg hidden-md" ng-if="which_device"><a ng-click="openMap()">Click here</a></div>
             </div>
             <div class="review-detail">
                 <h3>Reviews</h3>
@@ -428,7 +429,8 @@
             </div>
             <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
                 <i class="icon icon-contact"></i>
-                <span class="text" ng-click="book()">BOOK</span>
+                <span class="text" ng-if="has_online_payment" ng-click="book()">BOOK</span>
+                <span class="text" ng-if="has_online_payment == 0">No online booking for this.</span>
             </div>
         </div>
 

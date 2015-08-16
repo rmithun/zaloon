@@ -14,6 +14,20 @@ noqapp.filter('startFrom', function () {
 
 noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,lodash,httpServices,sessionService,putResultService) {
     
+    //detect device
+    $scope.device = navigator.platform
+    if($scope.device.indexOf("iPhone") != -1 || $scope.device.indexOf("iPod") != -1 || $scope.device.indexOf("iPad") != -1)
+    {
+        $scope.which_device = 1
+    }
+    else if($scope.device.indexOf("Android") != -1)
+    {
+        $scope.which_device = 1
+    }
+    else
+    {
+        $scope.which_device = 0
+    }
     $scope.studio = [];
     $scope.filteredstudio = [];
     $scope.servicelist = [];
@@ -85,9 +99,13 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             if (split[0] - 12 > 0) {
                 returnval = split[0] - 12 + ":" + split[1] + " PM";
             }
-            else {
+            else if((split[0] - 12 < 0)) {
                 returnval = split[0] + ":" + split[1] + " AM";
             }                
+            else
+            {
+                returnval = split[0] + ":" + split[1] + " PM";
+            }
             return returnval;
         }
         else
@@ -494,6 +512,7 @@ $scope.bindstudio=function(data){
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
+            $scope.has_online_payment = $scope.selectedstudio.has_online_payment
             $scope.selectedstudio['type_icon_class']  = lodash.where($scope.studiotype,{'name':$scope.selectedstudio.studio_type.type_desc})[0].icon;
             $scope.selectedstudio['kind_icon_class']  = lodash.where($scope.studiokind,{'name':$scope.selectedstudio.studio_kind.kind_desc})[0].icon;
             $scope.sortservicebyfilter();
@@ -519,10 +538,34 @@ $scope.bindstudio=function(data){
     }
 
     //function to open maps app in touch devices
-    $scope.openMaps = function()
+    $scope.openMap = function()
     {
-        $scope.selectedstudio.latitude, $scope.selectedstudio.longitude
-        if( (navigator.platform.indexOf("iPhone") != -1) || (navigator.platform.indexOf("iPod") != -1) || (navigator.platform.indexOf("iPad") != -1)) window.open("maps://maps.google.com/maps?daddr="+$scope.selectedstudio.latitude+","+$scope.selectedstudio.longitude+"&amp;ll="); else window.open("http://maps.google.com/maps?daddr=lat,long&amp;ll=");
+        var start_add = $scope.directionlocation
+        var lat = $scope.selectedstudio.latitude
+        var longt = $scope.selectedstudio.longitude
+        if($scope.which_device ==1 ) //open apple maps in apple devices
+        {
+            //http://www.google.com/maps/place/49.46800006494457,17.11514008755796/@49.46800006494457,17.11514008755796,17z
+            //console.log("http://maps.apple.com/?daddr="+lat+","+longt+"&saddr="+start_add)
+            window.open("http://maps.apple.com/?z=12&q="+lat+","+longt)
+            //window.open("comgooglemaps://?saddr=Google+Inc,+8th+Avenue,+New+York,+NY&daddr=John+F.+Kennedy+International+Airport,+Van+Wyck+Expressway,+Jamaica,+New+York&directionsmode=transit");
+        }
+        else if($scope.which_device ==2) //open google maps in android
+        {
+            window.open("maps://maps.google.com/maps?saddr="+start_add+"+&amp;daddr="+lat+","+longt+"&amp;ll="+start_add);
+        }
+        else
+        {
+            return false
+        }
+        var beforeSwitch = Date.now();
+        // schedule check if app was opened
+        setTimeout(function() {
+            // if this is called after less than 30ms
+            if (Date.now() - beforeSwitch < 30) {
+            alert("Could not open app")
+        }
+    });
     }
     $scope.closeslider = function () {     
         $scope.selectedstudio = {}   
@@ -1150,9 +1193,13 @@ $scope.timeFilter =  function (value) {
 
                 returnval = split[0] - 12 + ":" + min + " PM";
             }
-            else {
-                returnval = split[0] + ":" + min + " AM";
+            else if((split[0] - 12 < 0)) {
+                returnval = split[0] + ":" + split[1] + " AM";
             }                
+            else
+            {
+                returnval = split[0] + ":" + split[1] + " PM";
+            }
             return returnval;
         }
         else
@@ -1280,9 +1327,13 @@ noqapp.controller('accountscontroller',function($scope,$cookies,httpServices,put
             if (split[0] - 12 > 0) {
                 returnval = split[0] - 12 + ":" + split[1] + " PM";
             }
-            else {
+            else if((split[0] - 12 < 0)) {
                 returnval = split[0] + ":" + split[1] + " AM";
             }                
+            else
+            {
+                returnval = split[0]  + ":" + split[1] + " PM";
+            }
             return returnval;
         }
         else

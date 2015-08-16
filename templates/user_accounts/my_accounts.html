@@ -129,8 +129,8 @@
   <div class="landmark_details">{{buking.studio.area}},
   {{buking.studio.city}}
   {%endverbatim%}</div>
-        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</div> 
-        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</div>    
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</a></div> 
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
       </div>
       <div class="info1">
         <div class="landmark_details"><span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
@@ -163,8 +163,8 @@
   <div class="landmark_details">{{buking.studio.area}},
   {{buking.studio.city}}
   {%endverbatim%}</div>
-       <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</div> 
-        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - {%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</div>    
+       <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</a></div> 
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> -<a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
       </div>
       <div class="info1">
         <div class="landmark_details"><span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">

@@ -118,7 +118,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \
 			'studio_amenities','latitude','longitude','studio_kind','landmark','thumbnail',  \
-			'studio_closed_details')
+			'studio_closed_details','has_online_payment')
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 

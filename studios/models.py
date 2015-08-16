@@ -167,8 +167,8 @@ class StudioProfile(models.Model):
 	contact_mobile_no = models.CharField(max_length = 40, null = True)
 	in_charge_person = models.CharField(max_length = 75)
 	contact_person  = models.CharField(max_length = 75, null = True)
-	opening_at = models.TimeField()
-	closing_at = models.TimeField()
+	opening_at = models.TimeField(null = True)
+	closing_at = models.TimeField(null = True)
 	is_active = models.BooleanField(default  = 1)
 	#contract_start_date = models.DateTimeField()
 	#contract_end_date = models.DateTimeField()
@@ -183,6 +183,7 @@ class StudioProfile(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	latitude = models.CharField(max_length = 30)
 	longitude = models.CharField(max_length = 30)
+	has_online_payment = models.BooleanField(default = 0)
 	def __unicode__(self):
 		return self.name
 	"""def save(self):

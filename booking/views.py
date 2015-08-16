@@ -92,6 +92,18 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             ##check purchase amount is not changed
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
+            studio = StudioProfile.objects.values('name','address_1', \
+                'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
+                'incharge_mobile_no','city','has_online_payment').get(id = studio_id)
+            if studio['has_online_payment'] is False:
+                logger_error.error("No online payment")
+                logger_error.error(rzp_payment_id)
+                data = None
+                url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                ##change refund amount if neede in future
+                resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                transaction.rollback()
+                return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
             appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
             if appnt_date.date() < datetime.today().date():
                 data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
@@ -155,9 +167,6 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 services_booked = BookingServices.objects.filter(booking_id = booking_id)
                 services_booked_list = [ser.service.service_name for ser in services_booked]
                 user = User.objects.values('first_name','email').get(email = user)
-                studio = StudioProfile.objects.values('name','address_1', \
-                'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
-                'incharge_mobile_no','city').get(id = studio_id.studio.id)
                 contacts = {'in_charge_person':{'name':studio['in_charge_person'],'mobile_no': \
                 studio['incharge_mobile_no']},'contact_person':{'name':studio['contact_person'],\
                 'mobile_no':studio['contact_mobile_no']}}
@@ -200,6 +209,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 data = simplejson.dumps(booking_details)
         except Exception,e:
             logger_error.error(traceback.format_exc())
+            logger_error.error(rzp_payment_id)
             url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
             ##change refund amount if neede in future
             resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
@@ -406,7 +416,12 @@ class  GetSlots(APIView):
                 booking_status = 'BOOKED', status_code = 'B001', is_valid = True)
             #get studio start and end time
             studio_time = StudioProfile.objects.values('opening_at',  \
-                'closing_at','daily_studio_closed_from','daily_studio_closed_till').get(id = studio)
+                'closing_at','daily_studio_closed_from','daily_studio_closed_till',  \
+                'has_online_payment').get(id = studio)
+            if studio_time['has_online_payment'] is False:
+                logger_error.error("No online payment")
+                data = None
+                return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
             #check whether studio is closed on that day
             start = studio_time['opening_at']
             end = studio_time['closing_at']
