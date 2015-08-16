@@ -1040,7 +1040,7 @@ $("#datepicker").on("changeDate", function(event) {
         $scope.avail = sdata.available_slots.data;        
         //$('html, body').animate({scrollTop: $('#scrollhere').offset().top }, 'slow');
          $('html, body').animate({
-        scrollTop: $('#scrollhere').offset().top + ($(window).height() + $('#scrollhere').outerHeight(true)) 
+        scrollTop: $('#scrollhere').offset().top + ($(window).height() - $('#scrollhere').outerHeight(true)) 
     }, 200);
     },function()
     {
@@ -1192,7 +1192,7 @@ $scope.timeFilter =  function (value) {
             }                
             else
             {
-                returnval = split[0] + ":" + split[1] + " PM";
+                returnval = split[0] + ":" + min + " PM";
             }
             return returnval;
         }
@@ -1207,7 +1207,6 @@ $scope.timeFilter =  function (value) {
 
 noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServices,putResultService,sessionService,$window){
 
-    $scope.active_booking_count = 10;
 
     $scope.new_booking = putResultService.getBookingData()
     console.log($scope.new_booking)
@@ -1219,7 +1218,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             {
                 if(next['templateUrl'] ='/booking/booking_page/')
                 {
-                    window.location.href = "http://localhost:8000";
+                    window.location.href = "http://localhost:8000/#/search";
                     //window.location.href = "http://www.zaloon.in";                
                 }
                 
@@ -1254,8 +1253,9 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
 
     $scope.getBookings = function()
     {
+        $('.finder-overlay').show();
         httpServices.getDetails().then(function(data)
-        {
+        {            
             $scope.user_details = data.user_details.data[0]
             $scope.location = $scope.user_details.area
             $scope.phoneno = $scope.user_details.mobile
@@ -1264,6 +1264,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             {
                 $scope.active_bookings = data.active_booking
                 $scope.expired_bookings = data.inactive_booking
+                $('.finder-overlay').hide();
             },
             function()
             {
