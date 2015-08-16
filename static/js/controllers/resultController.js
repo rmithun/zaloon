@@ -41,6 +41,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     {
         $scope.which_device = 0
     }
+    alert($scope.which_device)
     $scope.studio = [];
     $scope.filteredstudio = [];
     $scope.servicelist = [];
