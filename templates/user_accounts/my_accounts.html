@@ -120,6 +120,7 @@
         <h4>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%}
         {%verbatim%}{{buking.appnt_day}}{%endverbatim%}
         <span ng-bind="timeFilter(buking.appointment_start_time)"></span></h4>
+        <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"></span>mins
           
       <div class="info">
         <div class="landmark_details">{%verbatim%}{{buking.studio.name}}{%endverbatim%}</div>    
@@ -138,7 +139,7 @@
         <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>             
       </div>
       </div>
-      <button class="bookbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}"   data-target="#cancelmodal">Cancel</button>       
+      <button class="bookbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}"  ng-if="has_cancel(buking.appointment_start_time,buking.appointment_date)"  data-target="#cancelmodal">Cancel</button>       
     </li>
         
     </ul>
@@ -154,6 +155,7 @@
       <div class="book-details">
         <h4>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%} {%verbatim%}{{buking.appointment_start_time}}{%endverbatim%}
           {%verbatim%}{{buking.appnt_day}}{%endverbatim%}</h4>
+          <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"></span>mins
           
       <div class="info">
         <div class="landmark_details">{%verbatim%}{{buking.studio.name}}{%endverbatim%}</div>    
@@ -190,14 +192,18 @@
     
   
   <!-- Model -->
-   <div  id="reviewmodal" class="modal fade" role="dialog">
+   <div  id="reviewmodal" class="modal fade" data-backdrop="static" 
+   data-keyboard="false" role="dialog">
     <div class="modal-dialog">
     <div class="modal-content signup">
      <div class="modal-header modal-booking-header">
      <button type="button" class="close" data-dismiss="modal">&times;</button> 
     
     </div> 
-      <div class="modal-body register">
+    <div class="modal-body register" ng-if="is_adding ==1">
+      {%verbatim%}{{review_message}}{%endverbatim%}
+    </div>
+      <div class="modal-body register" ng-if="is_adding ==0">
       <div class="col-sm-12">
          <h4 class="modal-title">Help Others, Write a review</h4>
       </div>         
@@ -241,11 +247,12 @@
    
 <!--cancel confirmation modal-->
 
-  <div  id="cancelmodal" class=" modal fade" role="dialog">
+  <div  id="cancelmodal" data-backdrop="static" 
+   data-keyboard="false" class=" modal fade" role="dialog">
     <div class="modal-dialog">
     <div class="modal-content signup">
      <div class="modal-header modal-register-header">
-     <button type="button" class="close" data-dismiss="modal">&times;</button> 
+     <button type="button" ng-hide="is_cancelling  == 1"  class="close" data-dismiss="modal">&times;</button> 
      <h4 class="modal-title" ng-if="is_cancelling  == 0" >Do you really want to cancel the booking?</h4>
      <h4 class="modal-title" ng-if="is_cancelling  == 1">We are cancelling</h4>
      <h4 class="modal-title" ng-if="has_cancelled == 1" >Sucess!</h4>

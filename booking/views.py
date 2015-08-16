@@ -230,6 +230,7 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
     @transaction.commit_manually
     def put(self,request,*args,**kwargs):
         try:
+            #import pdb;pdb.set_trace();
             booking_id = self.request.DATA
             user = self.request.user
             ##chk cancellation not happening on the same day after sending confirmation
@@ -239,8 +240,19 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                 status_code = responses.BOOKING_CODES['CANCELLED'],  \
                 updated_date_time = datetime.now(), is_valid = False)
             rzp_payment_id = None
+            today = datetime.now()
             if is_booking:
-                purchase = BookingDetails.objects.values('purchase_id').get(id = booking_id)
+                purchase = BookingDetails.objects.values('purchase_id','appointment_date',  \
+                    'appointment_start_time').get(id = booking_id)
+                if today.date() == purchase['appointment_date']:
+                    if today.hour < 5 and purchase['appointment_start_time'].hours < 13:
+                        pass
+                    elif today.hour < 12 and purchase['appointment_start_time'].hour >= 13:
+                        pass
+                    else:
+                        transaction.rollback()
+                        logger_booking.info("appointment_date and time passed"+str(booking_id))
+                        return Response(status = status.HTTP_406_NOT_ACCEPTABLE)
                 Purchase.objects.filter(id = purchase['purchase_id']).update(purchase_status = 'REFUND_REQUESTED',  \
                 status_code = responses.PAYMENT_CODES['REFUND_REQUESTED'],  \
                 service_updated = 'cancel booking', updated_date_time = datetime.now())

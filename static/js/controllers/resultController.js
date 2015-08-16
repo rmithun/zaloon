@@ -547,6 +547,7 @@ $scope.bindstudio=function(data){
         {
             //http://www.google.com/maps/place/49.46800006494457,17.11514008755796/@49.46800006494457,17.11514008755796,17z
             window.open("http://maps.apple.com/?z=12&q="+lat+","+longt)
+            //window.open("comgooglemaps://?saddr="+lat+","+longt);
             //window.open("comgooglemaps://?saddr=Google+Inc,+8th+Avenue,+New+York,+NY&daddr=John+F.+Kennedy+International+Airport,+Van+Wyck+Expressway,+Jamaica,+New+York&directionsmode=transit");
         }
         else if($scope.which_device ==2) //open google maps in android
@@ -558,7 +559,7 @@ $scope.bindstudio=function(data){
             return false
         }
         
-    });
+    
     }
     $scope.closeslider = function () {     
         $scope.selectedstudio = {}   
@@ -1204,7 +1205,7 @@ $scope.timeFilter =  function (value) {
 
 });
 
-noqapp.controller('accountscontroller',function($scope,$cookies,httpServices,putResultService,sessionService,$window){
+noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServices,putResultService,sessionService,$window){
 
     $scope.active_booking_count = 10;
 
@@ -1297,6 +1298,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,httpServices,put
         function()
         {
             $scope.has_cancelled = 0
+            $scope.is_cancelling = null
         })
     }
 
@@ -1443,24 +1445,71 @@ $scope.add_review = function()
     {
         $scope.is_adding = 0
         $('#reviewmodal').modal('hide')
-        $('#notificationmodal').modal('show')
         $scope.titleMsg = 'Successfully added review'; 
-        $scope.bodyMsg = 'Your rating and review successfully noted'; 
+        $scope.review_message = 'Your rating and review successfully noted'; 
         console.log(rdata)
+        lodash.find($scope.expired_bookings,function(booking) 
+            { if(booking['id'] == review_data['booking_id'])
+                {
+                    booking['is_reviewed'] = 1
+                }
+        });
     },function()
     {
         $('#reviewmodal').modal('hide')
+        $scope.is_adding = 0
         $('#notificationmodal').modal('show')
         $scope.titleMsg = 'Review not added'; 
-        $scope.bodyMsg = 'Could not add review try again'; 
+        $scope.review_message = 'Could not add review try again'; 
         console.log("Could not add review.")
+        
     })
 }
 
-//function which tells whether we can show cancel button for th booking
-$scope.has_cancel = function(buk_id)
-{
 
+function toSeconds(time_str) {
+    // Extract hours, minutes and seconds
+    var parts = time_str.split(':');
+    // compute  and return total seconds
+    return parts[0] * 3600 + // an hour has 3600 seconds
+    parts[1] * 60 + // a minute has 60 seconds
+    +
+    parts[2]; // seconds
+}
+
+//function which gives the duration of the booking
+$scope.findDuration = function(start_time,end_time)
+{
+    var difference = Math.abs(toSeconds(start_time) - toSeconds(end_time));
+    time = Math.abs(difference/60)
+    //console.log(time)
+    return time
+}
+//function which tells whether we can show cancel button for the booking
+var today  = new Date()
+$scope.has_cancel = function(start_time,appnt_date)
+{
+    var appnt_date =  new Date(appnt_date)
+    var start_time = parseInt(start_time.substring(0,2))
+    if(today.getDate() == appnt_date.getDate() && today.getMonth() == appnt_date.getMonth())
+    {
+       if(start_time < 13 && today.getHours() < 5)
+       {
+            return true
+       } 
+       else if(start_time >= 13 && today.getHours() < 12)
+       {
+            return true
+       }
+       else
+       {
+         return false
+       }
+    }
+    else
+    {
+        return true
+    }
 }
 });
     
