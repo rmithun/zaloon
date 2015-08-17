@@ -1287,6 +1287,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     }); 
     $scope.is_cancelling = 0;
     $scope.has_cancelled = null
+   
     $scope.booking_cancel = function(id)
     {
         $scope.is_cancelling = 1;
@@ -1303,7 +1304,12 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             $scope.is_cancelling = null
         })
     }
-
+    $scope.clearcancel = function()
+    {
+        $scope.is_cancelling = 0;
+        $scope.has_cancelled = null
+        $('#cancelmodal').modal('hide')
+    }
     $scope.change_usr_details = function()
     {
         $scope.usr_data = null

@@ -174,7 +174,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 'mobile_no':studio['contact_mobile_no']}}
                 studio_address = {'address_1':studio['address_1'],'address_2':studio['address_2'],  \
                 'area':studio['area'],'city':studio['city'],'landmark':studio['landmark']}
-                appnt_time =  studio_id.appointment_start_time.strftime('%H:%M')
+                appnt_time =  studio_id.appointment_start_time.strftime('%I:%M %p' )
                 appnt_date = studio_id.appointment_date.strftime('%d-%m-%Y')
                 booking_details = {'first_name':user['first_name'],'code':studio_id.booking_code,  \
                 'date':appnt_date, 'appnt_time':appnt_time,  \
@@ -232,7 +232,7 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
     @transaction.commit_manually
     def put(self,request,*args,**kwargs):
         try:
-            #import pdb;pdb.set_trace();
+            import pdb;pdb.set_trace();
             booking_id = self.request.DATA
             user = self.request.user
             ##chk cancellation not happening on the same day after sending confirmation
@@ -245,9 +245,14 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
             today = datetime.now()
             if is_booking:
                 purchase = BookingDetails.objects.values('purchase_id','appointment_date',  \
-                    'appointment_start_time').get(id = booking_id)
+                    'appointment_start_time','studio').get(id = booking_id)
+                studio = StudioProfile.objects.get(id = purchase['studio'])
+                appnt_time =  purchase['appointment_start_time'].strftime('%I:%M %p' )
+                booking_details = {'name':user.first_name,'studio':studio.name,'date':purchase['appointment_date'],  \
+                'appnt_time':appnt_time}
+                message = get_template('emails/cancelled.html').render(Context(booking_details))
                 if today.date() == purchase['appointment_date']:
-                    if today.hour < 5 and purchase['appointment_start_time'].hours < 13:
+                    if today.hour < 5 and purchase['appointment_start_time'].hour < 13:
                         pass
                     elif today.hour < 12 and purchase['appointment_start_time'].hour >= 13:
                         pass
@@ -290,6 +295,8 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
             logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
+            subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
+            email = sendEmail(user.email,subject,message)
             transaction.commit()
             logger_booking.info("Booking Cancelled")
             return Response(status = status.HTTP_200_OK)

@@ -136,12 +136,13 @@ if DEBUG:
     """
     ##AWS DEV DB
     HOST_NAME = 'http://127.0.0.1:8000'
+    # Additional locations of static files
     STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    )
+    )   
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
