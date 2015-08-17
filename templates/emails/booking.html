@@ -1,1 +1,116 @@
-Hi {{first_name}} , your booking for {{services}} at {{studio}} on {{date}}{{time}} is {{code}}.
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Zaloon | Booking Confirmed Email</title>
+{% load static from staticfiles %}
+</head>
+<body>
+<table  border="0" cellspacing="0" cellpadding="0" style="margin:0 auto; border-spacing:0px; line-height:100%; font-family:Arial, Helvetica, sans-serif;background-color:#ffffff; width:550px;border:1px solid #CDCDCD;padding:9px;">
+  <tr style="margin:0; padding:0; border-spacing:0px;background-color:#003;">
+    <td style="background-color:#EFFFFC;border-spacing:0px;vertical-align:top;margin:0; padding:0;" width="550">
+    <table width="550" border="0" cellspacing="0" cellpadding="0" style="vertical-align:top;margin:0; padding:0;">
+        <tr style="margin:0; padding:0; border-spacing:0px;">
+          <td style="margin:0; padding:0; border-spacing:0px;" colspan="3" height="30">&nbsp;</td>
+        </tr>
+        <tr style="margin:0; padding:0; border-spacing:0px;">
+          <td width="29" style="margin:0; padding:0; border-spacing:0px;">&nbsp;</td>
+          <td width="492" style="text-align:center; font-size:12px;color:#9e9d9d;line-height:20px;margin:0; padding:0; border-spacing:0px;">
+          <!-- CONTENT AREA START-->
+            <table width="492" border="0" cellspacing="0" cellpadding="0" style="margin:0; padding:0; border-spacing:0px;">
+              <tr style="margin:0; padding:0; border-spacing:0px;">
+                <td style="margin:0;padding-bottom:20px;border-spacing:0px; text-align:center;">
+           <img src = '{% static "img/logo.png"%}' src="assets/img/logo.png" width="168" height="51" alt="" style="margin:0;padding:0;border-spacing:0px;vertical-align:bottom;"/></td>
+              </tr>
+              
+              <tr style="margin:0; padding:0; border-spacing:0px;">
+			  
+                <td style="font-size:22px; font-weight:400;margin:0; padding:16px 0 16px 0;border-spacing:0px;text-align:center;color:#000;background-color:#1bbc9b;color:#fff;">
+				<img '{% static "img/email-booked.png"%}' width="43" height="43" alt="" style="margin:0;padding:0;border-spacing:0px;vertical-align:bottom;" /> 
+				<span style="padding-bottom: 11px; display: inline-block; padding-left: 10px;color:#fff;">BOOKING CONFIRMED</span>				
+				</td>
+              </tr>
+			   <tr style="margin:0; padding:0; border-spacing:0px;">
+				<td>&nbsp;</td>
+			   </tr>
+              <tr style="margin:0; padding:0;border-spacing:0px;text-align:center">
+                <td style="margin:0; padding:7px 0; border-spacing:0px;color: #1bbc9b; font-size: 15px;font-weight: bold;border:1px dashed red;">BOOKING CODE {{code}}</td>
+              </tr>
+              <tr style="border-spacing:0px;margin:0; padding:0;">
+                <td  style="padding:12px 0 24px 0;border-spacing:0px;text-align:left;margin:0;line-height:20px;">Hi {{first_name}},<br />
+                  <span style="padding-left:50px">Your appointment with {{studio}} is successfully booked.</span></td>
+              </tr>
+             <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
+                      <td style="margin:0; padding:0 0 10px 0; border-spacing:0px;font-size:16px;text-align:center;color:#1ABB9A;">BOOKING DETAILS </td>                      
+              </tr>
+			  <tr style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;">
+			  <td style="border-top:1px solid #cecece;padding:20px 0 20px 0;margin:0;border-spacing:0px;font-family:'Times New Roman', Times, serif;background-color:#fff0f0;color:#E85757; ">
+			  <table>
+			  <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
+                      <td style="margin:0; padding:0 0 10px 20px; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;text-align:center;">Appointment Date: {{date}}</td> 
+					<td style="margin:0; padding:0 0 10px 40px; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;text-align:center;">Appointment Time: {{appnt_time}}</td> 					  
+              </tr>
+			
+			  </table>
+			  </td >
+			   </tr>
+              
+              <!-- Grand Total Start-->
+              <tr style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;">
+                <td style="border-top:1px solid #cecece;padding:20px 0 20px 0;margin:0;border-spacing:0px;font-family:'Times New Roman', Times, serif; ">
+                <table width="492" border="0" cellspacing="0" cellpadding="0" style="margin:0; padding:0; border-spacing:0px;text-align:right;font-size:16px;font-family:'Times New Roman', Times, serif;line-height:24px;">
+                  {%for serv in services %}
+                    <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
+                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">{{serv.0}} </td>
+                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">₹ {{serv.2}}</td>
+                    </tr>
+                    {%endfor%}
+                    <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
+                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">Grand Total </td>
+                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">₹ {{total}}</td>
+                    </tr>
+                  </table>
+                  </td>
+              </tr>
+              <!-- Grand Total End-->
+              <!-- Recipient Start-->
+              <tr style="margin:0; padding:0; border-spacing:0px;">
+                <td style="border-top:1px solid #cecece;padding:20px 0 20px 0;margin:0;border-spacing:0px;">
+                <table width="492" border="0" cellspacing="0" cellpadding="0" style="margin:0; padding:0; border-spacing:0px;text-align:left;font-size:16px;font-family:'Times New Roman', Times, serif;line-height:19px;">
+                    <tr style="margin:0; padding:0; border-spacing:0px;text-align:left;font-family:'Times New Roman', Times, serif;">
+                      <td style="margin:0; padding:0px 0 10px 0; border-spacing:0px;color:#7a7a7a;font-family:'Times New Roman', Times, serif;font-size:16px;">SALON/SPA ADDRESS</td> 
+					  <td style="margin:0; padding:0px 0 10px 0; border-spacing:0px;color:#7a7a7a;font-family:'Times New Roman', Times, serif;font-size:16px;">CONTACTS</td> 					  
+                    </tr>
+                    <tr style="margin:0; padding:0; border-spacing:0px;text-align:left;font-size:14px;font-family:'Times New Roman', Times, serif;">
+                      <td style="margin:0; padding:0; border-spacing:0px;width:253px;font-family:'Times New Roman', Times, serif;text-align:left;"> 
+                        <span style="font-weight:bold;font-size:16px;">{{studio}}</span><br />
+                       {{studio_address.landmark}}<br />                       
+						{{studio_address.address_1 }}<br/>
+						{{studio_address.address_2 }}<br/>
+            {{studio_address.city}} <br/></td>
+                      
+						<td style="margin:0; padding:0; border-spacing:0px;text-align:left;font-family:'Times New Roman', Times, serif;vertical-align:top;"> 
+
+              {{contact.in_charge_person.name}} - {{contact.in_charge_person.mobile_no}}<br>
+                       {{contact.contact_person.name}} - {{contact.contact_person.mobile_no}}</td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <!-- Recipient End-->
+             
+              <tr style="border-spacing:0px;margin:0;padding:0;">
+                <td style="font-size:10px;line-height:14px;padding:10px 0;border-spacing:0px;text-align:center;margin:0;background-color:#1bbc9b;color:#fff;"> Thanks,<br />You are registered with zaloon.in
+                  <br /> 
+                  For queries contact: studiocare@zaloon.in</td>
+              </tr>
+            </table>
+            <!-- CONTENT AREA END--></td>
+          <td width="29" style="border-spacing:0px;margin:0;padding:0;">&nbsp;</td>
+        </tr>
+        <tr style="border-spacing:0px;margin:0;padding:0;">
+          <td style="border-spacing:0px;margin:0;padding:0;" colspan="3" height="17">&nbsp;</td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+</html>

@@ -1066,6 +1066,7 @@ $scope.applyPromo = function()
     },function(cdata)
     {   
         $scope.coupon_resp = cdata.data;
+        $scope.promo_amount = 0
         $scope.coupon_code="";
         console.log("Error applying coupon data")
     })
@@ -1110,7 +1111,7 @@ $scope.makepayment = function(bookingForm)
     if (!bookingForm.$invalid) {
         if ($scope.from_time && $scope.date_selected && $scope.mobileno)
         {
-            $scope.isdisable=true;
+            //$scope.isdisable=true;
             var booking_data = {}
             booking_data['appnt_date'] = $scope.date_selected
             booking_data['appnt_time'] = $scope.from_time
