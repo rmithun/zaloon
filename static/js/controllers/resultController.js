@@ -508,7 +508,9 @@ $scope.bindstudio=function(data){
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
             $('.tab-street').addClass('active');
-            $('#searchdevice').hide();
+            if($('.navsearch').css('display') != "none"){
+               $('#searchdevice').hide();
+            }
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
@@ -1225,6 +1227,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
                 
             });
             $('#bookingconfirm').modal('show')
+            putResultService.clearData()
         }
     }
 
