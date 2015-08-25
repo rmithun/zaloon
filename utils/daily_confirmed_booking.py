@@ -83,7 +83,6 @@ def daily_confirmed_booking():
                 else:
                     to_print[stud.studio_id]['data'].append(obj)
             except Exception,jsonerr:
-                print repr(jsonerr)
                 logger_error.error(traceback.format_exec())
                 #dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
                 #    studio_id = stud['studio_id'], status = 'Fail')
@@ -109,6 +108,7 @@ def render_to_pdf(template_url,data,studio):
         result = open(filename+'.pdf', 'wb')
         #result = StringIO.StringIO()
         logger_booking.info("File name "+str(filename))
+        logger_booking.info("File name "+str(data))
         try:
             pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
         except:
@@ -136,7 +136,7 @@ def render_to_pdf(template_url,data,studio):
     except Exception,pdfrenderr:
         transaction.rollback()
         logger_error.error(traceback.format_exec())
-        print (pdfrenderr)
+        
     else:
         transaction.commit()
 
@@ -154,6 +154,7 @@ def generate_pdf():
 logger_booking.info("Confirmed booking script starts running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 generate_pdf()
+generic_utils.sendEmail('vbnetmithun@gmail.com', 'Daily report script run sucessfull','')
 logger_booking.info("Confirmed booking script stops running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 

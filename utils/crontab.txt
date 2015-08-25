@@ -1,0 +1,14 @@
+##thanks mail sent daily at 8.PM for all previous day used booking
+30 14 * * *  /home/zaloon_dev_admin/zaloon-dev/bin/python /home/zaloon_dev_admin/zaloon-dev/zaloon/utils/thanks_mail_sender.py
+
+##reminder SMS sent early morning at 5 or 6 AM daily for the bookings of the day
+30 00 * * *  /home/zaloon_dev_admin/zaloon-dev/bin/python /home/zaloon_dev_admin/zaloon-dev/zaloon/utils/daily_booking_reminder.py
+
+##studio booking details sent daily at  5.05 AM for all booking before 1 PM
+35 23 * * *  /home/zaloon_dev_admin/zaloon-dev/bin/python /home/zaloon_dev_admin/zaloon-dev/zaloon/utils/daily_confirmed_booking.py
+
+##studio booking details sent daily at  12.05 PM for all booking after 1 PM
+35 06 * * *  /home/zaloon_dev_admin/zaloon-dev/bin/python /home/zaloon_dev_admin/zaloon-dev/zaloon/utils/daily_confirmed_booking.py
+
+
+

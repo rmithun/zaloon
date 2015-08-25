@@ -23,10 +23,10 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+ADMINS = (('Mithun', 'vbnetmithun@gmail.com'), ('Asha', 'ruksheee@yahoo.in'),('Jawahar', 'jawahar7.ceg@gmail.com'))
 
 
-
-
+SERVER_EMAIL = "donotreply@zaloon.in"
 
 # Application definition
 
@@ -166,7 +166,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'zaloon_prod',                      # Or path to database file if using sqlite3.
+            'NAME': 'zaloon_p',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
             'USER': 'zaloon_dba',
             'PASSWORD': '11July!99#',

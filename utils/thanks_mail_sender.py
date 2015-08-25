@@ -25,6 +25,7 @@ import traceback
 
 
 
+
 logger_booking = logging.getLogger('log.daily_scripts')
 logger_error = logging.getLogger('log.errors')
 
@@ -82,7 +83,6 @@ def send_thanks_mail():
                 ###log code end stats
     except Exception,errorz:
         logger_error.error(traceback.format_exc())
-        print errorz
     else:
         logger_booking.info("Total thanks mail sent - "+str(len(bookings)))
         ###log code end stats
@@ -91,6 +91,7 @@ def send_thanks_mail():
         
 logger_booking.info("Thanks mail start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 send_thanks_mail()
+status = generic_utils.sendEmail('vbnetmithun@gmail.com', 'Thanks mail run successful','')
 logger_booking.info("Thanks mail end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
 try:

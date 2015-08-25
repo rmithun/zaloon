@@ -74,7 +74,13 @@ def get_Bookings_for_day():
     ###log code end stats
 
 
+logger_booking.info("Booking reminder start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 get_Bookings_for_day()
+generic_utils.sendEmail('vbnetmithun@gmail.com', 'Booking reminder script run successful','')
+logger_booking.info("Booking reminder end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
+
+
+
 
 
 
