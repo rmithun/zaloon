@@ -261,6 +261,7 @@ $scope.bindstudio=function(data){
             $scope.filteredstudio.push(value);            
             $scope.getservice(value);
             $scope.getprice_rating(key, value);
+            $scope.studio[key].kind_icon = lodash.where($scope.studiokind,{'name':value.studio_kind.kind_desc})[0].icon;
             getdistance(key, value.latitude, value.longitude);
         });
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
@@ -508,7 +509,9 @@ $scope.bindstudio=function(data){
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
             $('.tab-street').addClass('active');
-            $('#searchdevice').hide();
+            if($('.navsearch').css('display') != "none"){
+               $('#searchdevice').hide();
+            }
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
@@ -1066,6 +1069,7 @@ $scope.applyPromo = function()
     },function(cdata)
     {   
         $scope.coupon_resp = cdata.data;
+        $scope.promo_amount = 0
         $scope.coupon_code="";
         console.log("Error applying coupon data")
     })
@@ -1110,7 +1114,7 @@ $scope.makepayment = function(bookingForm)
     if (!bookingForm.$invalid) {
         if ($scope.from_time && $scope.date_selected && $scope.mobileno)
         {
-            $scope.isdisable=true;
+            //$scope.isdisable=true;
             var booking_data = {}
             booking_data['appnt_date'] = $scope.date_selected
             booking_data['appnt_time'] = $scope.from_time
@@ -1224,6 +1228,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
                 
             });
             $('#bookingconfirm').modal('show')
+            putResultService.clearData()
         }
     }
 
@@ -1286,6 +1291,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     }); 
     $scope.is_cancelling = 0;
     $scope.has_cancelled = null
+   
     $scope.booking_cancel = function(id)
     {
         $scope.is_cancelling = 1;
@@ -1302,7 +1308,12 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             $scope.is_cancelling = null
         })
     }
-
+    $scope.clearcancel = function()
+    {
+        $scope.is_cancelling = 0;
+        $scope.has_cancelled = null
+        $('#cancelmodal').modal('hide')
+    }
     $scope.change_usr_details = function()
     {
         $scope.usr_data = null

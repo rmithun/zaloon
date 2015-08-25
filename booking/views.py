@@ -94,7 +94,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             ##make entry in purchase table
             studio = StudioProfile.objects.values('name','address_1', \
                 'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
-                'incharge_mobile_no','city','has_online_payment').get(id = studio_id)
+                'incharge_mobile_no','city','has_online_payment','landmark').get(id = studio_id)
             if studio['has_online_payment'] is False:
                 logger_error.error("No online payment")
                 logger_error.error(rzp_payment_id)
@@ -120,6 +120,8 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             logger_booking.info("New booking - "+str(data))
             total_duration = StudioServices.objects.filter(service_id__in = services_chosen,  \
                 studio_profile_id = studio_id).values('mins_takes').aggregate(Sum('mins_takes'))
+            service_details = StudioServices.objects.filter(service_id__in = services_chosen,  \
+                studio_profile_id = studio_id)
             ##capture payment in razor pay
             if rzp_payment_id:
                 #capture payment from razor pay
@@ -165,29 +167,29 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             studio_id = BookingDetails.objects.get(id = booking_id)
             if payment_success == 1 and studio_id.notification_send == 0:
                 services_booked = BookingServices.objects.filter(booking_id = booking_id)
-                services_booked_list = [ser.service.service_name for ser in services_booked]
+                services_booked_list = [(ser.service.service_name,ser.mins_takes,ser.price) for ser in service_details]
                 user = User.objects.values('first_name','email').get(email = user)
                 contacts = {'in_charge_person':{'name':studio['in_charge_person'],'mobile_no': \
                 studio['incharge_mobile_no']},'contact_person':{'name':studio['contact_person'],\
                 'mobile_no':studio['contact_mobile_no']}}
                 studio_address = {'address_1':studio['address_1'],'address_2':studio['address_2'],  \
-                'area':studio['area'],'city':studio['city']}
-                appnt_time =  studio_id.appointment_start_time.strftime('%H:%M')
+                'area':studio['area'],'city':studio['city'],'landmark':studio['landmark']}
+                appnt_time =  studio_id.appointment_start_time.strftime('%I:%M %p' )
                 appnt_date = studio_id.appointment_date.strftime('%d-%m-%Y')
                 booking_details = {'first_name':user['first_name'],'code':studio_id.booking_code,  \
                 'date':appnt_date, 'appnt_time':appnt_time,  \
                 'services':services_booked_list,  \
                 'studio':studio['name'],'studio_address':studio_address,  \
-                'contact':contacts}
+                'contact':contacts,'total':purchase_amount}
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
-                #email = sendEmail(to_user,subject,message)
+                email = sendEmail(to_user,subject,message)
                 #sms = sendSMS(studio_id.mobile_no,sms_message)
-                email = 1
+                #email = 1
                 sms_bms = 1
                 try:
                     email_bms = BookedMessageSent(booking_id = booking_id,is_successful = email,  \
@@ -230,7 +232,6 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
     @transaction.commit_manually
     def put(self,request,*args,**kwargs):
         try:
-            #import pdb;pdb.set_trace();
             booking_id = self.request.DATA
             user = self.request.user
             ##chk cancellation not happening on the same day after sending confirmation
@@ -243,9 +244,14 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
             today = datetime.now()
             if is_booking:
                 purchase = BookingDetails.objects.values('purchase_id','appointment_date',  \
-                    'appointment_start_time').get(id = booking_id)
+                    'appointment_start_time','studio').get(id = booking_id)
+                studio = StudioProfile.objects.get(id = purchase['studio'])
+                appnt_time =  purchase['appointment_start_time'].strftime('%I:%M %p' )
+                booking_details = {'name':user.first_name,'studio':studio.name,'date':purchase['appointment_date'],  \
+                'appnt_time':appnt_time}
+                message = get_template('emails/cancelled.html').render(Context(booking_details))
                 if today.date() == purchase['appointment_date']:
-                    if today.hour < 5 and purchase['appointment_start_time'].hours < 13:
+                    if today.hour < 5 and purchase['appointment_start_time'].hour < 13:
                         pass
                     elif today.hour < 12 and purchase['appointment_start_time'].hour >= 13:
                         pass
@@ -288,6 +294,8 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
             logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
+            subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
+            email = sendEmail(user.email,subject,message)
             transaction.commit()
             logger_booking.info("Booking Cancelled")
             return Response(status = status.HTTP_200_OK)

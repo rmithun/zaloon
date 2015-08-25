@@ -129,13 +129,8 @@
         <img class="image loaded" alt="" ng-src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
       </div>  
       <div class="book-details" >
-        <h4>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%}
-        {%verbatim%}{{buking.appnt_day}}{%endverbatim%}
-        <span ng-bind="timeFilter(buking.appointment_start_time)"></span></h4>
-        <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"></span>mins
-          
+        <h4>{%verbatim%}{{buking.studio.name}}{%endverbatim%}</h4>
       <div class="info">
-        <div class="landmark_details">{%verbatim%}{{buking.studio.name}}{%endverbatim%}</div>    
         <div class="landmark_details">{%verbatim%}{{buking.studio.landmark}}
   {{buking.studio.address_1}}
   {{buking.studio.address_2}}</div>
@@ -146,9 +141,17 @@
         <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
       </div>
       <div class="info1">
-        <div class="landmark_details"><span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
-          ,</span></span></div>       
+        Appnt. Date: <span>{%verbatim%}{{buking.appointment_date | date: mm-dd}}{%endverbatim%}</span>
+        <span ng-bind="timeFilter(buking.appointment_start_time)"></span>
+        
         <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>             
+        
+        <div class="landmark_details">
+        <span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
+          ,</span></span></div>       
+        <div class="landmark_details"><span>Duration:</span>  <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"></span> mins</div>
+        
+        
       </div>
       </div>
       <button class="bookbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}"  ng-if="has_cancel(buking.appointment_start_time,buking.appointment_date)"  data-target="#cancelmodal">Cancel</button>       
@@ -164,32 +167,36 @@
       <div class="book-imgthumb">
         <img class="image loaded" alt="" ng-src="{%verbatim%}{{buking.studio.thumbnail}}{%endverbatim%}">  
       </div>  
-      <div class="book-details">
-        <h4>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%} {%verbatim%}{{buking.appointment_start_time}}{%endverbatim%}
-          {%verbatim%}{{buking.appnt_day}}{%endverbatim%}</h4>
-          <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"></span>mins
-          
+          <div class="book-details" >
+        <h4>{%verbatim%}{{buking.studio.name}}{%endverbatim%}</h4>
       <div class="info">
-        <div class="landmark_details">{%verbatim%}{{buking.studio.name}}{%endverbatim%}</div>    
         <div class="landmark_details">{%verbatim%}{{buking.studio.landmark}}
   {{buking.studio.address_1}}
   {{buking.studio.address_2}}</div>
   <div class="landmark_details">{{buking.studio.area}},
   {{buking.studio.city}}
   {%endverbatim%}</div>
-       <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</a></div> 
-        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> -<a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</a></div> 
+        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
       </div>
       <div class="info1">
-        <div class="landmark_details"><span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
+        Appnt. Date: <span>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%}</span>
+        <span ng-bind="timeFilter(buking.appointment_start_time)"></span>
+        
+        <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>             
+        
+        <div class="landmark_details">
+        <span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
           ,</span></span></div>       
-        <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>               
-      </div>      
+        <div class="landmark_details"><span>Duration:</span>  <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"> </span> mins</div>
+        
+        
+      </div>
       </div>
         <!-- <button class="rebookbtn btn">Rebook</button> -->
         <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#reviewmodal">Write a review</button>
-        <span ng-if="buking.status_code != 'B004'">Cancelled </span>
-        <span ng-if="buking.is_reviewed == 1">Reviewed </span>
+        <button class="cancelledbtn btn" ng-if="buking.status_code != 'B004'">Cancelled </button>
+       <button class="reviewedbtn btn" ng-if="buking.is_reviewed == 1">Reviewed </button>
               
     </li>
     </ul>
@@ -264,7 +271,7 @@
     <div class="modal-dialog">
     <div class="modal-content signup">
      <div class="modal-header modal-register-header">
-     <button type="button" ng-hide="is_cancelling  == 1"  class="close" data-dismiss="modal">&times;</button> 
+     <button type="button" ng-hide="is_cancelling  == 1"  class="close" ng-click="clearcancel()">&times;</button> 
      <h4 class="modal-title" ng-if="is_cancelling  == 0" >Do you really want to cancel the booking?</h4>
      <h4 class="modal-title" ng-if="is_cancelling  == 1">We are cancelling</h4>
      <h4 class="modal-title" ng-if="has_cancelled == 1" >Sucess!</h4>

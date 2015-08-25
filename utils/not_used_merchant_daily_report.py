@@ -87,7 +87,7 @@ def daily_merchant_report():
 
 def render_to_pdf(template_url,data,studio):
     ##generate pdf with data
-    import pdb;pdb.set_trace();
+    #import pdb;pdb.set_trace();
     try:
         template = get_template(template_url)
         context = Context(data)

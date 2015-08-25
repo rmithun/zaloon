@@ -128,7 +128,7 @@ def sendEmail(to, subject, message, *args):
     fromaddr = 'donotreply@zaloon.in'
     msg['Subject'] = subject
     msg['From'] = "Zaloon.in <donotreply@zaloon.in>"
-    to = "mittugotmail@gmail.com"
+    to = to
     msg['To'] = to
     msg.attach(MIMEText(message, 'html','utf-8'))
     

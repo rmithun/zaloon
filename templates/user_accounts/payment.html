@@ -50,7 +50,7 @@
             </div>
       </div>
         </div>
-        <div class="panel panel-default">
+        <div class="panel panel-default choosedatepanel">
     <div name = "second-toggle" class="panel-open">
             <div class="panel-heading progress-done"> 
 <div class="heading-bar">     
@@ -77,12 +77,14 @@
 
 <div id="scrollhere">
   <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="avail.length != 0 && day_crossed">
-  <p >TIME</p>
+<p><span class="notavailable"><span class="notavailablebg"></span><span>Not Available</span></span></p>
+  <div class="clearfix"></div>
+<p>&nbsp;</p> 
+  <p>TIME</p>
   <p ng-if="hrs<12">MORNING(A.M)</p>
-  
-  <div class="time-meridiam"></div>
-    <div class="time-wrap timepanel">       
-  <table>
+    <div ng-if="hrs<12" class="time-meridiam"></div>
+    <divng-if="hrs<12"  class="time-wrap timepanel">       
+  <table ng-if="hrs<12" >
       <tr ng-repeat = "(hrs,val) in avail">
         <td ng-if="hrs<12" ng-class="{available: avail[hrs].indexOf(min) != -1,selected: avail[hrs].indexOf(min) == -1}" class="noblock" ng-repeat= "min in [00,15,30,45]" ng-click="selectTime(hrs,min)"  >
          <span class="noblock" ng-bind="timeFilter(hrs+':'+min)">
@@ -149,51 +151,53 @@
             </div>
             <div id="collapseThree" class="panel-collapse collapse">
                 <div class="panel-body">
-        <div class="col-sm-4 ">
-                    <div class="payaddress">
-            <h4>{%verbatim%}{{serviceschosen.studio.name}}{%endverbatim%}</h4>
-            <p>{%verbatim%}{{serviceschosen.studio.landmark}}{%endverbatim%}</p>
-            <p>{%verbatim%}{{serviceschosen.studio.address_1}}{%endverbatim%}</p>
-            <p>{%verbatim%}{{serviceschosen.studio.address_2}}{%endverbatim%} {%verbatim%}{{serviceschosen.studio.city}}{%endverbatim%}</p>
-            <p>{%verbatim%}{{serviceschosen.studio.contact_person}}{%endverbatim%} - {%verbatim%}{{serviceschosen.studio.contact_mobile_no}}{%endverbatim%}</p>
-            <p>{%verbatim%}{{serviceschosen.studio.in_charge_person}}{%endverbatim%} - {%verbatim%}{{serviceschosen.studio.incharge_mobile_no}}{%endverbatim%}</p>           
-          </div>
+
+                        <div class="row text-center">
+        <div class="col-sm-12">
+          <div class="col-sm-4 col-xs-4 bookdetail-title">SERVICES</div>
+          <div class="col-sm-4 col-xs-4 bookdetail-title">DURATION</div>
+          <div class="col-sm-4 col-xs-4 bookdetail-title">PRICE</div>
         </div>
-        <div class="col-sm-4">
-         
-                    <div class="promo">
-            
-            <p class="bold">Date & Time: <span>{%verbatim%}
-                    {{date_selected | date: 'dd MMMM'}}<span ng-if="from_time  ">,</span> {{timeFilter(from_time)}}{%endverbatim%}</span></p>
-            <p class="mobspan">Mobile No: <span>
-            <input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required></span></p>
+
+        <div class="col-sm-12" ng-repeat = "servs in serviceschosen.services">
+          <div class="col-sm-4 col-xs-4">{%verbatim%}{{servs.servicename}}{%endverbatim%}</div>
+          <div class="col-sm-4 col-xs-4">{%verbatim%}{{servs.duration}}{%endverbatim%} Min</div>
+          <div class="col-sm-4 col-xs-4">₹ {%verbatim%}{{servs.price}}{%endverbatim%}</div>
+        </div>
+       </div>
+        <div class="row paddtop10 paddbtm">       
+        <div class="col-sm-12">
+                   <div class="col-sm-8 col-xs-7 no-padding ">
+            <div class="promobox"><label>Enter Promo code:</label> <span><input type="text" ng-model="coupon_code" ng-click="focus()">
+              {%verbatim%}{{coupon_resp}}{%endverbatim%}</span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length"class="btn btn-primary promoapply">Apply</button></div>
+            </div>
+           <div class="col-sm-4 col-xs-3 text-center fntbold no-padding">- ₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>         
+        </div>        
+        </div> 
+        <div class="row">
+        <div class="col-sm-12 ">
+          
+          <div class="col-sm-8 no-padding">
+            <div class="promo">
+              <label class="mobspan">Mobile No:</label> <span><input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
             <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.required">
                     Mobile no is required</span></span>
                 <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
                     Enter your mobile number ex:9213233423</span></span>
-              
-            <div class="promobox"><p>Promo code:</p> <input type="text" ng-model="coupon_code" ng-click="focus()">
-              {%verbatim%}{{coupon_resp}}{%endverbatim%}
-              <button ng-click="applyPromo()" ng-disabled="!coupon_code.length" class="btn btn-primary promoapply">Apply</button></div>           
-          </div>
-         
-        </div>
-        <!-- <div class="clearfix"></div> -->
-        <div class="col-sm-4">
-                    <div class="selected-service">            
-            <div class="serviceline">
-              <p ng-repeat = "servs in serviceschosen.services">
-                {%verbatim%}{{servs.servicename}}{%endverbatim%}<span>
-                {%verbatim%}{{servs.price}}{%endverbatim%}</span></p> 
-            </div>
-            <div class="service-cal">
-              <p>Total <span>{%verbatim%}{{total_amount}}{%endverbatim%}</span></p> 
-              <p>Promo <span>{%verbatim%}{{promo_amount}}{%endverbatim%}</span></p>
-              <p class="total">To Pay <span>{%verbatim%}{{amount_to_pay}}{%endverbatim%}</span></p>
             </div>
           </div>
+          <div class="col-sm-4">
+          </div>
+          
         </div>
-        <p class="col-sm-12 col-xs-12 continuebtn"><button ng-click="makepayment(bookingForm)"   class="btn btn-primary">Continue</button></p>
+        </div>
+        <div class="col-sm-12 amntpayable">
+          <div class="col-sm-4 col-xs-6 continuebtn text-center"><button class="btn btn-primary" ng-click="makepayment(bookingForm)" >Make payment</button></div>
+          <div class="col-sm-4 hidden-xs"></div>
+          <div class="col-sm-4 col-xs-6 amntpay">Amount Payable: ₹ {%verbatim%}{{total_amount}}{%endverbatim%}</div>
+        </div>
+
+      
                 </div> 
         
             </div>
@@ -237,4 +241,12 @@
       </div>        
       </div>
     </div>  
-  </div>   
+  </div> 
+  <script type="text/javascript">
+    $(document).ready(function () {      
+      $(document).on('click', '.available', function (event) {  
+        $('.available').removeClass('active');    
+        $(this).addClass('active');
+      });
+    });
+  </script>  
