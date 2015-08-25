@@ -261,6 +261,7 @@ $scope.bindstudio=function(data){
             $scope.filteredstudio.push(value);            
             $scope.getservice(value);
             $scope.getprice_rating(key, value);
+            $scope.studio[key].kind_icon = lodash.where($scope.studiokind,{'name':value.studio_kind.kind_desc})[0].icon;
             getdistance(key, value.latitude, value.longitude);
         });
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);

@@ -232,7 +232,6 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
     @transaction.commit_manually
     def put(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace();
             booking_id = self.request.DATA
             user = self.request.user
             ##chk cancellation not happening on the same day after sending confirmation
