@@ -2,12 +2,17 @@
 ##for the day. 
 ##this script should run at differnt time in different day , so that
 ##we will analyze when the user interaction is more
-##for now run it at 7.AM
+##for now run it at 8.PM daily
 
 
+import os,sys
+import django
+sys.path.append(os.path.join(os.path.dirname(__file__), 'onepass'))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "onepass.settings")
+django.setup()
 
 from datetime import datetime, timedelta
-import django
 from user_accounts import models
 from booking.models import BookingDetails, ThanksMail, ReviewLink
 from studios.models import StudioProfile
@@ -15,7 +20,6 @@ from utils import responses, generic_utils
 from django.contrib.auth.models import User
 from django.template.loader import get_template
 from django.template import Context
-from django.conf import settings
 import logging
 import traceback
 

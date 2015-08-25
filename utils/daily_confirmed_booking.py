@@ -8,7 +8,14 @@ import logging
 import traceback
 
 #third party imports
+import os,sys
 import django
+sys.path.append(os.path.join(os.path.dirname(__file__), 'onepass'))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "onepass.settings")
+django.setup()
+
+
 from django.contrib.auth.models import User
 from django.db import transaction
 import cStringIO as StringIO
@@ -102,7 +109,10 @@ def render_to_pdf(template_url,data,studio):
         result = open(filename+'.pdf', 'wb')
         #result = StringIO.StringIO()
         logger_booking.info("File name "+str(filename))
-        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
+        try:
+            pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
+        except:
+            pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding="UTF-8")
         if not pdf.err:
             ###get and save the pdf 
             result = open(filename+'.pdf', 'r')

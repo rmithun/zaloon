@@ -2,6 +2,15 @@
 ##for the day. This differes from every hour notification script
 ##this runs every day at 7 AM
 
+
+import os,sys
+import django
+sys.path.append(os.path.join(os.path.dirname(__file__), 'onepass'))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "onepass.settings")
+django.setup()
+
+
 from datetime import datetime
 import logging
 import traceback
@@ -44,7 +53,7 @@ def get_Bookings_for_day():
                     studio_name['area'], date, time,code)
                 logger_booking.info("sms message - "+str(sms_template))
         	    try:
-        	        status = generic_utils.sendSMS(mobile_no,sms_template)
+        	        ##status = generic_utils.sendSMS(mobile_no,sms_template) uncomment while sending sms
         	    except Exception,smserr:
         		    logger_error.error(traceback.format_exc())
         		    status = False
