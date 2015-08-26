@@ -1182,22 +1182,28 @@ $scope.makepayment = function(bookingForm)
 
 //am/pm convertor
 
-$scope.timeFilter =  function (value) {
+$scope.timeFilter =  function (value) {    
         if(typeof value != 'undefined' && value!="")
         {            
             var split = value.split(':');
-            var min = split[1] =="0"? "00":split[1];
+            var min = split[1] =="0"? "00":split[1];            
             if (split[0] - 12 > 0) {
 
                 returnval = split[0] - 12 + ":" + min + " PM";
             }
             else if((split[0] - 12 < 0)) {
-                returnval = split[0] + ":" + split[1] + " AM";
+                if(min=="00"){
+                    returnval = split[0] + ":" + minutes + " AM";
+                }
+                else{
+                    returnval = split[0] + ":" + split[1] + " AM";
+                }
             }                
             else
             {
                 returnval = split[0] + ":" + min + " PM";
             }
+            //console.log(value+" - "+min+" - "+returnval);
             return returnval;
         }
         else
@@ -1206,7 +1212,41 @@ $scope.timeFilter =  function (value) {
         }
     }
 
-
+    //function check slot
+    $scope.checkslot=function(col,slot){  
+        var flag=false;      
+        if(slot=="morning"){
+            var array=lodash.range(1,12);
+            angular.forEach(array, function(value, key){
+                if(!flag){                
+                    if(typeof col[value] != "undefined"){
+                        flag=true;
+                    } 
+                }
+            });
+        }
+        else if(slot=="noon"){
+            var array=lodash.range(12,16);
+            angular.forEach(array, function(value, key){
+                if(!flag){                
+                    if(typeof col[value] != "undefined"){
+                        flag=true;
+                    } 
+                }
+            });
+        }
+        else if(slot=="evening"){
+            var array=lodash.range(16,24);
+            angular.forEach(array, function(value, key){
+                if(!flag){                
+                    if(typeof col[value] != "undefined"){
+                        flag=true;
+                    } 
+                }
+            });
+        }
+        return flag;        
+    }
 });
 
 noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServices,putResultService,sessionService,$window){
@@ -1522,6 +1562,6 @@ $scope.has_cancel = function(start_time,appnt_date)
     {
         return true
     }
-}
+}    
 });
     

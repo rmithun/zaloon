@@ -5,8 +5,8 @@
         <nav class="navigation">
             
                 <div class="navigation-brand">                  
-          <a href="#" ><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png">  </a>
-          <a href="#" ><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
+          <a href="#/search" ><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png">  </a>
+          <a href="#/search" ><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
                 </div>
         <div class="pull-right">
           <div class="securepayment-panel hidden480">
@@ -81,16 +81,17 @@
   <div class="clearfix"></div>
 <p>&nbsp;</p> 
   <p>TIME</p>
-  <p ng-if="hrs<12">MORNING(A.M)</p>
-    <div ng-if="hrs<12" class="time-meridiam"></div>
-    <divng-if="hrs<12"  class="time-wrap timepanel">       
-  <table ng-if="hrs<12" >
+  <p >MORNING(A.M)</p>
+    <div class="time-meridiam"></div>
+    <div class="time-wrap timepanel">        
+  <table  >
       <tr ng-repeat = "(hrs,val) in avail">
         <td ng-if="hrs<12" ng-class="{available: avail[hrs].indexOf(min) != -1,selected: avail[hrs].indexOf(min) == -1}" class="noblock" ng-repeat= "min in [00,15,30,45]" ng-click="selectTime(hrs,min)"  >
          <span class="noblock" ng-bind="timeFilter(hrs+':'+min)">
                   </span>
-              </td>
+              </td>              
       </tr>
+      <tr ng-if="!checkslot(avail,'morning')">Morning slots not available</tr>
 </table> 
       </div> 
     
@@ -110,6 +111,7 @@
                   </span>
               </td>
             </tr>
+            <tr ng-if="!checkslot(avail,'noon')">Noon slots not available</tr>
   
 </table> 
       </div>
@@ -127,6 +129,7 @@
                   </span>
               </td>
             </tr>
+            <tr ng-if="!checkslot(avail,'evening')">Evening slots not available</tr>
 </table> 
       </div>
     </div>  

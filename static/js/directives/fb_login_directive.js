@@ -38,6 +38,7 @@ noqapp.directive('facebook', function($http,httpServices) {
         FB.init({
           appId      : attrs.facebook, // App ID
           channelUrl : '//localhost:8000/static/js/channel.html', // Channel File
+          //channelUrl : '//zaloon.in/static/js/channel.html', // Channel File
           status     : true, // check login status
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML

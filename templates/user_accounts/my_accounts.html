@@ -58,7 +58,7 @@
     
     <div class="profile-panel"> 
       <h3>Profile</h3>      
-      <p><span>Name:</span> {%verbatim%}{{user_details.user_acc.first_name}}{{user_details.user_acc.last_name}}{%endverbatim%} </p>  
+      <p><span>Name:</span> {%verbatim%}{{user_details.user_acc.first_name}}   {{user_details.user_acc.last_name}}{%endverbatim%} </p>  
       <p><span>Email:</span> {%verbatim%}{{user_details.user_acc.email}}{%endverbatim%}</p> 
       <p><span>Area:</span>
           <span ng-show="locationshow"><span style="font-size: 15px;font-weight:400;" ng-model="location" class="ng-scope ng-binding editable editable-click">
@@ -297,7 +297,7 @@
       <div ng-if="has_cancelled == 1" class="modal-body register" style="text-align:center;">  
       Cancellation sucessfull
       <div>
-         Want to reschedule?<a href="#search"> Click here</a>
+         Want to reschedule?<a href="#/search"> Click here</a>
       </div> 
       <div style="clear:both;"></div>       
       </div>
