@@ -33,6 +33,7 @@ logger_error = logging.getLogger('log.errors')
 
 
 today = datetime.today().date()
+buks = None
 ##need to integrate with thread queue system when the count overflows indatetime.date(2015, 7, 1) future
 def get_Bookings_for_day():
     try:
@@ -42,26 +43,27 @@ def get_Bookings_for_day():
         for every_book in bookings:
             has_sent  = DailyReminder.objects.filter(booking_id = every_book.id, status = True)
             if len(has_sent) is 0:
-        	    code = every_book.booking_code
-        	    studio_name = StudioProfile.objects.values('name','area').get(id = every_book.studio.id)
-        	    user_name = User.objects.values('first_name','id').get(id = every_book.user.id)
-        	    date = today
-                    time = datetime.strptime(str(every_book.appointment_start_time), "%H:%M:%S").strftime("%I:%M %p")
-                    ##get sms template
-                    mobile_no = every_book.mobile_no
-        	    sms_template = (responses.SMS_TEMPLATES['DLY_REM'])%(user_name['first_name'], studio_name['name'],   \
+                code = every_book.booking_code
+                studio_name = StudioProfile.objects.values('name','area').get(id = every_book.studio.id)
+                user_name = User.objects.values('first_name','id').get(id = every_book.user.id)
+                date = today
+                time = datetime.strptime(str(every_book.appointment_start_time), "%H:%M:%S").strftime("%I:%M %p")
+                ##get sms template
+                mobile_no = every_book.mobile_no
+                sms_template = (responses.SMS_TEMPLATES['DLY_REM'])%(user_name['first_name'], studio_name['name'],   \
                     studio_name['area'], date, time,code)
                 logger_booking.info("sms message - "+str(sms_template))
-        	    try:
-        	        ##status = generic_utils.sendSMS(mobile_no,sms_template) uncomment while sending sms
-        	    except Exception,smserr:
-        		    logger_error.error(traceback.format_exc())
-        		    status = False
-        	            daily_reminder = DailyReminder(booking_id = every_book.id, mobile_no = mobile_no,  \
+                try:
+                    ##status = generic_utils.sendSMS(mobile_no,sms_template) uncomment while sending sms
+                    status = generic_utils.sendEmail(user_name['email'], 'Booking confirmation SMS', sms_template)
+                except Exception,smserr:
+                    logger_error.error(traceback.format_exc())
+                    status = False
+                    daily_reminder = DailyReminder(booking_id = every_book.id, mobile_no = mobile_no,  \
         	            status = status,user_id = user_name['id'],service_updated = "daily reminder", message = sms_template,  \
         	    	    )
-                            daily_reminder.save()
-        	    else:
+                    daily_reminder.save()
+                else:
         	        daily_reminder = DailyReminder(booking_id = every_book.id, mobile_no = mobile_no,  \
         	    	status = status,user_id = user_name['id'], service_updated = "daily reminder", message = sms_template,  \
         	    	)
@@ -70,13 +72,15 @@ def get_Bookings_for_day():
     except Exception,errorz:
         logger_error.error(traceback.format_exc())
     else:
-        print len(bookings)
+        buks = len(bookings)
+        logger_booking.info("Total reminder SMS sent - "+str(buks))
     ###log code end stats
 
 
 logger_booking.info("Booking reminder start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 get_Bookings_for_day()
-generic_utils.sendEmail('vbnetmithun@gmail.com', 'Booking reminder script run successful','')
+message = "Sent %s reminder SMS"%(str(buks))
+generic_utils.sendEmail('vbnetmithun@gmail.com', 'Booking reminder script run successful',message)
 logger_booking.info("Booking reminder end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
 

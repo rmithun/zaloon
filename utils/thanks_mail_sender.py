@@ -37,6 +37,7 @@ logger_error = logging.getLogger('log.errors')
 ##send SMS
 ##Make an entry in thanks_reminder table with status	
 ##need to integrate with thread que system when the count overflows in future
+buks = None
 def send_thanks_mail():
     try:
         yesterday = datetime.today().date()-timedelta(days = 1)
@@ -84,14 +85,16 @@ def send_thanks_mail():
     except Exception,errorz:
         logger_error.error(traceback.format_exc())
     else:
-        logger_booking.info("Total thanks mail sent - "+str(len(bookings)))
+        buks = len(bookings)
+        logger_booking.info("Total thanks mail sent - "+str(buks))
         ###log code end stats
 
 
         
 logger_booking.info("Thanks mail start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 send_thanks_mail()
-status = generic_utils.sendEmail('vbnetmithun@gmail.com', 'Thanks mail run successful','')
+message = "Sent %s mails"%(str(buks))
+status = generic_utils.sendEmail('vbnetmithun@gmail.com', 'Thanks mail run successful',message)
 logger_booking.info("Thanks mail end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
 

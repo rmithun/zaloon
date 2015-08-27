@@ -44,7 +44,7 @@ Name | Booking id | Services Booked | Booking Date | Booking Time
 """
 
 today = datetime.today().date()
-
+buks = None
 def daily_confirmed_booking():
     try:
         ##get all used booking for the day
@@ -84,13 +84,13 @@ def daily_confirmed_booking():
                     to_print[stud.studio_id]['data'].append(obj)
             except Exception,jsonerr:
                 logger_error.error(traceback.format_exec())
-                #dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
-                #    studio_id = stud['studio_id'], status = 'Fail')
-                #dm_status.save()
+                dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
+                    studio_id = stud['studio_id'], status = 'Fail')
+                dm_status.save()
             else:   
-                #dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
-                #    studio_id = stud['studio_id'], status = 'Fail')
-                #dm_status.save()
+                dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
+                    studio_id = stud['studio_id'], status = 'Fail')
+                dm_status.save()
     except Exception,majErr:
         logger_error.error(traceback.format_exec())
     else:
@@ -125,7 +125,8 @@ def render_to_pdf(template_url,data,studio):
             try:
                 #send email
                 subject = (responses.MAIL_SUBJECTS['DAILY_BOOKING_MAIL'])%(today)
-                generic_utils.sendEmail(studio_email['email'],subject,message)
+                generic_utils.sendEmail('vbnetmithun@gmail.com',subject,message)
+                ##generic_utils.sendEmail(studio_email['email'],subject,message)
                 rep = DailyBookingConfirmation.filter(studio_id = studio, report_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
             except Exception,e:
@@ -140,8 +141,11 @@ def render_to_pdf(template_url,data,studio):
     else:
         transaction.commit()
 
+
 def generate_pdf():
     to_generate = daily_confirmed_booking()
+    buks = len(to_generate)
+    logger_booking.info("Sent mails to %s  studios - "%(str(buks)))
     for key,data in to_generate.iteritems():
         try:
             logger_booking.info("data to be rendered - "+str(key)+"---"+str(data))
@@ -154,7 +158,8 @@ def generate_pdf():
 logger_booking.info("Confirmed booking script starts running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 generate_pdf()
-generic_utils.sendEmail('vbnetmithun@gmail.com', 'Daily report script run sucessfull','')
+message = "Sent mails to %s  studios"%(str(buks))
+generic_utils.sendEmail('vbnetmithun@gmail.com', 'Daily report script run sucessfull',message)
 logger_booking.info("Confirmed booking script stops running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 
