@@ -661,7 +661,8 @@ $scope.bindstudio=function(data){
     }
 
     //Pagination
-    $scope.pagechange = function () {    
+    $scope.pagechange = function (page) {  
+    console.log($scope.currentPage)  
         removemarker();
         clearlatlongbound();
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
@@ -714,7 +715,9 @@ $scope.bindstudio=function(data){
         $scope.directionlocation=$label;
     };
     $scope.searchservicestudio=function(){
-        $('#searchdevice').hide();
+        if($('.navsearch').css('display') != "none"){
+            $('#searchdevice').hide();
+        }
         $scope.searchicon=false;
         var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location};
         httpServices.getstudioDetails(obj).then(function(data)
@@ -918,7 +921,6 @@ else
 {
     $scope.rp_service_txt = $scope.serviceschosen['services'][0].servicename   
 }
-console.log($scope.rp_service_txt)
 $scope.user_details = $scope.serviceschosen['user_details']
 console.log($scope.user_details)
 $scope.mobileno = $scope.user_details.mobile
@@ -1144,9 +1146,9 @@ $scope.makepayment = function(bookingForm)
                         $('#processingmodal').modal('hide')
                         $location.path("/my_account");
                     }, function()
-                    {
-                        alert("Failed") //hide and show rzrpay again
-                        $('#processingmodal').modal('hide')
+                    {                        
+                        $('#processingmodal').modal('hide');
+                        $('#bookingfailedmodal').modal('show');
                         //$scope.isdisable=false;
                     });
             },
@@ -1193,7 +1195,7 @@ $scope.timeFilter =  function (value) {
             }
             else if((split[0] - 12 < 0)) {
                 if(min=="00"){
-                    returnval = split[0] + ":" + minutes + " AM";
+                    returnval = split[0] + ":" + min + " AM";
                 }
                 else{
                     returnval = split[0] + ":" + split[1] + " AM";
@@ -1245,6 +1247,7 @@ $scope.timeFilter =  function (value) {
                 }
             });
         }
+        console.log(slot+" - "+flag);
         return flag;        
     }
 });

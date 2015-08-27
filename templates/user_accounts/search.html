@@ -211,10 +211,10 @@
                 </a>
             </li>
         </ul>
-        <div style="padding: 10px 12px;">
-            <pagination direction-links="false" ng-if="filteredstudio.length > itemLimit" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="$parent.currentPage" num-pages="smallnumPages"></pagination>
-        </div>
+        <div ng-show="filteredstudio.length > itemLimit" style="padding: 10px 12px;">
+            <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="$parent.currentPage" num-pages="smallnumPages"></pagination>
 
+        </div>
     </div>
 </div>
 <div class="list-box" style="text-align:center;" ng-show="filteredstudio.length == 0">
