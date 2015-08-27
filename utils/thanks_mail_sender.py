@@ -40,9 +40,9 @@ logger_error = logging.getLogger('log.errors')
 def send_thanks_mail():
     try:
         yesterday = datetime.today().date()-timedelta(days = 1)
-        status_code = responses.BOOKING_CODES['USED']
+        status_code = responses.BOOKING_CODES['BOOKED']
         bookings = BookingDetails.objects.filter(appointment_date = yesterday,   \
-        booking_status = 'USED', status_code = status_code, is_valid = False)
+        booking_status = 'BOOKED', status_code = status_code, is_valid = True)
         ##log code starting
         status_code = responses.BOOKING_CODES['EXPIRED']
         for every_book in bookings:
@@ -94,9 +94,12 @@ send_thanks_mail()
 status = generic_utils.sendEmail('vbnetmithun@gmail.com', 'Thanks mail run successful','')
 logger_booking.info("Thanks mail end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
+
+"""
 try:
     BookingDetails.objects.filter(appointment_date = yesterday, booking_status = 'BOOKED',   \
     status_code = 'B001', is_valid = True).update(booking_status = 'EXPIRED',   \
     status_code = status_code, is_valid = False)
 except:
     logger_error.error(traceback.format_exc())
+"""
