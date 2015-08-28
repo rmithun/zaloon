@@ -102,7 +102,7 @@ article { text-align: left; }
 .brdrgt{border-right:1px solid #e6e6e6;}
 .red{color:#f06471;margin-bottom: 5px;line-height:15px;}
 .bold{font-weight:bold;}
-
+.dispInlineblk{display:inline-block;}
 
 /* Preloader */
 #mask { position: fixed;top: 0;left: 0;right: 0;bottom: 0;background-color: #F6F6F6;z-index: 10000;height: 100%; }
@@ -195,7 +195,7 @@ background-size: cover;  min-height: 400px; position: relative;background-positi
 .text-heading { padding-top: 8%; }
 .signup-wrapper { text-align:center; width:auto; }
 .static-header-landing { 
-background: url('../img/background/landing-bg.jpg'); 
+background: url('../img/background/landing-bg.jpeg'); 
 width: 100%!important;
    min-height: 400px;
   display: block;
@@ -918,6 +918,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 .choosedatepanel p{font-size:20px;text-align:center;}
 .securepayment-panel .btn {  border: 1px solid #BCBCBC;  padding: 7px;  margin-right: 10px;  color: #1BBC9B;  background-color: #f8f8f8;}
 .bookingdetails h4{margin-top:0px;outline:0;}
+.bookingdetails {color:#63696a;}
 .bookingdetails label {line-height: 12px; font-size: 13px;  font-weight: normal;}
 .bookingdetails .promo .btn{padding:5px;min-width: 62px; vertical-align: middle;}
 .bookingdetails .promo input{height:28px;width:150px;vertical-align: middle;}
@@ -952,7 +953,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
  .freecancelation{float:left;width: 150px;border-right:1px solid #1bbc9b;padding-top: 9px; padding-bottom: 11px;}
  .satisfaction{float:left;width: 134px;padding-top: 9px; padding-bottom: 11px;}
 .pay-container .searchheader .navigation{padding:0px;}
-.payment-wrapper .panel-default .panel-title{font-size:16px;}
+.payment-wrapper .panel-default .panel-title{font-size:14px;}
 .panel-heading .accordion-toggle:before { font-family: 'Glyphicons Halflings'; content: "\e082"; color: #fff;padding: 4px 10px 1px 5px; }
 
 .panel-heading .accordion-toggle.collapsed:before { content:"\e081";padding: 4px 10px 1px 5px;}
@@ -1081,7 +1082,8 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 }
 .circlebg{background:#f06471; border-radius: 27px; width: 40px; height: 40px;color:#fff;text-align: center;font-size: 22px; padding-top: 5px;display:inline-block;}
 .amntpayable{border-top:1px solid #EAE9E9;margin-top: 10px;}
-.amntpay{padding-top:10px;text-align:center;}
+.amntpay{padding-top:10px;text-align:right;float:right;font-size:18px;}
+.amntpay span{font-size:15px;}
 .fntbold{font-weight:bold;color:#f77d88;}
 
 /* Mobile device 767px */
@@ -1195,6 +1197,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 }
 
 @media (max-width: 480px) {
+.payment-wrapper .panel-default .panel-title{font-size:11px;}
 .listheader{width:320px;}
 .mapview{right:320px;}
 .hiddenxsprt{display:none;}
@@ -1247,7 +1250,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 
 /* Tablet device Landscape 1024px and 768px */
 @media (min-width: 768px) {
-
+.payment-wrapper .panel-default .panel-title{font-size:13px;}
 	p { font-size:12px; line-height:25px; }  
 	.submit-wrap .btn-primary{width:100%;}	
 	.text-heading{padding-top:8%;}
@@ -1312,7 +1315,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	 .promobox{float:right;}
 	 .promobox span{padding-left:10px;float:left;}
 	 .promobox button{padding:5px 0px;float:left;}
-	 .bookingdetails .promobox input{width: 110px;height: 28px;float:left;} 
+	 .bookingdetails .promobox input{width: 92px;height: 28px;float:left;} 
 	 
 	 .bookingdetails label {line-height: 12px; font-size: 13px;  font-weight: normal;float:left;padding: 5px 0 0 0;}
 	  .bookingdetails .promo{text-align:right;float:right;}
@@ -1322,6 +1325,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 
 /* Desktop medium screen  */
 @media (min-width: 992px){	
+.bookingdetails .promobox input{width:110px;}
 .distance{margin-bottom:0px;}
 #landing-page .static-header-landing, #landing-page .static-header{height:400px;}
 .searchheader .navigation{background:#f8f8f8;padding:15px 20px 8px 0px ;border-top: 5px solid #f06471;}

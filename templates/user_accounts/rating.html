@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" ng-app = "accountApp" >
+  <head>
+
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Give your valuable feeback -  Zaloon</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
+    {% load static from staticfiles %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
+    <link rel="stylesheet" href='{% static "css/font-awesome.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
+    <!-- loading django static files -->
+   <style type="text/css">
+
+</style>
+    
+  </head>
+
+
+<body ng-controller="reviewcontroller">
+      <!-- csrf token-->{% csrf_token %}
+
+         <header class="searchheader">
+        <nav class="navigation">
+            
+              <div class="navigation-brand">
+                      
+         <a href="http://www.zaloon.in"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/logo.png' %}"> </a>
+            <a href="http://www.zaloon.in"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="{% static 'img/logo-mobile.png' %}"> </a>
+                </div> 
+        <!-- Login -->
+        
+                <div class="navigation-navbar">                    
+                    
+                </div>           
+        </nav>
+    </header>
+
+
+
+{%if can_review %}
+<form>
+<div class="getdetails-panel">
+<div class="getdetails-panel-wrapper">
+<div class="container-fluid getpanel">
+        
+    <div class="row">
+      
+        <div class="form-group">
+          <label class="col-md-4 col-sm-4 col-xs-12 ">Rating</label>
+          <div class="col-md-8 col-sm-8 col-xs-11">
+          <span class="rating"><rating ng-model="rate" max="5" readonly="isReadonly"  on-leave="overStar = null"></rating></span>
+          </div>
+        </div>
+      
+    </div>    
+    <div class="row paddtop15">     
+        <div class="form-group">
+          <label class="col-md-4 col-sm-4 col-xs-12 ">Comment</label>
+          <div class="col-md-8 col-sm-8 col-xs-11">
+          <textarea  ng-model="comment" type="text" class="form-control"></textarea>
+          </div>
+        </div>      
+    </div>
+    <div class="row paddtop10">     
+        <div class="form-group col-sm-12 col-xs-11">          
+          <button class="getdetails-btn btn" ng-click="submit_review()">submit</button>          
+        </div>      
+    </div>  
+  </div>
+</div>    
+ </div>  
+ </form>
+ {%else%}
+ You cannot review
+ {%endif%}
+
+
+
+
+   <!-- js libs -->
+  <script src='{% static "js/jquery/jquery.min.js"%}'></script>   
+  <script src='{% static "js/bootstrap/bootstrap.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+  <script src='{% static "js/bootstrap/ui-bootstrap-tpls-0.13.0.js"%}'></script>  
+<!-- <script src="http://jsconsole.com/remote.js?EFF6B3F0-F091-4BF1-A102-81545C369DB1"></script> -->
+
+<script type="text/javascript">
+
+
+var noqapp = angular.module('accountApp', ['ui.bootstrap']);
+
+noqapp.controller('reviewcontroller', function ($scope,$http) {
+
+$scope.submit_review = function()
+{
+  data = {'rating':$scope.rate,'comment':$scope.comment,
+         'review_key':,'booking_id':}
+  alert($scope.rate)
+  alert($scope.comment)
+  $http.put(accountURL+'user_auth/')
+}
+
+});
+
+</script>
+  </body>
+
+  
+
+</html>

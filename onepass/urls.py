@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     url(r'^iframe/$',TemplateView.as_view(template_name='user_accounts/iframe.html'),name = 'iframe'),
 
     url(r'^search/$',TemplateView.as_view(template_name='user_accounts/search.html'),name = 'search'),
-    
+    url(r'^lp/$',TemplateView.as_view(template_name='user_accounts/index.html'),name = 'lp'),
     
 
 

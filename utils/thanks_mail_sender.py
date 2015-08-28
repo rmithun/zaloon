@@ -11,6 +11,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'onepass'))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "onepass.settings")
 django.setup()
+from django.conf import settings
 
 from datetime import datetime, timedelta
 from user_accounts import models
@@ -39,6 +40,7 @@ logger_error = logging.getLogger('log.errors')
 ##need to integrate with thread que system when the count overflows in future
 buks = None
 def send_thanks_mail():
+    import pdb;pdb.set_trace();
     try:
         yesterday = datetime.today().date()-timedelta(days = 1)
         status_code = responses.BOOKING_CODES['BOOKED']
@@ -53,9 +55,9 @@ def send_thanks_mail():
             date = yesterday
             #get email template and render all variables
             review_link = None
-            review_key = ReviewLink.objects.get('link_code').filter(booking_id = every_book.id, is_reviewed = 0)
+            review_key = ReviewLink.objects.values('link_code').filter(booking_id = every_book.id, is_reviewed = 0)
             if review_key:
-                review_link = settings.HOST_NAME+'/booking/review_from_email/?review_key='+str(review_key['link_code'])+  \
+                review_link = settings.HOST_NAME+'/booking/review_from_email/?review_key='+str(review_key[0]['link_code'])+  \
                 '&&booking_id='+str(every_book.id)
             user_details = {'first_name':user['first_name'],'studio_name':studio_name['name'],  \
             'date':yesterday,'review_link':review_link}
@@ -68,17 +70,18 @@ def send_thanks_mail():
                 if not has_sent:
                     status = generic_utils.sendEmail(to_user, subject, message)
                     BookingDetails.objects.filter(id = every_book.id).update(is_valid = False, \
-                        booking_status = 'EXPIRED', status_code = status_code)
+                        booking_status = 'EXPIRED', status_code = status_code,  \
+                        service_updated = "thanks mail")
             except Exception,smserr:
                 logger_error.error(traceback.format_exc())
                 status = False
                 thanks_mail = ThanksMail(booking_id = every_book.id, email = to_user, \
-                status = status,user_id = user['id'] ,service_updated = "daily reminder",  \
+                status = status,user_id = user['id'] ,service_updated = "thanks mail",  \
                 )
                 thanks_mail.save()
             else:
                 thanks_mail = ThanksMail(booking_id = every_book.id, email = to_user,
-                status = status,user_id = user['id'], service_updated = "daily reminder",  \
+                status = status,user_id = user['id'], service_updated = "thanks mail",  \
                 )
                 thanks_mail.save()
                 ###log code end stats
@@ -87,14 +90,15 @@ def send_thanks_mail():
     else:
         buks = len(bookings)
         logger_booking.info("Total thanks mail sent - "+str(buks))
+        message = "Sent %s mails"%(str(buks))
+        status = generic_utils.sendEmail('vbnetmithun@gmail.com', 'Thanks mail run successful',message)
+
         ###log code end stats
 
 
         
 logger_booking.info("Thanks mail start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 send_thanks_mail()
-message = "Sent %s mails"%(str(buks))
-status = generic_utils.sendEmail('vbnetmithun@gmail.com', 'Thanks mail run successful',message)
 logger_booking.info("Thanks mail end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
 

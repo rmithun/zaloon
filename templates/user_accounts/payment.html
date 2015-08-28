@@ -37,7 +37,7 @@
             <div class="payment-servicemodel">
               <div class="todo">            
                 <ul>
-                  <li class="todo-done" ng-repeat = "serv in serviceschosen.services">               
+                  <li  class="col-sm-4" ng-repeat = "serv in serviceschosen.services">               
                   <div class="todo-content">                 
                     {%verbatim%}{{serv.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{serv.price}}{%endverbatim%}
                   </div>
@@ -154,52 +154,67 @@
             <div id="collapseThree" class="panel-collapse collapse">
                 <div class="panel-body">
 
-                        <div class="row text-center">
+                        <div class="text-center">
         <div class="col-sm-12">
           <div class="col-sm-4 col-xs-4 bookdetail-title">SERVICES</div>
           <div class="col-sm-4 col-xs-4 bookdetail-title">DURATION</div>
           <div class="col-sm-4 col-xs-4 bookdetail-title">PRICE</div>
         </div>
-
+        <div class ="row">
         <div class="col-sm-12" ng-repeat = "servs in serviceschosen.services">
           <div class="col-sm-4 col-xs-4">{%verbatim%}{{servs.servicename}}{%endverbatim%}</div>
           <div class="col-sm-4 col-xs-4">{%verbatim%}{{servs.duration}}{%endverbatim%} Min</div>
           <div class="col-sm-4 col-xs-4">₹ {%verbatim%}{{servs.price}}{%endverbatim%}</div>
         </div>
+      </div>
        </div>
         <div class="row paddtop10 paddbtm">       
         <div class="col-sm-12">
-                   <div class="col-sm-8 col-xs-7 no-padding ">
-            <div class="promobox"><label>Enter Promo code:</label> <span><input type="text" ng-model="coupon_code" ng-click="focus()">
-              {%verbatim%}{{coupon_resp}}{%endverbatim%}</span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length"class="btn btn-primary promoapply">Apply</button></div>
-            </div>
-           <div class="col-sm-4 col-xs-3 text-center fntbold no-padding">- ₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>         
-        </div>        
-        </div> 
-        <div class="row">
-        <div class="col-sm-12 ">
-          
-          <div class="col-sm-8 no-padding">
+
+            <div class="col-sm-4 no-padding">
             <div class="promo">
-              <label class="mobspan">Mobile No:</label> <span><input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
+              <label class="mobspan">
+              <label>Mobile No:</label>  <span><input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
             <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.required">
                     Mobile no is required</span></span>
                 <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
-                    Enter your mobile number ex:9213233423</span></span>
+                    Enter your mobile number ex:9213233423</span></span></span>
+              </label>
             </div>
           </div>
+
+
+          <div class="col-sm-4 col-xs-7 no-padding ">
+            <div class="promobox"><label>Promo code:</label> 
+            <div class="dispInlineblk"> <span><input type="text" ng-model="coupon_code" ng-click="focus()">
+              {%verbatim%}{{coupon_resp}}{%endverbatim%}</span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length"class="btn btn-primary promoapply">Apply</button></div>
+            </div>
+          </div>
+
+          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding">₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
+     
+        </div>        
+        </div> 
+
+
+        <div class="row">
+        <div class="col-sm-12 ">
+          
+          
           <div class="col-sm-4">
           </div>
           
         </div>
         </div>
-        <div class="col-sm-12 amntpayable">
-          <div class="col-sm-4 col-xs-6 continuebtn text-center"><button class="btn btn-primary" ng-click="makepayment(bookingForm)" >Make payment</button></div>
-          <div class="col-sm-4 hidden-xs"></div>
-          <div class="col-sm-4 col-xs-6 amntpay">Amount Payable: ₹ {%verbatim%}{{amount_to_pay}}{%endverbatim%}</div>
+
+            <div class="col-sm-12 amntpayable">
+          
+          
+          <div class="col-sm-4 col-xs-12 amntpay">Amount Payable: <span>₹ {%verbatim%}{{amount_to_pay}}{%endverbatim%}</span>
+          <div class="continuebtn"><button ng-click="makepayment(bookingForm)" class="btn btn-primary">MAKE PAYMENT</button></div>
+          </div>
         </div>
 
-      
                 </div> 
         
             </div>

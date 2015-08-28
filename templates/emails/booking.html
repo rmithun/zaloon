@@ -36,7 +36,7 @@
               <tr style="margin:0; padding:0;border-spacing:0px;text-align:center">
                 <td style="margin:0; padding:7px 0; border-spacing:0px;color: #1bbc9b; font-size: 15px;font-weight: bold;border:1px dashed red;">BOOKING CODE {{code}}</td>
               </tr>
-              <tr style="border-spacing:0px;margin:0; padding:0;">
+              <tr style="border-spacing:0px;margin:0; padding:0;color:#737171;">
                 <td  style="padding:12px 0 24px 0;border-spacing:0px;text-align:left;margin:0;line-height:20px;">Hi {{first_name}},<br />
                   <span style="padding-left:50px">Your appointment with {{studio}} is successfully booked.</span></td>
               </tr>
@@ -44,7 +44,7 @@
                       <td style="margin:0; padding:0 0 10px 0; border-spacing:0px;font-size:16px;text-align:center;color:#1ABB9A;">BOOKING DETAILS </td>                      
               </tr>
 			  <tr style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;">
-			  <td style="border-top:1px solid #cecece;padding:20px 0 20px 0;margin:0;border-spacing:0px;font-family:'Times New Roman', Times, serif;background-color:#fff0f0;color:#E85757; ">
+			  <td style="border-top:1px solid #97F4E4;padding:20px 0 20px 0;margin:0;border-spacing:0px;font-family:'Times New Roman', Times, serif;background-color:#B9FFF3;color:#868484; ">
 			  <table>
 			  <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
                       <td style="margin:0; padding:0 0 10px 20px; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;text-align:center;">Appointment Date: {{date}}</td> 
@@ -57,17 +57,17 @@
               
               <!-- Grand Total Start-->
               <tr style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;">
-                <td style="border-top:1px solid #cecece;padding:20px 0 20px 0;margin:0;border-spacing:0px;font-family:'Times New Roman', Times, serif; ">
+                <td style="border-top:1px solid #97F4E4;padding:20px 0 20px 0;margin:0;border-spacing:0px;font-family:'Times New Roman', Times, serif; background-color:#D2FAF3;color:#868484; ">
                 <table width="492" border="0" cellspacing="0" cellpadding="0" style="margin:0; padding:0; border-spacing:0px;text-align:right;font-size:16px;font-family:'Times New Roman', Times, serif;line-height:24px;">
                   {%for serv in services %}
                     <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
                       <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">{{serv.0}} </td>
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">₹ {{serv.2}}</td>
+                      <td style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">₹ {{serv.2}}</td>
                     </tr>
                     {%endfor%}
                     <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">Grand Total </td>
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">₹ {{total}}</td>
+                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">Grand Total </td>
+                      <td style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">₹ {{total}}</td>
                     </tr>
                   </table>
                   </td>
@@ -75,13 +75,13 @@
               <!-- Grand Total End-->
               <!-- Recipient Start-->
               <tr style="margin:0; padding:0; border-spacing:0px;">
-                <td style="border-top:1px solid #cecece;padding:20px 0 20px 0;margin:0;border-spacing:0px;">
+                <td style="border-top:1px solid #E4E4E4;padding:20px 0 20px 0;margin:0;border-spacing:0px;">
                 <table width="492" border="0" cellspacing="0" cellpadding="0" style="margin:0; padding:0; border-spacing:0px;text-align:left;font-size:16px;font-family:'Times New Roman', Times, serif;line-height:19px;">
                     <tr style="margin:0; padding:0; border-spacing:0px;text-align:left;font-family:'Times New Roman', Times, serif;">
                       <td style="margin:0; padding:0px 0 10px 0; border-spacing:0px;color:#7a7a7a;font-family:'Times New Roman', Times, serif;font-size:16px;">SALON/SPA ADDRESS</td> 
 					  <td style="margin:0; padding:0px 0 10px 0; border-spacing:0px;color:#7a7a7a;font-family:'Times New Roman', Times, serif;font-size:16px;">CONTACTS</td> 					  
                     </tr>
-                    <tr style="margin:0; padding:0; border-spacing:0px;text-align:left;font-size:14px;font-family:'Times New Roman', Times, serif;">
+                    <tr style="margin:0; padding:0; border-spacing:0px;text-align:left;font-size:14px;font-family:'Times New Roman', Times, serif;color:#737171;">
                       <td style="margin:0; padding:0; border-spacing:0px;width:253px;font-family:'Times New Roman', Times, serif;text-align:left;"> 
                         <span style="font-weight:bold;font-size:16px;">{{studio}}</span><br />
                        {{studio_address.landmark}}<br />                       
@@ -99,7 +99,7 @@
               <!-- Recipient End-->
              
               <tr style="border-spacing:0px;margin:0;padding:0;">
-                <td style="font-size:10px;line-height:14px;padding:10px 0;border-spacing:0px;text-align:center;margin:0;background-color:#1bbc9b;color:#fff;"> Thanks,<br />You are registered with zaloon.in
+                <td style="font-size:10px;line-height:14px;padding:10px 0;border-spacing:0px;text-align:center;margin:0;color:#1BBC9B;"> Thanks,<br />You are registered with zaloon.in
                   <br /> 
                   For queries contact: studiocare@zaloon.in</td>
               </tr>

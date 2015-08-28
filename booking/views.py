@@ -191,6 +191,10 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 #sms = sendSMS(studio_id.mobile_no,sms_message)
                 #email = 1
                 sms_bms = 1
+                review_key = uniquekey_generator()
+                new_link = ReviewLink(booking_id = booking_id, link_code = review_key,  \
+                    service_updated = "booking confirmed")
+                new_link.save()
                 try:
                     email_bms = BookedMessageSent(booking_id = booking_id,is_successful = email,  \
                         type_of_message = 'book', mode = 'email', service_updated =  \
@@ -270,7 +274,6 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                     url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
                     ##change refund amount if neede in future
                     resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
-                    print resp
                     if resp.status_code == 200:
                         dat = eval(resp.text)
                         refund_id = dat['id']
@@ -285,6 +288,10 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                         transaction.rollback()
                         logger_booking.info("Refund failed - "+str(is_booking))
                         return Response(status = status.HTTP_304_NOT_MODIFIED)
+                    old_link = ReviewLink.objects.get(booking_id = booking_id)
+                    old_link.delete()
+                    subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
+                    email = sendEmail(user.email,subject,message)
             else:
                 transaction.rollback()
                 logger_booking.info("No booking with booking id - "+str(is_booking))
@@ -294,8 +301,6 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
             logger_error.error(traceback.format_exc())
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
-            email = sendEmail(user.email,subject,message)
             transaction.commit()
             logger_booking.info("Booking Cancelled")
             return Response(status = status.HTTP_200_OK)
@@ -396,12 +401,14 @@ class ReviewFromEmail(CreateAPIView):
             data = self.request.DATA
             booking_id = data['booking_id']
             review_code = data['review_key']
-            is_used = BookingDetails.objects.values('status_code','studio_id','is_reviewed').get(Q(id = booking_id),  \
-                ~Q(is_reviewed = 1), Q(status_code = 'B004'))
-            if is_used['status_code'] == responses.BOOKING_CODES['USED'] and   \
+            comment = data['comment']
+            rating = data['rating']
+            is_used = BookingDetails.objects.values('status_code','studio_id','user','is_reviewed').get(Q(id = booking_id),  \
+                ~Q(is_reviewed = 1), Q(status_code = 'B001'))
+            if is_used['status_code'] == responses.BOOKING_CODES['BOOKED'] and   \
             is_used['is_reviewed'] == 0:
                 new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
-                comment = comment, rating = rating, user = user, service_updated = 'add review')
+                comment = comment, rating = rating, user = is_used['user'], service_updated = 'review from email')
                 new_review.save()
                 ReviewLink.objects.filter(booking_id = booking_id).update(is_reviewed = 1)
                 BookingDetails.objects.filter(id = booking_id).update(is_reviewed = 1)
@@ -618,7 +625,7 @@ class ApplyCoupon(APIView):
 
 
 class ReviewLinkValidate(APIView):
-    """class which validates the review link ans returns html for enter review if true else
+    """class which validates the review link and returns html for enter review if true else
     error message"""
     permission_classes = (ReadWithoutAuthentication,)
     serializer_class = EmailReviewLinkSerializer
@@ -631,13 +638,13 @@ class ReviewLinkValidate(APIView):
                 is_reviewed = 0)
             if data:
                 #return html
-                return render(request, 'booking/review_from_email.html',{'can_review':1})
+                return render(request, 'user_accounts/rating.html',{'can_review':1})
             else:
                 #return error message
-                return render(request, 'booking/review_from_email.html',{'can_review':0})
+                return render(request, 'user_accounts/rating.html',{'can_review':0})
         except Exception,e:
             print repr(e)
-            return render(request, 'booking/review_from_email.html',{'can_review':0})
+            return render(request, 'user_accounts/rating.html',{'can_review':0})
 
 
 

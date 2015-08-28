@@ -1,2 +1,4 @@
 *.pyc
 *.log
+*.sqlite3
+*.sh
