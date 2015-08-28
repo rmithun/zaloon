@@ -77,7 +77,8 @@ def get_studios(location,service,date=None):
             filtered_studios =  StudioServices.objects.filter(service_id__in =   \
             services).values('studio_profile').distinct()
         else:
-            filtered_studios =  StudioServices.objects.all().distinct()
+            #filtered_studios =  StudioServices.objects.all().distinct()
+            filtered_studios =  []
 
         ##call for booking logic
     except Exception,e:

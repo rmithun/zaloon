@@ -45,7 +45,7 @@ def get_Bookings_for_day():
             if len(has_sent) is 0:
                 code = every_book.booking_code
                 studio_name = StudioProfile.objects.values('name','area').get(id = every_book.studio.id)
-                user_name = User.objects.values('first_name','id').get(id = every_book.user.id)
+                user_name = User.objects.values('first_name','id','email').get(id = every_book.user.id)
                 date = today
                 time = datetime.strptime(str(every_book.appointment_start_time), "%H:%M:%S").strftime("%I:%M %p")
                 ##get sms template

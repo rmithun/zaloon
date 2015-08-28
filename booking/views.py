@@ -398,17 +398,18 @@ class ReviewFromEmail(CreateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
+            import pdb;pdb.set_trace();
             data = self.request.DATA
-            booking_id = data['booking_id']
-            review_code = data['review_key']
+            review_code = data['review_key'].split('&&')[0].split('=')[1]
+            booking_id = data['review_key'].split('&&')[1].split('=')[1]
             comment = data['comment']
             rating = data['rating']
             is_used = BookingDetails.objects.values('status_code','studio_id','user','is_reviewed').get(Q(id = booking_id),  \
-                ~Q(is_reviewed = 1), Q(status_code = 'B001'))
-            if is_used['status_code'] == responses.BOOKING_CODES['BOOKED'] and   \
+                ~Q(is_reviewed = 1), Q(status_code = 'B007'))
+            if is_used['status_code'] == responses.BOOKING_CODES['EXPIRED'] and   \
             is_used['is_reviewed'] == 0:
                 new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
-                comment = comment, rating = rating, user = is_used['user'], service_updated = 'review from email')
+                comment = comment, rating = rating, user_id = is_used['user'], service_updated = 'review from email')
                 new_review.save()
                 ReviewLink.objects.filter(booking_id = booking_id).update(is_reviewed = 1)
                 BookingDetails.objects.filter(id = booking_id).update(is_reviewed = 1)

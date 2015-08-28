@@ -43,12 +43,12 @@
 
 
 
-{%if can_review %}
-<form>
+<form ng-if="added == 0">
 <div class="getdetails-panel">
 <div class="getdetails-panel-wrapper">
+{%if can_review %}   
 <div class="container-fluid getpanel">
-        
+ 
     <div class="row">
       
         <div class="form-group">
@@ -73,12 +73,18 @@
         </div>      
     </div>  
   </div>
+
+   {%else%}
+ <p> <div class="row">
+      
+        <div class="form-group">
+          <label class="col-md-4 col-sm-4 col-xs-12 ">You have added your review</label>
+        </div></p>
+ {%endif%}
 </div>    
  </div>  
  </form>
- {%else%}
- You cannot review
- {%endif%}
+
 
 
 
@@ -96,15 +102,19 @@
 
 var noqapp = angular.module('accountApp', ['ui.bootstrap']);
 
-noqapp.controller('reviewcontroller', function ($scope,$http) {
-
+noqapp.controller('reviewcontroller', function ($scope,$http,$window) {
+ $scope.added = 0
 $scope.submit_review = function()
 {
   data = {'rating':$scope.rate,'comment':$scope.comment,
-         'review_key':,'booking_id':}
-  alert($scope.rate)
-  alert($scope.comment)
-  $http.put(accountURL+'user_auth/')
+         'review_key':$window.location.search}
+  $http.post('../add_review_from_email/',data).then(function()
+  {
+    $scope.added = 1
+  },function()
+  {
+    $scope.added = 0
+  })
 }
 
 });
