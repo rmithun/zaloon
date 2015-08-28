@@ -40,7 +40,7 @@ logger_error = logging.getLogger('log.errors')
 ##need to integrate with thread que system when the count overflows in future
 buks = None
 def send_thanks_mail():
-    import pdb;pdb.set_trace();
+    #import pdb;pdb.set_trace();
     try:
         yesterday = datetime.today().date()-timedelta(days = 1)
         status_code = responses.BOOKING_CODES['BOOKED']
