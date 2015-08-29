@@ -40,6 +40,9 @@ class Coupon(models.Model):
 	discount_value = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+	def __unicode__(self):
+		return self.coupon_code
 	
 
 class CouponForStudios(models.Model):
@@ -50,6 +53,8 @@ class CouponForStudios(models.Model):
 	is_active = models.BooleanField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
+
+	
 
 
 class BookingDetails(models.Model):

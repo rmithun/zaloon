@@ -85,6 +85,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             services_chosen = data['services']
             studio_id = data['studio']
             rzp_payment_id = data['razorpay_payment_id']
+            promo_amount = data['discount']
             promo_code = None
             payment_success = 0
             if data.has_key('promo_code'):
@@ -180,7 +181,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 'date':appnt_date, 'appnt_time':appnt_time,  \
                 'services':services_booked_list,  \
                 'studio':studio['name'],'studio_address':studio_address,  \
-                'contact':contacts,'total':purchase_amount}
+                'contact':contacts,'total':purchase_amount,'discount':promo_amount}
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
@@ -251,8 +252,9 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                     'appointment_start_time','studio').get(id = booking_id)
                 studio = StudioProfile.objects.get(id = purchase['studio'])
                 appnt_time =  purchase['appointment_start_time'].strftime('%I:%M %p' )
+                refund_amt = Purchase.objects.values('purchase_amount').get(id = purchase['purchase_id'])
                 booking_details = {'name':user.first_name,'studio':studio.name,'date':purchase['appointment_date'],  \
-                'appnt_time':appnt_time}
+                'appnt_time':appnt_time,'amount':refund_amt['purchase_amount']}
                 message = get_template('emails/cancelled.html').render(Context(booking_details))
                 if today.date() == purchase['appointment_date']:
                     if today.hour < 5 and purchase['appointment_start_time'].hour < 13:
@@ -280,6 +282,10 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                         update = RZPayment.objects.filter(purchase_id = purchase['purchase_id']).update(  \
                             rzp_status = 'REFUND_INI',refund_id = refund_id, updated_date_time = \
                             datetime.now(),service_updated = 'cancel booking')
+                        refund = Refund(user = user, purchase_id = purchase['purchase_id'], \
+                        booking_id = booking_id, status = 'REFUND_INI', status_code = 'REF200',  \
+                        amount_refunded = refund_amt['purchase_amount'], initiated_date_time = datetime.now(), \
+                        service_updated = 'cancel booking') 
                         if not update:
                             transaction.rollback()
                             logger_booking.info("Refund failed - "+str(is_booking))

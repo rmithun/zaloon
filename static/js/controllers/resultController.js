@@ -1122,6 +1122,7 @@ $scope.makepayment = function(bookingForm)
             booking_data['appnt_time'] = $scope.from_time
             booking_data['actual_amount'] = $scope.total_amount
             booking_data['purchase_amount'] = $scope.amount_to_pay
+            booking_data['discount'] = $scope.promo_amount
             booking_data['mobile_no'] = $scope.mobileno
             booking_data['services'] = $scope.selected_services
             booking_data['studio'] = $scope.serviceschosen.studio.id
