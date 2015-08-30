@@ -162,6 +162,7 @@ text-transform: capitalize;font-weight:normal;}
   margin-top: 10px;
   background-color: #22ab81;
 }
+#bookingconfirm{width: 480px;  margin: 15% auto;  overflow:hidden;}
 .cancel-modal-alert{text-align:center;}
 .cancel-modal-alert{font-size:13px;}
 #bookingmodel textarea.form-control{height:100px;}
@@ -204,7 +205,7 @@ width: 100%!important;
   background-size: cover;
   position:relative;
 }
-.navigation-bar li.logindetails button{background: none;border:none;}
+.navigation-bar li.logindetails button{background: none;border:none;color:#E65555;}
 .navigation-bar li.logindetails .dropdown-menu{min-width: 125px; border-radius: 0px;top: 100%;left: -44px;font-size:13px;right:21px;}
 .navigation-bar li.logindetails ul li{float:none;}
 .dropdown-menu>li>a{padding: 4px 20px;}
@@ -1176,7 +1177,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	.service-checkboxcolumn{height:332px;}
 	.service-checkboxcolumn .btn{width:100px;padding:10px;float:left;margin:15px 0;}
 	.service-totamnt{font-weight:700;color:#fff;display: block;}
-	.navigation-bar li.logindetails {font-size: 13px; color: #fff; max-width: 150px;  padding-top: 17px;}
+	.navigation-bar li.logindetails {font-size: 13px; color: #fff; max-width: 150px;  padding-top: 13px;}
 	.nav-tabs>li{width:200px;text-align:center;}
 	.booking-panel-wrapper { margin: 0 auto; width: 95%;}
 	.booking-aside{width: 100%;}
@@ -1193,6 +1194,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	 .bookingdetails .promobox input{width: 110px; height: 28px; float: left;}
 	 .bookingdetails .promobox label { width: 100%;}
 	  .promobox button{padding:5px 0px;float:left;}
+    .navigation-bar li.logindetails button{color:#fff;}
 	
 }
 
@@ -1293,7 +1295,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	  #servicemodel .todo ul { -webkit-column-count: 3;column-count: 3;-moz-column-count: 3;}
 	  .list-detail-header{padding-top:0;}
 	  .payment-wrapper{width:724px;padding-top:80px;margin:0 auto;background-color: transparent;}
-	 .payment-servicemodel .todo ul { -webkit-column-count: 3;column-count: 3;-moz-column-count: 3;}
+	 .payment-servicemodel .todo ul { margin: 0;padding: 0;list-style-type: none;}
 	 .securepayment-panel .fa{color:#fff;}
 	 .securepayment-panel span {color:#fff;}
 	 .securepay, .freecancelation{border-right: 1px solid #fff;}
@@ -1301,7 +1303,8 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	 .payment-wrapper .time-wrap{margin-left: 0%;margin-bottom: 20px;}
 	 .time-meridiam{text-align:center;}
 	 .service-totamnt{font-weight:700;float:right;padding-right:70px;color:#fff;}
-	 .navigation-bar li.logindetails{font-size:13px;color:#fff;max-width: 150px;padding-top: 6px;}
+	 .navigation-bar li.logindetails{font-size:13px;color:#fff;max-width: 150px;padding-top: 13px;}
+   .navigation-bar li.logindetails button{color:#fff;}
 	 .booking-panel-wrapper{margin:0 auto;width:97%; }
 	 .nav-tabs>li{width:150px;text-align:center;}
 	 .booking-panel .info {width: 140px;}
@@ -1319,6 +1322,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	 
 	 .bookingdetails label {line-height: 12px; font-size: 13px;  font-weight: normal;float:left;padding: 5px 0 0 0;}
 	  .bookingdetails .promo{text-align:right;float:right;}
+
 	 
 }
 
