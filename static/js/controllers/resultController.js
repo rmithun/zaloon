@@ -781,11 +781,12 @@ $scope.book = function()
 }
 
 //fb keys
-
+$scope.fb_key = httpServices.getFBKey() 
+/*
 httpServices.getFBKey().then(function(data)
 {
     $scope.fb_key = data['fb_key'].data
-});
+});*/
 
 $scope.fbLogin = function(dummy)
 {

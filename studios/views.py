@@ -55,7 +55,7 @@ class ServiceDetails(ServiceMixin, ListAPIView):
     pass
 
 
-def get_studios(location,service,date=None):
+def get_studios(service,date=None):
 
     """function which filters the list of studios 
     based on location and services"""
@@ -95,14 +95,14 @@ class StudioProfileMixin(object):
     model = StudioProfile
     def get_queryset(self):
         try:
-            city = self.request.GET['location'].split(',')
-            print city[-3]
+            #city = self.request.GET['location'].split(',')
             ##add city to filter in future
-            locations = self.request.GET['location'].split()
+            location = self.request.GET['location']
             service = self.request.GET['service']
             logger_studios.info("Search Query - "+str(self.request.GET))
-            studios_ = get_studios(city,service)
-            queryset = self.model.objects.filter(id__in = studios_)
+            studios_ = get_studios(service)
+            queryset = self.model.objects.filter(Q(id__in = studios_),  \
+            (Q(search_field_1 = location) | Q(search_field_2 = location)))
         except Exception ,e:
             logger_error.error(traceback.format_exc())
             return None

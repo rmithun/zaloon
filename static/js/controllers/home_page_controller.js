@@ -4,10 +4,15 @@ $scope.formsubmit=false;
 
  function getFBKey()
  {
+ 	$scope.fb_key = httpServices.getFBKey()
+ 	/*
 	httpServices.getFBKey().then(function(data)
 	{
 		$scope.fb_key = data['fb_key'].data
-	});
+	}, function()
+	{
+		console.log("Error getting FB key")
+	});*/
  }
 getFBKey()
 

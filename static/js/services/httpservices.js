@@ -11,8 +11,10 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 
 	loginData.getFBKey = function()
 	{
-		var fb_key = $http.get(accountURL+'fb_key/')
-		return $q.all({'fb_key':fb_key})
+		//var fb_key = $http.get(accountURL+'fb_key/')
+		//return $q.all({'fb_key':fb_key
+		fb_key = 442685319234348
+		return fb_key
 	}
 
 	loginData.loginUsingFB = function(dummyKey)

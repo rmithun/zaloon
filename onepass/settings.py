@@ -124,11 +124,11 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'dev_zaloon',                      # Or path to database file if using sqlite3.
+            'NAME': 'zaloon_dev',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
-            'USER': 'dev_zaloon',
-            'PASSWORD': 'zaloon123',
-            'HOST': 'dev-zaloon.cwh48zxk9diu.ap-southeast-1.rds.amazonaws.com',
+            'USER': 'zaloon_dev',
+            'PASSWORD': 'Zaloon123',
+            'HOST': 'zaloon-dev.cyscy0cpjemo.ap-southeast-1.rds.amazonaws.com',
             'PORT': '5432',                      # Set to empty string for default.
         }
     }
@@ -143,12 +143,26 @@ if DEBUG:
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     )   
-    DATABASES = {
+    """DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
     }
+    """
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'zaloon_dev',                      # Or path to database file if using sqlite3.
+            # The following settings are not used with sqlite3:
+            'USER': 'zaloon_dev',
+            'PASSWORD': 'Zaloon123',
+            'HOST': 'zaloon-dev.cyscy0cpjemo.ap-southeast-1.rds.amazonaws.com',
+            'PORT': '5432',                      # Set to empty string for default.
+        }
+    } 
+
+
     ALLOWED_HOSTS = []
     HOST_NAME = 'http://www.dev.zaloon.in'
 else:
