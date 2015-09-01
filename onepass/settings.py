@@ -143,7 +143,7 @@ if DEBUG:
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     )   
-    """DATABASES = {
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -160,8 +160,8 @@ if DEBUG:
             'HOST': 'zaloon-dev.cyscy0cpjemo.ap-southeast-1.rds.amazonaws.com',
             'PORT': '5432',                      # Set to empty string for default.
         }
-    } 
-
+    }"""
+ 
 
     ALLOWED_HOSTS = []
     HOST_NAME = 'http://www.dev.zaloon.in'
