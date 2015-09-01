@@ -184,6 +184,7 @@ class StudioProfile(models.Model):
 	latitude = models.CharField(max_length = 30)
 	longitude = models.CharField(max_length = 30)
 	has_online_payment = models.BooleanField(default = 0)
+	commission_percent = models.IntegerField()
 	def __unicode__(self):
 		return self.name
 	"""def save(self):

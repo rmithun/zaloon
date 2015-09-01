@@ -577,12 +577,12 @@ class ApplyCoupon(APIView):
             #check coupon code is there
             logger_booking.info("Coupon request -" +str(data))
             try:
-                coupon_detail = Coupon.objects.get(coupon_code = coupon_code)
+                coupon_detail = Coupon.objects.get(coupon_code_icontains = coupon_code)
             except:
                 response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['INVALID_COUPON'])
                 return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
             try:
-                coupon_detail = Coupon.objects.get(coupon_code = coupon_code, is_active = 1,   \
+                coupon_detail = Coupon.objects.get(coupon_code_icontains = coupon_code, is_active = 1,   \
                 expiry_date__gte =  datetime.today().date())
             except Exception,e:
                 logger_error.info(traceback.format_exc())

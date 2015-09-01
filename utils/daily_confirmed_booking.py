@@ -38,9 +38,9 @@ logger_error = logging.getLogger('log.errors')
 
 
 """"
-------------------------------------------------------------------------------------------------------
-Name | Booking id | Services Booked | Booking Date | Booking Time 
-------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+Name | Mobile | Booking id | Services Booked | From Time | To Time | Booking Code | Booking Amount | Mark Used  
+--------------------------------------------------------------------------------------------------------------
 """
 
 today = datetime.today().date()
@@ -75,7 +75,11 @@ def daily_confirmed_booking():
                 obj['booking_id'] = stud.id
                 obj['services_booked'] = services[:]
                 obj['appointment_date'] = today
-                obj['appointment_time'] = stud.appointment_start_time
+                obj['appointment_start_time'] = stud.appointment_start_time
+                obj['appointment_end_time'] = stud.appointment_end_time
+                obj['booking_code'] = stud.booking_code
+                obj['booking_amount'] = stud.purchase.purchase_amount
+                obj['mobile_no'] = stud.mobile_no
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:
                     studios_visited.append(stud.studio_id)
