@@ -115,20 +115,26 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     }
 
     $scope.getprice_rating = function (index, studio) {
-        var price, rating = 0;
+        var price=0, rating = 0;
         for (var i = 0; i < studio.studio_detail_for_activity.length; i++) {
-            if (studio.studio_detail_for_activity[i].service.service_name == $scope.searchdata.service) {
-                price = studio.studio_detail_for_activity[i].price;
-                break;
+            if (studio.studio_detail_for_activity[i].service.service_type.service_name == $scope.searchdata.service) {
+                if(price==0){
+                    price = studio.studio_detail_for_activity[i].price;
+                }
+                else{
+                    if(price>studio.studio_detail_for_activity[i].price){
+                        price = studio.studio_detail_for_activity[i].price;
+                    }
+                }                
             }
         }
+        console.log(price);
         for (var j = 0; j < studio.studio_review.length; j++) {
             rating = rating + studio.studio_review[j].rating;
         }        
         if(rating!=0){
             rating = Math.round(rating / studio.studio_review.length);            
-        }
-        console.log(rating);
+        }        
         $scope.studio[index].rating = rating;
         $scope.filteredstudio[index].rating = rating;
         $scope.studio[index].price = price;
@@ -256,6 +262,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
 $scope.bindstudio=function(data){    
     $scope.studio=[];
     $scope.filteredstudio=[];
+    console.log(data)
     angular.forEach(data, function (value, key) {
             $scope.studio.push(value);
             $scope.filteredstudio.push(value);            

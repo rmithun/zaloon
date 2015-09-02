@@ -96,7 +96,12 @@ httpServices.getUsrDetails().then(function(dataz)
                         	label: places[i].description
                     	});
                 	}                	
-                	$scope.searchdata_['arealist'] = _places;     
+                	if(_places.length>0){           	
+                		$scope.searchdata_['arealist'] = _places;     
+                	}                	
+            	}
+            	else{
+            		$scope.searchdata_['arealist'] =[{'label':null,'value':null}];
             	}
         	});
     	}
@@ -104,7 +109,8 @@ httpServices.getUsrDetails().then(function(dataz)
     //Get All Services    
     $scope.searchdata_['servicelist']='';
     httpServices.getServiceType().then(function(data)
-    	{    		
+    	{    
+    		console.log(data['service_details'].data.length)		
     		$scope.searchdata_['servicelist'] = data['service_details'].data;
     		
 

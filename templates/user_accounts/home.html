@@ -129,25 +129,24 @@
             </div>    
                 
         </div>
-    </section>
-    
-
+    </section>    
+<!--<a>
+     <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
+  </a>-->
 
   </div> 
   </div>
-  <script type="text/ng-template" id="location.html">
-  <a>
-     <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
-  </a>
-
+  <script type="text/ng-template" id="location.html" >
+<a ng-if="match.label" class="form-control" style="cursor: pointer;"><i class="fa fa-map-marker"></i><span bind-html-unsafe="match.label" style="padding-left: 5px;"></span></a>
+<span style="padding: 10px 5px;display: inline-block;height: 46px;" ng-if="!match.label">
+        <i class="fa fa-frown-o"></i><span style="padding-left: 5px;">Sorry! No Matching Found</span></span>
   </script>
 
 
-  <script type="text/ng-template" id="service.html">
+  <script type="text/ng-template" id="service.html">  
   <a>
      <i class="icon icon-shopping-23"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
   </a>
-
   </script>
 
 
