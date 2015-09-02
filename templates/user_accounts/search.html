@@ -279,11 +279,12 @@
 
             </div>
             <div class="contact">
-                <span>{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}</a></span>&nbsp; <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</a></span><span class="fa fa-phone paddlft10"></span>
+                <span ng-if="selectedstudio.contact_person">{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}</a></span>&nbsp; <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</a></span><span class="fa fa-phone paddlft10"></span>
             </div>
             <p>Timing - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
-            <p class="red">Closed on - <span ng-repeat="leav in selectedstudio.studio_closed_details">
+            <p class="red" ng-if="selectedstudio.studio_closed_details.length > 0">Closed on - <span ng-repeat="leav in selectedstudio.studio_closed_details">
                 {%verbatim%}{{leav.closed_on.closed_on_day}}<span ng-if="$last != true">,</span>{%endverbatim%}</span></p>
+            <p class="red" ng-if="selectedstudio.studio_closed_details.length < 1 ">Open on all days</span></p>
             
             <div class="service-list">
                 <h3>Services</h3>
