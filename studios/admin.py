@@ -29,7 +29,7 @@ class CloseDatesAdmin(admin.ModelAdmin):
 	list_display = ['closed_on_day']
 
 
-admin.register(StudioKind,StudioKindAdmin)
+admin.site.register(StudioKind,StudioKindAdmin)
 admin.site.register(Studio)
 admin.site.register(StudioServices)
 admin.site.register(StudioProfile,StudioProfileAdmin)

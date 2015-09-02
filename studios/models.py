@@ -159,8 +159,8 @@ class StudioProfile(models.Model):
 	country = models.CharField(max_length = 40)
 	area = models.CharField(max_length = 100)
 	state = models.CharField(max_length = 40)
-	search_field_1 = models.CharField(max_length = 200)
-	search_field_2 = models.CharField(max_length = 200)
+	#search_field_1 = models.CharField(max_length = 200)
+	#search_field_2 = models.CharField(max_length = 200)
 	landline_no_1 = models.CharField(max_length = 40, null = True)
 	landline_no_2 = models.CharField(max_length = 40, null = True)
 	incharge_mobile_no = models.CharField(max_length = 40)
@@ -183,8 +183,8 @@ class StudioProfile(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	latitude = models.CharField(max_length = 30)
 	longitude = models.CharField(max_length = 30)
-	has_online_payment = models.BooleanField(default = 0)
-	commission_percent = models.IntegerField()
+	#has_online_payment = models.BooleanField(default = 0)
+	#commission_percent = models.IntegerField()
 	def __unicode__(self):
 		return self.name
 	"""def save(self):
