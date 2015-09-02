@@ -33,10 +33,10 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.servicelist = [];
     $scope.selectedstudio = {};
     $scope.searchdata={};
-    $scope.serviceprice;    
+    $scope.serviceprice = 0;    
     $scope.morefilter = false;
     $scope.stariconset={1:'star1',2:'star2',3:'star3',4:'star4',5:'star5'};
-    $scope.studiotype = [{ name: "Spa", active: false, icon: "icon icon-medical-19" }, { name: "Studio", active: false, icon: "icon icon-shopping-23" }, { name: "Saloon", active: false, icon: "fa fa-scissors" }];
+    $scope.studiotype = [{ name: "Spa", active: false, icon: "icon icon-medical-19" }, { name: "Beauty parlor", active: false, icon: "icon icon-shopping-23" }, { name: "Salon", active: false, icon: "fa fa-scissors" }];
     $scope.studiokind = [{ name: "Men", active: false, icon: "fa-mars" }, { name: "Women", active: false, icon: "fa-venus" }, { name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
     $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "price", value: "priceasc", direction: false ,name:"Price"}, { property: "price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: true,name:"Rating" }];
@@ -628,10 +628,10 @@ $scope.bindstudio=function(data){
 
     $scope.sortservicebyfilter = function () {
         $scope.servicelist = [];
-        var res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: $scope.searchdata.service } });
-        $scope.servicelist.push({id:res[0].service.id, servicename: res[0].service.service_name, price: res[0].price, flag: true, duration:res[0].mins_takes  });
-        $scope.selected_service.push($scope.servicelist[0]);
-        $scope.serviceprice = res[0].price;
+        //var res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: $scope.searchdata.service } });
+        //$scope.servicelist.push({id:res[0].service.id, servicename: res[0].service.service_name, price: res[0].price, flag: true, duration:res[0].mins_takes  });
+        //$scope.selected_service.push($scope.servicelist[0]);
+        //$scope.serviceprice = res[0].price;
         angular.forEach($scope.studioservicefilter, function (service, key) {
             res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: service } });
             if (lodash.findIndex($scope.servicelist, { 'servicename': res[0].service.service_name }) == -1) {
@@ -695,7 +695,7 @@ $scope.bindstudio=function(data){
     }
     //Get All Services    
     $scope.searchdata_['servicelist']='';
-    httpServices.getService().then(function(data)
+    httpServices.getServiceType().then(function(data)
         {           
             $scope.searchdata_['servicelist'] = data['service_details'].data;
 

@@ -20,10 +20,10 @@ class ServiceAdmin(admin.ModelAdmin):
 	list_display = ['service_name']
 
 class StudioProfileAdmin(admin.ModelAdmin):
-	list_display = ['name']
+	list_display = ['name','area']
 	
 class ServiceTypeAdmin(admin.ModelAdmin):
-	list_display = ['service_type_name']
+	list_display = ['service_name']
 
 class CloseDatesAdmin(admin.ModelAdmin):
 	list_display = ['closed_on_day']

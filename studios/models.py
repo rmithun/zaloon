@@ -17,14 +17,14 @@ from user_accounts.models import User
 class ServiceType(models.Model):
 
 	"""type of service types available"""
-	service_type_name = models.CharField(max_length = 100)
+	service_name = models.CharField(max_length = 100)
 	description = models.TextField()
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 	def __unicode__(self):
-		return self.service_type_name
+		return self.service_name
 
 
 class Service(models.Model):
@@ -120,17 +120,17 @@ class StudioGroup(models.Model):
 	"""table for holding studio groups"""
 	group_name = models.CharField(max_length = 50)
 	address = models.TextField()
-	city = models.CharField(max_length = 40)
-	country = models.CharField(max_length = 40)
-	landline_no_1 = models.CharField(max_length = 40, null = True)
-	landline_no_2 = models.CharField(max_length = 40, null = True)
-	mobile_no_1 = models.CharField(max_length = 40)
-	mobile_no_2 = models.CharField(max_length = 40, null = True)
-	contact_person_1 = models.CharField(max_length = 75)
-	contact_person_2 = models.CharField(max_length = 75, null = True)
-	primary_email  = models.CharField(max_length = 50)
-	secondary_email = models.CharField(max_length = 50)
-	total_branches = models.PositiveIntegerField()
+	city = models.CharField(max_length = 40, default = 'Chennai')
+	country = models.CharField(max_length = 40, default = 'India')
+	contact_no = models.CharField(max_length = 40, blank = True)
+	#landline_no_2 = models.CharField(max_length = 40, null = True)
+	#mobile_no_1 = models.CharField(max_length = 40)
+	#mobile_no_2 = models.CharField(max_length = 40, null = True)
+	#contact_person_1 = models.CharField(max_length = 75)
+	#contact_person_2 = models.CharField(max_length = 75, null = True)
+	primary_email  = models.CharField(max_length = 50, blank = True)
+	#secondary_email = models.CharField(max_length = 50)
+	#total_branches = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	def __unicode__(self):
@@ -154,19 +154,19 @@ class StudioProfile(models.Model):
 	name = models.CharField(max_length = 120)
 	address_1 = models.CharField(max_length = 200)
 	address_2 = models.CharField(max_length = 200)
-	landmark = models.CharField(max_length = 200)
-	city = models.CharField(max_length = 40)
-	country = models.CharField(max_length = 40)
-	area = models.CharField(max_length = 100)
-	state = models.CharField(max_length = 40)
-	#search_field_1 = models.CharField(max_length = 200)
-	#search_field_2 = models.CharField(max_length = 200)
-	landline_no_1 = models.CharField(max_length = 40, null = True)
-	landline_no_2 = models.CharField(max_length = 40, null = True)
+	landmark = models.CharField(max_length = 200, blank = True)
+	city = models.CharField(max_length = 40, default = 'Chennai')
+	country = models.CharField(max_length = 40 , default = 'India')
+	area = models.CharField(max_length = 100 )
+	state = models.CharField(max_length = 40, default = 'Tamil nadu')
+	search_field_1 = models.CharField(max_length = 200)
+	search_field_2 = models.CharField(max_length = 200)
+	landline_no_1 = models.CharField(max_length = 40, blank = True)
+	landline_no_2 = models.CharField(max_length = 40, blank = True)
 	incharge_mobile_no = models.CharField(max_length = 40)
-	contact_mobile_no = models.CharField(max_length = 40, null = True)
+	contact_mobile_no = models.CharField(max_length = 40, blank = True)
 	in_charge_person = models.CharField(max_length = 75)
-	contact_person  = models.CharField(max_length = 75, null = True)
+	contact_person  = models.CharField(max_length = 75, blank = True)
 	opening_at = models.TimeField(null = True)
 	closing_at = models.TimeField(null = True)
 	is_active = models.BooleanField(default  = 1)
@@ -174,8 +174,8 @@ class StudioProfile(models.Model):
 	#contract_end_date = models.DateTimeField()
 	is_closed = models.BooleanField(default = 0)
 	#serve_type = models.CharField(max_length = 10)# men women unisex
-	daily_studio_closed_from = models.TimeField(null = True)
-	daily_studio_closed_till = models.TimeField(null = True)
+	daily_studio_closed_from = models.TimeField(null = True,blank = True)
+	daily_studio_closed_till = models.TimeField(null = True,blank = True)
 	thumbnail= models.ImageField(upload_to = 'img_gallery')
 	is_ac = models.BooleanField(default = 0)
 	studio_kind = models.ForeignKey(StudioKind, related_name = "kind_of_studio")
@@ -183,10 +183,10 @@ class StudioProfile(models.Model):
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	latitude = models.CharField(max_length = 30)
 	longitude = models.CharField(max_length = 30)
-	#has_online_payment = models.BooleanField(default = 0)
-	#commission_percent = models.IntegerField()
+	has_online_payment = models.BooleanField(default = 0)
+	commission_percent = models.IntegerField()
 	def __unicode__(self):
-		return self.name
+		return str(self.name +'--'+self.area)
 	"""def save(self):
 		for field in self._meta.fields:
 			if field.name == 'thumbnail':

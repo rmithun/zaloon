@@ -32,7 +32,7 @@ from django.db import transaction
 #application imports
 from serializers import ServiceSerializer, StudioServicesSerializer,  \
 StudioProfileSerializer, StudioReviewSerializer,StudioTypeSerializer,StudioSerializer,  \
-StudioKindSerializer
+StudioKindSerializer,ServiceTypeSerializer
 from models import *
 from booking.models import BookingDetails
 from booking.models import StudioReviews
@@ -54,8 +54,13 @@ class ServiceMixin(object):
 class ServiceDetails(ServiceMixin, ListAPIView):
     pass
 
+class ServiceTypeDetails(ListAPIView):
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = ServiceTypeSerializer
+    queryset = ServiceType.objects.all()
 
-def get_studios(service,date=None):
+
+def get_studios(service_type,date=None):
 
     """function which filters the list of studios 
     based on location and services"""
@@ -68,12 +73,15 @@ def get_studios(service,date=None):
         if settings.DEBUG:
             #studios = StudioProfile.objects.filter(city = 'Chennai', is_closed = 0 ,  \
             #id__in = open_studios).values('id')
-            services = Service.objects.filter(service_name__iregex = r'\b{0}\b'.format(service)).values('id')
+            services_types = ServiceType.objects.filter(service_name = service_type).values('id')
+            services = Service.objects.filter(service_type_id__in = services_types).values('id')
         else:
-            services = Service.objects.filter(service_name__iregex = r'\y{0}\y'.format(service)).values('id')
+            #services_types = ServiceType.objects.filter(service_name__iregex = r'\y{0}\y'.format(service_type)).values('id')
+            services_types = ServiceType.objects.filter(service_name = service_type).values('id')
+            services = Service.objects.filter(service_type_id__in = services_types).values('id')
             #studios = StudioProfile.objects.filter(area__iregex = r'\y{0}\y'.format(location), is_closed = 0 ,  \
             #id__in = open_studios).values('id')
-        if len(service) > 0:
+        if len(services) > 0:
             filtered_studios =  StudioServices.objects.filter(service_id__in =   \
             services).values('studio_profile').distinct()
         else:

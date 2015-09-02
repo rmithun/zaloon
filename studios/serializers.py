@@ -21,7 +21,7 @@ class ServiceTypeSerializer(serializers.ModelSerializer):
 	"""list of available service type serializer"""
 	class Meta:
 		model = ServiceType
-		fields = ('id', 'service_type_name', 'description', 'is_active')
+		fields = ('id', 'service_name', 'description', 'is_active')
 
 class ServiceSerializer(serializers.ModelSerializer):
 

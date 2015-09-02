@@ -103,9 +103,10 @@ httpServices.getUsrDetails().then(function(dataz)
     }
     //Get All Services    
     $scope.searchdata_['servicelist']='';
-    httpServices.getService().then(function(data)
+    httpServices.getServiceType().then(function(data)
     	{    		
     		$scope.searchdata_['servicelist'] = data['service_details'].data;
+    		
 
     	},function()
     	{
