@@ -30,7 +30,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Service
 		fields = ('id', 'service_type', 'service_name', 'min_duration', \
-		'is_active')
+		'is_active','service_for')
 
 class StudioTypeSerializer(serializers.ModelSerializer):
 

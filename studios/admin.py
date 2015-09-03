@@ -28,10 +28,12 @@ class ServiceTypeAdmin(admin.ModelAdmin):
 class CloseDatesAdmin(admin.ModelAdmin):
 	list_display = ['closed_on_day']
 
+class StudioServicesAdmin(admin.ModelAdmin):
+	list_display = ['studio_profile','service']
 
 admin.site.register(StudioKind,StudioKindAdmin)
 admin.site.register(Studio)
-admin.site.register(StudioServices)
+admin.site.register(StudioServices,StudioServicesAdmin)
 admin.site.register(StudioProfile,StudioProfileAdmin)
 admin.site.register(Service,ServiceAdmin)
 admin.site.register(ServiceType,ServiceTypeAdmin)

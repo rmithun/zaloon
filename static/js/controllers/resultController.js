@@ -79,7 +79,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.reviewPage = 1;
     $scope.reviewtotalpage;
     $scope.totalItems;
-    $scope.itemLimit = 2;
+    $scope.itemLimit = 5;
     $scope.currentPage = 1;
     var top;
     var data;    
