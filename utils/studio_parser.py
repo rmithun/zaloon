@@ -16,7 +16,7 @@ import traceback
 @transaction.commit_manually
 def parse_and_store():
 	try:
-		data = open('/home/mithun/Downloads/xml/Sholinganallur.xml')
+		data = open('/home/mithun/Downloads/xml/Tambaram.xml')
 		
 		parsed=BeautifulSoup(data,"html5lib")
 		shops = parsed.findAll('shop')
