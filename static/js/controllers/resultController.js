@@ -519,6 +519,7 @@ $scope.bindstudio=function(data){
             if($('.navsearch').css('display') != "none"){
                $('#searchdevice').hide();
             }
+            $scope.serviceprice = 0;
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
@@ -726,34 +727,43 @@ $scope.bindstudio=function(data){
             $('#searchdevice').hide();
         }
         $scope.searchicon=false;
+        removemarker();
         var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location};
+        $('.finder-overlay').show();
         httpServices.getstudioDetails(obj).then(function(data)
         {
+            $('.finder-overlay').hide();
             $scope.bindstudio(data.studio_details.data);
             $cookies.putObject('searchdata',obj,{path:'/'});         
-            $cookies.putObject('data',data.studio_details.data,{path:'/'});
+            //$cookies.putObject('data',data.studio_details.data,{path:'/'});
+            putResultService.setresult(data.studio_details.data);
+            
         },function()
         {
             console.log("Try again to get service")
         });
     }
 
-    $scope.searchdata=$cookies.getObject('searchdata');    
+    $scope.searchdata=$cookies.getObject('searchdata');
+    //$scope.searchdata=putResultService.getresult();
+    $('.finder-overlay').hide();
     if(typeof $scope.searchdata == "undefined"){
         $location.path("/");
     }
     else
     {
         if(putResultService.getresult().length ==0){
+            $('.finder-overlay').show();
             httpServices.getstudioDetails($scope.searchdata).then(function(res)
-                {       
-                    //console.log(res.studio_details.data);
+                {                           
                     data=res.studio_details.data;
                     putResultService.setresult(res.studio_details.data);  
                     $scope.bindstudio(data);                              
+                    $('.finder-overlay').hide();
                 },function()
                 {
                     console.log("Try again to get service");
+                    $('.finder-overlay').hide();
                     $location.path("/");
                 });
         }

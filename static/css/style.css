@@ -1094,6 +1094,9 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 
 /* Mobile device 767px */
 @media (max-width: 767px) {
+.list-view{
+  top:0;
+}
 
 .btnmore :first-child{background:none;position:inherit;width:30px;}
 .navigation-bar-right > .btn{min-width:40px;padding:14px;}
@@ -1204,6 +1207,12 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 }
 
 @media (max-width: 480px) {
+  .list-view{
+  top:0;
+}
+.carousel-image{
+  height: 230px;
+}
 .payment-wrapper .panel-default .panel-title{font-size:11px;}
 .listheader{width:320px;}
 .mapview{right:320px;}
@@ -1352,7 +1361,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
  .moresearch{margin-right:20px;}
  .btnmore :first-child { position: absolute; left: 0; top: 0; bottom: 0; width: 34px; line-height: 40px; font-size: 1.6em; text-align: center; background-color:#EBEBEB;}
 .moresearch >.btnmore{background:#f1f1f1; color:#1bbc9b;min-width: 100px; padding: 12px 7px 12px 44px;}
- .list-box{top:80px;}
+ .list-box{top:82px;}
  .more-filters-dropdown-menu{top: 141%;}
   .more-filters-dropdown-menu:before{bottom: -14px; border-top: 7px solid #555;}
   .more-filters-dropdown-menu:after, .more-filters-dropdown-menu:first-child:after {

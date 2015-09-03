@@ -1,4 +1,4 @@
-  var noqapp = angular.module('accountApp', ['ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable']);
+  var noqapp = angular.module('accountApp', ['ngAnimate','ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable','ngTouch','ui.bootstrap.setNgAnimate']);
 
 noqapp.run(function($http,$cookies,sessionService) {
 
@@ -88,4 +88,13 @@ angular.module("ui.editable", []).directive('txtEditable', function (httpService
        }
    };
 });
+
+angular.module('ui.bootstrap.setNgAnimate', ['ngAnimate']).directive('disableNgAnimate', ['$animate', function ($animate) {
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            $animate.enabled(false, element);
+        }
+    };
+} ]);
 

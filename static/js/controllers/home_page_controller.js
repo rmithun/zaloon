@@ -131,7 +131,7 @@ httpServices.getUsrDetails().then(function(dataz)
 		    		$cookies.putObject('searchdata',obj,{path:'/'})    	
 		    		//console.log(data.studio_details.data)	
 		    		//$cookies.putObject('data',data.studio_details.data,{path:'/'})
-		    		putResultService.setresult(data.studio_details.data);
+		    		putResultService.setresult(data.studio_details.data);		    		
 		    		$location.path("/search");		    		
 		    	},function()
 		    	{

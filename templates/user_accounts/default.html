@@ -39,8 +39,10 @@
   <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.4/jquery-ui.min.js"></script>
   <script src='{% static "js/bootstrap/bootstrap-datepicker.js"%}'></script>
   <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-animate.min.js"%}'></script>
   <script src='{% static "js/angular1.4.0/angular-cookies.min.js"%}'></script>
   <script src='{% static "js/angular1.4.0/angular-route.min.js"%}'></script>
+  <script src='{% static "js/angular1.4.0/angular-touch.min.js"%}'></script>
   <script src='{% static "js/bootstrap/ui-bootstrap-tpls-0.13.0.js"%}'></script>  
   <script type="text/javascript" src='{% static "js/ng-lodash.js" %}'></script>
   <script src='{% static "js/app.js" %}'></script>
@@ -60,7 +62,19 @@
 <!-- <script src="http://jsconsole.com/remote.js?EFF6B3F0-F091-4BF1-A102-81545C369DB1"></script> -->
 
   </body>
-
+<div class="finder-overlay" style="display:none;">
+      <div style="position:absolute;color:#000;top:50%;width:100%;text-align:center;">
+        <!--<i class="fa fa-spinner fa-spin"></i>-->
+        <div class="la-line-scale la-dark" style="left:48%;">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+        Hunting for the parlours near you...
+    </div>
+    </div>
       <div class="loader-overlay" style="display:none;">
       <div style="position:absolute;color:white;top:50%;width:100%;text-align:center;">
         <i class="fa fa-spinner fa-spin"></i>

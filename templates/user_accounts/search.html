@@ -12,7 +12,7 @@
                         <a href="#" class="logo"></a>                       
                     </div>  -->
             <a href="#/"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/logo.png' %}"> </a>
-            <a href="#/"><img width="141" height="41" class="logo hidden-md hidden-lg" alt="" src="{% static 'img/logo-mobile.png' %}"> </a>
+            <a href="#/"><img width="47" height="47" class="logo hidden-md hidden-lg" alt="" src="{% static 'img/logo-mobile.png' %}"> </a>
         </div>
         <!-- Login -->
 
@@ -186,7 +186,7 @@
     </div>
 
 
-    <div class="list-view"> 
+    <div class="list-view" style="-webkit-overflow-scrolling: touch;"> 
 
         <ul>
             <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="studiodetails(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
@@ -224,13 +224,13 @@
 </div>
 
 <!-- List Details -->
-<div id="studiodetails" class="list-detail-box-panel" style="display:none">
+<div id="studiodetails" class="list-detail-box-panel" style="display:none;-webkit-overflow-scrolling: touch;">
     <a style="cursor:pointer;" ng-click="closeslider()" class="listclose hidden-xs">X</a>
     <div class="list-detail-box">
         <div class="rate-panel col-xs-12 no-padding">
 
-             <div class="hidden-sm hidden-md hidden-lg col-xs-2 btn btn-primary btn-close">             
-                <span class="text"> <a style="cursor:pointer;color:#fff;" ng-click="closeslider()" >X
+             <div ng-click="closeslider()" class="hidden-sm hidden-md hidden-lg col-xs-2 btn btn-primary btn-close">             
+                <span class="text"> <a style="cursor:pointer;color:#fff;"  >X
                 </a></span>
             </div>  
 
@@ -247,9 +247,9 @@
         <div class="list-detail-header">
             <div class="list-detail-image">
 
-                <carousel no-wrap="true">
+                <carousel no-wrap="true" disable-ng-animate>
                     <slide ng-repeat="pic in selectedstudio.pic_of_studio" active="slide.active">
-                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" style="margin:auto;height:300px;">
+                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" class="carousel-image" style="margin:auto;">
 
                     </slide>
                 </carousel>
