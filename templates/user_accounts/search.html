@@ -74,12 +74,14 @@
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="checkboxcolumn-more-panel">
+                                    <div class="checkboxcolumn-more">
                                     <label ng-repeat="ser in  services_filtered = ( studioservice | filter:service)" class="checkbox">
                                         <input type="checkbox" ng-click="studioserviceclick(ser)">
                                         <span ng-bind="ser"></span>
                                     </label>
                                     <span ng-hide="services_filtered.length">No Services found</span>
                                 </div>
+                                 </div>
                             </div>
 
                             <div class="col-xs-12 col-sm-12  more-footer">
@@ -193,8 +195,8 @@
                         <img class="image loaded" style="height:80px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
                         <div class="info">
                             <div class="heading">
-                                <h4>{%verbatim%}{{stu.name}}{%endverbatim%}
-                                 <span class="fa pull-right" ng-class="stu.kind_icon"></span></h4>
+                                <h4><span class="fa" ng-class="stu.kind_icon"></span>{%verbatim%}{{stu.name}}{%endverbatim%}
+                                 </h4>
                             </div>
                             <div class="landmark_details">{%verbatim%}{{stu.area}}{%endverbatim%}</div>
                             <div class="sub-line-1 hidden-xs">
@@ -202,7 +204,7 @@
                                 <img ng-if="stu.staricon" class="image loaded staricon {%verbatim%}{{stu.staricon}}{%endverbatim%} pull-right" alt="" /></div>
                             <div class="sub-line-2" style="text-transform:none;">
                                 <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
-                                <span class="price">
+                                <span class="price circlebg">
                 <span class="icon-rupee rupee"></span><span class="info-rate">₹ {%verbatim%}{{stu.price}}{%endverbatim%}</span>
                                 </span>
                             </div>
