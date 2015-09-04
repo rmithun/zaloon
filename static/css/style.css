@@ -403,7 +403,7 @@ content: ' ';
   padding-top: 6px;
 }
 .list-item-container .list-item h4{margin-top:5px;white-space: nowrap;overflow: hidden;
-    text-overflow: ellipsis;width: 130px;margin-bottom: 0;}
+    text-overflow: ellipsis;width: 160px;margin-bottom: 0;}
 .service-list .servicemore a { font-size: 10px;color: #f06471;}
 .service-list .servicemore{text-align:right;}
 .street-info p{line-height:10px;}
@@ -513,8 +513,12 @@ content: ' ';
   font-weight: normal;
   }
 .info .landmark_details {
-  color: #4c4c4c; 
+  color: #4c4c4c;
+  white-space: nowrap;
   font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 160px;
 }
 .list-item .details .sub-line-1 {
   font-size: 14px;
