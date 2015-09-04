@@ -16,7 +16,7 @@ import traceback
 @transaction.commit_manually
 def parse_and_store():
 	try:
-		data = open('/home/mithun/Downloads/xml/Tambaram.xml')
+		data = open('/home/mithun/Downloads/xml/Thiruvanmiyur.xml')
 		
 		parsed=BeautifulSoup(data,"html5lib")
 		shops = parsed.findAll('shop')
@@ -67,6 +67,7 @@ def parse_and_store():
 			    studio_type = 1 
 			if 'chennai' in landmark.lower():
 				landmark = ''
+			print area
 			data = requests.get(("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%s&types=geocode&key=AIzaSyDLYJn4fbF_JCQs5YU2tJ5qGQGjtYHm_Uo")%(area))
 			g_places = eval(data.content)
 			search_field1 = g_places['predictions'][0]['description']
@@ -96,6 +97,8 @@ def parse_and_store():
 				incharge_name = random.choice(names)
 			timins = timing.split('to')
 			from_time = timins[0].split(' ')[0]
+			print name
+			print timins
 			to_time = timins[1].strip().split(' ')[0]
 			from_hour = from_time[0:2]
 			if from_time[3:] not in ['00','15','30','45']:

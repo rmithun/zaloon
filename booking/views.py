@@ -93,6 +93,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             ##check purchase amount is not changed
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
+            logger_booking.info("User - "+str(user))
             studio = StudioProfile.objects.values('name','address_1', \
                 'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
                 'incharge_mobile_no','city','has_online_payment','landmark').get(id = studio_id)
