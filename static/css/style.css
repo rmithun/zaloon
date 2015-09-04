@@ -1112,7 +1112,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 13px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
-  .navigation-brand{padding-top:7px;}
+  
   .navigation-brand .logo{margin-left:10px;}
   
 	p { font-size: 14px; line-height: 25px; }  
@@ -1231,9 +1231,10 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	.video-version .text-heading { padding-top: 35%; } 
 	#register-page .text-heading { padding-top: 65px; }
 	.text-heading { padding-top: 85px; }
+  .text-heading p{font-size: 9px;}
 	.text-heading h1 { font-size: 25px; }
 	.text-heading .btn { margin-bottom: 10px; }
-	.text-heading{padding-top: 15%;}
+	.text-heading{padding-top: 18%;}
 	
 	.logos li { display:inline; padding:10px !important; }	
 	.section-content article { text-align: center; }	
@@ -1286,7 +1287,8 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	#hero .btn-primary, .submit-wrap { width:100%; }
 	.submit-wrap { width:100%; margin-top: 7px; }   
 	#landing-page .static-header{height:450px;}
-	 #landing-page .static-header h1 { font-size: 50px; margin-bottom:0;}.navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 16px 13px; text-align: center;color:#fff;}
+	 #landing-page .static-header h1 { font-size: 35px; margin-bottom:0;}
+   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 16px 13px; text-align: center;color:#fff;}
   
   .searchpanel{ padding:20px 15px; border: 0; }
   .searchheader .navigation{padding:0 20px 0 0;background: #F06370;border-top:0px;}
@@ -1352,6 +1354,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 
 /* Desktop medium screen  */
 @media (min-width: 992px){	
+  #landing-page .static-header h1 { font-size: 50px;}
   .navigation-bar li.logindetails button{color:#000;}
 .bookingdetails .promobox input{width:110px;}
 .distance{margin-bottom:0px;}
