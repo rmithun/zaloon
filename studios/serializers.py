@@ -26,7 +26,7 @@ class ServiceTypeSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
 
 	"""list of available activities serializer"""
-	service_type = ServiceTypeSerializer()
+	#service_type = ServiceTypeSerializer()
 	class Meta:
 		model = Service
 		fields = ('id', 'service_type', 'service_name', 'min_duration', \
@@ -97,28 +97,44 @@ class StudioClosedDatesSerializer(serializers.ModelSerializer):
 		model = StudioClosedDetails
 		fields = ('id','closed_on')
 
+class StudioProfileDetailsSerialzier(serializers.ModelSerializer):
+	"""serializer  to get studio profile details"""
+	#studio_group = StudioGroupSerializer()
+	studio_detail_for_activity = StudioServicesSerializer(many = True)
+	studio_review = StudioReviewSerializer(many = True)
+	pic_of_studio = StudioPictureSerializer(many = True)
+	#studio_amenities = StudioAmenitiesSerializer(many = True, required = False)
+	#studio_closed_details = StudioClosedDatesSerializer(many = True)
+	class Meta:
+		model = StudioProfile
+		fields = ('id', 'studio_detail_for_activity','studio_review','pic_of_studio',)
+
 
 class StudioProfileSerializer(serializers.ModelSerializer):
 
 	"""serializer to get  studio details"""
-	studio_group = StudioGroupSerializer()
-	studio_detail_for_activity = StudioServicesSerializer(many = True)
-	studio_review = StudioReviewSerializer(many = True)
-	pic_of_studio = StudioPictureSerializer(many = True)
-	studio_amenities = StudioAmenitiesSerializer(many = True, required = False)
-	studio_type = StudioTypeSerializer()
-	studio_kind = StudioKindSerializer()
-	studio_closed_details = StudioClosedDatesSerializer(many = True)
+	#studio_group = StudioGroupSerializer()
+	#studio_detail_for_activity = StudioServicesSerializer(many = True)
+	#studio_review = StudioReviewSerializer(many = True)
+	#pic_of_studio = StudioPictureSerializer(many = True)
+	#studio_amenities = StudioAmenitiesSerializer(many = True, required = False)
+	#studio_type = StudioTypeSerializer()
+	#studio_kind = StudioKindSerializer()
+	#studio_closed_details = StudioClosedDatesSerializer(many = True)
 	class Meta:
 		model = StudioProfile
-		fields = ('id', 'studio_group','studio_type', 'name', 'address_1', 'address_2',  \
+		fields = ('id','studio_type', 'name', 'address_1', 'address_2',  \
 			'city', 'country', 'area', 'state', 'landline_no_1', 'landline_no_2', \
 			'incharge_mobile_no', 'contact_mobile_no', 'in_charge_person', 'contact_person',  \
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
-			'studio_detail_for_activity', 'studio_review','pic_of_studio',  \
-			'studio_amenities','latitude','longitude','studio_kind','landmark','thumbnail',  \
-			'studio_closed_details','has_online_payment')
+			'latitude','longitude','studio_kind','landmark','thumbnail',  \
+			'has_online_payment')
+
+class StudioResponse(serializers.ModelSerializer):
+	class Meta:
+		model = StudioProfile
+		fields = ('item_type','data',)
 
 class StudioActivitiesSerializer(serializers.ModelSerializer):
 

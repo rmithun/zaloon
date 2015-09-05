@@ -1,6 +1,7 @@
-noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $location,httpServices,sessionService,putResultService){
+noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $location,lodash,httpServices,sessionService,putResultService){
 $scope.is_logged = sessionService.isLogged();
 $scope.formsubmit=false;
+$scope.iswrongservice=false;
 
  function getFBKey()
  {
@@ -75,6 +76,9 @@ httpServices.getUsrDetails().then(function(dataz)
 		})
 	}
 
+	$scope.focus=function(){
+    	$scope.iswrongservice=false;
+	}
 
 	//AutoComplete
 	$scope.searchdata_ = {};	
@@ -109,11 +113,8 @@ httpServices.getUsrDetails().then(function(dataz)
     //Get All Services    
     $scope.searchdata_['servicelist']='';
     httpServices.getServiceType().then(function(data)
-    	{    
-    		console.log(data['service_details'].data.length)		
-    		$scope.searchdata_['servicelist'] = data['service_details'].data;
-    		
-
+    	{        		
+    		$scope.searchdata_['servicelist'] = data['service_details'].data;    		
     	},function()
     	{
     		console.log("Try again to get service")
@@ -123,24 +124,33 @@ httpServices.getUsrDetails().then(function(dataz)
     $scope.searchstudio=function(form){
     	$scope.formsubmit=true;
     	if(form.$valid)
-		{ 			
-			var obj={'service':$scope.searchdata_.service_name,'location':$scope.searchdata_.searchlocation};
-			$('.finder-overlay').show();
-			 httpServices.getstudioDetails(obj).then(function(data)
-		    	{		
-		    		$cookies.putObject('searchdata',obj,{path:'/'})    	
-		    		//console.log(data.studio_details.data)	
-		    		//$cookies.putObject('data',data.studio_details.data,{path:'/'})
-		    		putResultService.setresult(data.studio_details.data);		    		
-		    		$location.path("/search");		    		
-		    	},function()
-		    	{
-		    		console.log("Try again to get service")
-		    	});
+		{			
+    		if(typeof $scope.searchdata_.service != "undefined"){    			
+    			var servicename=$scope.searchdata_.service_name;
+    			servicename=servicename.trim();
+    			if (lodash.findIndex($scope.searchdata_['servicelist'], { service_name: $scope.searchdata_.service_name.trim() }) != -1) {
+    				var obj={'service':$scope.searchdata_.service.id,'location':$scope.searchdata_.searchlocation,'servicename':$scope.searchdata_.service.service_name};					
+					$('.finder-overlay').show();
+			 		httpServices.getstudioDetails(obj).then(function(data) {		
+		    			$cookies.putObject('searchdata',obj,{path:'/'})		    		
+		    			putResultService.setresult(data.studio_details.data);		    			    	
+		    			$location.path("/search");		    		
+		    		},function() {
+		    			console.log("Try again to get service")
+		    		});
+    			}
+    			else{
+    				$scope.iswrongservice=true;
+    			}
+    		}
+    		else{
+    			$scope.iswrongservice=true;
+    		}			
 		}
     }
-    $scope.onserviceselect = function ($item, $model, $label) {    	
-	    $scope.searchdata_.service_name=$item.service_name;	   
+    $scope.onserviceselect = function ($item, $model, $label) {    
+    	$scope.searchdata_.service_name =$label;
+	    $scope.searchdata_.service=$model;	   
 	};
 	$scope.onlocationselect = function ($item, $model, $label) {
 		$scope.searchdata_.searchlocation=$label;

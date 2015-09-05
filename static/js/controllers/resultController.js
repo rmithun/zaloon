@@ -114,33 +114,15 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         }
     }
 
-    $scope.getprice_rating = function (index, studio) {
-        var price=0, rating = 0;
-        for (var i = 0; i < studio.studio_detail_for_activity.length; i++) {
-            if (studio.studio_detail_for_activity[i].service.service_type.service_name == $scope.searchdata.service) {
-                if(price==0){
-                    price = studio.studio_detail_for_activity[i].price;
-                }
-                else{
-                    if(price>studio.studio_detail_for_activity[i].price){
-                        price = studio.studio_detail_for_activity[i].price;
-                    }
-                }                
-            }
-        }
-        console.log(price);
-        for (var j = 0; j < studio.studio_review.length; j++) {
-            rating = rating + studio.studio_review[j].rating;
+    $scope.getprice_rating = function (index, studio) {        
+        if(studio.avg_rating!=0 || studio.avg_rating!=null){
+            rating = Math.round(studio.avg_rating);            
         }        
-        if(rating!=0){
-            rating = Math.round(rating / studio.studio_review.length);            
-        }        
-        $scope.studio[index].rating = rating;
-        $scope.filteredstudio[index].rating = rating;
-        $scope.studio[index].price = price;
-        $scope.filteredstudio[index].price = price;        
-        $scope.filteredstudio[index].staricon=$scope.stariconset[rating];
-        $scope.studio[index].staricon=$scope.stariconset[rating];
+        $scope.studio[index].rating = studio.avg_rating;
+        $scope.filteredstudio[index].rating = studio.avg_rating;            
+        $scope.filteredstudio[index].staricon=$scope.stariconset[studio.avg_rating];
+        $scope.studio[index].staricon=$scope.stariconset[studio.avg_rating];
+        console.log(studio)
     }
 
         //Google Maps    
@@ -259,14 +241,13 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         });
     }
 
-$scope.bindstudio=function(data){    
+$scope.bindstudio=function(data){ 
     $scope.studio=[];
-    $scope.filteredstudio=[];
-    console.log(data)
+    $scope.filteredstudio=[];    
     angular.forEach(data, function (value, key) {
             $scope.studio.push(value);
             $scope.filteredstudio.push(value);            
-            $scope.getservice(value);
+            //$scope.getservice(value);
             $scope.getprice_rating(key, value);
             $scope.studio[key].kind_icon = lodash.where($scope.studiokind,{'name':value.studio_kind.kind_desc})[0].icon;
             getdistance(key, value.latitude, value.longitude);

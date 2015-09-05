@@ -212,6 +212,15 @@ class StudioAmenities(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
+class StudioServiceTypes(models.Model):
+	"""list of available activities in studio"""
+
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_service_type")
+	service_type = models.ForeignKey(ServiceType, related_name = "service_type_in_studio")
+	is_active = models.BooleanField(default = 1)
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
 
 class StudioServices(models.Model):
 

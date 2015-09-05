@@ -7,6 +7,7 @@ from datetime import timedelta, datetime
 import operator
 import logging
 import traceback
+from itertools import chain
 
 
 #third party imports
@@ -27,15 +28,15 @@ from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasSco
 from django.template.loader import get_template
 from django.template import Context
 from django.db import transaction
+from django.db.models import Min, Avg
 
 
 #application imports
 from serializers import ServiceSerializer, StudioServicesSerializer,  \
 StudioProfileSerializer, StudioReviewSerializer,StudioTypeSerializer,StudioSerializer,  \
-StudioKindSerializer,ServiceTypeSerializer
+StudioKindSerializer,ServiceTypeSerializer,StudioProfileDetailsSerialzier
 from models import *
-from booking.models import BookingDetails
-from booking.models import StudioReviews
+from booking.models import BookingDetails,StudioReviews
 from utils.permission_class import ReadWithoutAuthentication, PostWithoutAuthentication
 from django.db.models import Q
 from django.conf import settings
@@ -73,12 +74,10 @@ def get_studios(service_type,date=None):
         if settings.DEBUG:
             #studios = StudioProfile.objects.filter(city = 'Chennai', is_closed = 0 ,  \
             #id__in = open_studios).values('id')
-            services_types = ServiceType.objects.filter(service_name = service_type).values('id')
-            services = Service.objects.filter(service_type_id__in = services_types).values('id')
+            services = Service.objects.filter(service_type_id  = services_type).values('id')
         else:
             #services_types = ServiceType.objects.filter(service_name__iregex = r'\y{0}\y'.format(service_type)).values('id')
-            services_types = ServiceType.objects.filter(service_name = service_type).values('id')
-            services = Service.objects.filter(service_type_id__in = services_types).values('id')
+            services = Service.objects.filter(service_type_id  = services_type).values('id')
             #studios = StudioProfile.objects.filter(area__iregex = r'\y{0}\y'.format(location), is_closed = 0 ,  \
             #id__in = open_studios).values('id')
         if len(services) > 0:
@@ -101,26 +100,62 @@ class StudioProfileMixin(object):
     permission_classes = (ReadWithoutAuthentication,)
     serializer_class = StudioProfileSerializer
     model = StudioProfile
-    def get_queryset(self):
+    def get(self, request, *args, **kw):
         try:
             #city = self.request.GET['location'].split(',')
             ##add city to filter in future
             location = self.request.GET['location']
             service = self.request.GET['service']
             logger_studios.info("Search Query - "+str(self.request.GET))
-            studios_ = get_studios(service)
-            queryset = self.model.objects.filter(Q(id__in = studios_),  \
+            studios_ = StudioServiceTypes.objects.filter(service_type_id = service).values('studio_profile_id').distinct()
+            chosen_studios = StudioProfile.objects.filter(Q(id__in = studios_),  \
             (Q(search_field_1 = location) | Q(search_field_2 = location)))
+            ser_data = StudioProfileSerializer(chosen_studios, many = True)
+            data = ser_data.data
+            print datetime.now()
+            for studio in data:
+                min_price = StudioServices.objects.filter(studio_profile_id = studio['id']  \
+                    ).aggregate(Min('price'))
+                avg_rating = StudioReviews.objects.filter(studio_profile_id = studio['id'] \
+                    ).aggregate(Avg('rating'))
+                studio['min_price'] = min_price['price__min']
+                studio['avg_rating'] = avg_rating['rating__avg']
+            
         except Exception ,e:
             logger_error.error(traceback.format_exc())
-            return None
+            return Response()
         else:
-            return queryset
+            print datetime.now()
+            return Response(data)
         
 
-class StudioProfileDetail(StudioProfileMixin, ListAPIView):
+class StudioProfileDetail(StudioProfileMixin, APIView):
     #import pdb;pdb.set_trace();
     pass    
+
+class StudioDetailed(APIView):
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = StudioProfileDetailsSerialzier
+    model = StudioProfile
+    def get(self, request, *args, **kw):
+        try:
+            #studio_id = self.request.GET['id']
+            print datetime.now()
+            studios_data = StudioProfile.objects.filter(id = 172)
+            ser_data = StudioProfileDetailsSerialzier(studios_data, many = True)
+            data = ser_data.data
+        except Exception,e:
+            logger_error.error(traceback.format_exc())
+            return Response()
+        else:
+            print datetime.now()
+            return Response(data)
+
+
+    
+
+
+
 
 class StudioServicesDetail(ListAPIView):
     permission_classes = (ReadWithoutAuthentication,)
