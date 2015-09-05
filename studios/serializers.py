@@ -50,7 +50,7 @@ class StudioServicesSerializer(serializers.ModelSerializer):
 
 	"""studio and its services details"""
 	#studio_profile = StudioProfileSerializer()
-	service = ServiceSerializer()
+	#service = ServiceSerializer()
 	class Meta:
 		model = StudioServices
 		fields = ('service','price','is_active','mins_takes')

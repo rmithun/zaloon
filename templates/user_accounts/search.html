@@ -116,7 +116,7 @@
 
                     <!-- for mobile-->
                 <li ng-show="is_logged == 0" class="hidden-md hidden-lg">
-                    <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook">
+                    <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook" style="width:34px;">
                         <i class="fa fa-facebook"></i>
                     </button>
                 </li>
@@ -199,9 +199,9 @@
                                  </h4>
                             </div>
                             <div class="landmark_details">{%verbatim%}{{stu.landmark}}{%endverbatim%}</div>
-                            <div class="sub-line-1 hidden-xs">
-                                {%verbatim%}{{stu.studio_type.type_desc}}{%endverbatim%}-{%verbatim%}{{stu.studio_kind.kind_desc}}{%endverbatim%}
-                                <img ng-if="stu.staricon" class="image loaded staricon {%verbatim%}{{stu.staricon}}{%endverbatim%} pull-right" alt="" /></div>
+                            <div class="sub-line-1">
+                                {%verbatim%}{{stu.studio_type.type_desc}}{%endverbatim%}
+                                <img class="image loaded staricon star1 pull-right" alt="" /></div>
                             <div class="sub-line-2" style="text-transform:none;">
                                 <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
                                 <span class="price circlebg">

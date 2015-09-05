@@ -1110,6 +1110,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   .searchheader .navigation{padding:0 20px 0 0;background: #F06370;border-top:0px;height:55px;}
   .searchdevice{position: absolute;width: 100%; height: auto; top: 55px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display: none;}
   .searchpanel .btn{width:100%;}
+  .navigation-bar li.navsearch{border-left: 1px solid #D23D4B;}
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 13px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
   
@@ -1153,9 +1154,10 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	.list-box{top:55px;width:100%;}
 	.list-box #namesearch{width:180px;}
 	.mapview{top:24px;}
-	.moresearch{background:none;border:none;color:#fff;}  
-   .moresearch >.btnmore{background:none;color:#fff; padding: 16px 7px 15px 22px; min-width: 50px;}
-	.moresearch >.btnmore:hover { background-color: #e7e7e7;color: #1BBC9B;}
+	.moresearch{background:none;border:none;color:#fff;border-left: 1px solid #D23D4B;border-right: 1px solid #D23D4B;}  
+   .moresearch >.btnmore{background:none;color:#fff; padding: 16px 7px 15px 17px; min-width: 54px;}
+	.moresearch >.btnmore:hover { background-color: #F1F1F1;color: #1BBC9B;}
+  .moresearch >.btnmore.active { background-color: #F1F1F1;color: #1BBC9B;}
 	.more-filters-dropdown-menu{width:365px;right:-45px;overflow-x:hidden;overflow-y:auto;background:#f7f5ee;top:101%;padding-top:13px;}
 	.btn-toolbars a.btn{  min-width: 80px;}
 	.moresearch .btn-toolbars.ratingbar a{min-width:53px;}
@@ -1288,6 +1290,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 	.submit-wrap { width:100%; margin-top: 7px; }   
 	#landing-page .static-header{height:450px;}
 	 #landing-page .static-header h1 { font-size: 35px; margin-bottom:0;}
+   .navigation-bar li.navsearch{border-left: 1px solid #D23D4B;}
    .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 16px 13px; text-align: center;color:#fff;}
   
   .searchpanel{ padding:20px 15px; border: 0; }
@@ -1297,9 +1300,10 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding:17px 13px 16px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
   .navigation-bar li.navsearch a:hover{background-color: #e7e7e7;  color: #1BBC9B;}
-  .moresearch{background:none;border:none;color:#fff;}
-  .moresearch >.btnmore{background:none;color:#fff; padding: 21px 7px 15px 22px; min-width: 50px;}
+  .moresearch{background:none;border:none;color:#fff;border-left: 1px solid #D23D4B;border-right: 1px solid #D23D4B;}
+  .moresearch >.btnmore{background:none;color:#fff; padding: 21px 7px 15px 17px; min-width: 54px;}
   .moresearch >.btnmore:hover{ background-color: #e7e7e7;color:#1BBC9B;}
+  .moresearch >.btnmore.active { background-color: #F1F1F1;color: #1BBC9B;}
   .navigation-brand .logo{margin-left:15px;}
   
 	 .navigation-bar-right >.btn {  min-width: 40px;  padding: 14px;}
@@ -1369,7 +1373,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
  .navigation-brand { padding-right: 4%;padding-left:12px;}
  .navigation-brand .logo{margin-left:5px;}
  .navigation-bar-right >.btn {  min-width: 40px;  padding: 11px 10px 11px 44px;}
- .moresearch{margin-right:20px;}
+ .moresearch{margin-right:20px;border: 0;}
  .btnmore :first-child { position: absolute; left: 0; top: 0; bottom: 0; width: 34px; line-height: 40px; font-size: 1.6em; text-align: center; background-color:#EBEBEB;}
 .moresearch >.btnmore{background:#f1f1f1; color:#1bbc9b;min-width: 100px; padding: 12px 7px 12px 44px;}
  .list-box{top:82px;}

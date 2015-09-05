@@ -16,7 +16,7 @@ import traceback
 @transaction.commit_manually
 def parse_and_store():
 	try:
-		data = open('/home/mithun/Downloads/xml/Thiruvanmiyur.xml')
+		data = open('/home/jawahar/Downloads/Thiruvanmiyur.xml')
 		
 		parsed=BeautifulSoup(data,"html5lib")
 		shops = parsed.findAll('shop')
@@ -123,7 +123,7 @@ def parse_and_store():
 				kind = 1
 			if 'women' in name.lower():
 				kind = 2
-			file_name = '/home/mithun/Pictures/thumbs/'+random.choice(os.listdir("/home/mithun/Pictures/thumbs"))
+			file_name = '/home/jawahar/Downloads/images/'+random.choice(os.listdir("/home/jawahar/Downloads/images"))
 			imgz = open(file_name)
 			img = File(imgz)
 			has_studio = Studio.objects.filter(email = email)
@@ -141,7 +141,7 @@ def parse_and_store():
 				profile.save()
 				imgz.close()
 				for i in range(0,5):
-					file_name = '/home/mithun/Pictures/pictures/'+random.choice(os.listdir("/home/mithun/Pictures/pictures"))
+					file_name = '/home/jawahar/Downloads/images/'+random.choice(os.listdir("/home/jawahar/Downloads/images"))
 					imgz = open(file_name)
 					img = File(imgz)
 					stu_pic = StudioPicture(studio_profile = profile, picture = img, service_updated =service_updated)
