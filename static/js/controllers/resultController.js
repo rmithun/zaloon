@@ -448,15 +448,7 @@ $scope.bindstudio=function(data){
 
     $scope.studiodetails = function (id) {   
         $scope.servicelist = []; 
-        $('.service-overlay').show();
-        httpServices.getServicebyid({id:id}).then(function(res)
-        {                               
-            $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);
-
-        },function()
-        {
-            console.log("Try again to get service")
-        });        
+        $('.service-overlay').show();    
         var studio = lodash.where($scope.studio, { 'id': id });
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
@@ -490,6 +482,13 @@ $scope.bindstudio=function(data){
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
                 console.log(top);
             }, 500);
+            httpServices.getServicebyid({id:id}).then(function(res)
+            {                               
+                $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);
+            },function()
+            {
+                console.log("Try again to get service")
+            }); 
         }
     }
 
@@ -598,7 +597,7 @@ $scope.bindstudio=function(data){
             console.log(tempheight);
             console.log(serviceheight);
                 top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
-            }, 500);        
+            }, 1000);        
         console.log($scope.servicelist);
     }
     $scope.addservice = function (service) {       
