@@ -37,7 +37,7 @@ class Service(models.Model):
 	min_duration = models.IntegerField() ##duration in mins
 	is_active = models.BooleanField(default = 1)
 	#unit_price = models.IntegerField()
-	service_for = models.IntegerField(default = 1) #1- unisex, 2- Men 3 -Women
+	service_for = models.IntegerField(default = 1) #3- unisex, 1- Men 2 -Women
 	service_updated = models.CharField(max_length = 25, default = 'Admin')
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	def __unicode__(self):

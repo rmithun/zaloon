@@ -107,17 +107,18 @@ class StudioProfileMixin(object):
             location = self.request.GET['location']
             service = self.request.GET['service']
             logger_studios.info("Search Query - "+str(self.request.GET))
-            studios_ = StudioServiceTypes.objects.filter(service_type_id = service).values('studio_profile_id').distinct()
+            studios_ = StudioServiceTypes.objects.filter(service_type_id = service,  \
+                is_active = 1).values('studio_profile_id').distinct()
             chosen_studios = StudioProfile.objects.filter(Q(id__in = studios_),  \
             (Q(search_field_1 = location) | Q(search_field_2 = location)))
             ser_data = StudioProfileSerializer(chosen_studios, many = True)
             data = ser_data.data
             print datetime.now()
             for studio in data:
-                min_price = StudioServices.objects.filter(studio_profile_id = studio['id']  \
+                min_price = StudioServices.objects.filter(studio_profile_id = studio['id'], is_active = 1  \
                     ).aggregate(Min('price'))
-                avg_rating = StudioReviews.objects.filter(studio_profile_id = studio['id'] \
-                    ).aggregate(Avg('rating'))
+                avg_rating = StudioReviews.objects.filter(studio_profile_id = studio['id'], \
+                    is_active = 1).aggregate(Avg('rating'))
                 studio['min_price'] = min_price['price__min']
                 studio['avg_rating'] = avg_rating['rating__avg']
             
@@ -139,9 +140,10 @@ class StudioDetailed(APIView):
     model = StudioProfile
     def get(self, request, *args, **kw):
         try:
-            #studio_id = self.request.GET['id']
+            studio_id = self.request.GET['id']
             print datetime.now()
-            studios_data = StudioProfile.objects.filter(id = 172)
+            studios_data = StudioProfile.objects.filter(id = studio_id).select_related('studio_detail_for_activity',  \
+                'studio_review')
             ser_data = StudioProfileDetailsSerialzier(studios_data, many = True)
             data = ser_data.data
         except Exception,e:
@@ -150,11 +152,6 @@ class StudioDetailed(APIView):
         else:
             print datetime.now()
             return Response(data)
-
-
-    
-
-
 
 
 class StudioServicesDetail(ListAPIView):

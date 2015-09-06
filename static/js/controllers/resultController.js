@@ -36,21 +36,18 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.serviceprice = 0;    
     $scope.morefilter = false;
     $scope.stariconset={1:'star1',2:'star2',3:'star3',4:'star4',5:'star5'};
-    $scope.studiotype = [{ name: "Spa", active: false, icon: "icon icon-medical-19" }, { name: "Beauty parlor", active: false, icon: "icon icon-shopping-23" }, { name: "Salon", active: false, icon: "fa fa-scissors" }];
-    $scope.studiokind = [{ name: "Men", active: false, icon: "fa-mars" }, { name: "Women", active: false, icon: "fa-venus" }, { name: "Unisex", active: false, icon: "fa-venus-mars" }];
+    $scope.studiotype = [{ id:1, name: "Salon", active: false, icon: "fa fa-scissors" }, { id:2, name: "Spa", active: false, icon: "icon icon-medical-19" }, { id:3, name: "Beauty parlor", active: false, icon: "icon icon-shopping-23" }];
+    $scope.studiokind = [{ id:1, name: "Men", active: false, icon: "fa-mars" }, {id:2, name: "Women", active: false, icon: "fa-venus" }, {id:3, name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
-    $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "price", value: "priceasc", direction: false ,name:"Price"}, { property: "price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: true,name:"Rating" }];
+    $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "min_price", value: "priceasc", direction: false ,name:"Price"}, { property: "min_price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: true,name:"Rating" }];
     $scope.orderProp = 'price';
     $scope.direction = false;    
-    $scope.studioservice = [];
     $scope.studiotypefilter = [];
     $scope.studiokindfilter = [];
-    $scope.studioratingfilter = [];
-    $scope.studioservicefilter = [];
+    $scope.studioratingfilter = [];    
     $scope.tempstudiotypefilter=[];
     $scope.tempstudiokindfilter = [];
-    $scope.tempstudioratingfilter = [];
-    $scope.tempstudioservicefilter = [];
+    $scope.tempstudioratingfilter = [];    
     $scope.is_logged = sessionService.isLogged();
     $scope.selected_service = [];
     $scope.to_booking_flag = 0;
@@ -82,15 +79,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.itemLimit = 5;
     $scope.currentPage = 1;
     var top;
-    var data;    
-    
-     $scope.getservice = function (studio) {
-        angular.forEach(studio.studio_detail_for_activity, function (value, key) {
-            if ($scope.studioservice.indexOf(value.service.service_name) == -1) {
-                $scope.studioservice.push(value.service.service_name);
-            }
-        });
-    };
+    var serviceheight;
+    var data;        
 
     $scope.timeFilter =  function (value) {
         if(typeof value != 'undefined')
@@ -121,8 +111,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         $scope.studio[index].rating = studio.avg_rating;
         $scope.filteredstudio[index].rating = studio.avg_rating;            
         $scope.filteredstudio[index].staricon=$scope.stariconset[studio.avg_rating];
-        $scope.studio[index].staricon=$scope.stariconset[studio.avg_rating];
-        console.log(studio)
+        $scope.studio[index].staricon=$scope.stariconset[studio.avg_rating];        
     }
 
         //Google Maps    
@@ -247,9 +236,13 @@ $scope.bindstudio=function(data){
     angular.forEach(data, function (value, key) {
             $scope.studio.push(value);
             $scope.filteredstudio.push(value);            
-            //$scope.getservice(value);
             $scope.getprice_rating(key, value);
-            $scope.studio[key].kind_icon = lodash.where($scope.studiokind,{'name':value.studio_kind.kind_desc})[0].icon;
+            var kind=lodash.where($scope.studiokind,{'id':value.studio_kind})[0];
+            var type=lodash.where($scope.studiotype,{'id':value.studio_type})[0];
+            $scope.studio[key].kind_icon = kind.icon;
+            $scope.studio[key].kind_desc = kind.name;
+            $scope.studio[key].type_icon = type.icon;
+            $scope.studio[key].type_desc = type.name;
             getdistance(key, value.latitude, value.longitude);
         });
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
@@ -281,12 +274,10 @@ $scope.bindstudio=function(data){
         if(!$scope.morefilter){            
             $scope.tempstudiotypefilter= [];
             $scope.tempstudiokindfilter = [];
-            $scope.tempstudioratingfilter = [];
-            $scope.tempstudioservicefilter = [];
+            $scope.tempstudioratingfilter = [];            
             $scope.tempstudiotypefilter = angular.copy($scope.studiotypefilter);
             $scope.tempstudiokindfilter = angular.copy($scope.studiokindfilter);
-            $scope.tempstudioratingfilter = angular.copy($scope.studioratingfilter);
-            $scope.tempstudioservicefilter = angular.copy($scope.studioservicefilter);
+            $scope.tempstudioratingfilter = angular.copy($scope.studioratingfilter);            
         }
         else{            
             $scope.undofilter();
@@ -297,8 +288,7 @@ $scope.bindstudio=function(data){
     $scope.undofilter=function(){
         $scope.studiotypefilter = angular.copy($scope.tempstudiotypefilter);
         $scope.studiokindfilter = angular.copy($scope.tempstudiokindfilter);
-        $scope.studioratingfilter = angular.copy($scope.tempstudioratingfilter);
-        $scope.studioservicefilter = angular.copy($scope.tempstudioservicefilter);
+        $scope.studioratingfilter = angular.copy($scope.tempstudioratingfilter);        
         angular.forEach($scope.studiotype,function(val,index){
             $scope.studiotype[index].active=false;                
             if ($scope.studiotypefilter.indexOf(val.name) != -1) {
@@ -316,15 +306,7 @@ $scope.bindstudio=function(data){
             if ($scope.studioratingfilter.indexOf(val.star) != -1) {
                 $scope.studiostar[index].active=true;
             }                
-        })
-        $('input:checkbox').removeAttr('checked');
-        $('input[type=checkbox]').each(function () {  
-            //Start Added          
-            if ($scope.tempstudioservicefilter.indexOf($(this).next().text()) != -1) {                
-                $(this).prop('checked', true);
-            }
-            //End Added
-        });
+        })        
     }
 
     $scope.studiotypeclick = function (type, index) {
@@ -355,16 +337,7 @@ $scope.bindstudio=function(data){
         else {
             $scope.studioratingfilter.splice($scope.studioratingfilter.indexOf(star), 1);
         }
-    }
-
-    $scope.studioserviceclick = function (service) {
-        if ($scope.studioservicefilter.indexOf(service) == -1) {
-            $scope.studioservicefilter.push(service);
-        }
-        else {
-            $scope.studioservicefilter.splice($scope.studioservicefilter.indexOf(service), 1);
-        }        
-    }
+    }    
 
     $scope.applyfilter = function () {
         if($('#studiodetails').css('display') == 'block')
@@ -400,14 +373,13 @@ $scope.bindstudio=function(data){
         });
         $scope.studiotypefilter = [];
         $scope.studiokindfilter = [];
-        $scope.studioratingfilter = [];
-        $scope.studioservicefilter = [];
+        $scope.studioratingfilter = [];        
         $('input:checkbox').removeAttr('checked');
         $scope.applyfilter();
     }
 
     $scope.customfilter = function (studio) {
-        if ($scope.studiotypefilter.length != 0 || $scope.studiokindfilter.length != 0 || $scope.studioratingfilter.length != 0 || $scope.studioservicefilter.length != 0) {
+        if ($scope.studiotypefilter.length != 0 || $scope.studiokindfilter.length != 0 || $scope.studioratingfilter.length != 0 ) {
             var returnvalue;
             returnvalue = $scope.checkstudiotype(studio);
             if (returnvalue) {
@@ -415,10 +387,7 @@ $scope.bindstudio=function(data){
             }
             if (returnvalue) {
                 returnvalue = $scope.checkstudiorating(studio);
-            }
-            if (returnvalue) {
-                returnvalue = $scope.checkstudioservice(studio);
-            }
+            }            
             return returnvalue;
         }
         else {
@@ -428,7 +397,7 @@ $scope.bindstudio=function(data){
 
     $scope.checkstudiotype = function (studio) {
         if ($scope.studiotypefilter.length != 0) {
-            if ($scope.studiotypefilter.indexOf(studio.studio_type.type_desc) == -1) {
+            if ($scope.studiotypefilter.indexOf(studio.type_desc) == -1) {
                 return false;
             }
             else {
@@ -442,7 +411,7 @@ $scope.bindstudio=function(data){
 
     $scope.checkstudiokind = function (studio) {
         if ($scope.studiokindfilter.length != 0) {
-            if ($scope.studiokindfilter.indexOf(studio.studio_kind.kind_desc) == -1) {
+            if ($scope.studiokindfilter.indexOf(studio.kind_desc) == -1) {
                 return false;
             }
             else {
@@ -466,22 +435,7 @@ $scope.bindstudio=function(data){
         else {
             return true;
         }
-    }
-
-    $scope.checkstudioservice = function (studio) {
-        var returntype = true;
-        angular.forEach($scope.studioservicefilter, function (service, index) {
-            if (returntype) {
-                if (lodash.findIndex(studio.studio_detail_for_activity, { service: { service_name: service } }) == -1) {
-                    returntype = false;                    
-                }
-            }
-        });
-        return returntype;
-    }
-
-
-    
+    }    
 
     $scope.sortchange=function(selectitem){        
         $scope.orderProp = selectitem.property;
@@ -492,7 +446,17 @@ $scope.bindstudio=function(data){
         autozoom();
     }
 
-    $scope.studiodetails = function (id) {        
+    $scope.studiodetails = function (id) {   
+        $scope.servicelist = []; 
+        $('.service-overlay').show();
+        httpServices.getServicebyid({id:id}).then(function(res)
+        {                               
+            $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);
+
+        },function()
+        {
+            console.log("Try again to get service")
+        });        
         var studio = lodash.where($scope.studio, { 'id': id });
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
@@ -504,10 +468,8 @@ $scope.bindstudio=function(data){
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
-            $scope.has_online_payment = $scope.selectedstudio.has_online_payment
-            $scope.selectedstudio['type_icon_class']  = lodash.where($scope.studiotype,{'name':$scope.selectedstudio.studio_type.type_desc})[0].icon;
-            $scope.selectedstudio['kind_icon_class']  = lodash.where($scope.studiokind,{'name':$scope.selectedstudio.studio_kind.kind_desc})[0].icon;
-            $scope.sortservicebyfilter();
+            $scope.has_online_payment = $scope.selectedstudio.has_online_payment            
+            //$scope.sortservicebyfilter();
             $('.header-tabs').removeClass('stick');
             $('.header-tabs').removeClass('stick-mobile');
             $('.header-tabs').removeClass('stick-tablet');
@@ -515,9 +477,10 @@ $scope.bindstudio=function(data){
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
             $scope.reviewPage = 1;
             $scope.directionlocation=$scope.searchdata.location;
-            var page = Math.floor($scope.selectedstudio.studio_review.length / 10);            
-            page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
-            $scope.reviewtotalpage = page;            
+            //var page = Math.floor($scope.selectedstudio.studio_review.length / 10);            
+            //page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
+            //$scope.reviewtotalpage = page;            
+            serviceheight= $('.service-list').height();
             $scope.shopdistance = $scope.selectedstudio.distance;            
             setTimeout(function(){
                 removemarker();                
@@ -525,6 +488,7 @@ $scope.bindstudio=function(data){
             },300);
             setTimeout(function () {                
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
+                console.log(top);
             }, 500);
         }
     }
@@ -565,7 +529,8 @@ $scope.bindstudio=function(data){
             autozoom();
         },300);                
     }
-    $scope.easyscroll = function (clsname,tab) {          
+    $scope.easyscroll = function (clsname,tab) {   
+    console.log(top)       
         if($(window).width() <= 480){            
             $('.list-detail-box').animate({
                 scrollTop: top[clsname] - 92
@@ -611,27 +576,30 @@ $scope.bindstudio=function(data){
                 $scope.shopdistance = parseFloat(response.routes[0].legs[0].distance.text);
                 $scope.$apply();
             }
-        });
+        });        
         //$scope.shopdistance
     }
 
-    $scope.sortservicebyfilter = function () {
+    $scope.sortservicebyfilter = function (studioactivity) {
         $scope.servicelist = [];
-        //var res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: $scope.searchdata.service } });
-        //$scope.servicelist.push({id:res[0].service.id, servicename: res[0].service.service_name, price: res[0].price, flag: true, duration:res[0].mins_takes  });
-        //$scope.selected_service.push($scope.servicelist[0]);
-        //$scope.serviceprice = res[0].price;
-        angular.forEach($scope.studioservicefilter, function (service, key) {
-            res = lodash.where($scope.selectedstudio.studio_detail_for_activity, { service: { service_name: service } });
-            if (lodash.findIndex($scope.servicelist, { 'servicename': res[0].service.service_name }) == -1) {
-                $scope.servicelist.push({id:res[0].service.id,servicename: res[0].service.service_name, price: res[0].price, flag: false , duration:res[0].mins_takes });
-            }
-        });
-        angular.forEach($scope.selectedstudio.studio_detail_for_activity, function (service, key) {
-            if (lodash.findIndex($scope.servicelist, { 'servicename': service.service.service_name }) == -1) {
+        var res = lodash.where(studioactivity, { service: { service_type: $scope.searchdata.service } });        
+        angular.forEach(res,function(service,key){
+            $scope.servicelist.push({id:service.service.id,servicename: service.service.service_name, price: service.price, flag: false , duration:service.mins_takes });
+        });        
+        angular.forEach(studioactivity, function (service, key) {
+            if (lodash.findIndex($scope.servicelist, { 'id': service.service.id }) == -1) {
                 $scope.servicelist.push({id:service.service.id, servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes });
             }
         });
+        $('.service-overlay').hide();
+        setTimeout(function () {           
+            var tempheight=serviceheight;     
+            serviceheight=$('.service-list').height();
+            console.log(tempheight);
+            console.log(serviceheight);
+                top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
+            }, 500);        
+        console.log($scope.servicelist);
     }
     $scope.addservice = function (service) {       
         var index = lodash.findIndex($scope.servicelist, service);
@@ -650,8 +618,7 @@ $scope.bindstudio=function(data){
     }
 
     //Pagination
-    $scope.pagechange = function (page) {  
-    console.log($scope.currentPage)  
+    $scope.pagechange = function (page) {      
         removemarker();
         clearlatlongbound();
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
@@ -695,7 +662,8 @@ $scope.bindstudio=function(data){
 
     //Search Studio Details Event    
     $scope.onserviceselect = function ($item, $model, $label) {     
-        $scope.searchdata.service=$item.service_name;    
+        $scope.searchdata.servicename=$item.service_name;
+        $scope.searchdata_.service=$model;    
     };
     $scope.onlocationselect = function ($item, $model, $label) {
         $scope.searchdata.location=$label;
@@ -709,14 +677,14 @@ $scope.bindstudio=function(data){
         }
         $scope.searchicon=false;
         removemarker();
-        var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location};
+        var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location,'servicename':$scope.searchdata.servicename};
+        console.log(obj)
         $('.finder-overlay').show();
         httpServices.getstudioDetails(obj).then(function(data)
         {
             $('.finder-overlay').hide();
             $scope.bindstudio(data.studio_details.data);
-            $cookies.putObject('searchdata',obj,{path:'/'});         
-            //$cookies.putObject('data',data.studio_details.data,{path:'/'});
+            $cookies.putObject('searchdata',obj,{path:'/'});                     
             putResultService.setresult(data.studio_details.data);
             
         },function()
@@ -725,8 +693,7 @@ $scope.bindstudio=function(data){
         });
     }
 
-    $scope.searchdata=$cookies.getObject('searchdata');
-    //$scope.searchdata=putResultService.getresult();
+    $scope.searchdata=$cookies.getObject('searchdata');       
     $('.finder-overlay').hide();
     if(typeof $scope.searchdata == "undefined"){
         $location.path("/");

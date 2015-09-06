@@ -239,7 +239,7 @@ width: 100%!important;
 label.error { color: #FF4040; line-height: 0px !important;margin-top: 10px;text-align: left;font-size: 10pt;display:block; }
 .form-register-small label.error { display:block; position:absolute; }
 .form-register-small .form-group { margin-bottom: 5px; margin-top: 5px; position:relative;}
-.mappad{font-size:14px;padding-right:10px;}
+.mappad{font-size:14px;padding-right:10px;padding-top: 20px;}
 .mappad:before{padding-right:5px;}
 
 
@@ -406,7 +406,7 @@ content: ' ';
     text-overflow: ellipsis;width: 160px;margin-bottom: 0;}
 .service-list .servicemore a { font-size: 10px;color: #f06471;}
 .service-list .servicemore{text-align:right;}
-.street-info p{line-height:10px;}
+.street-info p{line-height: 15px;}
 .review-detail h3{display: inline-block;
   margin: 0;
   padding-bottom: 20px;}
@@ -499,7 +499,7 @@ content: ' ';
   }
   
   .list-item .details .info {
-  left: 180px;
+  left: 165px;
 }
 .list-item .info {
   position: absolute;
@@ -518,7 +518,7 @@ content: ' ';
   font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 160px;
+  width: 150px;
 }
 .list-item .details .sub-line-1 {
   font-size: 14px;

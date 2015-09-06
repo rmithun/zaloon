@@ -130,7 +130,7 @@
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                         <span class="service-icon"><i class="fa fa-gear icon-active"></i></span>
-                        <input type="text" ng-model="searchdata.service" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
+                        <input type="text" ng-model="searchdata.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
                     </div>
                 </div>
 
@@ -192,7 +192,7 @@
             <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="studiodetails(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
                 <a class="list-item" style="cursor:pointer;">
                     <div class="details">
-                        <img class="image loaded" style="height:80px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
+                        <img class="image loaded" style="height:100px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
                         <div class="info">
                             <div class="heading">
                                 <h4><span class="fa" ng-class="stu.kind_icon"></span>{%verbatim%}{{stu.name}}{%endverbatim%}
@@ -200,12 +200,12 @@
                             </div>
                             <div class="landmark_details">{%verbatim%}{{stu.landmark}}{%endverbatim%}</div>
                             <div class="sub-line-1">
-                                {%verbatim%}{{stu.studio_type.type_desc}}{%endverbatim%}
+                                {%verbatim%}{{stu.type_desc}}{%endverbatim%}
                                 <img class="image loaded staricon star1 pull-right" alt="" /></div>
                             <div class="sub-line-2" style="text-transform:none;">
                                 <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
                                 <span class="price circlebg">
-                <span class="icon-rupee rupee"></span><span class="info-rate">₹ {%verbatim%}{{stu.price}}{%endverbatim%}</span>
+                <span class="icon-rupee rupee"></span><span class="info-rate">₹ {%verbatim%}{{stu.min_price}}{%endverbatim%}</span>
                                 </span>
                             </div>
                         </div>
@@ -274,14 +274,15 @@
         </div>
         <div class="list-detail-cnt">
             <div class="street-info ">
-                <h4>{%verbatim%}{{selectedstudio.name}}{%endverbatim%}<span class="paddlft10" ng-class="selectedstudio.type_icon_class"></span> <span class = "pull-right fa" ng-class="selectedstudio.kind_icon_class"></span></h4>
+                <h4>{%verbatim%}{{selectedstudio.name}}{%endverbatim%}<span class="paddlft10" ng-class="selectedstudio.type_icon"></span> <span class = "pull-right fa" ng-class="selectedstudio.kind_icon"></span></h4>
                 <p>{%verbatim%}{{selectedstudio.landmark}}{%endverbatim%}</p>
                 <p>{%verbatim%}{{selectedstudio.address_1}}{%endverbatim%}</p>
                 <p>{%verbatim%}{{selectedstudio.address_2}}{%endverbatim%} {%verbatim%}{{selectedstudio.city}}{%endverbatim%}</p>
 
             </div>
             <div class="contact">
-                <span ng-if="selectedstudio.contact_person">{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}</a></span><span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</a></span><span class="fa fa-phone paddlft10"></span>
+                <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</a></span>
+                &nbsp;<span ng-if="selectedstudio.contact_person" style="text-transform:capitalize;">{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}</a></span><span class="fa fa-phone paddlft10"></span>
             </div>
             <p>Timing - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
             <p class="red" ng-if="selectedstudio.studio_closed_details.length > 0">Closed on - <span ng-repeat="leav in selectedstudio.studio_closed_details">
@@ -290,7 +291,15 @@
             
             <div class="service-list">
                 <h3>Services</h3>
-
+                <div class="service-overlay" style="display:none;">        
+                    <div class="la-line-scale la-dark" style="left:48%;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>        
+                </div>            
                 <div class="checkboxcolumn">
 
                     <div class="todo">

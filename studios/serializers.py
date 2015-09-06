@@ -50,7 +50,7 @@ class StudioServicesSerializer(serializers.ModelSerializer):
 
 	"""studio and its services details"""
 	#studio_profile = StudioProfileSerializer()
-	#service = ServiceSerializer()
+	service = ServiceSerializer()
 	class Meta:
 		model = StudioServices
 		fields = ('service','price','is_active','mins_takes')
@@ -102,12 +102,12 @@ class StudioProfileDetailsSerialzier(serializers.ModelSerializer):
 	#studio_group = StudioGroupSerializer()
 	studio_detail_for_activity = StudioServicesSerializer(many = True)
 	studio_review = StudioReviewSerializer(many = True)
-	pic_of_studio = StudioPictureSerializer(many = True)
+
 	#studio_amenities = StudioAmenitiesSerializer(many = True, required = False)
 	#studio_closed_details = StudioClosedDatesSerializer(many = True)
 	class Meta:
 		model = StudioProfile
-		fields = ('id', 'studio_detail_for_activity','studio_review','pic_of_studio',)
+		fields = ('id', 'studio_detail_for_activity','studio_review',)
 
 
 class StudioProfileSerializer(serializers.ModelSerializer):
@@ -116,7 +116,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 	#studio_group = StudioGroupSerializer()
 	#studio_detail_for_activity = StudioServicesSerializer(many = True)
 	#studio_review = StudioReviewSerializer(many = True)
-	#pic_of_studio = StudioPictureSerializer(many = True)
+	pic_of_studio = StudioPictureSerializer(many = True)
 	#studio_amenities = StudioAmenitiesSerializer(many = True, required = False)
 	#studio_type = StudioTypeSerializer()
 	#studio_kind = StudioKindSerializer()
@@ -129,7 +129,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'latitude','longitude','studio_kind','landmark','thumbnail',  \
-			'has_online_payment')
+			'has_online_payment','pic_of_studio')
 
 class StudioResponse(serializers.ModelSerializer):
 	class Meta:
