@@ -122,6 +122,8 @@
   <div class="tab-content">     
     
     <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-class="{'active':tabx == 1}" ng-show="tabx == 1" id="booking">
+
+      <span ng-if="active_bookings.length == 0"> No active bookings.</span>
     <ul>
     
     <li class="booking-list-item-container" ng-repeat="buking in active_bookings  | orderBy:'id':true">
@@ -161,6 +163,7 @@
   </div>
     
   <div role="tabpanel" class="booking-panel-list-view tab-pane" ng-class="{'active':tabx == 2}" ng-show="tabx == 2" id="booking-history">
+    <span ng-if="expired_bookings.length == 0"> No booking used yet.</span>
     <ul>
     
     <li class="booking-list-item-container" ng-repeat="buking in expired_bookings | orderBy:'id':true">

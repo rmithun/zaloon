@@ -33,6 +33,7 @@ from django.template import Context
 #application imports
 from serializers import *
 from models import *
+from user_accounts.models import UserProfile
 from utils.generic_utils import sendEmail, sendSMS, uniquekey_generator, getIframeFromPG
 from utils import responses
 from studios.models import StudioServices
@@ -168,6 +169,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             booking_id = new_booking.id
             studio_id = BookingDetails.objects.get(id = booking_id)
             if payment_success == 1 and studio_id.notification_send == 0:
+                UserProfile.objects.filter(user_acc = user).update(mobile = mobile_no )
                 services_booked = BookingServices.objects.filter(booking_id = booking_id)
                 services_booked_list = [(ser.service.service_name,ser.mins_takes,ser.price) for ser in service_details]
                 user = User.objects.values('first_name','email').get(email = user)
@@ -582,12 +584,12 @@ class ApplyCoupon(APIView):
             #check coupon code is there
             logger_booking.info("Coupon request -" +str(data))
             try:
-                coupon_detail = Coupon.objects.get(coupon_code_icontains = coupon_code)
+                coupon_detail = Coupon.objects.get(coupon_code__icontains = coupon_code)
             except:
                 response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['INVALID_COUPON'])
                 return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
             try:
-                coupon_detail = Coupon.objects.get(coupon_code_icontains = coupon_code, is_active = 1,   \
+                coupon_detail = Coupon.objects.get(coupon_code__icontains = coupon_code, is_active = 1,   \
                 expiry_date__gte =  datetime.today().date())
             except Exception,e:
                 logger_error.info(traceback.format_exc())
@@ -619,10 +621,10 @@ class ApplyCoupon(APIView):
                         return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
                 """
                 to_deduct = 0
-                if coupon_detail.coupon_type == 'PERCENT':
+                if coupon_detail.coupon_type == 'PERCENT' or coupon_detail.coupon_type == 'percent':
                     logger_booking.info("Coupon type is PERCENT")
                     to_deduct = (amount * coupon_detail.discount_value)/100
-                if coupon_detail.coupon_type == 'FLAT':
+                if coupon_detail.coupon_type == 'FLAT' or coupon_detail.coupon_type == 'flat':
                     logger_booking.info("Coupon type is FLAT")
                     to_deduct = (amount -coupon_detail.discount_value)
                 if to_deduct > coupon_detail.maximum_discount:

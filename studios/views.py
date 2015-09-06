@@ -110,12 +110,13 @@ class StudioProfileMixin(object):
             service = self.request.GET['service']
             cache_key = location.replace(" ","")+str(service)
             if cache.get(cache_key):
+                print "here"
                 return Response(cache.get(cache_key))
             logger_studios.info("Search Query - "+str(self.request.GET))
-            studios_ = StudioServiceTypes.objects.filter(service_type_id = service,  \
-                is_active = 1).values('studio_profile_id').distinct()
-            chosen_studios = StudioProfile.objects.filter(Q(id__in = studios_),  \
-            (Q(search_field_1 = location) | Q(search_field_2 = location)))
+            studios = StudioServiceTypes.objects.filter(service_type_id = service, is_active = 1).values('studio_profile_id')
+            chosen_studios = StudioProfile.objects.filter(Q(id__in = studios), 
+                (Q(search_field_1 = location)|Q(search_field_2 = location))).select_related('studio_closed_details', \
+                'pic_of_studio')
             ser_data = StudioProfileSerializer(chosen_studios, many = True)
             data = ser_data.data
             for studio in data:
@@ -126,7 +127,7 @@ class StudioProfileMixin(object):
                 studio['min_price'] = min_price['price__min']
                 studio['avg_rating'] = avg_rating['rating__avg']
             now = datetime.now().time()
-            expiration_sec = ((23 - now.hour*60 +(59 - now.minute)*60))
+            expiration_sec = ((23 - now.hour)*60 +(59 - now.minute)*60)
             cache.set(cache_key, data, expiration_sec)
         except Exception ,e:
             logger_error.error(traceback.format_exc())
@@ -155,7 +156,7 @@ class StudioDetailed(APIView):
             ser_data = StudioProfileDetailsSerialzier(studios_data, many = True)
             data = ser_data.data
             now = datetime.now()
-            expiration_sec = ((23 - now.hour*60 +(59 - now.minute)*60))
+            expiration_sec = ((23 - now.hour)*60 +(59 - now.minute)*60)
             cache.set(cache_key, data, expiration_sec)
         except Exception,e:
             logger_error.error(traceback.format_exc())

@@ -678,10 +678,12 @@ $scope.bindstudio=function(data){
         removemarker();
         var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location,'servicename':$scope.searchdata.servicename};
         console.log(obj)
-        $('.finder-overlay').show();
+        $('#lister').hide();
+        $('#loading').show();
         httpServices.getstudioDetails(obj).then(function(data)
         {
-            $('.finder-overlay').hide();
+            $('#lister').show();
+            $('#loading').hide();
             $scope.bindstudio(data.studio_details.data);
             $cookies.putObject('searchdata',obj,{path:'/'});                     
             putResultService.setresult(data.studio_details.data);

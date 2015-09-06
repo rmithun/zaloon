@@ -389,7 +389,9 @@ content: ' ';
 .list-detail-cnt .contact{font-size:13px;color:#000;text-transform: capitalize;}
 .list-detail-cnt .fa-scissors:before, .list-item-container .fa-scissors:before{color:#F06471; font-size: 16px;}
 .list-detail-cnt .fa-venus-mars:before{color: #34495E; font-size: 16px;}
-.list-item-container .fa-venus-mars:before{color: #34495E; font-size: 16px; padding-right: 10px;}
+.list-item-container .fa-venus:before{color: #34495E; font-size: 16px; padding-right: 5px;}
+.list-item-container .fa-mars:before{color: #34495E; font-size: 16px; padding-right: 5px;}
+.list-item-container .fa-venus-mars:before{color: #34495E; font-size: 16px; padding-right: 5px;}
 .list-detail-cnt .fa-phone:before{color: #1BBC9B; font-size: 16px;}
 .more-filters-dropdown-menu  .fa-scissors:before{padding-right:5px;}
 .more-filters-dropdown-menu  .fa-venus:before{padding-right:5px;}
@@ -403,7 +405,7 @@ content: ' ';
   padding-top: 6px;
 }
 .list-item-container .list-item h4{margin-top:5px;white-space: nowrap;overflow: hidden;
-    text-overflow: ellipsis;width: 160px;margin-bottom: 0;}
+    text-overflow: ellipsis;width: 150px;margin-bottom: 0;}
 .service-list .servicemore a { font-size: 10px;color: #f06471;}
 .service-list .servicemore{text-align:right;}
 .street-info p{line-height: 15px;}
@@ -418,9 +420,9 @@ content: ' ';
 .review-detail p span a{color:#f06471;font-size:10px;}
 
 .direction{padding-bottom:10px;position:relative;}
-.direction input.form-control{width:263px;float:left;padding-left: 30px;border: 1px solid #d2d2d2;}
-.direction button{padding:7px 5px; min-width: 60px;}
-.direction .glyphicon-search:before{font-size:15px;}
+.direction input.form-control{width:273px;float:left;padding-left: 30px;height:42px;border: 1px solid #d2d2d2;}
+.direction button{padding:7px 5px; min-width: 50px;height: 42px;}
+.direction .glyphicon-search:before{font-size:20px;}
 .direction .icon-loc{color:#989898;padding-bottom: 4px;display: inline-block;}
 .list-detail-image img{width: 100%;}
  
@@ -534,7 +536,7 @@ content: ' ';
   color: #7f7f7f;
    text-transform: uppercase;
   }
-  .info-rate{color:#1bbc9b;font-weight:bold;font-size:15px;float:right;}
+  .info-rate{color:#1bbc9b;font-weight:bold;font-size:13px;float:right;}
   .list-box .service-arrow-icon {
   position: absolute;
   bottom: 4px;
@@ -607,7 +609,7 @@ content: ' ';
 }
 .booking-panel .info  h4, .booking-panel .info1 h4{margin:0;}
 
-.book-imgthumb{width:162px;float:left;}
+.book-imgthumb{width:162px;float:left;padding-top: 20px;}
 .book-imgthumb img{width:100%;}
 .booking-panel .list-item .heading {
   color: #4c4c4c;
@@ -1220,6 +1222,8 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   height: 230px;
 }
 .btn-toolbars a.btn{  min-width: 40px;}
+
+.list-item-container .list-item h4{width: 130px;}
 
 /*vasu changes*/
 

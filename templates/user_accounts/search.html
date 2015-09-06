@@ -164,8 +164,19 @@
 
 </div>
 
+
+<div class="list-box"   id ="loading" style="top:50%;text-align:center;display:none;box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2);">
+        <div class="la-line-scale la-dark" style="left:48%;">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+        Again hunting best parlours for you...
+</div>
 <!-- List -->
-<div class="list-box" ng-show="filteredstudio.length > 0">
+<div class="list-box" id = "lister" ng-show="filteredstudio.length > 0">
     <div class="listheader">
         <label>We have found {%verbatim%} {{filteredstudio.length}}{%endverbatim%} results for you</label>
         <span class="pull-right hiddenxsprt">
@@ -205,7 +216,7 @@
                             <div class="sub-line-2" style="text-transform:none;">
                                 <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
                                 <span class="price circlebg">
-                <span class="icon-rupee rupee"></span><span class="info-rate">₹ {%verbatim%}{{stu.min_price}}{%endverbatim%}</span>
+                <span class="icon-rupee rupee"></span><span class="info-rate">₹{%verbatim%}{{stu.min_price}}{%endverbatim%}+</span>
                                 </span>
                             </div>
                         </div>
@@ -323,8 +334,9 @@
             <div class="direction">
                 <h3>Direction</h3>
                 <p>Enter from Location <span class="pull-right hidden-md hidden-lg">{%verbatim%} {{shopdistance}}{%endverbatim%}km</span></p>
+                <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
                 <div class="searchloc">
-                    <span class="service-icon"><i class="icon icon-socialmedia-25 icon-loc"></i></span>
+                    
                     <div class="form-group autocomplete">
                         <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="directionlocation" placeholder="Location: Porur" ng-keyup="areacomplete(directionlocation)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
                         <button type="button" class="btn btn-primary" ng-click="changedirection()">
@@ -332,14 +344,16 @@
                         </button>
                     </div>
                 </div>
-                <div class="distance hidden-xs"><div class="circlebg">{%verbatim%} {{shopdistance}}{%endverbatim%}</div>km</div>
+                <div class="distance hidden-xs"><div class="circlebg" style="float:none">{%verbatim%} {{shopdistance}}{%endverbatim%}</div>km</div>
                 <div id="mobgooglemap" class="mapview-mob hidden-md hidden-lg col-sm-12">
                 </div>
                 <!-- <div  ng-if="which_device"><a ng-click="openMap()">Open map</a></div> -->
             </div>
             <div class="review-detail">
                 <h3>Reviews</h3>
-                <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
+                <span ng-if="selectedstudio.studio_review.length == 0" class="reviewtotal">No reviews yet</span>
+                <span ng-if="selectedstudio.studio_review.length > 0" class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
+                
                 <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
 
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
@@ -389,6 +403,7 @@
         </div>
 
         <div class="modal-footer">
+            <button type="button" data-dismiss="modal">Ok</button>
             <!-- <div class="service-rate-panel col-sm-12 no-padding">
             <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
                 <i class="icon icon-contact"></i>

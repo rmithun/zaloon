@@ -248,17 +248,26 @@
 
 <!--cancel confirmation modal-->
 
-  <div  id="processingmodal"  data-backdrop="static"  data-keyboard="false" class=" modal fade" role="dialog">
+
+
+  <div  id="processingmodal" data-keyboard="false"  class="modal fade" data-backdrop="static" 
+   data-keyboard="false" role="dialog">
+    <div class="modal-dialog">
     <div class="modal-content signup">
-     <div class="modal-header modal-register-header">
-     <h4 class="modal-title">We are processing your payment, Dont back or Refresh</h4>
-    </div> 
-      <div class="modal-body register">   
-      <div class="socialpanel">
-      </div>        
+     <div class="modal-header modal-booking-header">
+      <h4 class="modal-title">Processing...</h4>
+          
+    </div>     
+      <div class="modal-body register">         
+    We are processing your payment. Please dont refresh or close the page.
       </div>
     </div>  
-  </div>   
+  </div>  
+</div>
+  
+
+
+
   <div  id="bookingfailedmodal" class="modal fade" data-backdrop="static" 
    data-keyboard="false" role="dialog">
     <div class="modal-dialog">
@@ -268,7 +277,7 @@
      <button type="button" style="margin-top: -22px;" class="close" data-dismiss="modal">&times;</button>     
     </div>     
       <div class="modal-body register">         
-    Transfer your amount
+    Your booking failed.Please try again. If amount has been deducted from your account it will be refunded.
       </div>
     </div>  
   </div>  

@@ -120,7 +120,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 	#studio_amenities = StudioAmenitiesSerializer(many = True, required = False)
 	#studio_type = StudioTypeSerializer()
 	#studio_kind = StudioKindSerializer()
-	#studio_closed_details = StudioClosedDatesSerializer(many = True)
+	studio_closed_details = StudioClosedDatesSerializer(many = True)
 	class Meta:
 		model = StudioProfile
 		fields = ('id','studio_type', 'name', 'address_1', 'address_2',  \
@@ -129,7 +129,7 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'latitude','longitude','studio_kind','landmark','thumbnail',  \
-			'has_online_payment','pic_of_studio')
+			'has_online_payment','pic_of_studio','studio_closed_details')
 
 class StudioResponse(serializers.ModelSerializer):
 	class Meta:
