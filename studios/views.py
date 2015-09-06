@@ -29,6 +29,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.db import transaction
 from django.db.models import Min, Avg
+from django.core.cache import cache
 
 
 #application imports
@@ -104,8 +105,12 @@ class StudioProfileMixin(object):
         try:
             #city = self.request.GET['location'].split(',')
             ##add city to filter in future
+            print datetime.now()
             location = self.request.GET['location']
             service = self.request.GET['service']
+            cache_key = location.replace(" ","")+str(service)
+            if cache.get(cache_key):
+                return Response(cache.get(cache_key))
             logger_studios.info("Search Query - "+str(self.request.GET))
             studios_ = StudioServiceTypes.objects.filter(service_type_id = service,  \
                 is_active = 1).values('studio_profile_id').distinct()
@@ -113,7 +118,6 @@ class StudioProfileMixin(object):
             (Q(search_field_1 = location) | Q(search_field_2 = location)))
             ser_data = StudioProfileSerializer(chosen_studios, many = True)
             data = ser_data.data
-            print datetime.now()
             for studio in data:
                 min_price = StudioServices.objects.filter(studio_profile_id = studio['id'], is_active = 1  \
                     ).aggregate(Min('price'))
@@ -121,12 +125,13 @@ class StudioProfileMixin(object):
                     is_active = 1).aggregate(Avg('rating'))
                 studio['min_price'] = min_price['price__min']
                 studio['avg_rating'] = avg_rating['rating__avg']
-            
+            now = datetime.now().time()
+            expiration_sec = ((23 - now.hour*60 +(59 - now.minute)*60))
+            cache.set(cache_key, data, expiration_sec)
         except Exception ,e:
             logger_error.error(traceback.format_exc())
             return Response()
         else:
-            print datetime.now()
             return Response(data)
         
 
@@ -141,16 +146,21 @@ class StudioDetailed(APIView):
     def get(self, request, *args, **kw):
         try:
             studio_id = self.request.GET['id']
-            print datetime.now()
+            cache_key = 'studio'+str(studio_id)
+            if cache.get(cache_key):
+                data = cache.get(cache_key)
+                return Response(data)
             studios_data = StudioProfile.objects.filter(id = studio_id).select_related('studio_detail_for_activity',  \
                 'studio_review')
             ser_data = StudioProfileDetailsSerialzier(studios_data, many = True)
             data = ser_data.data
+            now = datetime.now()
+            expiration_sec = ((23 - now.hour*60 +(59 - now.minute)*60))
+            cache.set(cache_key, data, expiration_sec)
         except Exception,e:
             logger_error.error(traceback.format_exc())
             return Response()
         else:
-            print datetime.now()
             return Response(data)
 
 
