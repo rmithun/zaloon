@@ -1,12 +1,13 @@
+{% load static from staticfiles %}
 <div class="pay-container" ng-controller="paymentcontroller">
      <!-- Preloader -->
    
     <header class="searchheader">
         <nav class="navigation">
             
-                <div class="navigation-brand">                  
-          <a href="#/search" ><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="assets/img/logo.png">  </a>
-          <a href="#/search" ><img width="47" height="47" class="logo hidden-md hidden-lg" alt="" src="assets/img/logo-mobile.png"> </a>
+                <div class="navigation-brand" style="margin-top:4px">                  
+          <img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/logo.png' %}">
+            <img width="47" height="47" class="logo hidden-md hidden-lg" alt="" src="{% static 'img/logo-mobile.png' %}">
                 </div>
         <div class="pull-right">
           <div class="securepayment-panel hidden480">
@@ -35,7 +36,7 @@
             <div id="collapseOne" class="panel-collapse collapse">
           <div class="panel-body">
             <div class="payment-servicemodel">
-              <div class="todo">            
+              <div class="todo" style="margin-bottom:0px">            
                 <ul>
                   <li  class="col-sm-4" ng-repeat = "serv in serviceschosen.services">               
                   <div class="todo-content">                 
@@ -76,7 +77,23 @@
 <!-- Time --> 
 
 <div id="scrollhere">
+
+ <div class="col-sm-12 col-xs-12 no-padding scrolltime" id="loading" style="display:none;" >
+<p></p>
+  <div class="clearfix"></div>
+<p>&nbsp;</p> 
+    <div class="la-line-scale la-dark" style="left:48%;">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+</div>
+
+<div id="slotter">
   <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="avail.length != 0 && day_crossed">
+  <p>&nbsp;</p> 
 <p><span class="notavailable"><span class="notavailablebg"></span><span>Not Available</span></span></p>
   <div class="clearfix"></div>
 <p>&nbsp;</p> 
@@ -132,7 +149,7 @@
 <div ng-if="!checkslot(avail,'evening')">Evening slots not available</div>
       </div>
     </div>  
-  
+  </div>
                 </div>
         
             </div>
@@ -173,10 +190,11 @@
 
             <div class="col-sm-4 no-padding">
             <div class="promo">
-              <label class="mobspan">
+              <label class="mobspan" style="padding-top:0px">
               <label>Mobile No:</label>  <span><input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
+              <br/>
             <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.required">
-                    Mobile no is required</span></span>
+                    Please enter your mobile no.</span></span>
                 <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
                     Enter your mobile number ex:9213233423</span></span></span>
               </label>
@@ -187,11 +205,13 @@
           <div class="col-sm-4 col-xs-7 no-padding ">
             <div class="promobox"><label>Promo code:</label> 
             <div class="dispInlineblk"> <span><input type="text" ng-model="coupon_code" ng-click="focus()">
-              {%verbatim%}{{coupon_resp}}{%endverbatim%}</span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length"class="btn btn-primary promoapply">Apply</button></div>
+              </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length"class="btn btn-primary promoapply">Apply</button>
+              </div>
             </div>
+            <span class="red" style="float:right;">{%verbatim%}{{coupon_resp}}{%endverbatim%}</span>
           </div>
 
-          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding">₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
+          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding">- ₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
      
         </div>        
         </div> 
@@ -202,6 +222,11 @@
           
           
           <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">
+         <span > Total - {%verbatim%}{{amount_to_pay}}{%endverbatim%}</span>
           </div>
           
         </div>

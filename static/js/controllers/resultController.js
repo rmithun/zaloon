@@ -1007,8 +1007,12 @@ $("#datepicker").on("changeDate", function(event) {
     slot_data['date'] = $scope.date_selected
     slot_data['duration'] = $scope.total_duration
     slot_data['studio_id'] = $scope.serviceschosen.studio.id
+    $('#loading').show();
+    $('#slotter').hide();
     httpServices.getSlots(slot_data).then(function(sdata)
     {
+        $('#loading').hide();
+        $('#slotter').show();
         $scope.avail = sdata.available_slots.data;        
         //$('html, body').animate({scrollTop: $('#scrollhere').offset().top }, 'slow');
          $('html, body').animate({
@@ -1045,7 +1049,10 @@ $scope.applyPromo = function()
 }
 //Start Added
 $scope.focus=function(){
-    $scope.coupon_resp="";
+    if($scope.promo_amount < 1)
+    {
+        $scope.coupon_resp="";
+    }
 }
 //End Added
 
