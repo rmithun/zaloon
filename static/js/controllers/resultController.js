@@ -232,7 +232,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
 
 $scope.bindstudio=function(data){ 
     $scope.studio=[];
-    $scope.filteredstudio=[];    
+    $scope.filteredstudio=[];   
+    if(data.length>0){ 
     angular.forEach(data, function (value, key) {
             $scope.studio.push(value);
             $scope.filteredstudio.push(value);            
@@ -247,9 +248,24 @@ $scope.bindstudio=function(data){
         });
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
         autozoom();
-        $scope.totalItems = $scope.filteredstudio.length;
     }
+    else{
+        getlatlong($scope.searchdata.location)
+    }
+    $scope.totalItems = $scope.filteredstudio.length;
+}
 
+function getlatlong(location){
+    var geocoder =  new google.maps.Geocoder();
+    geocoder.geocode( { 'address': location}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          console.log(results[0].geometry.location.lat() + " " +results[0].geometry.location.lng())
+        }
+        else{
+            
+        }
+    });
+}
 
     function getdistance(key, lat, long) {
         var request = { origin: new google.maps.LatLng(lat, long), destination: $scope.searchdata.location, travelMode: google.maps.DirectionsTravelMode.DRIVING };
@@ -473,6 +489,7 @@ $scope.bindstudio=function(data){
             //page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
             //$scope.reviewtotalpage = page;            
             serviceheight= $('.service-list').height();
+            console.log(serviceheight);
             $scope.shopdistance = $scope.selectedstudio.distance;            
             setTimeout(function(){
                 removemarker();                
@@ -490,6 +507,56 @@ $scope.bindstudio=function(data){
                 console.log("Try again to get service")
             }); 
         }
+    }
+
+    $scope.sortservicebyfilter = function (studioactivity) {
+        $scope.servicelist = [];
+        var res = lodash.where(studioactivity, { service: { service_type: $scope.searchdata.service } });        
+        angular.forEach(res,function(service,key){
+            $scope.servicelist.push({id:service.service.id,servicename: service.service.service_name, price: service.price, flag: false , duration:service.mins_takes });
+        });        
+        angular.forEach(studioactivity, function (service, key) {
+            if (lodash.findIndex($scope.servicelist, { 'id': service.service.id }) == -1) {
+                $scope.servicelist.push({id:service.service.id, servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes });
+            }
+        });
+        $('.service-overlay').hide();
+        setTimeout(function () {           
+            var tempheight=serviceheight;     
+            serviceheight=$('.service-list').height();
+            //console.log(tempheight);
+            console.log(serviceheight);
+                top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
+            }, 1000);        
+        console.log($scope.servicelist);
+    }
+
+    $scope.easyscroll = function (clsname,tab) {   
+    //console.log(top)       
+        if($(window).width() <= 480){            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 92
+            }, 100);
+        }        
+        else if($(window).width() >= 481 && $(window).width() <= 767){            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 100
+            }, 100);
+        }
+        else if($(window).width() >= 768 && $(window).width() <= 991){            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 105
+            }, 200);
+        }
+        else{            
+            $('.list-detail-box').animate({
+                scrollTop: top[clsname] - 140
+            }, 200);
+        } 
+        setTimeout(function(){
+            $('.detail-tab').removeClass('active');
+            $('.'+tab).addClass('active');   
+        },250);        
     }
 
     //function to open maps app in touch devices
@@ -520,6 +587,7 @@ $scope.bindstudio=function(data){
         $scope.selectedstudio = {}   
         $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
         $scope.selected_service = [];
+        $scope.servicelist = []; 
         setTimeout(function(){
             directionsDisplay.setMap(null);
             mdirectionsDisplay.setMap(null);
@@ -527,33 +595,6 @@ $scope.bindstudio=function(data){
             $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
             autozoom();
         },300);                
-    }
-    $scope.easyscroll = function (clsname,tab) {   
-    console.log(top)       
-        if($(window).width() <= 480){            
-            $('.list-detail-box').animate({
-                scrollTop: top[clsname] - 92
-            }, 100);
-        }        
-        else if($(window).width() >= 481 && $(window).width() <= 767){            
-            $('.list-detail-box').animate({
-                scrollTop: top[clsname] - 100
-            }, 100);
-        }
-        else if($(window).width() >= 768 && $(window).width() <= 991){            
-            $('.list-detail-box').animate({
-                scrollTop: top[clsname] - 105
-            }, 200);
-        }
-        else{            
-            $('.list-detail-box').animate({
-                scrollTop: top[clsname] - 140
-            }, 200);
-        } 
-        setTimeout(function(){
-            $('.detail-tab').removeClass('active');
-            $('.'+tab).addClass('active');   
-        },250);        
     }
 
     $scope.morereview = function () {
@@ -578,28 +619,7 @@ $scope.bindstudio=function(data){
         });        
         //$scope.shopdistance
     }
-
-    $scope.sortservicebyfilter = function (studioactivity) {
-        $scope.servicelist = [];
-        var res = lodash.where(studioactivity, { service: { service_type: $scope.searchdata.service } });        
-        angular.forEach(res,function(service,key){
-            $scope.servicelist.push({id:service.service.id,servicename: service.service.service_name, price: service.price, flag: false , duration:service.mins_takes });
-        });        
-        angular.forEach(studioactivity, function (service, key) {
-            if (lodash.findIndex($scope.servicelist, { 'id': service.service.id }) == -1) {
-                $scope.servicelist.push({id:service.service.id, servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes });
-            }
-        });
-        $('.service-overlay').hide();
-        setTimeout(function () {           
-            var tempheight=serviceheight;     
-            serviceheight=$('.service-list').height();
-            console.log(tempheight);
-            console.log(serviceheight);
-                top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
-            }, 1000);        
-        console.log($scope.servicelist);
-    }
+    
     $scope.addservice = function (service) {       
         var index = lodash.findIndex($scope.servicelist, service);
         var flag = $scope.servicelist[index].flag;
@@ -673,7 +693,9 @@ $scope.bindstudio=function(data){
     $scope.searchservicestudio=function(){
         if($('.navsearch').css('display') != "none"){
             $('#searchdevice').hide();
-        }
+        }         
+        //$scope.studio=[];
+        //$scope.filteredstudio=[];  
         $scope.searchicon=false;
         removemarker();
         var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location,'servicename':$scope.searchdata.servicename};
@@ -692,6 +714,12 @@ $scope.bindstudio=function(data){
         {
             console.log("Try again to get service")
         });
+        if($('#studiodetails').css('display') != 'none'){
+            $('#studiodetails').hide();
+            directionsDisplay.setMap(null);
+            mdirectionsDisplay.setMap(null);
+            clearlatlongbound();
+        }
     }
 
     $scope.searchdata=$cookies.getObject('searchdata');       
@@ -760,7 +788,6 @@ $scope.fbLogin = function(dummy)
     $('#signupmodel').modal('hide')
     httpServices.loginUsingFB(dummy).then(function(data)
     {
-        $('.loader-overlay').hide();
         if(data)
         {
             sessionService.setAuthToken(data)
@@ -770,6 +797,7 @@ $scope.fbLogin = function(dummy)
                 $scope.user_details = dataz['user_details'].data[0]
                 $scope.user_name = $scope.user_details.user_acc['first_name']
                 $('#signupmodel').modal('hide');
+                $('.loader-overlay').hide();
                 //redirect to booking page if clicked book
                 if ($scope.to_booking_flag == 1)
                 {
@@ -782,6 +810,7 @@ $scope.fbLogin = function(dummy)
             }, function()
             {
                 $scope.is_logged = sessionService.isLogged()
+                $('#signupmodel').modal('hide');
                 console.log("Error getting user data")
             })
         }
@@ -1276,7 +1305,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
 
     $scope.getBookings = function()
     {
-        $('.finder-overlay').show();
+        $('.profile-overlay').show();
         httpServices.getDetails().then(function(data)
         {            
             $scope.user_details = data.user_details.data[0]
@@ -1287,7 +1316,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             {
                 $scope.active_bookings = data.active_booking
                 $scope.expired_bookings = data.inactive_booking
-                $('.finder-overlay').hide();
+                $('.profile-overlay').hide();
             },
             function()
             {

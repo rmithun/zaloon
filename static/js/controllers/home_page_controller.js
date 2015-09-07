@@ -22,7 +22,6 @@ getFBKey()
 		$('.loader-overlay').show();
 		httpServices.loginUsingFB(dummy).then(function(data)
 		{
-		  $('.loader-overlay').hide();
 		  if(data)
 		  {
 		  	sessionService.setAuthToken(data)
@@ -31,8 +30,11 @@ getFBKey()
 		  		$scope.is_logged = sessionService.isLogged()
 		  		$scope.user_name = dataz['user_details'].data[0].user_acc['first_name']
 		  		//$('#signupmodel').modal('hide');
+		  		$('.loader-overlay').hide();
+
 		  	}, function()
 		  	{
+		  		$('.loader-overlay').hide();
 		  		$scope.is_logged = sessionService.isLogged()
 		  		console.log("Error getting user data")
 		  	})
@@ -74,11 +76,7 @@ httpServices.getUsrDetails().then(function(dataz)
 		{
 			console.log("Logout Error")
 		})
-	}
-
-	$scope.focus=function(){
-    	$scope.iswrongservice=false;
-	}
+	}	
 
 	//AutoComplete
 	$scope.searchdata_ = {};	
@@ -123,6 +121,7 @@ httpServices.getUsrDetails().then(function(dataz)
     //Search Studio Details Event
     $scope.searchstudio=function(form){
     	$scope.formsubmit=true;
+    	$scope.iswrongservice=false;
     	if(form.$valid)
 		{			
     		if(typeof $scope.searchdata_.service != "undefined"){    			
@@ -140,17 +139,22 @@ httpServices.getUsrDetails().then(function(dataz)
 		    		});
     			}
     			else{
+    				$scope.searchdata_.service_name ="";
     				$scope.iswrongservice=true;
+    				$scope.formsubmit=false;
     			}
     		}
     		else{
+    			$scope.searchdata_.service_name ="";
     			$scope.iswrongservice=true;
+    			$scope.formsubmit=false;
     		}			
 		}
     }
     $scope.onserviceselect = function ($item, $model, $label) {    
     	$scope.searchdata_.service_name =$label;
 	    $scope.searchdata_.service=$model;	   
+	    $scope.iswrongservice=false;
 	};
 	$scope.onlocationselect = function ($item, $model, $label) {
 		$scope.searchdata_.searchlocation=$label;
