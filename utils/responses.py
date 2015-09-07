@@ -41,4 +41,5 @@ HOURS_DICT = {0:[00,15,30,45],1:[00,15,30,45],2:[00,15,30,45],3:[00,15,30,45],  
 COUPON_RESPONSE = {'NO_COUPON':'Sorry, Coupon expired.', \
                    'INVALID_COUPON':'The coupon code is invalid', \
                    'NOT_APPLICABLE':'Sorry, Coupon code not applicable.',\
-                   'COUPON_USED':'Sorry, Coupon code not applicable.This Coupon code was already used.'}
+                   'COUPON_USED':'Sorry, Coupon code not applicable.This Coupon code was already used.',
+                   'COUPON_EXPIRED_USED':'Sorry, Coupon code not applicable.This Coupon code was already used/expired.'}

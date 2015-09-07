@@ -115,9 +115,12 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 	loginData.splitBookings = function(bookings)
 	{
 		var active_booking = [], inactive_booking = [];
+		today = new Date()
 		for(i=0;i<bookings.length;i++)
 		{
-			if(bookings[i].booking_status == 'BOOKED' && bookings[i].status_code == 'B001')
+			buking_date = new Date(bookings[i].appointment_date)
+			if(bookings[i].booking_status == 'BOOKED' && bookings[i].status_code == 'B001' && 
+			buking_date	<= today )
 			{
 				active_booking.push(bookings[i])
 			}

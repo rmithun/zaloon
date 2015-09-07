@@ -188,6 +188,22 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
+                if promo_code:
+                    coupon_detail = Coupon.objects.get(coupon_code__icontains = coupon_code, is_active = 1,  \
+                        expiry_date__gte =  datetime.today().date())
+                    if not coupon_detail:
+                        logger_error.error("Invalid promo code")
+                        logger_error.error(rzp_payment_id)
+                        url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                        ##change refund amount if neede in future
+                        resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                        transaction.rollback()
+                        return Response(data = None,status = status.HTTP_406_NOT_ACCEPTABLE)
+                    if coupon_detail.user_based == 1:
+                        CouponForUsers.objects.filter(user = user, coupon = coupon_detail,  \
+                        is_active = 1, expiry_date__gte = datetime.today().date()).update(is_active = 0,  \
+                        expiry_date = datetime.today().date(),service_updated = 'new booking',  \
+                        updated_date_time = datetime.now())
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
@@ -596,6 +612,12 @@ class ApplyCoupon(APIView):
                 response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['NO_COUPON'])
                 return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
             else:
+                if coupon_detail.user_based == 1:
+                    is_valid = CouponForUsers.objects.filter(user = user, coupon = coupon_detail,  \
+                        is_active = 1, expiry_date__gte = datetime.today().date())
+                    if not is_valid:
+                        response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['COUPON_EXPIRED_USED'])
+                        return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
                 if coupon_detail.for_all_studios != 1:
                     is_applicable = CouponForStudios.objects.filter(studio_id = studio_id,  \
                         coupon_id = coupon_detail.id, is_active = 1)

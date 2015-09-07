@@ -38,12 +38,13 @@
                 <td  style="padding:12px 0;border-spacing:0px;text-align:left;margin:0;line-height:20px;">Hi {{first_name}},<br />
                   <span style="padding-left:50px">Thank you booking with zaloon, We hope everything was alright.</span></td>
               </tr>
-			   <tr style="border-spacing:0px;margin:0; padding:0;color:#737171;">
+			 {% if review_link %}
+         <tr style="border-spacing:0px;margin:0; padding:0;color:#737171;">
                 <td  style="padding:0px 0 24px 0;border-spacing:0px;text-align:left;margin:0;line-height:20px;">
                   <span style="padding-left:50px;font-size: 14px;">Help us serve you better, rate your experience at {{studio_name}} on {{date}}.</span></td>
               </tr>
            
-			 {% if review_link %}
+			 
 
 
               <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">

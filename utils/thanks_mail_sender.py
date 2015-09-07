@@ -47,7 +47,7 @@ def send_thanks_mail():
         bookings = BookingDetails.objects.filter(appointment_date = yesterday,   \
         booking_status = 'BOOKED', status_code = status_code, is_valid = True)
         ##log code starting
-        status_code = responses.BOOKING_CODES['EXPIRED']
+        status_code = responses.BOOKING_CODES['USED']
         for every_book in bookings:
             #code = every_book.booking_code
             studio_name = StudioProfile.objects.values('name').get(id = every_book.studio.id)

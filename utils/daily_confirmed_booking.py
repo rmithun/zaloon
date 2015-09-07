@@ -72,6 +72,10 @@ def daily_confirmed_booking():
                 obx['data'] = []
                 obj = {}
                 obj['studio_name'] = stud.studio.name
+                obj['studio_address1'] = stud.studio.address_1
+                obj['studio_address2'] = stud.studio.address_2
+                obj['studio_area'] = stud.studio.area
+                obj['studio_city'] = stud.studio.city
                 obj['booking_id'] = stud.id
                 obj['services_booked'] = services[:]
                 obj['appointment_date'] = today

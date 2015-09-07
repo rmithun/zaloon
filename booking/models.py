@@ -36,6 +36,7 @@ class Coupon(models.Model):
 	maximum_discount = models.PositiveIntegerField()
 	is_one_time = models.BooleanField()
 	is_active = models.BooleanField()
+	user_based = models.BooleanField() # 1- user bases 0 - open to all
 	coupon_type = models.CharField(max_length = 10)
 	discount_value = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
@@ -44,6 +45,17 @@ class Coupon(models.Model):
 	def __unicode__(self):
 		return self.coupon_code
 	
+class CouponForUsers(models.Model):
+
+	"""table for coupon applicable users"""
+
+	coupon = models.ForeignKey(Coupon, related_name = "coupon_for_user")
+	user = models.ForeignKey(User, related_name = "user_have_coupon")
+	is_active = models.BooleanField()
+	expiry_date = models.DateField()
+	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
 
 class CouponForStudios(models.Model):
 
