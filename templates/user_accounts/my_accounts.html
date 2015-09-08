@@ -49,7 +49,7 @@
     <div class="summary-panel">   
       <h3>Summary</h3>
       <div class="col-sm-6 col-xs-6 summary">
-        <h4>{%verbatim%}{{expired_bookings.length}}{%endverbatim%}</h4><span>Booked</span>      
+        <h4>{%verbatim%}{{expired_bookings.length}}{%endverbatim%}</h4><span>Used</span>      
       </div>
       <div class="col-sm-6 col-xs-6 summary">
         <h4>{%verbatim%}{{active_bookings.length}}{%endverbatim%}</h4><span>Upcoming</span>     
@@ -114,8 +114,8 @@
   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Booking</a></li>
-      <li role="presentation"><a ng-click="tabx = 2" aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
+      <li role="presentation"  style="cursor:pointer;" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Booking</a></li>
+      <li role="presentation" style="cursor:pointer;"><a ng-click="tabx = 2" aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
       </ul>
 
       <!-- Tab panes -->
@@ -219,7 +219,7 @@
     <div class="modal-dialog">
     <div class="modal-content signup">
      <div class="modal-header modal-booking-header">
-     <button type="button" class="close" data-dismiss="modal">&times;</button> 
+     <button type="button" class="close" ng-click="clearreviewdata()" data-dismiss="modal">&times;</button> 
     
     </div> 
     <div class="modal-body register" ng-if="is_adding ==1">
@@ -234,7 +234,7 @@
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 ">Your Rating</label>
           <div class="col-md-7 col-sm-8 col-xs-11">
-          <rating ng-model="rate" max="5" readonly="isReadonly"  on-leave="overStar = null"></rating>
+          <rating ng-model="review_data.rate" max="5" readonly="isReadonly"  on-leave="overStar = null"></rating>
           </div>
         </div>
       </div>
@@ -244,7 +244,7 @@
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 ">Your Review</label>
           <div class="col-md-7 col-sm-8 col-xs-11">
-          <textarea name="" ng-model="comment" type="text" class="form-control"></textarea>
+          <textarea name="" ng-model="review_data.comment" type="text" class="form-control"></textarea>
           </div>
         </div>
       </div>

@@ -394,7 +394,7 @@ class AddReviews(CreateAPIView):
             data = self.request.DATA
             booking_id = data['booking_id']
             comment = data['comment']
-            rating = data['rating']
+            rating = data['rate']
             user = self.request.user
             logger_booking.info("Review data by user- "+ user.email +" -- " +str(data))
             is_used = BookingDetails.objects.values('status_code','studio_id','is_reviewed').get(Q(id = booking_id),  \

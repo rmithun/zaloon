@@ -1512,22 +1512,27 @@ $(document).on("click", ".reviewbtn", function () {
     });  
 
 
+$scope.review_data = {}
 $scope.is_adding = 0
+$scope.clearreviewdata = function()
+{
+    $scope.review_data['comment'] = ""
+}
 $scope.add_review = function()
 {
     
-$scope.review_data = {}
-   $sccope.review_data['booking_id'] = $scope.booking_id
+   $scope.review_data['booking_id'] = $scope.booking_id
     $scope.is_adding = 1
-    httpServices.addReview(review_data).then(function(rdata)
+    httpServices.addReview($scope.review_data).then(function(rdata)
     {
         $scope.is_adding = 0
+        $scope.review_data = {}
         $('#reviewmodal').modal('hide')
         $scope.titleMsg = 'Successfully added review'; 
         $scope.review_message = 'Your rating and review successfully noted'; 
         console.log(rdata)
         lodash.find($scope.expired_bookings,function(booking) 
-            { if(booking['id'] == review_data['booking_id'])
+            { if(booking['id'] == $scope.review_data['booking_id'])
                 {
                     booking['is_reviewed'] = 1
                 }
