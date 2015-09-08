@@ -251,8 +251,7 @@ $scope.bindstudio=function(data){
         autozoom();
     }
     else{
-        var templocation=getlatlong($scope.searchdata.location)
-        plotmarker(templocation.latitude,templocation.longitude);
+        getlatlong($scope.searchdata.location)        
     }
     $scope.totalItems = $scope.filteredstudio.length;
 }
@@ -262,9 +261,9 @@ $scope.bindstudio=function(data){
         var geocoder =  new google.maps.Geocoder();
         geocoder.geocode( { 'address': location}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                obj.latitude=results[0].geometry.location.lat();
-                obj.longitude=results[0].geometry.location.lng();
-              console.log(results[0].geometry.location.lat() + " " +results[0].geometry.location.lng())
+                obj['latitude']=results[0].geometry.location.lat();
+                obj['longitude']=results[0].geometry.location.lng();
+                plotmarker(obj.latitude,obj.longitude)              
             }
             else{
                 geocoder.geocode( { 'address': "India"}, function(res, stu) {
@@ -275,23 +274,25 @@ $scope.bindstudio=function(data){
                 });
             }
         });
-        return obj;
+        
     }
     function plotmarker(latitude,longitude){
+        google.maps.event.trigger($scope.map, 'resize');
         var marker = new google.maps.Marker({
                 map: $scope.map,
                 position: new google.maps.LatLng(latitude, longitude)            
             });        
             $scope.markers.push(marker);
-            var latlong = new google.maps.LatLng(studio.latitude, studio.longitude);
+            var latlong = new google.maps.LatLng(latitude, longitude);
             latlongcollection.push(latlong);
+            $scope.map.fitBounds(bounds);
+            autozoom();
     }
 
     function getdistance(key, lat, long) {
         var request = { origin: new google.maps.LatLng(lat, long), destination: $scope.searchdata.location, travelMode: google.maps.DirectionsTravelMode.DRIVING };
         directionsService.route(request, function (response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-                console.log(response.routes[0].legs[0].distance.text);
+            if (status == google.maps.DirectionsStatus.OK) {                
                 $scope.studio[key].distance = parseFloat(response.routes[0].legs[0].distance.text);
                 $scope.$apply();
             }
@@ -504,12 +505,8 @@ $scope.bindstudio=function(data){
             $('.header-tabs').removeClass('stick-lap');
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
             $scope.reviewPage = 1;
-            $scope.directionlocation=$scope.searchdata.location;
-            //var page = Math.floor($scope.selectedstudio.studio_review.length / 10);            
-            //page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
-            //$scope.reviewtotalpage = page;            
-            serviceheight= $('.service-list').height();
-            console.log(serviceheight);
+            $scope.directionlocation=$scope.searchdata.location;            
+            serviceheight= $('.service-list').height();            
             $scope.shopdistance = $scope.selectedstudio.distance;            
             setTimeout(function(){
                 removemarker();                
@@ -517,11 +514,16 @@ $scope.bindstudio=function(data){
             },300);
             setTimeout(function () {                
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
-                console.log(top);
             }, 500);
             httpServices.getServicebyid({id:id}).then(function(res)
             {                               
                 $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);
+                console.log(res['service_details'].data[0].studio_review)
+                $scope.selectedstudio.studio_review=res['service_details'].data[0].studio_review;
+                var page = Math.floor($scope.selectedstudio.studio_review.length / 10);   
+                //console.log(page)
+                page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
+                $scope.reviewtotalpage = page;        
             },function()
             {
                 console.log("Try again to get service")
@@ -543,12 +545,9 @@ $scope.bindstudio=function(data){
         $('.service-overlay').hide();
         setTimeout(function () {           
             var tempheight=serviceheight;     
-            serviceheight=$('.service-list').height();
-            //console.log(tempheight);
-            console.log(serviceheight);
+            serviceheight=$('.service-list').height();            
                 top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
             }, 1000);        
-        console.log($scope.servicelist);
     }
 
     $scope.easyscroll = function (clsname,tab) {   
@@ -716,10 +715,10 @@ $scope.bindstudio=function(data){
         }         
         //$scope.studio=[];
         //$scope.filteredstudio=[];  
-        $scope.searchicon=false;
+        $scope.searchicon=false;        
         removemarker();
-        var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location,'servicename':$scope.searchdata.servicename};
-        console.log(obj)
+        clearlatlongbound();
+        var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location,'servicename':$scope.searchdata.servicename};        
         $('#lister').hide();
         $('#loading').show();
         httpServices.getstudioDetails(obj).then(function(data)
@@ -765,6 +764,7 @@ $scope.bindstudio=function(data){
                 });
         }
         else{
+            console.log(putResultService.getresult())
            data=putResultService.getresult(); 
            $scope.bindstudio(data);
         }

@@ -350,10 +350,8 @@
                 <!-- <div  ng-if="which_device"><a ng-click="openMap()">Open map</a></div> -->
             </div>
             <div class="review-detail">
-                <h3>Reviews</h3>
-                <span ng-if="selectedstudio.studio_review.length == 0" class="reviewtotal">No reviews yet</span>
-                <span ng-if="selectedstudio.studio_review.length > 0" class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} reviews</span>
-                
+                <h3>Reviews</h3>                
+                <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} review(s)</span>                
                 <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
 
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
