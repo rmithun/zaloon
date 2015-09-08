@@ -232,7 +232,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
 
 $scope.bindstudio=function(data){ 
     $scope.studio=[];
-    $scope.filteredstudio=[];   
+    $scope.filteredstudio=[]; 
+    console.log(data)  
     if(data.length>0){ 
     angular.forEach(data, function (value, key) {
             $scope.studio.push(value);
@@ -250,22 +251,41 @@ $scope.bindstudio=function(data){
         autozoom();
     }
     else{
-        getlatlong($scope.searchdata.location)
+        var templocation=getlatlong($scope.searchdata.location)
+        plotmarker(templocation.latitude,templocation.longitude);
     }
     $scope.totalItems = $scope.filteredstudio.length;
 }
 
-function getlatlong(location){
-    var geocoder =  new google.maps.Geocoder();
-    geocoder.geocode( { 'address': location}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          console.log(results[0].geometry.location.lat() + " " +results[0].geometry.location.lng())
-        }
-        else{
-            
-        }
-    });
-}
+    function getlatlong(location){
+        var obj={};
+        var geocoder =  new google.maps.Geocoder();
+        geocoder.geocode( { 'address': location}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                obj.latitude=results[0].geometry.location.lat();
+                obj.longitude=results[0].geometry.location.lng();
+              console.log(results[0].geometry.location.lat() + " " +results[0].geometry.location.lng())
+            }
+            else{
+                geocoder.geocode( { 'address': "India"}, function(res, stu) {
+                    if (stu == google.maps.GeocoderStatus.OK) {
+                        obj.latitude=res[0].geometry.location.lat();
+                        obj.longitude=res[0].geometry.location.lng();
+                    }
+                });
+            }
+        });
+        return obj;
+    }
+    function plotmarker(latitude,longitude){
+        var marker = new google.maps.Marker({
+                map: $scope.map,
+                position: new google.maps.LatLng(latitude, longitude)            
+            });        
+            $scope.markers.push(marker);
+            var latlong = new google.maps.LatLng(studio.latitude, studio.longitude);
+            latlongcollection.push(latlong);
+    }
 
     function getdistance(key, lat, long) {
         var request = { origin: new google.maps.LatLng(lat, long), destination: $scope.searchdata.location, travelMode: google.maps.DirectionsTravelMode.DRIVING };
@@ -706,10 +726,10 @@ function getlatlong(location){
         {
             $('#lister').show();
             $('#loading').hide();
-            $scope.bindstudio(data.studio_details.data);
             $cookies.putObject('searchdata',obj,{path:'/'});                     
             putResultService.setresult(data.studio_details.data);
-            
+            $scope.bindstudio(data.studio_details.data);
+                    
         },function()
         {
             console.log("Try again to get service")
@@ -1495,10 +1515,9 @@ $(document).on("click", ".reviewbtn", function () {
 $scope.is_adding = 0
 $scope.add_review = function()
 {
-    var review_data = {}
-    review_data['comment'] = $scope.comment
-    review_data['rating'] = $scope.rate
-    review_data['booking_id'] = $scope.booking_id
+    
+$scope.review_data = {}
+   $sccope.review_data['booking_id'] = $scope.booking_id
     $scope.is_adding = 1
     httpServices.addReview(review_data).then(function(rdata)
     {
