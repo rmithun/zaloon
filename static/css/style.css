@@ -1103,20 +1103,25 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 .list-view{
   top:0;
 }
-
+.fbmobile{
+  color:#fff;
+  background-color: #F06370;
+  padding: 12px 17px 15px 17px;
+  font-size:20px;
+}
 .btnmore :first-child{background:none;position:inherit;width:30px;}
 .navigation-bar-right > .btn{min-width:40px;padding:14px;}
 .btn-facebook-small.icon-socialmedia-08:before{font-size:18px;}
 
   .searchpanel{ padding:20px 15px; border: 0; }
-  .searchheader .navigation{padding:0 20px 0 0;background: #F06370;border-top:0px;height:55px;}
+  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;height:55px;}
   .searchdevice{position: absolute;width: 100%; height: auto; top: 55px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display: none;}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch{border-left: 1px solid #D23D4B;}
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 13px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
   
-  .navigation-brand .logo{margin-left:10px;}
+  .navigation-brand .logo{margin-left:10px;margin-top: 4px;}
   
 	p { font-size: 14px; line-height: 25px; }  
 
@@ -1221,6 +1226,12 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 .carousel-image{
   height: 230px;
 }
+.fbmobile{
+  color:#fff;
+  background-color: #F06370;
+  padding: 13px 17px 14px 17px;
+  font-size:20px;
+}
 .btn-toolbars a.btn{  min-width: 40px;}
 
 .list-item-container .list-item h4{width: 130px;}
@@ -1281,6 +1292,20 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 
 /* Tablet device Landscape 1024px and 768px */
 @media (min-width: 768px) {
+  .fbmobile{
+  color:#fff;
+  background-color: #F06370;
+  padding: 18px 17px 16px 17px;
+  font-size:20px;
+}
+li.fbbutton{
+  border: :0;
+  color: #fff !important;
+}
+li.fbbutton:hover{
+  border: :0;
+  color: #fff !important;
+}
 .modal-dialog{ margin: 20% auto;}
 .payment-wrapper .panel-default .panel-title{font-size:13px;}
 	p { font-size:12px; line-height:25px; }  
@@ -1298,17 +1323,17 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
    .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 16px 13px; text-align: center;color:#fff;}
   
   .searchpanel{ padding:20px 15px; border: 0; }
-  .searchheader .navigation{padding:0 20px 0 0;background: #F06370;border-top:0px;}
+  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;}
   .searchdevice{position: absolute;width: 100%; height: auto; top: 60px; padding-right: 0; background-color: #F1F1F1; z-index: 2; display: none;/*Jawahar*/}
   .searchpanel .btn{width:100%;}
-  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding:17px 13px 16px 13px; text-align: center;color:#fff;}
+  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding:20px 13px 14px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
   .navigation-bar li.navsearch a:hover{background-color: #e7e7e7;  color: #1BBC9B;}
   .moresearch{background:none;border:none;color:#fff;border-left: 1px solid #D23D4B;border-right: 1px solid #D23D4B;}
-  .moresearch >.btnmore{background:none;color:#fff; padding: 21px 7px 15px 17px; min-width: 54px;}
+  .moresearch >.btnmore{background:none;color:#fff; padding: 21px 7px 17px 17px; min-width: 54px;}
   .moresearch >.btnmore:hover{ background-color: #e7e7e7;color:#1BBC9B;}
   .moresearch >.btnmore.active { background-color: #F1F1F1;color: #1BBC9B;}
-  .navigation-brand .logo{margin-left:15px;}
+  .navigation-brand .logo{margin-left:15px;margin-top: 7px;}
   
 	 .navigation-bar-right >.btn {  min-width: 40px;  padding: 14px;}
 	 .btnmore :first-child { background: none; position: inherit; width: 30px;}

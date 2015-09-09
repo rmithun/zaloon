@@ -22,7 +22,7 @@
                     <a style="cursor:pointer;" class="" ng-class="{'active': searchicon == true}"><span class="glyphicon glyphicon-search"></span></a>
                 </li>
                 <li class="moresearch" id="morefilter">
-                    <button class="btn btnmore" ng-click="clkmore()">
+                    <button class="btn btnmore" ng-class="{'active': morefilter == true}" ng-click="clkmore()">
                         <i class="glyphicon glyphicon-filter"></i><span id="devicefilter" class="hidden-xs hidden-sm">More</span>
                     </button>
 
@@ -115,8 +115,8 @@
                 </li>
 
                     <!-- for mobile-->
-                <li ng-show="is_logged == 0" class="hidden-md hidden-lg">
-                    <button data-ng-click='fetch()' class="btn btn-block btn-social btn-facebook" style="width:34px;">
+                <li ng-show="is_logged == 0" class="fbbutton hidden-md hidden-lg">
+                    <button data-ng-click='fetch()' class="btn btn-block fbmobile" style="width:34px;">
                         <i class="fa fa-facebook"></i>
                     </button>
                 </li>
@@ -212,7 +212,8 @@
                             <div class="landmark_details">{%verbatim%}{{stu.landmark}}{%endverbatim%}</div>
                             <div class="sub-line-1">
                                 {%verbatim%}{{stu.type_desc}}{%endverbatim%}
-                                <img class="image loaded staricon star1 pull-right" alt="" /></div>
+                                
+                                <span class="image loaded staricon star{%verbatim%}{{stu.rating}}{%endverbatim%} pull-right"></span></div>
                             <div class="sub-line-2" style="text-transform:none;">
                                 <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
                                 <span class="price circlebg">
@@ -351,10 +352,10 @@
             </div>
             <div class="review-detail">
                 <h3>Reviews</h3>                
-                <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} review(s)</span>                
+                <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} review(s)</span>                  
                 <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
 
-                    <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><img class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></div>
+                    <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><span class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></span></div>
                     <p>{%verbatim%}{{rev.comment}}{%endverbatim%}</p>
                 </div>
                 <span ng-if="(selectedstudio.studio_review).length <1;" class="reviewer"><p>No reviews yet!</p></span>
