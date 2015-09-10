@@ -68,7 +68,7 @@ class StudioReviewSerializer(serializers.ModelSerializer):
 		model = StudioReviews
 		fields = ('user','rating','comment','is_active', 'updated_date_time')
 
-class AmenitiesSerializer(serializers.ModelSerializer):
+"""class AmenitiesSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Amenities
 		fields = ('amenity_name', 'is_active')
@@ -78,7 +78,7 @@ class StudioAmenitiesSerializer(serializers.ModelSerializer):
 	amenity = AmenitiesSerializer()
 	class Meta:
 		model = StudioAmenities
-		fields = ('studio_profile', 'amenity','is_active')
+		fields = ('studio_profile', 'amenity','is_active')"""
 
 class StudioKindSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -145,21 +145,21 @@ class StudioActivitiesSerializer(serializers.ModelSerializer):
 		model = StudioServices
 		fields = ('id', 'studio', 'activity', 'is_active')
 
-class PaymentModeSerializer(serializers.ModelSerializer):
+"""class PaymentModeSerializer(serializers.ModelSerializer):
 
-	"""serializer to get list of available payment modes"""
+	serializer to get list of available payment modes
 	class Meta:
 		model = PaymentModes
-		fields = ('id', 'mode', 'description', 'is_active')
+		fields = ('id', 'mode', 'description', 'is_active')"""
 
 class StudioAccountDetailsSerializer(serializers.ModelSerializer):
 
 	"""serializer to get the studio account details"""
 	studio = StudioProfileSerializer()
-	mode_of_payment = PaymentModeSerializer()
+	#mode_of_payment = PaymentModeSerializer()
 	class Meta:
 		model = StudioAccountDetails
-		fields = ('id', 'studio', 'mode_of_payment', 'bank_name', 'bank_branch',  \
+		fields = ('id', 'studio', 'bank_name', 'bank_branch',  \
 			'bank_ifsc', 'bank_city', 'bank_acc_number', 'min_deposit', 'max_deposit'
 			'trasaction_percent')
 
@@ -178,8 +178,8 @@ class StudioInvoicesSerializer(serializers.ModelSerializer):
 	studio = StudioProfileSerializer()
 	class Meta:
 		model = StudioInvoices
-		fields = ('id', 'studio', 'amount_to_be_paid', 'last_payment_amount', \
-			'last_payment_date', 'payment_requested')
+		fields = ('id', 'studio', 'amount_to_be_paid', 'total_booking', \
+			'fee_amount', 'total_booking_amount')
 
 class PasswordResetSerializer(serializers.ModelSerializer):
 
@@ -196,19 +196,19 @@ class CloseDatesSerializer(serializers.ModelSerializer):
 		model  = CloseDates
 		fields = ('id', 'closed_on_day', 'closed_on_desc')
 
-class StudioClosedDetailsSerializer(serializers.ModelSerializer):
+"""class StudioClosedDetailsSerializer(serializers.ModelSerializer):
 
-	"""studio closed on details"""
+	studio closed on details
 	class Meta:
 		model = StudioClosedDetails
 		fields = ('id', 'closed_on', 'studio', 'is_active')
 
 class StudioClosedFromTillSerializer(serializers.ModelSerializer):
 
-	"""serializer to get details of studio long closed"""
+	serializer to get details of studio long closed
 	class Meta:
 		model = StudioClosedFromTill
 		fields = ('id', 'studio', 'closed_from_date', 'closed_till_date',  \
-			'is_active')
+			'is_active')"""
 
 

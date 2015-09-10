@@ -10,8 +10,8 @@ class StudioTypeAdmin(admin.ModelAdmin):
 class StudioKindAdmin(admin.ModelAdmin):
 	list_display = ['kind_desc']
 	
-class AmenitiesAdmin(admin.ModelAdmin):
-	list_display = ['amenity_name']
+#class AmenitiesAdmin(admin.ModelAdmin):
+#	list_display = ['amenity_name']
 
 class StudioGroupAdmin(admin.ModelAdmin):
 	list_display = ['group_name']
@@ -34,7 +34,10 @@ class StudioServicesAdmin(admin.ModelAdmin):
 class StudioServicesTypesAdmin(admin.ModelAdmin):
 	list_display = ['studio_profile','service_type']
 
+class StudioAccountDetailsAdmin(admin.ModelAdmin):
+	list_display = ['bank_name']
 
+admin.site.register(StudioAccountDetails, StudioAccountDetailsAdmin)
 admin.site.register(StudioServiceTypes, StudioServicesTypesAdmin)
 admin.site.register(StudioKind,StudioKindAdmin)
 admin.site.register(Studio)
@@ -44,8 +47,8 @@ admin.site.register(Service,ServiceAdmin)
 admin.site.register(ServiceType,ServiceTypeAdmin)
 admin.site.register(StudioGroup,StudioGroupAdmin)
 admin.site.register(StudioType, StudioTypeAdmin)
-admin.site.register(StudioAmenities)
-admin.site.register(Amenities,AmenitiesAdmin)
+#admin.site.register(StudioAmenities)
+#admin.site.register(Amenities,AmenitiesAdmin)
 admin.site.register(StudioPicture)
 admin.site.register(StudioClosedDetails)
 admin.site.register(CloseDates,CloseDatesAdmin)

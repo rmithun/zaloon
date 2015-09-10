@@ -194,9 +194,9 @@ class StudioProfile(models.Model):
 			   field.upload_to = 'img_gallery/%d' % self.id
         super(Studio, self).save()"""
     
-
+""""
 class Amenities(models.Model):
-	"""list of all amenities"""
+	list of all amenities
 	amenity_name= models.CharField(max_length = 30)
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
@@ -205,12 +205,12 @@ class Amenities(models.Model):
 		return self.amenity_name
 
 class StudioAmenities(models.Model):
-	"""list of available amenities in studio"""
+	list of available amenities in studio
 	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_amenities")
 	amenity = models.ForeignKey(Amenities, related_name = "amenity_available")
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
+	updated_date_time = models.DateTimeField(default = datetime.now())"""
 
 class StudioServiceTypes(models.Model):
 	"""list of available activities in studio"""
@@ -234,21 +234,21 @@ class StudioServices(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
-
+""""
 class StudioStaffCounts(models.Model):
 
-	"""table holding studio staff count on normal day and holiday day"""
+	table holding studio staff count on normal day and holiday day
 	studio_profile = models.OneToOneField(StudioProfile, related_name = "studio_staff_count")
 	normal_day = models.PositiveIntegerField()
 	holiday = models.PositiveIntegerField()
 	festive_season = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
-	
+	updated_date_time = models.DateTimeField(default = datetime.now())"""
 
+""""
 class PaymentModes(models.Model):
 
-	"""payment modes available"""
+	payment modes available
 
 	mode = models.CharField(max_length = 40)
 	description = models.CharField(max_length = 75)
@@ -256,21 +256,22 @@ class PaymentModes(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	def __unicode__(self):
-		return self.mode
+		return self.mode"""
+
 
 class StudioAccountDetails(models.Model):
 
 	"""studio bank and payment details"""
 	studio = models.OneToOneField(StudioProfile, related_name = "studio_account_detail")
-	mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_account")
+	#mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_account")
 	bank_name = models.CharField(max_length = 120)
 	bank_branch = models.CharField(max_length = 120)
 	bank_ifsc = models.CharField(max_length = 25)
 	bank_city = models.CharField(max_length = 40)
 	bank_acc_number = models.CharField(max_length = 120)
-	min_deposit = models.PositiveIntegerField()
-	max_deposit = models.PositiveIntegerField()
-	transaction_percent = models.PositiveIntegerField()
+	#min_deposit = models.PositiveIntegerField()
+	#max_deposit = models.PositiveIntegerField()
+	#transaction_percent = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -279,10 +280,11 @@ class StudioPayment(models.Model):
 
 	"""all payement details for a studio"""
 	studio = models.ForeignKey(StudioProfile, related_name = "studio_payment_detail")
-	mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_payments")
+	#mode_of_payment = models.ForeignKey(PaymentModes, related_name = "payment_mode_for_studio_payments")
 	amount_paid = models.PositiveIntegerField()
 	paid_by = models.CharField(max_length = 120) ##has to be foreign key in future
 	paid_date = models.DateTimeField(default = datetime.now())
+	disputed = models.BooleanField(default = 0) # 1 - disputed
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -292,9 +294,10 @@ class StudioInvoices(models.Model):
 	"""all invoice details for studio"""
 	studio = models.ForeignKey(StudioProfile, related_name = "studio_invoice_detail")
 	amount_to_be_paid = models.PositiveIntegerField()
-	last_payment_amount = models.PositiveIntegerField()
-	last_payment_date = models.DateTimeField()
-	payment_requested = models.BooleanField(default = 0)
+	total_booking = models.PositiveIntegerField()
+	fee_amount = models.PositiveIntegerField()
+	invoice_date = models.DateField(default = datetime.now().date())
+	total_booking_amount = models.PositiveIntegerField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -328,16 +331,16 @@ class StudioClosedDetails(models.Model):
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
-
+"""
 class StudioClosedFromTill(models.Model):
 
-	"""if studio is closed for to many days"""
+	if studio is closed for to many days
 	studio = models.ForeignKey(StudioProfile, related_name = "studio_long_closed_details")
 	closed_from_date = models.DateField()
 	closed_till_date = models.DateField()
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
-	updated_date_time = models.DateTimeField(default = datetime.now())
+	updated_date_time = models.DateTimeField(default = datetime.now())"""
 
 
 

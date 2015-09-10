@@ -29,7 +29,7 @@ from django.db import transaction
 
 #application imports
 from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus, DailyBookingConfirmation
-from studios.models import StudioProfile, Studio
+from studios.models import StudioProfile, Studio,StudioInvoices
 from utils import responses, generic_utils
 
 
@@ -44,18 +44,18 @@ Name | Mobile | Booking id | Services Booked | From Time | To Time | Booking Cod
 """
 
 today = datetime.today().date()
+till_hour = datetime.now().hour
 buks = None
 def daily_confirmed_booking():
     try:
         ##get all used booking for the day
-        #import pdb;pdb.set_trace();
         time = datetime.now().replace(hour = 13, minute = 00)
-        if datetime.now().hour < 13:
-            bookings = BookingDetails.objects.filter(appointment_date = today,  \
+        if till_hour < 13:
+            bookings = BookingDetails.objects.filter(  \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
             appointment_start_time__lt = time)
         else:
-            bookings = BookingDetails.objects.filter(appointment_date = today,  \
+            bookings = BookingDetails.objects.filter(  \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
             appointment_start_time__gte = time)
         studios_visited = []
@@ -63,7 +63,8 @@ def daily_confirmed_booking():
         for stud in bookings:
             #if stud not in studios_visited:
             try:
-                services_booked = BookingServices.objects.filter(booking_id = stud.id)
+                services_booked = BookingServices.objects.filter(booking_id = \
+                 stud.id)
                 services = []
                 for sun in services_booked:
                     services.append(sun.service.service_name)
@@ -77,30 +78,38 @@ def daily_confirmed_booking():
                 obj['studio_area'] = stud.studio.area
                 obj['studio_city'] = stud.studio.city
                 obj['booking_id'] = stud.id
+                obj['user'] = stud.user.first_name
                 obj['services_booked'] = services[:]
                 obj['appointment_date'] = today
                 obj['appointment_start_time'] = stud.appointment_start_time
                 obj['appointment_end_time'] = stud.appointment_end_time
                 obj['booking_code'] = stud.booking_code
                 obj['booking_amount'] = stud.purchase.purchase_amount
+                obj['actual_amount'] = stud.purchase.actual_amount
                 obj['mobile_no'] = stud.mobile_no
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:
+                    obx['account_number'] = stud.studio.studio_account_detail.bank_acc_number
+                    obx['bank_name'] = stud.studio.studio_account_detail.bank_name
+                    obx['ifsc_code'] = stud.studio.studio_account_detail.bank_ifsc
+                    obx['total_amount'] = obj['booking_amount']
+                    obx['total_booking_amount'] = stud.purchase.actual_amount
+                    obx['fee_amount'] = obj['booking_amount'] -  \
+                    (obj['booking_amount']/int(stud.studio.commission_percent))
                     studios_visited.append(stud.studio_id)
                     to_print[stud.studio_id] = obx
                 else:
+                    to_print[stud.studio_id]['total_booking_amount'] = to_print[stud.studio_id]['total_booking_amount'] +  \
+                    stud.purchase.actual_amount
+                    to_print[stud.studio_id]['total_amount'] = to_print[stud.studio_id]['total_amount'] +  \
+                        obj['booking_amount']
+                    to_print[stud.studio_id]['fee_amount'] =  (to_print[stud.studio_id]['fee_amount'] + obj['booking_amount'] -  \
+                    (obj['booking_amount']/int(stud.studio.commission_percent)))
                     to_print[stud.studio_id]['data'].append(obj)
             except Exception,jsonerr:
-                logger_error.error(traceback.format_exec())
-                dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
-                    studio_id = stud['studio_id'], status = 'Fail')
-                dm_status.save()
-            else:   
-                dm_status = DailyMerchantReportStatus(booking_id = stud['id'],  \
-                    studio_id = stud['studio_id'], status = 'Fail')
-                dm_status.save()
+                logger_error.error(traceback.format_exc())
     except Exception,majErr:
-        logger_error.error(traceback.format_exec())
+        logger_error.error(traceback.format_exc())
     else:
         logger_booking.info(" data to render  "+str(to_print))
         return to_print
@@ -108,8 +117,11 @@ def daily_confirmed_booking():
 @transaction.commit_manually
 def render_to_pdf(template_url,data,studio):
     ##generate pdf with data
+    #import pdb;pdb.set_trace();
     try:
         template = get_template(template_url)
+        data['date'] = today
+        data['time'] = till_hour
         context = Context(data)
         html =  template.render(context)
         filename = data['todayslist']['data'][0]['studio_name'] + str(datetime.today().date())+"__bookings"
@@ -121,31 +133,32 @@ def render_to_pdf(template_url,data,studio):
             pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
         except:
             pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding="UTF-8")
+        result.close()
         if not pdf.err:
             ###get and save the pdf 
-            result = open(filename+'.pdf', 'r')
-            pdf = File(result)
+            file_ = open(filename+'.pdf', 'r')
+            pdf = File(file_)
             rep = DailyBookingConfirmation(studio_id = studio, booking_pdf = pdf,  \
-                service_updated = "daily confirm booking sender")
+                service_updated = "studio report sender")
             rep.save()
             studio_dt = StudioProfile.objects.values('studio').get(id = studio)
             studio_email = Studio.objects.values('email').get(id = studio_dt['studio'])
             try:
                 #send email
+                message  = "Please find the booking data"
                 subject = (responses.MAIL_SUBJECTS['DAILY_BOOKING_MAIL'])%(today)
-                generic_utils.sendEmail('vbnetmithun@gmail.com',subject,message)
+                generic_utils.sendEmail('vbnetmithun@gmail.com',subject,message,filename+'.pdf')
                 ##generic_utils.sendEmail(studio_email['email'],subject,message)
-                rep = DailyBookingConfirmation.filter(studio_id = studio, report_date = \
+                rep = DailyBookingConfirmation.objects.filter(studio_id = studio, report_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
             except Exception,e:
-                logger_error.error(traceback.format_exec())
+                logger_error.error(traceback.format_exc())
             ##save pdf to table
             ##location should be inside studio
-            result.close();
+            file_.close();
     except Exception,pdfrenderr:
         transaction.rollback()
-        logger_error.error(traceback.format_exec())
-        
+        logger_error.error(traceback.format_exc())
     else:
         transaction.commit()
 
@@ -156,11 +169,17 @@ def generate_pdf():
     logger_booking.info("Sent mails to %s  studios - "%(str(buks)))
     for key,data in to_generate.iteritems():
         try:
+            stud_invoice = StudioInvoices(studio_id = data['studio_id'],  \
+                amount_to_be_paid = data['total_booking_amount'],  \
+                total_booking = len(data['data']), fee_amount = data['fee_amount'],  \
+                total_booking_amount = data['total_amount'])
+            stud_invoice.save()
+            data['invoice_id'] = stud_invoice.id
             logger_booking.info("data to be rendered - "+str(key)+"---"+str(data))
             pdf_file = render_to_pdf('../templates/emails/daily_confirmed_bookings.html',  \
                {'pagesize':'A4','todayslist':data},key)
         except Exception,pdfgenrateerr:
-            logger_error.error(traceback.format_exec())
+            logger_error.error(traceback.format_exc())
 
      
 logger_booking.info("Confirmed booking script starts running  "+datetime.strftime(datetime.now(),  \

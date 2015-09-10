@@ -3,6 +3,8 @@ from datetime import datetime
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.MIMEText import MIMEText
+from email.MIMEBase import MIMEBase
+from email import Encoders
 import os, sys
 import logging
 import traceback

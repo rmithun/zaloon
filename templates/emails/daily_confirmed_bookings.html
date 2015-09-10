@@ -1,13 +1,3 @@
-{{todayslist.data.0.studio_name}}
-{%for buks in todayslist.data%}
-{{buks.booking_id}}
-{%for serv in buks.services_booked%}
-{{serv}}
-{%endfor%}
-{{buks.appointment_time}}
-{{buks.appointment_date}}
-{%endfor%}
-
 
 <html>
 <head>
@@ -78,7 +68,7 @@
 
 </head>
 <body>
-
+\
    <!-- Content for Static Frame 'footer_frame' -->
     <div class="footer" id="footer_content">Footer
 <pdf:pagenumber> of <pdf:pagecount>
@@ -106,19 +96,20 @@
             <th rowspan="3" class="billed-to" scope="col">
               <span class="title">Billed To:</span>
                 <span class="content">
-                       Naturals<br>
-                       Ramapuram,<br>
-                       Porur<br>
-                        <a class="link" href="mailto:smith@nike.com" target="_blank">naturals@porur.com</a><br>
-                        Ph 1236547890
+                       {{todayslist.data.0.studio_name}}<br>
+                       {{todayslist.data.0.studio_address_1}},
+                       {{todayslist.data.0.studio_address_2}}<br>
+                       {{todayslist.data.0.studio_area}}<br>
                 </span>
             </th>
             <th rowspan="3" scope="col" class=""> </th>
             <th rowspan="3" scope="col" class="billed-date">
-			 <span class="invoice-details"><span class="content-rgt">12-04-2015</span> <span class="title-rgt">Date :</span></span>
-             <span class="invoice-details"><span class="content-rgt">123654</span><span class="title-rgt">Invoice No# :</span></span>
-			 <span class="invoice-details"><span class="content-rgt">1236544567123</span><span class="title-rgt">Account No# :</span></span>
-			 <span class="invoice-details"><span class="content-rgt">HDFC123654</span><span class="title-rgt">IFSC Code# :</span></span>
+			 <span class="invoice-details"><span class="content-rgt">{{today}}</span> <span class="title-rgt">Date :</span></span>
+       <span class="invoice-details"><span class="content-rgt">{{till_hour}}</span> <span class="title-rgt">Bookings till time :</span></span>
+             <span class="invoice-details"><span class="content-rgt">{{invoice_id}}</span><span class="title-rgt">Invoice No# :</span></span>
+      <span class="invoice-details"><span class="content-rgt">{{todayslist.bank_name}}</span><span class="title-rgt">Bank Name :</span></span>
+			 <span class="invoice-details"><span class="content-rgt">{{todayslist.account_number}}</span><span class="title-rgt">Account No# :</span></span>
+			 <span class="invoice-details"><span class="content-rgt">{{todayslist.ifsc_code}}</span><span class="title-rgt">IFSC Code# :</span></span>
 				
             </th>
             </tr>
@@ -131,19 +122,19 @@
             <tr>
                 <th scope="col" class="bar-left">
                   <span class="title">Total Booking</span>
-                  <span class="content">25</span>
+                  <span class="content">{{todayslist.data.length}}</span>
                 </th>
                 <th scope="col" class="bar-middle">
                   <span class="title">Total Amount</span>
-                  <span class="content">2500</span>
+                  <span class="content">{{todayslist.total_booking_amount}}</span>
                 </th>
                 <th scope="col" class="bar-right">
                   <span class="title">FEE (10%)</span>
-                  <span class="content">250</span>
+                  <span class="content">{{todayslist.total_booking_amount}}</span>
                 </th>
 				<th scope="col" class="bar-paid">
                   <span class="title">AMOUNT PAID</span>
-                  <span class="blue-content">1500</span>
+                  <span class="blue-content">{{todayslist.total_booking_amount}} - {{todayslist.total_booking_amount }}</span>
                 </th>
             </tr>
         </table><!-- // Bar Section --> 
@@ -155,35 +146,30 @@
   <th class="blue-border left-align" scope="col">#</th>
     <th class="blue-border left-align" scope="col">Name</th>
     <th class="blue-border left-align" scope="col">Mobile no</th>
-    <th class="blue-border left-align" scope="col">Services</th>
-    <th class="blue-border left-align" scope="col">Booked</th>
+    <th class="blue-border left-align" scope="col">Services Booked</th>
     <th class="blue-border left-align" scope="col">Booking Code</th>
 	<th class="blue-border left-align" scope="col">Start Time</th>
 	<th class="blue-border left-align" scope="col">End Time</th>
     <th class="blue-border right-align" scope="col">Amount Paid</th>
   </tr>
+
+
+  {%for buk in todayslist.data %}
   <tr class="table-row">
     <td class="left-align">1</td>
-    <td class="left-align">Mithun</td>
-    <td class="left-align">897876567</td>
-    <td class="left-align">Haircut</td>
-	 <td class="left-align">Shaving</td>
-	  <td class="left-align">we34r5t</td>
-    <td class="left-align">12:00PM</td>
-	 <td class="left-align">12:00PM</td>
-    <td class="right-align">250</td>
+    <td class="left-align">{{buk.user.first_name}}</td>
+    <td class="left-align">{{buk.mobile_no}}</td>
+<td class="left-align">
+   {%for serv in buk.services_booked%}
+<span>{{serv}}</span>
+{%endfor%}</td> 
+    
+	  <td class="left-align">{{buk.booking_code}}</td>
+    <td class="left-align">{{buk.appointment_start_time}}</td>
+	 <td class="left-align">{{buk.appointment_end_time}}</td>
+    <td class="left-align">{{buk.actual_amount}}</td>
   </tr>
-  <tr class="table-row">
-    <td class="left-align">1</td>
-    <td class="left-align">Ja</td>
-    <td class="left-align">897876567</td>
-    <td class="left-align">Shaving</td>
-	 <td class="left-align">Shaving</td>
-	  <td class="left-align">we34r5t</td>
-    <td class="left-align">12:00PM</td>
-	 <td class="left-align">12:00PM</td>
-    <td class="right-align">1250</td>
-  </tr>
+  {%endfor%}
   
 </table> 
 

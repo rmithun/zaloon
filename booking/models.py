@@ -219,7 +219,7 @@ class DailyBookingConfirmation(models.Model):
 	report_date = models.DateField(default = datetime.now().date())
 	booking_pdf = models.FileField(upload_to = 'reports/%Y/%m/%d')
 	mail_sent = models.BooleanField(default = 0)
-	service_updated = models.CharField(max_length = 25)
+	service_updated = models.CharField(max_length = 50)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 
