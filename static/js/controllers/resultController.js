@@ -33,7 +33,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.servicelist = [];
     $scope.selectedstudio = {};
     $scope.searchdata={};
-    $scope.serviceprice = 0;    
+    $scope.serviceprice = 0;  
+    $scope.serviceduration=0;  
     $scope.morefilter = false;
     $scope.stariconset={1:'star1',2:'star2',3:'star3',4:'star4',5:'star5'};
     $scope.studiotype = [{ id:1, name: "Salon", active: false, icon: "fa fa-scissors" }, { id:2, name: "Spa", active: false, icon: "icon icon-medical-19" }, { id:3, name: "Beauty parlor", active: false, icon: "icon icon-shopping-23" }];
@@ -505,6 +506,7 @@ $scope.bindstudio=function(data){
                $('#searchdevice').hide();
             }
             $scope.serviceprice = 0;
+            $scope.serviceduration=0;
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
@@ -518,7 +520,20 @@ $scope.bindstudio=function(data){
             $scope.reviewPage = 1;
             $scope.directionlocation=$scope.searchdata.location;            
             serviceheight= $('.service-list').height();            
-            $scope.shopdistance = $scope.selectedstudio.distance;            
+            $scope.shopdistance = $scope.selectedstudio.distance;   
+            if($scope.selectedstudio.daily_studio_closed_from == null){
+                $scope.selectedstudio.daily_studio_duration=$scope.calculate($scope.selectedstudio.opening_at,$scope.selectedstudio.closing_at);
+            }         
+            else{
+                var fn=$scope.calculate($scope.selectedstudio.opening_at,$scope.selectedstudio.daily_studio_closed_from);
+                var an=$scope.calculate($scope.selectedstudio.daily_studio_closed_till,$scope.selectedstudio.closing_at);
+                if(fn>an){
+                    $scope.selectedstudio.daily_studio_duration=fn;
+                }
+                else{
+                    $scope.selectedstudio.daily_studio_duration=an
+                }
+            }            
             setTimeout(function(){
                 removemarker();                
                 drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
@@ -528,11 +543,9 @@ $scope.bindstudio=function(data){
             }, 500);
             httpServices.getServicebyid({id:id}).then(function(res)
             {                               
-                $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);
-                console.log(res['service_details'].data[0].studio_review)
+                $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);                
                 $scope.selectedstudio.studio_review=res['service_details'].data[0].studio_review;
-                var page = Math.floor($scope.selectedstudio.studio_review.length / 10);   
-                //console.log(page)
+                var page = Math.floor($scope.selectedstudio.studio_review.length / 10);                   
                 page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
                 $scope.reviewtotalpage = page;        
             },function()
@@ -647,24 +660,61 @@ $scope.bindstudio=function(data){
                 $scope.$apply();
             }
         });        
-        //$scope.shopdistance
     }
     
-    $scope.addservice = function (service) {       
+    $scope.addservice = function (from,service) {       
         var index = lodash.findIndex($scope.servicelist, service);
         var flag = $scope.servicelist[index].flag;
-        $scope.servicelist[index].flag = !$scope.servicelist[index].flag;
-        if (flag) {            
+             
+        if (flag) {                        
             var inx=lodash.findIndex($scope.selected_service, { 'servicename': service.servicename });
+            $scope.servicelist[index].flag = !$scope.servicelist[index].flag;   
             $scope.selected_service.splice(inx, 1);
             $scope.serviceprice = $scope.serviceprice - service.price;
+            $scope.serviceduration=$scope.serviceduration-service.duration;
         }
         else 
         {   
-            $scope.selected_service.push(service);            
-            $scope.serviceprice = $scope.serviceprice + service.price;
-        }        
+            if($scope.selectedstudio.daily_studio_duration>=$scope.serviceduration+service.duration){
+                $scope.servicelist[index].flag = !$scope.servicelist[index].flag;   
+                $scope.selected_service.push(service);            
+                $scope.serviceprice = $scope.serviceprice + service.price;
+                $scope.serviceduration=$scope.serviceduration+service.duration;
+            }  
+            else{
+                if(from=="slider"){
+                    $('#serviceinfomodal').modal('show');
+                    return false;   
+                }
+                else{
+
+                }
+            }          
+        }  
+        console.log($scope.selectedstudio.daily_studio_duration+"-"+$scope.serviceduration);
     }
+
+    $scope.calculate=function(start,closed) {        
+         var time1 = start.split(':'), time2 = closed.split(':');
+         var hours1 = parseInt(time1[0], 10), 
+             hours2 = parseInt(time2[0], 10),
+             mins1 = parseInt(time1[1], 10),
+             mins2 = parseInt(time2[1], 10);
+         var hours = hours2 - hours1, mins = 0;
+         if(hours < 0) hours = 24 + hours;
+         if(mins2 >= mins1) {
+             mins = mins2 - mins1;
+         }
+         else {
+             mins = (mins2 + 60) - mins1;
+             hours--;
+         }
+         mins = mins / 60; // take percentage in 60
+         hours += mins;
+         hours = hours.toFixed(2);
+         hours=hours*60
+         return hours;
+     }
 
     //Pagination
     $scope.pagechange = function (page) {      

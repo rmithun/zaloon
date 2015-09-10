@@ -316,7 +316,7 @@
 
                     <div class="todo">
                         <ul>
-                            <li ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
+                            <li ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
                                     {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
@@ -414,6 +414,33 @@
 </div>
 </div>
 
+<div id="serviceinfomodal" class=" modal fade" role="dialog">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Duration
+        </div>
+        <div class="modal-body">
+            <div class="todo">
+                Duration
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal">Ok</button>
+            <!-- <div class="service-rate-panel col-sm-12 no-padding">
+            <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
+                <i class="icon icon-contact"></i>
+                <span class="text">₹ 240</span>
+            </div> -->
+
+        </div>
+    </div>
+</div>
+</div>
+
+
 <!-- Modal -->
 <div id="signupmodel" class=" modal fade" role="dialog">
     
@@ -449,7 +476,7 @@
         <div class="service-checkboxcolumn col-sm-12">
             <div class="todo">
                 <ul>
-                    <li ng-repeat="ser in servicelist" ng-click="addservice(ser)" ng-class="{'todo-done':ser.flag == true}">
+                    <li ng-repeat="ser in servicelist" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
                             {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>
