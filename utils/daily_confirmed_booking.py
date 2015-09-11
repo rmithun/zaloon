@@ -45,17 +45,21 @@ Name | Mobile | Booking id | Services Booked | From Time | To Time | Booking Cod
 
 today = datetime.today().date()
 till_hour = datetime.now().hour
+till_time = None
 buks = None
 def daily_confirmed_booking():
     try:
         ##get all used booking for the day
         time = datetime.now().replace(hour = 13, minute = 00)
+        global till_time,today
         if till_hour < 13:
-            bookings = BookingDetails.objects.filter(  \
+            till_time = time.time().replace(hour = 13, minute = 00)
+            bookings = BookingDetails.objects.filter( appointment_date = today, \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
             appointment_start_time__lt = time)
         else:
-            bookings = BookingDetails.objects.filter(  \
+            till_time = time.time().replace(hour = 23, minute = 59)
+            bookings = BookingDetails.objects.filter( appointment_date = today,  \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
             appointment_start_time__gte = time)
         studios_visited = []
@@ -69,14 +73,8 @@ def daily_confirmed_booking():
                 for sun in services_booked:
                     services.append(sun.service.service_name)
                 obx = {}
-                obx['studio_id'] =  stud.studio_id
                 obx['data'] = []
                 obj = {}
-                obj['studio_name'] = stud.studio.name
-                obj['studio_address1'] = stud.studio.address_1
-                obj['studio_address2'] = stud.studio.address_2
-                obj['studio_area'] = stud.studio.area
-                obj['studio_city'] = stud.studio.city
                 obj['booking_id'] = stud.id
                 obj['user'] = stud.user.first_name
                 obj['services_booked'] = services[:]
@@ -89,13 +87,20 @@ def daily_confirmed_booking():
                 obj['mobile_no'] = stud.mobile_no
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:
+                    obx['studio_id'] =  stud.studio_id
+                    obx['studio_name'] = stud.studio.name
+                    obx['studio_address1'] = stud.studio.address_1
+                    obx['studio_address2'] = stud.studio.address_2
+                    obx['studio_area'] = stud.studio.area
+                    obx['studio_city'] = stud.studio.city
                     obx['account_number'] = stud.studio.studio_account_detail.bank_acc_number
                     obx['bank_name'] = stud.studio.studio_account_detail.bank_name
                     obx['ifsc_code'] = stud.studio.studio_account_detail.bank_ifsc
                     obx['total_amount'] = obj['booking_amount']
                     obx['total_booking_amount'] = stud.purchase.actual_amount
-                    obx['fee_amount'] = obj['booking_amount'] -  \
+                    obx['paid_amount'] = obj['booking_amount'] -  \
                     (obj['booking_amount']/int(stud.studio.commission_percent))
+                    obx['fee_amount'] =  obx['total_booking_amount'] - obx['paid_amount']
                     studios_visited.append(stud.studio_id)
                     to_print[stud.studio_id] = obx
                 else:
@@ -103,8 +108,11 @@ def daily_confirmed_booking():
                     stud.purchase.actual_amount
                     to_print[stud.studio_id]['total_amount'] = to_print[stud.studio_id]['total_amount'] +  \
                         obj['booking_amount']
-                    to_print[stud.studio_id]['fee_amount'] =  (to_print[stud.studio_id]['fee_amount'] + obj['booking_amount'] -  \
+                    to_print[stud.studio_id]['paid_amount'] =  (to_print[stud.studio_id]['paid_amount']  \
+                        + obj['booking_amount'] -  \
                     (obj['booking_amount']/int(stud.studio.commission_percent)))
+                    to_print[stud.studio_id]['fee_amount'] = to_print[stud.studio_id]['total_booking_amount'] -  \
+                    to_print[stud.studio_id]['paid_amount'] 
                     to_print[stud.studio_id]['data'].append(obj)
             except Exception,jsonerr:
                 logger_error.error(traceback.format_exc())
@@ -119,12 +127,14 @@ def render_to_pdf(template_url,data,studio):
     ##generate pdf with data
     #import pdb;pdb.set_trace();
     try:
+        global till_time,today
         template = get_template(template_url)
-        data['date'] = today
-        data['time'] = till_hour
+        data['todayslist']['date'] = today
+        data['todayslist']['time'] = till_time
+        print data
         context = Context(data)
         html =  template.render(context)
-        filename = data['todayslist']['data'][0]['studio_name'] + str(datetime.today().date())+"__bookings"
+        filename = data['todayslist']['studio_name'] + str(datetime.today().date())+"__bookings"
         result = open(filename+'.pdf', 'wb')
         #result = StringIO.StringIO()
         logger_booking.info("File name "+str(filename))
@@ -148,7 +158,7 @@ def render_to_pdf(template_url,data,studio):
                 message  = "Please find the booking data"
                 subject = (responses.MAIL_SUBJECTS['DAILY_BOOKING_MAIL'])%(today)
                 generic_utils.sendEmail('vbnetmithun@gmail.com',subject,message,filename+'.pdf')
-                ##generic_utils.sendEmail(studio_email['email'],subject,message)
+                #generic_utils.sendEmail(studio_email['email'],subject,message)
                 rep = DailyBookingConfirmation.objects.filter(studio_id = studio, report_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
             except Exception,e:
@@ -165,6 +175,7 @@ def render_to_pdf(template_url,data,studio):
 
 def generate_pdf():
     to_generate = daily_confirmed_booking()
+    global buks
     buks = len(to_generate)
     logger_booking.info("Sent mails to %s  studios - "%(str(buks)))
     for key,data in to_generate.iteritems():
@@ -174,7 +185,7 @@ def generate_pdf():
                 total_booking = len(data['data']), fee_amount = data['fee_amount'],  \
                 total_booking_amount = data['total_amount'])
             stud_invoice.save()
-            data['invoice_id'] = stud_invoice.id
+            data['invoice_id'] =    stud_invoice.id
             logger_booking.info("data to be rendered - "+str(key)+"---"+str(data))
             pdf_file = render_to_pdf('../templates/emails/daily_confirmed_bookings.html',  \
                {'pagesize':'A4','todayslist':data},key)
