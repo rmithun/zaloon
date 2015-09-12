@@ -1590,7 +1590,7 @@ $scope.add_review = function()
         $scope.review_data = {}
         $('#reviewmodal').modal('hide')
         $scope.titleMsg = 'Successfully added review'; 
-        $scope.review_message = 'Your rating and review successfully noted'; 
+        $scope.review_message = 'Thanks for your valuable rating!.It will help us serve you better.'; 
         console.log(rdata)
         lodash.find($scope.expired_bookings,function(booking) 
             { if(booking['id'] == $scope.review_data['booking_id'])

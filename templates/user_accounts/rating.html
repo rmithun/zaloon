@@ -48,11 +48,11 @@
 <div class="getdetails-panel-wrapper">
 {%if can_review %}   
 <div class="container-fluid getpanel">
- 
+ <span>Help us serve you better by rating your experience. We appreciate your feedback!</span>
     <div class="row">
       
         <div class="form-group">
-          <label class="col-md-4 col-sm-4 col-xs-12 ">Rating</label>
+          <label class="col-md-4 col-sm-4 col-xs-12 ">Your Rating</label>
           <div class="col-md-8 col-sm-8 col-xs-11">
           <span class="rating"><rating ng-model="rate" max="5" readonly="isReadonly"  on-leave="overStar = null"></rating></span>
           </div>
@@ -61,7 +61,7 @@
     </div>    
     <div class="row paddtop15">     
         <div class="form-group">
-          <label class="col-md-4 col-sm-4 col-xs-12 ">Comment</label>
+          <label class="col-md-4 col-sm-4 col-xs-12 ">Your Comment</label>
           <div class="col-md-8 col-sm-8 col-xs-11">
           <textarea  ng-model="comment" type="text" class="form-control"></textarea>
           </div>
@@ -78,7 +78,7 @@
  <p> <div class="row">
       
         <div class="form-group">
-          <label class="col-md-4 col-sm-4 col-xs-12 ">You have added your review</label>
+          <label class="col-md-4 col-sm-4 col-xs-12 ">Thanks for your valuable rating!.It will help us serve you better.</label>
         </div></p>
  {%endif%}
 </div>    

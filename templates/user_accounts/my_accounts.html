@@ -1,5 +1,5 @@
   <div class="finder-overlay" style="display:none;">
-      <div style="position:absolute;color:#000;top:50%;width:100%;text-align:center;">
+      <div style="position:absolute;color:#000;top:50%;wid`:100%;text-align:center;">
         <!--<i class="fa fa-spinner fa-spin"></i>-->
         <div class="la-line-scale" style="left:48%;color: #f06471;">
     <div></div>
@@ -114,7 +114,7 @@
   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation"  style="cursor:pointer;" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Booking</a></li>
+      <li role="presentation"  style="cursor:pointer;" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Active Booking</a></li>
       <li role="presentation" style="cursor:pointer;"><a ng-click="tabx = 2" aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
       </ul>
 
@@ -227,7 +227,7 @@
     </div>
       <div class="modal-body register" ng-if="is_adding ==0">
       <div class="col-sm-12">
-         <h4 class="modal-title">Help Others, Write a review</h4>
+         <h4 class="modal-title">Help us serve you better by rating your experience. We appreciate your feedback!</h4>
       </div>         
     <div class="row">
       <div class="col-sm-12 paddtop10">
@@ -275,9 +275,9 @@
     <div class="modal-content signup">
      <div class="modal-header modal-register-header">
      <button type="button" ng-hide="is_cancelling  == 1"  class="close" ng-click="clearcancel()">&times;</button> 
-     <h4 class="modal-title" ng-if="is_cancelling  == 0" >Do you really want to cancel the booking?</h4>
-     <h4 class="modal-title" ng-if="is_cancelling  == 1">We are cancelling</h4>
-     <h4 class="modal-title" ng-if="has_cancelled == 1" >Sucess!</h4>
+     <h4 class="modal-title" ng-if="is_cancelling  == 0" >Oops!! Do you really want to cancel your booking?</h4>
+     <h4 class="modal-title" ng-if="is_cancelling  == 1">Please wait while we cancel your booking.</h4>
+     <h4 class="modal-title" ng-if="has_cancelled == 1" >Cancelled!</h4>
      <h4 class="modal-title" ng-if="has_cancelled == 0">Failed</h4>
     </div> 
       <div ng-if="is_cancelling  == 0" class="modal-body register" style="text-align:center;">  
@@ -298,9 +298,9 @@
       <div style="clear:both;"></div>       
       </div>
       <div ng-if="has_cancelled == 1" class="modal-body register" style="text-align:center;">  
-      Cancellation sucessfull
+      Your booking has been cancelled. Do you want to reschedule?
       <div>
-         Want to reschedule?<a href="#/search"> Click here</a>
+         <a href="#/search"> Please Click here</a>
       </div> 
       <div style="clear:both;"></div>       
       </div>
@@ -322,7 +322,7 @@
     <div class="modal-content signup">
      <div class="modal-header modal-register-header">
      <button type="button" class="close" data-dismiss="modal">&times;</button> 
-     <h4 class="modal-title">Your booking is sucessful!</h4>
+     <h4 class="modal-title">Cheers! Your booking is successful.</h4>
     </div> 
       <div class="modal-body register">   
       <div class="socialpanel">

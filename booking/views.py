@@ -189,7 +189,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
                 if promo_code:
-                    coupon_detail = Coupon.objects.get(coupon_code__icontains = coupon_code, is_active = 1,  \
+                    coupon_detail = Coupon.objects.get(coupon_code__icontains = promo_code, is_active = 1,  \
                         expiry_date__gte =  datetime.today().date())
                     if not coupon_detail:
                         logger_error.error("Invalid promo code")
@@ -206,11 +206,11 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                         updated_date_time = datetime.now())
                 subject = responses.MAIL_SUBJECTS['BOOKING_EMAIL']
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
-                sms_message = sms_template%(user['first_name'],studio['name'],studio['area'],appnt_date,appnt_time)
+                sms_message = sms_template%(user['first_name'],studio['name'],appnt_date,appnt_time,studio_id.booking_code)
                 email = sendEmail(to_user,subject,message)
-                #sms = sendSMS(studio_id.mobile_no,sms_message)
+                sms = sendSMS(studio_id.mobile_no,sms_message)
                 #email = 1
-                sms_bms = 1
+                #sms = 1
                 review_key = uniquekey_generator()
                 new_link = ReviewLink(booking_id = booking_id, link_code = review_key,  \
                     service_updated = "booking confirmed")
@@ -221,9 +221,10 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                     'new booking')
                     sms_bms = BookedMessageSent.objects.filter(booking_id = booking_id, is_successful = 0,   \
                     type_of_message = 'book', mode = 'sms', service_updated =  \
-                    'new booking', message = '').update(is_successful = sms_bms,  \
+                    'new booking', message = '').update(is_successful = sms,  \
                     service_updated = 'booking confirmed')
                     email_bms.save()
+                    sms_bms.save()
                     notification_send = 1
                     logger_booking.info("Notification sent - "+str(notification_send))
                     BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
