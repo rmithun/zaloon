@@ -261,7 +261,7 @@
 
                 <carousel no-wrap="true" disable-ng-animate>
                     <slide ng-repeat="pic in selectedstudio.pic_of_studio" active="slide.active">
-                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" class="carousel-image" style="margin:auto;">
+                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" class="carousel-image" style="margin:auto;height:250px;">
 
                     </slide>
                 </carousel>
@@ -316,7 +316,7 @@
 
                     <div class="todo">
                         <ul>
-                            <li ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
+                            <li ng-if="ser.isactive" ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
                                     {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
