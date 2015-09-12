@@ -365,7 +365,7 @@ class ValidateBookingCode(UpdateAPIView, ListAPIView):
                 service_updated = 'booking used', updated_date_time = datetime.now(), is_valid = False)
                 review_key = uniquekey_generator()
                 new_link = ReviewLink(booking_id = has_exists[0].booking_id, link_code = review_key,  \
-                    service_updated = "thanks mail sender")
+                    service_updated = "booking code validated")
                 new_link.save()
             if not has_exists:
                 transaction.rollback()
@@ -431,8 +431,8 @@ class ReviewFromEmail(CreateAPIView):
             comment = data['comment']
             rating = data['rating']
             is_used = BookingDetails.objects.values('status_code','studio_id','user','is_reviewed').get(Q(id = booking_id),  \
-                ~Q(is_reviewed = 1), Q(status_code = 'B007'))
-            if is_used['status_code'] == responses.BOOKING_CODES['EXPIRED'] and   \
+                ~Q(is_reviewed = 1), Q(status_code = 'B004'))
+            if is_used['status_code'] == responses.BOOKING_CODES['USED'] and   \
             is_used['is_reviewed'] == 0:
                 new_review = StudioReviews(studio_profile_id = is_used['studio_id'], booking_id = booking_id,  \
                 comment = comment, rating = rating, user_id = is_used['user'], service_updated = 'review from email')

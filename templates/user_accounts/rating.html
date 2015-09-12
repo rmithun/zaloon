@@ -41,20 +41,34 @@
         </nav>
     </header>
 
+<div class="getdetails-panel">
+<div class="getdetails-panel-wrapper">
+<div class="container-fluid getpanel">
+
+<p> <div class="row">
+  <div class="form-group">
+      <label class="col-md-4 col-sm-4 col-xs-12 ">Thanks for your valuable rating!.It will help us serve you better.</label>
+  </div>
+</p>
+</div> 
+</div>
+</div>
 
 
-<form ng-if="added == 0">
+<form name ="submitreview" ng-if="added == 0" novalidate>
 <div class="getdetails-panel">
 <div class="getdetails-panel-wrapper">
 {%if can_review %}   
 <div class="container-fluid getpanel">
  <span>Help us serve you better by rating your experience. We appreciate your feedback!</span>
+<br/>
+ <span  class="error" style="color:red;" ng-if="failed == 1">Please try again!</span>
     <div class="row">
       
         <div class="form-group">
           <label class="col-md-4 col-sm-4 col-xs-12 ">Your Rating</label>
           <div class="col-md-8 col-sm-8 col-xs-11">
-          <span class="rating"><rating ng-model="rate" max="5" readonly="isReadonly"  on-leave="overStar = null"></rating></span>
+          <span class="rating"><rating name="rev_rating" ng-model="review.rate" max="5" readonly="isReadonly"  on-leave="overStar = null" required></rating></span>
           </div>
         </div>
       
@@ -63,13 +77,15 @@
         <div class="form-group">
           <label class="col-md-4 col-sm-4 col-xs-12 ">Your Comment</label>
           <div class="col-md-8 col-sm-8 col-xs-11">
-          <textarea  ng-model="comment" type="text" class="form-control"></textarea>
+          <textarea name="rev_comment" ng-model="review.comment" type="text" class="form-control" required></textarea>
           </div>
         </div>      
     </div>
+    <span class="error" style="color:red;" ng-show="formsubmit && submitreview.rev_comment.$error.required">All fields are required.</span>
+
     <div class="row paddtop10">     
         <div class="form-group col-sm-12 col-xs-11">          
-          <button class="getdetails-btn btn" ng-click="submit_review()">submit</button>          
+          <button class="getdetails-btn btn" ng-disabled="is_submitting == 0" ng-click="submit_review(submitreview)">submit</button>          
         </div>      
     </div>  
   </div>
@@ -78,7 +94,7 @@
  <p> <div class="row">
       
         <div class="form-group">
-          <label class="col-md-4 col-sm-4 col-xs-12 ">Thanks for your valuable rating!.It will help us serve you better.</label>
+          <label class="col-md-4 col-sm-4 col-xs-12 ">You have reviewed this booking already.</label>
         </div></p>
  {%endif%}
 </div>    
@@ -104,17 +120,29 @@ var noqapp = angular.module('accountApp', ['ui.bootstrap']);
 
 noqapp.controller('reviewcontroller', function ($scope,$http,$window) {
  $scope.added = 0
-$scope.submit_review = function()
+ $scope.formsubmit = false
+ $scope.review = {}
+ $scope.review['rate'] = 0
+ $scope.is_submitting = 1
+$scope.submit_review = function(review_form)
 {
-  data = {'rating':$scope.rate,'comment':$scope.comment,
+  $scope.formsubmit = true
+  $scope.is_submitting = 0
+  if (review_form.$valid)
+  {
+    data = {'rating':$scope.review['rate'],'comment':$scope.review['comment'],
          'review_key':$window.location.search}
-  $http.post('../add_review_from_email/',data).then(function()
-  {
-    $scope.added = 1
-  },function()
-  {
-    $scope.added = 0
-  })
+    $http.post('../add_review_from_email/',data).then(function()
+    {
+      $scope.added = 1
+    },function()
+    {
+      $scope.is_submitting = 1
+      $scope.added = 0
+      $scope.failed = 1
+    })
+  }
+  
 }
 
 });

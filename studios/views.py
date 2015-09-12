@@ -125,7 +125,7 @@ class StudioProfileMixin(object):
                 avg_rating = StudioReviews.objects.filter(studio_profile_id = studio['id'], \
                     is_active = 1).aggregate(Avg('rating'))
                 studio['min_price'] = min_price['price__min']
-                studio['avg_rating'] = avg_rating['rating__avg']
+                studio['avg_rating'] = round(avg_rating['rating__avg'])
             now = datetime.now().time()
             expiration_sec = ((23 - now.hour)*60 +(59 - now.minute)*60)
             cache.set(cache_key, data, expiration_sec)

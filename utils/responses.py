@@ -21,7 +21,7 @@ SMS_TEMPLATES = {'DLY_REM':"Hi %s,This is a reminder for your booking in zaloon.
                 'HLY_REM':"Hi %s,This is a reminder for your booking for %s on %s at %s ",
                 'BOOKING_SMS':"Hi %s,Your appointment with %s on %s at %s has been confirmed.Your booking code is %s."}
 
-MAIL_SUBJECTS = {'THANKS_EMAIL':"Thank you for using Zaloon.in",
+MAIL_SUBJECTS = {'THANKS_EMAIL':"How was %s?",
                  'BOOKING_EMAIL':"Booking code from Zaloon.in",
                  'CANCEL_EMAIL':"Cancelled booking details",
                  'DAILY_REPORT_EMAIL':"Daily booking report from zaloon for %s",

@@ -48,43 +48,42 @@ def send_thanks_mail():
         booking_status = 'BOOKED', status_code = status_code, is_valid = True)
         ##log code starting
         status_code = responses.BOOKING_CODES['USED']
-        for every_book in bookings:
-            #code = every_book.booking_code
-            studio_name = StudioProfile.objects.values('name').get(id = every_book.studio.id)
-            user = User.objects.values('first_name','email','id').get(id = every_book.user.id)
-            date = yesterday
-            #get email template and render all variables
-            review_link = None
-            review_key = ReviewLink.objects.values('link_code').filter(booking_id = every_book.id, is_reviewed = 0)
-            if review_key:
-                review_link = settings.HOST_NAME+'/booking/review_from_email/?review_key='+str(review_key[0]['link_code'])+  \
-                '&&booking_id='+str(every_book.id)
-            user_details = {'first_name':user['first_name'],'studio_name':studio_name['name'],  \
-            'date':yesterday,'review_link':review_link}
-            logger_booking.info("Thanks mail user details - "+str(user_details))
-            message = get_template('emails/thanks_email.html').render(Context(user_details))
-            to_user = user['email']
-            subject = responses.MAIL_SUBJECTS['THANKS_EMAIL']
+         for every_book in bookings:
             try:
-                has_sent = ThanksMail.objects.filter(booking_id = every_book.id)
+                #code = every_book.booking_code
+                #studio_name = StudioProfile.objects.values('name').get(id = every_book.studio.id)
+                #user = User.objects.values('first_name','email','id').get(id = every_book.user.id)
+                date = yesterday
+                #get email template and render all variables
+                review_link = None
+                review_key = ReviewLink.objects.values('link_code').filter(booking_id = every_book.id, is_reviewed = 0)
+                if review_key:
+                    review_link = settings.HOST_NAME+'/booking/review_from_email/?review_key='+str(review_key[0]['link_code'])+  \
+                    '&&booking_id='+str(every_book.id)
+                user_details = {'first_name':every_book.user.first_name,'studio_name':every_book.studio.name,  \
+                'date':every_book.appointment_date,'review_link':review_link}
+                logger_booking.info("Thanks mail user details - "+str(user_details))
+                message = get_template('emails/thanks_email.html').render(Context(user_details))
+                to_user = every_book.user.email
+                subject = responses.MAIL_SUBJECTS['THANKS_EMAIL']%(every_book.studio.name)
+                has_sent = ThanksMail.objects.filter(booking_id = every_book.id, status = True)
                 if not has_sent:
                     status = generic_utils.sendEmail(to_user, subject, message)
-                    BookingDetails.objects.filter(id = every_book.id).update(is_valid = False, \
-                        booking_status = 'EXPIRED', status_code = status_code,  \
+                    updated = BookingDetails.objects.filter(id = every_book.id).update(is_valid = False, \
+                        booking_status = 'USED', status_code = status_code,  \
                         service_updated = "thanks mail")
+                    if updated:
+                        thanks_mail = ThanksMail(booking_id = every_book.id, email = to_user,
+                        status = status,user_id = every_book.user.id, service_updated = "thanks mail",  \
+                        )
+                        thanks_mail.save()
             except Exception,smserr:
                 logger_error.error(traceback.format_exc())
                 status = False
                 thanks_mail = ThanksMail(booking_id = every_book.id, email = to_user, \
-                status = status,user_id = user['id'] ,service_updated = "thanks mail",  \
+                status = status,user_id = every_book.user.id ,service_updated = "thanks mail",  \
                 )
                 thanks_mail.save()
-            else:
-                thanks_mail = ThanksMail(booking_id = every_book.id, email = to_user,
-                status = status,user_id = user['id'], service_updated = "thanks mail",  \
-                )
-                thanks_mail.save()
-                ###log code end stats
     except Exception,errorz:
         logger_error.error(traceback.format_exc())
     else:
