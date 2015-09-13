@@ -8,7 +8,7 @@ noqapp.directive('facebook', function($http,httpServices) {
         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
         if (d.getElementById(id)) {return;}
         js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "https://connect.facebook.net/en_US/all.js";
+        js.src = "https://connect.facebook.net/en_US/all.js"; 
         ref.parentNode.insertBefore(js, ref);
       }(document));
 
@@ -16,6 +16,7 @@ noqapp.directive('facebook', function($http,httpServices) {
         FB.login(function(response) {
           if (response.authResponse) {
             console.log(response)
+            $scope.login_status =  response.status
             $scope.fbLogin(response.authResponse.accessToken)
             console.log('FB.login connected');
           } else {
@@ -27,6 +28,7 @@ noqapp.directive('facebook', function($http,httpServices) {
 
     
       $scope.fetch = function() {
+        console.log($scope.login_status)
         if ($scope.login_status != 'connected') {
           login();
           return false
