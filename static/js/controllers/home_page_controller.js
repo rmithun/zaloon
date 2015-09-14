@@ -43,6 +43,7 @@ getFBKey()
 		},function()
 		{
 		   //cannot login to fb try again
+		   $('.loader-overlay').hide();
 		   $scope.is_logging = 1
 		   console.log("Cannot login to FB")
 		});
