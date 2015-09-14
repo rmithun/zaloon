@@ -463,87 +463,6 @@
 </div>
 </div>
 
-<!--<div id="servicemodelbox" class="modal fade" role="dialog">
-<div id="servicemodel" class="modal-dialog">    
-        <div class="modal-content">
-         <div class="modal-header modal-register-header">
-         <button type="button" class="close" data-dismiss="modal">×</button> 
-        Select your More Services
-        <span class="service-totamnt">Total Amount - ₹ 240</span>
-        </div> 
-                <div class="service-checkboxcolumn col-sm-12">
-                      <div class="todo">            
-                            <ul>
-                              <li>               
-                                <div class="todo-content">                 
-                                  HairCut - ₹ 240
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                  Shave - ₹ 100
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                  Golden Facial - ₹ 2300
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                  Facial - ₹ 100
-                                </div>
-                              </li>
-                               <li>               
-                                <div class="todo-content">                 
-                                  HairCut - ₹ 160
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                   Shave - ₹ 100
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                  Shave - ₹ 100
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                   Golden Facial - ₹ 2300
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                  Facial - ₹ 100
-                                </div>
-                              </li>
-                               <li>               
-                                <div class="todo-content">                 
-                                  HairCut - ₹ 160
-                                </div>
-                              </li>
-                              <li>               
-                                <div class="todo-content">                 
-                                   Shave - ₹ 100
-                                </div>
-                              </li>
-                            </ul>
-                    </div>  
-                    <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
-                <i class="icon icon-contact"></i>
-                <span class="text">BOOK</span>
-            </div>  
-                </div>
-                
-                <div class="modal-footer">            
-            </div>  
-                </div>
-                
-        </div>
-        </div>-->
-
 <!-- Modal -->
 <div id="servicemodelbox" class="modal fade" role="dialog">
 <div id="servicemodel" class="modal-dialog">
@@ -569,7 +488,7 @@
         <div class="modal-footer">
                <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
                 <i class="icon icon-contact"></i>
-                <span class="text" ng-if="has_online_payment" ng-click="book()">BOOK</span>
+                <span class="text show.bs.modal" ng-if="has_online_payment" ng-click="book()">BOOK</span>
                 <span class="text" ng-if="has_online_payment == 0">No online booking</span>
             </div>
             
@@ -656,6 +575,13 @@
                     $('.header-tabs').removeClass('stick-tablet');
             }         
         });  
+ $(document).on('show.bs.modal', '.modal', function (event) {
+            var zIndex = 1040 + (10 * $('.modal:visible').length-1);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', '-1').addClass('modal-stack');
+            }, 0);
+        });
         function removestick(){
             $('.header-tabs').removeClass('stick');
             $('.header-tabs').removeClass('stick-mobile');
