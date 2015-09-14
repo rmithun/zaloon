@@ -321,7 +321,7 @@
                                     {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
                             </li>
-                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodel">
+                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
                                 <div class="todo-content"> Click to add more services...</div>
                             </li>
                         </ul>
@@ -463,10 +463,90 @@
 </div>
 </div>
 
+<!--<div id="servicemodelbox" class="modal fade" role="dialog">
+<div id="servicemodel" class="modal-dialog">    
+        <div class="modal-content">
+         <div class="modal-header modal-register-header">
+         <button type="button" class="close" data-dismiss="modal">×</button> 
+        Select your More Services
+        <span class="service-totamnt">Total Amount - ₹ 240</span>
+        </div> 
+                <div class="service-checkboxcolumn col-sm-12">
+                      <div class="todo">            
+                            <ul>
+                              <li>               
+                                <div class="todo-content">                 
+                                  HairCut - ₹ 240
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                  Shave - ₹ 100
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                  Golden Facial - ₹ 2300
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                  Facial - ₹ 100
+                                </div>
+                              </li>
+                               <li>               
+                                <div class="todo-content">                 
+                                  HairCut - ₹ 160
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                   Shave - ₹ 100
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                  Shave - ₹ 100
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                   Golden Facial - ₹ 2300
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                  Facial - ₹ 100
+                                </div>
+                              </li>
+                               <li>               
+                                <div class="todo-content">                 
+                                  HairCut - ₹ 160
+                                </div>
+                              </li>
+                              <li>               
+                                <div class="todo-content">                 
+                                   Shave - ₹ 100
+                                </div>
+                              </li>
+                            </ul>
+                    </div>  
+                    <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
+                <i class="icon icon-contact"></i>
+                <span class="text">BOOK</span>
+            </div>  
+                </div>
+                
+                <div class="modal-footer">            
+            </div>  
+                </div>
+                
+        </div>
+        </div>-->
 
 <!-- Modal -->
-<div id="servicemodel" class=" modal fade" role="dialog">
-<div class="modal-dialog"> 
+<div id="servicemodelbox" class="modal fade" role="dialog">
+<div id="servicemodel" class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -492,16 +572,15 @@
                 <span class="text" ng-if="has_online_payment" ng-click="book()">BOOK</span>
                 <span class="text" ng-if="has_online_payment == 0">No online booking</span>
             </div>
-            <!-- <div class="service-rate-panel col-sm-12 no-padding">
-            <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
-                <i class="icon icon-contact"></i>
-                <span class="text">₹ 240</span>
-            </div> -->
+            
 
         </div>
     </div>
 </div>
 </div>
+
+
+
 </div>
 <script type="text/javascript">
     $(document).ready(function () {

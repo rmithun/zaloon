@@ -263,7 +263,7 @@ filter: alpha(opacity=80);
 z-index: 999;
 }
    
-.finder-overlay {
+.finder-overlay ,.profile-overlay{
 position: fixed;
 left: 0;
 top: 0;

@@ -42,7 +42,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.studiokind = [{ id:1, name: "Men", active: false, icon: "fa-mars" }, {id:2, name: "Women", active: false, icon: "fa-venus" }, {id:3, name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
     $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "min_price", value: "priceasc", direction: false ,name:"Price"}, { property: "min_price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: false,name:"Rating" }];
-    $scope.orderProp = 'price';
+    $scope.orderProp = 'min_price';
     $scope.direction = false;    
     $scope.studiotypefilter = [];
     $scope.studiokindfilter = [];
@@ -504,8 +504,14 @@ $scope.bindstudio=function(data){
     }    
 
     $scope.sortchange=function(selectitem){        
-        $scope.orderProp = selectitem.property;
-        $scope.direction = selectitem.direction;
+        if(selectitem!=null){
+            $scope.orderProp = selectitem.property;
+            $scope.direction = selectitem.direction;
+        } 
+        else{
+            $scope.orderProp = 'min_price';
+            $scope.direction = false;    
+        }
         removemarker();
         clearlatlongbound();
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
@@ -809,9 +815,11 @@ $scope.bindstudio=function(data){
         {            
             $cookies.putObject('searchdata',obj,{path:'/'});                     
             putResultService.setresult(data.studio_details.data);
-            $scope.bindstudio(data.studio_details.data);
-            $('#lister').show();
-            $('#loading').hide();           
+            $scope.bindstudio(data.studio_details.data); 
+            setTimeout(function(){
+                $('#lister').show();
+                $('#loading').hide();
+            },500);                                
         },function()
         {
             console.log("Try again to get service")
@@ -886,9 +894,7 @@ httpServices.getFBKey().then(function(data)
 });*/
 
 $scope.fbLogin = function(dummy)
-{
-    $('.loader-overlay').show();
-    $('#signupmodel').modal('hide')
+{    
     httpServices.loginUsingFB(dummy).then(function(data)
     {
         if(data)
@@ -913,13 +919,16 @@ $scope.fbLogin = function(dummy)
             }, function()
             {
                 $scope.is_logged = sessionService.isLogged()
-                $('#signupmodel').modal('hide');
+                $('.loader-overlay').hide();
+                $('#signupmodel').modal('hide')
                 console.log("Error getting user data")
             })
         }
     },function()
     {
         //cannot login to fb try again
+        $('.loader-overlay').hide();
+        $('#signupmodel').modal('hide')
         console.log("Cannot login to FB")
     });
 }
@@ -1408,7 +1417,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
 
     $scope.getBookings = function()
     {
-        $('.finder-overlay').show();
+        $('.profile-overlay').show();
         httpServices.getDetails().then(function(data)
         {            
             $scope.user_details = data.user_details.data[0]
@@ -1419,7 +1428,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             {
                 $scope.active_bookings = data.active_booking
                 $scope.expired_bookings = data.inactive_booking
-                $('.finder-overlay').hide();
+                $('.profile-overlay').hide();
             },
             function()
             {
