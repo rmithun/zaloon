@@ -1381,8 +1381,8 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             {
                 if(next['templateUrl'] ='/booking/booking_page/')
                 {
-                    window.location.href = "http://localhost:8000/#/search";
-                    //window.location.href = "http://www.zaloon.in";                
+                    //window.location.href = "http://localhost:8000/#/search";
+                    window.location.href = "http://dev.zaloon.in";                
                 }
                 
             });
