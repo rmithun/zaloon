@@ -89,6 +89,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             promo_amount = data['discount']
             promo_code = None
             payment_success = 0
+            service_tax = data['service_tax']
             if data.has_key('promo_code'):
                 promo_code = data['promo_code']
             ##check purchase amount is not changed
@@ -142,7 +143,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             new_purchase = Purchase(customer = user,  \
                 purchase_amount = purchase_amount, actual_amount = actual_amount,  \
                 purchase_status = 'BOOKED', service_updated = 'new booking',  \
-                status_code = status_code)
+                status_code = status_code, service_tax = service_tax)
             new_purchase.save()
             logger_booking.info("New purchase id - "+str(new_purchase.id))
             appointment_end_time = appointment_start_time + timedelta(minutes = total_duration['mins_takes__sum'])
@@ -184,7 +185,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 'date':appnt_date, 'appnt_time':appnt_time,  \
                 'services':services_booked_list,  \
                 'studio':studio['name'],'studio_address':studio_address,  \
-                'contact':contacts,'total':purchase_amount,'discount':promo_amount}
+                'contact':contacts,'total':purchase_amount,'discount':promo_amount,'service_tax':service_tax}
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 to_user = user['email']
@@ -208,9 +209,9 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],appnt_date,appnt_time,studio_id.booking_code)
                 email = sendEmail(to_user,subject,message)
-                sms = sendSMS(studio_id.mobile_no,sms_message)
+                #sms = sendSMS(studio_id.mobile_no,sms_message)
                 #email = 1
-                #sms = 1
+                sms = 1
                 review_key = uniquekey_generator()
                 new_link = ReviewLink(booking_id = booking_id, link_code = review_key,  \
                     service_updated = "booking confirmed")

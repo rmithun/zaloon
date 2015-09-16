@@ -153,6 +153,7 @@ Loading your profile...
         <span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
           ,</span></span></div>       
         <div class="landmark_details"><span>Duration:</span>  <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"></span> mins</div>
+        <div class="landmark_details"><span>Booking date:</span> {%verbatim%}{{buking.booking_date | date: mm-dd}}{%endverbatim%}</div>
         
         
       </div>
@@ -193,6 +194,7 @@ Loading your profile...
         <span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
           ,</span></span></div>       
         <div class="landmark_details"><span>Duration:</span>  <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"> </span> mins</div>
+        <div class="landmark_details"><span>Booking date:</span> {%verbatim%}{{buking.booking_date | date: mm-dd}}{%endverbatim%}</div>
         
         
       </div>

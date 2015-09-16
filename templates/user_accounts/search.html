@@ -250,7 +250,11 @@
                 <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
             <div class="col-sm-6 col-xs-4 no-padding" >
-                <button class="btn btn-primary col-xs-12" ng-click="book()" ng-if="has_online_payment">BOOK</button>
+                <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
+                ng-switch="su_booking">
+                <span ng-switch-default>BOOK</span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                       </button>
                 <button class="btn btn-primary col-xs-12" ng-if="has_online_payment == 0">No online booking.</button>
             </div>
         
@@ -360,7 +364,7 @@
                 </div>
                 <span ng-if="(selectedstudio.studio_review).length <1;" class="reviewer"><p>No reviews yet!</p></span>
                 <div ng-if="(selectedstudio.studio_review).length > 0;" class="pull-right"><a  style="font-size: 11px;cursor:pointer;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
-                <div ng-if="(selectedstudio.studio_review).length > 0;" class="pull-right"><a  ng-click="firstreview()" style="font-size: 11px;cursor:pointer;" ng-show="reviewtotalpage==reviewPage">FIRST</a></div>
+                <div ng-if="(selectedstudio.studio_review).length > 0;&&(selectedstudio.studio_review).length > reviewtotalpage;"  class="pull-right"><a  ng-click="firstreview()" style="font-size: 11px;cursor:pointer;" ng-show="reviewtotalpage==reviewPage">FIRST</a></div>
 
             </div>
             <div style="clear: both;"></div>
@@ -488,7 +492,11 @@
         <div class="modal-footer">
                <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
                 <i class="icon icon-contact"></i>
-                <span class="text show.bs.modal" ng-if="has_online_payment" ng-click="book()">BOOK</span>
+                <span class="text show.bs.modal" ng-if="has_online_payment" ng-disabled="su_booking"
+                  ng-switch="su_booking" ng-click="book()">
+                <span ng-switch-default>BOOK</span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                       </button></span>
                 <span class="text" ng-if="has_online_payment == 0">No online booking</span>
             </div>
             

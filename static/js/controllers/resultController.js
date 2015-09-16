@@ -861,6 +861,7 @@ $scope.bindstudio=function(data){
         }
     }
 
+$scope.su_booking = false
 //set booking details
 $scope.book = function()
 {
@@ -878,10 +879,12 @@ $scope.book = function()
     }
     else
     {
+        $scope.su_booking = true
         var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service,  
         'user_details':$scope.user_details}
         putResultService.setSelectedservice(booking_data)
         $location.path('/booking')
+        //$scope.su_booking = false
     }
 }
 
@@ -1037,6 +1040,8 @@ $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
 $scope.selected_services = lodash.pluck($scope.serviceschosen.services, 'id');
 $scope.promo_amount = 0
 $scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
+$scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+$scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
 
 console.log($scope.serviceschosen.studio);
 angular.forEach($scope.serviceschosen.studio.studio_closed_details, function(value, key) {    
@@ -1178,7 +1183,9 @@ $scope.applyPromo = function()
     {
         $scope.promo_amount = parseInt(cdata.apply_coupon.data)
         $scope.coupon_resp = "Coupon applied"
-        $scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
+        $scope.amount_to_pay = ($scope.total_amount - $scope.promo_amount)
+        $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+        $scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
         //$scope.promo_amount = cdata.
     },function(cdata)
     {   
@@ -1235,8 +1242,9 @@ $scope.makepayment = function(bookingForm)
             var booking_data = {}
             booking_data['appnt_date'] = $scope.date_selected
             booking_data['appnt_time'] = $scope.from_time
-            booking_data['actual_amount'] = $scope.total_amount
+            booking_data['actual_amount'] = $scope.total_amount 
             booking_data['purchase_amount'] = $scope.amount_to_pay
+            booking_data['service_tax'] =  $scope.service_tax
             booking_data['discount'] = $scope.promo_amount
             booking_data['mobile_no'] = $scope.mobileno
             booking_data['services'] = $scope.selected_services
@@ -1609,6 +1617,8 @@ $scope.is_adding = 0
 $scope.clearreviewdata = function()
 {
     $scope.review_data['comment'] = ""
+    $scope.review_data['rate'] = 0
+
 }
 $scope.add_review = function()
 {
@@ -1618,7 +1628,6 @@ $scope.add_review = function()
     httpServices.addReview($scope.review_data).then(function(rdata)
     {
         $scope.is_adding = 0
-        $scope.review_data = {}
         $('#reviewmodal').modal('hide')
         $scope.titleMsg = 'Successfully added review'; 
         $scope.review_message = 'Thanks for your valuable rating!.It will help us serve you better.';
@@ -1629,6 +1638,7 @@ $scope.add_review = function()
                     booking['is_reviewed'] = 1
                 }
         });
+        $scope.review_data = {}
     },function()
     {
         $('#reviewmodal').modal('hide')

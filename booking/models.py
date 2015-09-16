@@ -21,6 +21,7 @@ class Purchase(models.Model):
 	purchase_amount = models.FloatField()
 	actual_amount = models.FloatField()
 	purchase_status = models.CharField(max_length = 30)
+	service_tax = models.FloatField()
 	status_code = models.CharField(max_length = 10)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
@@ -87,6 +88,7 @@ class BookingDetails(models.Model):
 	is_valid = models.BooleanField(default = 1) #0- new 1-postponed
 	purchase = models.ForeignKey(Purchase, related_name = "purchase_id", null = True)
 	#total_duration = models.PositiveIntegerField()
+	booking_date = models.DateTimeField(default = datetime.now())
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 	is_reviewed = models.BooleanField(default = 0)
