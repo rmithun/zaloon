@@ -1,0 +1,678 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en"  ng-app="test">
+  <head>
+
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Your Parlor on Your Hand -  Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">     
+    {% load static from staticfiles %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap/bootstrap.min.css"%}'>
+    <link rel="stylesheet" href='{% static "css/font-awesome.css"%}' type="text/css" media="all" />      
+    <!-- our css -->
+    <link rel="stylesheet" href='{% static "css/style.css"%}' type="text/css" media="all" /> 
+    <link rel="stylesheet" href='{% static "css/devcss.css"%}' type="text/css" media="all" /> 
+    <!-- loading django static files -->
+   <style type="text/css">
+
+</style>
+      <script src='{% static "js/angular1.4.0/angular.min.js"%}'></script>
+<script type="text/javascript">
+var noqapp = angular.module('test', []);
+noqapp.controller('mgr',function($scope){
+$scope.fb_key = 442685319234348
+$scope.fbLogin = function(dummy)
+  {
+    alert(dummy)
+    $('.loader-overlay').show();
+    httpServices.loginUsingFB(dummy).then(function(data)
+    {
+      if(data)
+      {
+        sessionService.setAuthToken(data)
+        httpServices.getUsrDetails().then(function(dataz)
+        {
+          $scope.is_logged = sessionService.isLogged()
+          $scope.user_name = dataz['user_details'].data[0].user_acc['first_name']
+          //$('#signupmodel').modal('hide');
+          $('.loader-overlay').hide();
+
+        }, function()
+        {
+          $('.loader-overlay').hide();
+          $scope.is_logged = sessionService.isLogged()
+          console.log("Error getting user data")
+        })
+        
+      }
+    },function()
+    {
+       //cannot login to fb try again
+       $('.loader-overlay').hide();
+       $scope.is_logging = 1
+       console.log("Cannot login to FB")
+    });
+  }
+});
+
+
+
+
+</script>
+
+  </head>
+
+
+<body ng-controller="mgr">
+  
+ <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
+    <div id="fb-root"></div>
+<header class="searchheader">
+
+
+    <nav class="navigation">
+
+        <div class="navigation-brand">
+            <!--  <div class="brand-logo">
+                        <a href="#" class="logo"></a>                       
+                    </div>  -->
+            <a href="#/"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/logo.png' %}"> </a>
+            <a href="#/"><img width="47" height="47" class="logo hidden-md hidden-lg" alt="" src="{% static 'img/logo-mobile.png' %}"> </a>
+        </div>
+        <!-- Login -->
+
+        <div class="navigation-navbar">
+            <ul class="navigation-bar navigation-bar-right">
+                <li class="navsearch hidden-md hidden-lg" ng-click="showsearch()">
+                    <a style="cursor:pointer;" class="" ng-class="{'active': searchicon == true}"><span class="glyphicon glyphicon-search"></span></a>
+                </li>
+                <li class="moresearch" id="morefilter">
+                    <button class="btn btnmore" ng-class="{'active': morefilter == true}" ng-click="clkmore()">
+                        <i class="glyphicon glyphicon-filter"></i><span id="devicefilter" class="hidden-xs hidden-sm">More</span>
+                    </button>
+
+                    <!-- More -->
+                    <div ng-show="morefilter" class="more-filters-dropdown-panel">
+                        <div class="triangle-up hidden-xs"></div>
+                        <div class="more-filters-dropdown-menu">
+                            <div class="col-xs-12 col-sm-6 brdrgt">
+                                <div class="hidden-md hidden-lg paddbtm">
+                                    <input size="3" type="text" class="form-control" placeholder="Search by name">
+                                </div>
+                                
+                                <h3 class="more-panel-title margintopnone">Studio Type</h3>
+                                <div class="clearfix"></div>
+                                <div class="btn-toolbars">
+
+                                    <a ng-repeat="type in studiotype" class="btn " ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiotypeclick(type.name,$index)">
+                                        <span ng-class="type.icon">
+                                                {%verbatim%}{{type.name}}{%endverbatim%}</span>
+                                    </a>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <h3 class="more-panel-title">Type</h3>
+                                <div class="clearfix"></div>
+                                <div class="btn-toolbars">
+
+
+                                    <a ng-repeat="type in studiokind" class="btn" ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiokindclick(type.name,$index)">
+                                        <span class="fa" ng-class="type.icon">{%verbatim%}{{type.name}}{%endverbatim%}</span>
+                                    </a>
+
+
+                                </div>
+                                <div class="clearfix"></div>
+                                <h3 class="more-panel-title">Rating</h3>
+                                <div class="clearfix"></div>
+
+                                <div class="btn-toolbars ratingbar">
+                                    <a ng-repeat="star in studiostar" class="btn" ng-class="{'active':star.active == true,'borderrgtnone':$last == true}" ng-click="studioreviewclick(star.star,$index)"><span>{%verbatim%}{{star.star}}{%endverbatim%}</span></a>
+                                </div>
+                            </div>
+                            <!--<div class="col-xs-12 col-sm-6 more-services hidden-xs">
+                                <h3 class="more-panel-title">Services</h3>
+                                <div class="hidden-xs">
+                                    <input size="3" type="text" class="form-control" ng-model="service" placeholder="filter service">
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="checkboxcolumn-more-panel">
+                                    <div class="checkboxcolumn-more">
+                                    <label ng-repeat="ser in  services_filtered = ( studioservice | filter:service)" class="checkbox">
+                                        <input type="checkbox" ng-click="studioserviceclick(ser)">
+                                        <span ng-bind="ser"></span>
+                                    </label>
+                                    <span ng-hide="services_filtered.length">No Services found</span>
+                                </div>
+                                 </div>
+                            </div>-->
+
+                            <div class="col-xs-12 col-sm-12  more-footer">
+                                <div class="resetpanel">
+                                    <span class="btn apply-btn  pull-right" ng-click="applyfilter()">Apply</span>
+                                    <span class="btn reset-btn  pull-right" ng-click="resetfilter()">Reset</span>
+                                </div>
+                                <!-- <div class="btn btn-primary pull-right">Done</div> -->
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="hidden-xs hidden-sm">
+                    <button data-ng-click='fetch();' class="btn  btn-social btn-facebook">
+                        <i class="fa fa-facebook"></i>Login with Facebook
+                    </button>
+                </li>
+
+                <li ng-show="is_logged == 1" class="dropdown logindetails">
+                    <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Hi {%verbatim%}{{user_name}}{%endverbatim%}
+                        <span class="caret"></span>
+                    </button>
+
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="#my_account">My Account</a></li>
+                        <li><a style ="cursor:pointer;" ng-click="logOut()">Signout</a></li>
+                    </ul>
+
+                </li>
+
+                    <!-- for mobile-->
+                <li ng-show="is_logged == 0" class="fbbutton hidden-md hidden-lg">
+                    <button data-ng-click='fetch()' class="btn btn-block fbmobile" style="width:34px;">
+                        <i class="fa fa-facebook"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="searchdevice" id="searchdevice">
+
+            <!-- search -->
+
+            <form role="form" name="searchForm" class="searchpanel">
+                <div class="col-md-2 col-lg-3 no-padding">
+                    <div class="form-group autocomplete">
+                        <span class="service-icon"><i class="fa fa-gear icon-active"></i></span>
+                        <input type="text" ng-model="searchdata.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-lg-3 no-padding">
+                    <div class="form-group autocomplete">
+                          <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
+                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:5   " typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html">
+                    </div>
+                </div>
+                <div class="col-custom-button">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" ng-click="searchservicestudio()">
+                            <span class="glyphicon glyphicon-search hidden-xs hidden-sm"></span><span class="hidden-md hidden-lg hidden-md">Search</span>
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+
+    </nav>
+</header>
+
+<div class="container-mapview">
+    <div class="mapview">
+        <div class="mappanel" id="googleMap">
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="list-box"   id ="loading" style="top:50%;text-align:center;display:none;box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2);">
+        <div class="la-line-scale la-dark" style="left:48%;">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+        Again hunting best parlours for you...
+</div>
+<!-- List -->
+<div class="list-box" id = "lister" ng-show="filteredstudio.length > 0">
+    <div class="listheader">
+        <label>We have discovered  {%verbatim%} {{filteredstudio.length}}{%endverbatim%} best parlours near you.</label>
+        <span class="pull-right hiddenxsprt">
+                        <span class="icon-active">Map</span>
+       <!-- <span class="sep">|</span>
+        <span class="icon icon-text-hierarchy-06">List</span> -->
+        </span>
+    </div>
+    <div class="form-group hidden-xs">
+        <input size="5" type="text" class="form-control" id="namesearch" ng-model="query.name" placeholder="Search by name">        
+    </div>
+    <div class="form-group hidden-xs">        
+            <span><select  class="form-control" id="sortbyservice" placeholder="Sort by" ng-model="sortservice" data-ng-options="studiosort as studiosort.name for studiosort in studiosort" ng-change="sortchange(sortservice)">
+                    <option value="">Sort by</option> 
+            </select></span>
+
+        <span class="service-arrow-icon"><i class="icon icon-arrows-06 icon-active"></i></span>
+    </div>
+
+
+    <div class="list-view" style="-webkit-overflow-scrolling: touch;"> 
+
+        <ul>
+            <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="studiodetails(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
+                <a class="list-item" style="cursor:pointer;">
+                    <div class="details">
+                        <img class="image loaded" style="height:100px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
+                        <div class="info">
+                            <div class="heading">
+                                <h4><span class="fa" ng-class="stu.kind_icon"></span>{%verbatim%}{{stu.name}}{%endverbatim%}
+                                 </h4>
+                            </div>
+                            <div class="landmark_details">{%verbatim%}{{stu.landmark}}{%endverbatim%}</div>
+                            <div class="sub-line-1">
+                                {%verbatim%}{{stu.type_desc}}{%endverbatim%}
+                                
+                                <span class="image loaded staricon star{%verbatim%}{{stu.rating}}{%endverbatim%} pull-right"></span></div>
+                            <div class="sub-line-2" style="text-transform:none;">
+                                <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
+                                <span class="price circlebg">
+                <span class="icon-rupee rupee"></span><span class="info-rate">₹{%verbatim%}{{stu.min_price}}{%endverbatim%}+</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <div ng-show="filteredstudio.length > itemLimit" style="padding: 10px 12px;">
+            <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="$parent.currentPage" num-pages="smallnumPages"></pagination>
+
+        </div>
+    </div>
+</div>
+<div class="list-box" style="text-align:center;" ng-show="filteredstudio.length == 0">
+    No results found
+</div>
+
+<!-- List Details -->
+<div id="studiodetails" class="list-detail-box-panel" style="display:none;-webkit-overflow-scrolling: touch;">
+    <a style="cursor:pointer;" ng-click="closeslider()" class="listclose hidden-xs">X</a>
+    <div class="list-detail-box">
+        <div class="rate-panel col-xs-12 no-padding">
+
+             <div ng-click="closeslider()" class="hidden-sm hidden-md hidden-lg col-xs-2 btn btn-primary btn-close">             
+                <span class="text"> <a style="cursor:pointer;color:#fff;"  >X
+                </a></span>
+            </div>  
+
+            <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
+                <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
+            </div>
+            <div class="col-sm-6 col-xs-4 no-padding" >
+                <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
+                ng-switch="su_booking">
+                <span ng-switch-default>BOOK</span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                       </button>
+                <button class="btn btn-primary col-xs-12" ng-if="has_online_payment == 0">No online booking.</button>
+            </div>
+        
+        </div>
+
+        <div class="list-detail-header">
+            <div class="list-detail-image">
+
+                <carousel no-wrap="true" disable-ng-animate>
+                    <slide ng-repeat="pic in selectedstudio.pic_of_studio" active="slide.active">
+                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" class="carousel-image" style="margin:auto;height:250px;">
+
+                    </slide>
+                </carousel>
+
+            </div>
+            <div class="header-tabs">
+                <ul class="nav tabs-container">
+                    <a class="detail-tab tab-street active" ng-click="easyscroll('street-info','tab-street')">
+                        <span>DETAILS</span>
+                    </a>
+                    <a class="detail-tab tab-service" ng-click="easyscroll('service-list','tab-service')">
+                        <span>SERVICES</span>
+                    </a>
+                    <a class="detail-tab tab-direction" ng-click="easyscroll('direction','tab-direction')">
+                        <span>DIRECTION</span>
+                    </a>
+                    <a class="detail-tab tab-review" ng-click="easyscroll('review-detail','tab-review')">
+                        <span>REVIEWS</span>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <div class="list-detail-cnt">
+            <div class="street-info ">
+                <h4>{%verbatim%}{{selectedstudio.name}}{%endverbatim%}<span class="paddlft10" ng-class="selectedstudio.type_icon"></span> <span class = "pull-right fa" ng-class="selectedstudio.kind_icon"></span></h4>
+                <p>{%verbatim%}{{selectedstudio.landmark}}{%endverbatim%}</p>
+                <p>{%verbatim%}{{selectedstudio.address_1}}{%endverbatim%}</p>
+                <p>{%verbatim%}{{selectedstudio.address_2}}{%endverbatim%} {%verbatim%}{{selectedstudio.city}}{%endverbatim%}</p>
+
+            </div>
+            <div class="contact">
+                <span>{%verbatim%}{{selectedstudio.in_charge_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.incharge_mobile_no}}{%endverbatim%}</a></span>
+                &nbsp;<span ng-if="selectedstudio.contact_person" style="text-transform:capitalize;">{%verbatim%}{{selectedstudio.contact_person}}{%endverbatim%} - <a href="tel:+91{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{selectedstudio.contact_mobile_no}}{%endverbatim%}</a></span><span class="fa fa-phone paddlft10"></span>
+            </div>
+            <p>Timing - <span ng-bind="timeFilter(selectedstudio.opening_at)"></span> to <span ng-bind="timeFilter(selectedstudio.closing_at)"></span></p>
+            <p class="red" ng-if="selectedstudio.studio_closed_details.length > 0">Closed on - <span ng-repeat="leav in selectedstudio.studio_closed_details">
+                {%verbatim%}{{leav.closed_on.closed_on_day}}<span ng-if="$last != true">,</span>{%endverbatim%}</span></p>
+            <p class="red" ng-if="selectedstudio.studio_closed_details.length < 1 ">Open on all days</span></p>
+            
+            <div class="service-list">
+                <h3>Services</h3>
+                <div class="service-overlay" style="display:none;">        
+                    <div class="la-line-scale la-dark" style="left:48%;">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>        
+                </div>            
+                <div class="checkboxcolumn">
+
+                    <div class="todo">
+                        <ul>
+                            <li ng-if="ser.isactive" ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
+                                <div class="todo-content">
+                                    {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                                </div>
+                            </li>
+                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
+                                <div class="todo-content"> Click to add more services...</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="servicemore"></div>
+
+            </div>
+            <div class="direction">
+                <h3>Direction</h3>
+                <p>Enter from Location <span class="pull-right hidden-md hidden-lg">{%verbatim%} {{shopdistance}}{%endverbatim%}km</span></p>
+                <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
+                <div class="searchloc">
+                    
+                    <div class="form-group autocomplete">
+                        <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="directionlocation" placeholder="Location: Porur" ng-keyup="areacomplete(directionlocation)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
+                        <button type="button" class="btn btn-primary" ng-click="changedirection()">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="distance hidden-xs"><div class="circlebg" style="float:none">{%verbatim%} {{shopdistance}}{%endverbatim%}</div>km</div>
+                <div id="mobgooglemap" class="mapview-mob hidden-md hidden-lg col-sm-12">
+                </div>
+                <!-- <div  ng-if="which_device"><a ng-click="openMap()">Open map</a></div> -->
+            </div>
+            <div class="review-detail">
+                <h3>Reviews</h3>                
+                <span class="reviewtotal">{%verbatim%}{{selectedstudio.studio_review.length}} {%endverbatim%} review(s)</span>                  
+                <div ng-repeat="rev in selectedstudio.studio_review | startFrom:(reviewPage-1)*5 | limitTo:5">
+
+                    <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><span class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></span></div>
+                    <p>{%verbatim%}{{rev.comment}}{%endverbatim%}</p>
+                </div>
+                <span ng-if="(selectedstudio.studio_review).length <1;" class="reviewer"><p>No reviews yet!</p></span>
+                <div ng-if="(selectedstudio.studio_review).length > 0;" class="pull-right"><a  style="font-size: 11px;cursor:pointer;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
+                <div ng-if="(selectedstudio.studio_review).length > 0;&&(selectedstudio.studio_review).length > reviewtotalpage;"  class="pull-right"><a  ng-click="firstreview()" style="font-size: 11px;cursor:pointer;" ng-show="reviewtotalpage==reviewPage">FIRST</a></div>
+
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/ng-template" id="service.html">
+    <a>
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+    </a>
+
+</script>
+<script type="text/ng-template" id="location.html">
+    <a>
+        <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>   </i>
+    </a>
+
+</script>
+
+
+
+<!-- Modal -->
+
+<!-- Modal -->
+<div id="infomodal" class=" modal fade" role="dialog">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Select atleast one service
+        </div>
+        <div class="modal-body">
+            <div class="todo">
+                Please select atleast one service to book;
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal">Ok</button>
+            <!-- <div class="service-rate-panel col-sm-12 no-padding">
+            <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
+                <i class="icon icon-contact"></i>
+                <span class="text">₹ 240</span>
+            </div> -->
+
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="serviceinfomodal" class=" modal fade" role="dialog">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Duration
+        </div>
+        <div class="modal-body">
+            <div class="todo">
+                Duration
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal">Ok</button>
+            <!-- <div class="service-rate-panel col-sm-12 no-padding">
+            <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
+                <i class="icon icon-contact"></i>
+                <span class="text">₹ 240</span>
+            </div> -->
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!-- Modal -->
+<div id="signupmodel" class=" modal fade" role="dialog">
+    
+    <div class="modal-dialog" style="margin-top:15%;">    
+    <div class="modal-content signup">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Login</h4>
+        </div>
+        <div class="modal-body register">
+            
+            <div class="socialpanel">
+                <button data-ng-click='fetch();' class="btn btn-block btn-social btn-facebook">
+                    <i class="fa fa-facebook"></i>Login using Facebook</button>
+
+            </div>
+            <p class="hidden-xs"><i>* We remember our promise of no posts on your wall</i></p>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Modal -->
+<div id="servicemodelbox" class="modal fade" role="dialog">
+<div id="servicemodel" class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Select  More Services
+            <span class="service-totamnt">Total Amount - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
+        </div>
+        <div class="service-checkboxcolumn col-sm-12">
+            <div class="todo">
+                <ul>
+                    <li ng-repeat="ser in servicelist" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
+                        <div class="todo-content">
+                            {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+         
+        </div>
+
+        <div class="modal-footer">
+               <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
+                <i class="icon icon-contact"></i>
+                <span class="text show.bs.modal" ng-if="has_online_payment" ng-disabled="su_booking"
+                  ng-switch="su_booking" ng-click="book()">
+                <span ng-switch-default>BOOK</span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                       </button></span>
+                <span class="text" ng-if="has_online_payment == 0">No online booking</span>
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".list-detail-box").scroll(function () {            
+            var window_top = $('.list-detail-box').scrollTop();
+            var div_height = $('.list-detail-header').innerHeight();            
+            var stick;
+            var street_info;
+            var service_list;
+            var direction;
+            if($(window).width() <= 480){
+                stick=44;
+                street_info=-50;
+                service_list=30;
+                direction=20;
+            }
+            else if($(window).width() >= 481 && $(window).width() <= 767){
+                stick=44;
+                street_info=-40;
+                service_list=37;
+                direction=20;
+            }
+            else if($(window).width() >= 768 && $(window).width() <= 991){
+                stick=44;
+                street_info=-40;
+                service_list=37;
+                direction=20;
+            }
+            else{
+                stick=94;
+                street_info=10;
+                service_list=90;
+                direction=90;
+            }
+            //End Mobile
+            if (window_top > div_height - stick) { 
+                if($(window).width() <= 480){
+                    removestick();
+                    $('.header-tabs').addClass('stick-mobile');                    
+                } 
+                else if($(window).width() >= 481 && $(window).width() <= 767){
+                    removestick();
+                    $('.header-tabs').addClass('stick-tablet');                    
+                }
+                else if($(window).width() >= 768 && $(window).width() <= 991){
+                    removestick();
+                    $('.header-tabs').addClass('stick-lap');                    
+                }
+                else{
+                    removestick();
+                    $('.header-tabs').addClass('stick');                    
+                }                       
+                if ($('.street-info').position().top + $('.street-info').height() > street_info) {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-street').addClass('active');
+                }
+                else if ($('.service-list').position().top + $('.service-list').height() > service_list) {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-service').addClass('active');
+                }
+                else if ($('.direction').position().top + $('.direction').height() > direction) {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-direction').addClass('active');
+                }
+                else {
+                    $('.detail-tab').removeClass('active');
+                    $('.tab-review').addClass('active');                   
+                }                                
+            }                  
+            else {
+                    $('.header-tabs').removeClass('stick');
+                    $('.header-tabs').removeClass('stick-mobile');
+                    $('.header-tabs').removeClass('stick-tablet');
+            }         
+        });  
+ $(document).on('show.bs.modal', '.modal', function (event) {
+            var zIndex = 1040 + (10 * $('.modal:visible').length-1);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', '-1').addClass('modal-stack');
+            }, 0);
+        });
+        function removestick(){
+            $('.header-tabs').removeClass('stick');
+            $('.header-tabs').removeClass('stick-mobile');
+            $('.header-tabs').removeClass('stick-tablet');
+            $('.header-tabs').removeClass('stick-lap');                    
+        }                      
+    });
+</script>
+
+  <script src='{% static "js/directives/fb_login_directive.js" %}'></script>
+  </body>
+
+</html>
