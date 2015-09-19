@@ -162,6 +162,15 @@ def getFBkey(request):
     return  HttpResponse(settings.FBAPIKEY)
 
 
+class UserInterestMixin(object):
+    permission_classes = (PostWithoutAuthentication,)
+    throttle_classes = (UserRateThrottle,)
+    serializer_class = LocationUsedSerializer
+    queryset = LocationUsers.objects.all()
+
+class UserInterest(UserInterestMixin,ListCreateAPIView):
+   pass
+
 
 
 

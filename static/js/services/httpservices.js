@@ -133,6 +133,12 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		return $q.all({'active_booking':active_booking,'inactive_booking':inactive_booking})
 	}
 
+	loginData.userAreaInterest = function(data)
+	{
+		var notify_user = $http.post(accountURL+"user_interest/",data)
+		return $q.all({'notify_user':notify_user})
+	}
+
     return loginData;
 });
 

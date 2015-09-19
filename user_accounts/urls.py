@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^invite_user/$', views.InviteUser.as_view(), name = 'invite_user'),
     url(r'^fb_key/$', views.getFBkey, name = 'fb_key'),
     url(r'^user_account/$', views.user_account, name = 'user_account'),
+    url(r'^user_interest/$', views.UserInterest.as_view(), name = 'user_interest'),
     
 )

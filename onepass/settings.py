@@ -238,7 +238,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
  'DEFAULT_THROTTLE_RATES': {
-        'anon': '1000/day',  ##change before going live
+        'anon': '5/day',  ##change before going live
         'user': '10/day'
     }
 

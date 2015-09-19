@@ -233,6 +233,25 @@
 </div>
 <div class="list-box" style="text-align:center;" ng-show="filteredstudio.length == 0">
     No results found
+    <form  ng-hide="inviteflag == 1;" class="form-inline form-register form-register-small" name="inviteform" style="padding:0px;" novalidate>
+              
+              <div class="form-group">
+                <span class="email-icon"><i class="icon fa fa-envelope-o icon-active"></i></span>              
+                <input  size="25" type="email" class="form-control emailtxt" placeholder="Enter email to get notified"  name="email" ng-model="notify_user.email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required />
+              </div>
+              
+              <div class="form-group invite-wrap">                
+                <button type="button" ng-disabled="lp_invited"  ng-click="invite(inviteform)" class="btn btn-primary btn-md" >
+                  <span>Notify Me</span>
+              </button>
+              </div>
+              <span ng-show = "inviteflag == 0;" class="prioritylist">Try Again</span>
+              <span class="error" ng-show="formsubmit && inviteform.email.$error.required">Please enter your email.</span>
+              <span class="error" ng-show="formsubmit && inviteform.email.$error.pattern">Please enter valid email.</span>
+    </form>
+    <div>
+        <span ng-show="inviteflag == 1">We will notify you</span>
+    </div>
 </div>
 
 <!-- List Details -->
@@ -362,7 +381,7 @@
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><span class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></span></div>
                     <p>{%verbatim%}{{rev.comment}}{%endverbatim%}</p>
                 </div>
-                <span ng-if="selectedstudio.studio_review.length <1" class="reviewer"><p>No reviews yet!</p></span>
+                 <span ng-if="selectedstudio.studio_review.length <1" class="reviewer"><p>No reviews yet!</p></span>
                 <div ng-if="selectedstudio.studio_review.length > 0" class="pull-right"><a  style="font-size: 11px;cursor:pointer;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
                 <div ng-if="(selectedstudio.studio_review.length > 0)&&(reviewPage <= reviewtotalpage)"  class="pull-right"><a  ng-click="firstreview()" style="font-size: 11px;cursor:pointer;" ng-show="(reviewPage!=1)&&(reviewtotalpage==reviewPage)">FIRST</a></div>
             </div>

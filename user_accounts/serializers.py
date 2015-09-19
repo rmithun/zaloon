@@ -39,3 +39,10 @@ class InviteUserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = UserInvites
 		fields = ('email',)
+
+class LocationUsedSerializer(serializers.ModelSerializer):
+
+	"""serializer to store user location, email"""
+	class Meta:
+		model = LocationUsers
+		fields = ('email','area',)

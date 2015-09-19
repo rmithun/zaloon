@@ -861,6 +861,36 @@ $scope.bindstudio=function(data){
         }
     }
 
+
+
+$scope.inviteflag = null
+$scope.emailid = null
+$scope.lp_invited = false
+$scope.formsubmit=false;
+$scope.notify_user = {}
+$scope.notify_user['email'] = null
+$scope.invite = function(form)
+{
+
+    $scope.formsubmit=true;
+    if(form.$valid)
+    {
+        $scope.lp_invited = true;
+        $scope.notify_user['area'] = $scope.searchdata.location
+        httpServices.userAreaInterest($scope.notify_user).then(function(res)
+        {
+            //successfully added
+            $scope.inviteflag = 1
+        }, function()
+        {
+            //cant add error
+            $scope.lp_invited = false
+            $scope.inviteflag = 0
+        })
+    }
+}
+
+
 $scope.su_booking = false
 //set booking details
 $scope.book = function()

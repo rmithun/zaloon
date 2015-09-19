@@ -30,3 +30,11 @@ class UserInvites(models.Model):
 	"""table holding all emails of user who wants to be invited"""
 	email = models.EmailField()
 	date = models.DateTimeField(default = datetime.now())
+
+
+class LocationUsers(models.Model):
+
+	"""table to store location and email for users"""
+	email = models.EmailField()
+	area = models.CharField(max_length = 200, null = True)
+	updated_date_time = models.DateTimeField(default = datetime.now())

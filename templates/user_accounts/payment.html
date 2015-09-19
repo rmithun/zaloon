@@ -204,7 +204,7 @@
 
           <div class="col-sm-4 col-xs-7 no-padding ">
             <div class="promobox"><label>Promo code:</label> 
-            <div class="dispInlineblk"> <span><input type="text" ng-model="coupon_code" ng-click="focus()">
+            <div class="dispInlineblk"> <span><input type="text" ng-model="coupon_code" ng-focus="focus()">
               </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length||su_booking" class="btn btn-primary promoapply" ng-switch="su_couponing">
                   <span ng-switch-default>Apply</span>
                   <span ng-switch-when="true">Apply&nbsp;<i class="fa fa-spinner"></i></span>

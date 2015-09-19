@@ -11,7 +11,7 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
 		if(form.$valid)
 		{
             $scope.lp_invited = true;
-			$scope.lp_invited = false;
+			//$scope.lp_invited = false;
 			var data = {email:$scope.emailid};
 			landingServices.invite(data).then(function(res)
 			{
