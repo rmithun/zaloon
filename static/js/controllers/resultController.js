@@ -1389,12 +1389,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
 
     $scope.new_booking = putResultService.getBookingData()
     $scope.one =1
-     $modal.open({
-            templateUrl: 'bookingconfirmodal.html',
-            controller: 'modalController',
-            scope: $scope,
-            size:'lg'
-        });
+
     if($scope.new_booking)
     {
         if(($scope.new_booking['has_booked'] == 1) && ($scope.new_booking['razorpay_payment_id'] == null))
