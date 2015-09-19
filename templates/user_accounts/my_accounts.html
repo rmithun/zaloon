@@ -1,7 +1,7 @@
   <div class="profile-overlay" style="display:none;">
       <div style="position:absolute;color:#000;top:50%;width:100%;text-align:center;">
         <!--<i class="fa fa-spinner fa-spin"></i>-->
-        <div class="la-line-scale" style="left:48%;">
+        <div class="la-line-scale" style="left:48%;color:#000;">
     <div></div>
     <div></div>
     <div></div>
@@ -134,14 +134,14 @@ Loading your profile...
       <div class="book-details" >
         <h4>{%verbatim%}{{buking.studio.name}}{%endverbatim%}</h4>
       <div class="info">
-        <div class="landmark_details">{%verbatim%}{{buking.studio.landmark}}
-  {{buking.studio.address_1}}
-  {{buking.studio.address_2}}</div>
+        <div class="landmark_details">{%verbatim%}{{buking.studio.landmark}}</div>
+        <div class="landmark_details">{{buking.studio.address_1}}</div>
+  <div class="landmark_details">{{buking.studio.address_2}}</div>
   <div class="landmark_details">{{buking.studio.area}},
   {{buking.studio.city}}
   {%endverbatim%}</div>
         <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</a></div> 
-        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
+        <div class="landmark_details" ng-if="buking.studio.contact_mobile_no"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
       </div>
       <div class="info1">
         Appnt. Date: <span>{%verbatim%}{{buking.appointment_date | date: mm-dd}}{%endverbatim%}</span>
@@ -175,14 +175,14 @@ Loading your profile...
           <div class="book-details" >
         <h4>{%verbatim%}{{buking.studio.name}}{%endverbatim%}</h4>
       <div class="info">
-        <div class="landmark_details">{%verbatim%}{{buking.studio.landmark}}
-  {{buking.studio.address_1}}
-  {{buking.studio.address_2}}</div>
+        <div class="landmark_details">{%verbatim%}{{buking.studio.landmark}}</div>
+  <div class="landmark_details">{{buking.studio.address_1}}</div>
+  <div class="landmark_details">{{buking.studio.address_2}}</div>
   <div class="landmark_details">{{buking.studio.area}},
   {{buking.studio.city}}
   {%endverbatim%}</div>
         <div class="landmark_details"><span>{%verbatim%}{{buking.studio.in_charge_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.incharge_mobile_no}}{%endverbatim%}</a></div> 
-        <div class="landmark_details"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
+        <div class="landmark_details" ng-if="buking.studio.contact_mobile_no"><span>{%verbatim%}{{buking.studio.contact_person}}{%endverbatim%}</span> - <a href="tel:+91{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}">{%verbatim%}{{buking.studio.contact_mobile_no}}{%endverbatim%}</a></div>    
       </div>
       <div class="info1">
         Appnt. Date: <span>{%verbatim%}{{buking.appointment_date | date: yyyy-mm-dd}}{%endverbatim%}</span>
@@ -319,8 +319,7 @@ Loading your profile...
   </div> 
   </div>  
 
-
-
+<script type="text/ng-template" id="bookingconfirmodal.html">
   <div  id="bookingconfirm" class=" modal fade" role="dialog">
     <div class="modal-dialog">
     <div class="modal-content signup">
@@ -330,15 +329,35 @@ Loading your profile...
     </div> 
       <div class="modal-body register">   
       <div class="socialpanel">
-          <div>
-            Booking details
+         {%verbatim%}{{one}}{%endverbatim%}
+                
+          <div ng-if="new_booking">
+            <div>
+              <span>
+                {%verbatim%}{{new_booking.serviceschosen.studio.name}}{%endverbatim%}
+                {%verbatim%}{{new_booking.serviceschosen.studio.landmark}}{%endverbatim%}
+                {%verbatim%}{{new_booking.serviceschosen.studio.address_1}}{%endverbatim%}
+                {%verbatim%}{{new_booking.serviceschosen.studio.address_2}}{%endverbatim%}
+                {%verbatim%}{{new_booking.serviceschosen.studio.area}}{%endverbatim%}
+              </span>
+            </div>
+            <div>
+              <span>
+                {%verbatim%}{{new_booking.mobile_no}}{%endverbatim%}
+              </span>
+            </div>
+            <div>
+                <span ng-repeat="serv in new_booking.serviceschosen.services">
+                  {%verbatim%}{{serv.servicename}}{%endverbatim%}
+                </span>
+            </div>
           </div>
       </div>        
       </div>
     </div>  
   </div>  
 </div>
-
+</script>
 
 
 <script type="text/ng-template" id="location.html">

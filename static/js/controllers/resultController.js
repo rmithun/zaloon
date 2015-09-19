@@ -1172,15 +1172,17 @@ $("#datepicker").on("changeDate", function(event) {
 
 });
 
-
+$scope.su_couponing = false
 $scope.applyPromo = function()
 {
     var coupon_data = {};
     coupon_data['coupon_code'] = $scope.coupon_code
     coupon_data['studio_id']  = $scope.serviceschosen.studio.id
     coupon_data['amount'] = $scope.total_amount
+    $scope.su_couponing = true
     httpServices.applyCoupon(coupon_data).then(function(cdata)
     {
+        $scope.su_couponing = false
         $scope.promo_amount = parseInt(cdata.apply_coupon.data)
         $scope.coupon_resp = "Coupon applied"
         $scope.amount_to_pay = ($scope.total_amount - $scope.promo_amount)
@@ -1189,6 +1191,7 @@ $scope.applyPromo = function()
         //$scope.promo_amount = cdata.
     },function(cdata)
     {   
+        $scope.su_couponing = false
         $scope.coupon_resp = cdata.data;
         $scope.promo_amount = 0
         $scope.coupon_code="";
@@ -1250,6 +1253,7 @@ $scope.makepayment = function(bookingForm)
             booking_data['services'] = $scope.selected_services
             booking_data['studio'] = $scope.serviceschosen.studio.id
             booking_data['promo_code'] = $scope.coupon_code
+            booking_data['serviceschosen'] = $scope.serviceschosen['services']
             var options = {
                 "key": "rzp_test_bKVgZ668B7jtSR",
                 "amount": ($scope.amount_to_pay * 100),
@@ -1376,11 +1380,21 @@ $scope.timeFilter =  function (value) {
     }
 });
 
-noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServices,putResultService,sessionService,$window){
+
+noqapp.controller('modalController', ['$scope', function($scope) {
+    
+}]);
+noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServices,putResultService,sessionService,$window,$modal){
 
 
     $scope.new_booking = putResultService.getBookingData()
-    console.log($scope.new_booking)
+    $scope.one =1
+     $modal.open({
+            templateUrl: 'bookingconfirmodal.html',
+            controller: 'modalController',
+            scope: $scope,
+            size:'lg'
+        });
     if($scope.new_booking)
     {
         if(($scope.new_booking['has_booked'] == 1) && ($scope.new_booking['razorpay_payment_id'] == null))
@@ -1394,7 +1408,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
                 }
                 
             });
-            $('#bookingconfirm').modal('show')
+            
             putResultService.clearData()
         }
     }
