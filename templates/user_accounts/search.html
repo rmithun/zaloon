@@ -362,10 +362,9 @@
                     <div class="reviewer">{%verbatim%}{{rev.user.first_name}}{%endverbatim%}<span ng-bind="rev.updated_date_time | date:'dd MMMM yyyy'"></span><span class="image loaded staricon star{%verbatim%}{{rev.rating}}{%endverbatim%} pull-right"></span></div>
                     <p>{%verbatim%}{{rev.comment}}{%endverbatim%}</p>
                 </div>
-                <span ng-if="(selectedstudio.studio_review).length <1;" class="reviewer"><p>No reviews yet!</p></span>
-                <div ng-if="(selectedstudio.studio_review).length > 0;" class="pull-right"><a  style="font-size: 11px;cursor:pointer;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
-                <div ng-if="(selectedstudio.studio_review).length > 0;&&(selectedstudio.studio_review).length > reviewtotalpage;"  class="pull-right"><a  ng-click="firstreview()" style="font-size: 11px;cursor:pointer;" ng-show="reviewtotalpage==reviewPage">FIRST</a></div>
-
+                <span ng-if="selectedstudio.studio_review.length <1" class="reviewer"><p>No reviews yet!</p></span>
+                <div ng-if="selectedstudio.studio_review.length > 0" class="pull-right"><a  style="font-size: 11px;cursor:pointer;" ng-hide="reviewtotalpage==reviewPage" ng-click="morereview()">MORE</a></div>
+                <div ng-if="(selectedstudio.studio_review.length > 0)&&(reviewPage <= reviewtotalpage)"  class="pull-right"><a  ng-click="firstreview()" style="font-size: 11px;cursor:pointer;" ng-show="(reviewPage!=1)&&(reviewtotalpage==reviewPage)">FIRST</a></div>
             </div>
             <div style="clear: both;"></div>
         </div>

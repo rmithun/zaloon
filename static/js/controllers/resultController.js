@@ -569,8 +569,8 @@ $scope.bindstudio=function(data){
             {                               
                 $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);                
                 $scope.selectedstudio.studio_review=res['service_details'].data[0].studio_review;
-                var page = Math.floor($scope.selectedstudio.studio_review.length / 10);                   
-                page = page + ($scope.selectedstudio.studio_review.length % 10 > 0 ? 1 : 0);                  
+                var page = Math.floor($scope.selectedstudio.studio_review.length / 5);                   
+                page = page + ($scope.selectedstudio.studio_review.length % 5 > 0 ? 1 : 0);                  
                 $scope.reviewtotalpage = page;        
             },function()
             {
@@ -1155,6 +1155,9 @@ $("#datepicker").on("changeDate", function(event) {
     slot_data['studio_id'] = $scope.serviceschosen.studio.id
     $('#loading').show();
     $('#slotter').hide();
+    $('html, body').animate({
+       scrollTop: $('#scrollhere').offset().top + ($(window).height() - $('#scrollhere').outerHeight(true)) 
+   }, 200);
     httpServices.getSlots(slot_data).then(function(sdata)
     {
         $('#loading').hide();
