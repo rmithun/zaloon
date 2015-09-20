@@ -120,6 +120,10 @@
                         <i class="fa fa-facebook"></i>
                     </button>
                 </li>
+                <li>
+                    <i class="fa fa-shopping-cart"></i>
+                    <span ng-show="selected_service.length>0" class="cart-count">{%verbatim%}{{selected_service.length}}{%endverbatim%}</span>
+                </li>
             </ul>
         </div>
         <div class="searchdevice" id="searchdevice">

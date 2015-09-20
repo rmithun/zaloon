@@ -298,4 +298,14 @@ z-index: 999;
   height: 300px;
 }
 
-  
+.cart-count{
+  position: absolute;
+    top: 16px;
+    right: 13px;
+    text-align: center;
+    font-size: 9px;
+    padding: 2px 3px;
+    line-height: .9;
+    background-color: #f06471;
+    color: white;
+  }
