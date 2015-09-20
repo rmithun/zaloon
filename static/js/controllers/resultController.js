@@ -526,7 +526,8 @@ $scope.bindstudio=function(data){
         if(typeof $scope.selectedstudio.id != "undefined"){
             if($scope.selectedstudio.id!=id){
                 $scope.selected_service = [];  
-                $scope.serviceprice = 0;              
+                $scope.serviceprice = 0;  
+                $scope.serviceduration=0;            
             }  
             else{
                 samestudio=true;
@@ -543,7 +544,6 @@ $scope.bindstudio=function(data){
                $('#searchdevice').hide();
             }
             serviceheight=0;            
-            $scope.serviceduration=0;
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
@@ -695,6 +695,30 @@ $scope.bindstudio=function(data){
             $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
             autozoom();
         },300);                
+    }
+
+    $scope.servicecart=function(){        
+        if($('#studiodetails').css('display') != 'none'){
+            $scope.closeslider();
+        } 
+        $('#cartmodal').modal('show');
+    }
+
+    $scope.removeselectedservice=function(service){
+        console.log($scope.servicelist);
+        var index = lodash.findIndex($scope.selected_service, service);
+        $scope.selected_service.splice(index, 1);
+        $scope.serviceprice = $scope.serviceprice - service.price;
+        $scope.serviceduration=$scope.serviceduration-service.duration;
+        //var flag = $scope.servicelist[index].flag;
+             
+        //if (flag) {                        
+        //    var inx=lodash.findIndex($scope.selected_service, { 'servicename': service.servicename });
+        //    $scope.servicelist[index].flag = !$scope.servicelist[index].flag;   
+        //    $scope.selected_service.splice(inx, 1);
+        //    $scope.serviceprice = $scope.serviceprice - service.price;
+        //    $scope.serviceduration=$scope.serviceduration-service.duration;
+        //}
     }
 
     $scope.morereview = function () {
@@ -956,6 +980,7 @@ httpServices.getFBKey().then(function(data)
 
 $scope.fbLogin = function(dummy)
 {    
+     $('.loader-overlay').show();
     httpServices.loginUsingFB(dummy).then(function(data)
     {
         if(data)

@@ -120,7 +120,7 @@
                         <i class="fa fa-facebook"></i>
                     </button>
                 </li>
-                <li>
+                <li ng-click="servicecart()">
                     <i class="fa fa-shopping-cart"></i>
                     <span ng-show="selected_service.length>0" class="cart-count">{%verbatim%}{{selected_service.length}}{%endverbatim%}</span>
                 </li>
@@ -484,6 +484,38 @@
 
             </div>
             <p class="hidden-xs"><i>* We remember our promise of no posts on your wall</i></p>
+        </div>
+    </div>
+</div>
+</div>
+
+<!--Modal-->
+<div id="cartmodal" class=" modal fade" role="dialog">
+    
+    <div class="modal-dialog" style="margin-top:15%;">    
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Selected Service</h4>
+        </div>
+        <div class="modal-body register">            
+            <div ng-repeat="ser in selected_service">
+                {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                <span ng-click="removeselectedservice(ser)">Delete</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+               <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
+                <i class="icon icon-contact"></i>
+                <span class="text show.bs.modal" ng-if="has_online_payment" ng-disabled="su_booking"
+                  ng-switch="su_booking" ng-click="book()">
+                <span ng-switch-default>BOOK</span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                       </button></span>
+                <span class="text" ng-if="has_online_payment == 0">No online booking</span>
+            </div>
+            
+
         </div>
     </div>
 </div>
