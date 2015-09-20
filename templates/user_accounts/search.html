@@ -30,14 +30,14 @@
                     <div ng-show="morefilter" class="more-filters-dropdown-panel">
                         <div class="triangle-up hidden-xs"></div>
                         <div class="more-filters-dropdown-menu">
-                            <div class="col-xs-12 col-sm-6 brdrgt">
-                                <div class="hidden-md hidden-lg paddbtm">
+                            <div class="col-xs-12 col-sm-12">
+                                <div class="hidden-xs hidden-sm hidden-md hidden-lg paddbtm">
                                     <input size="3" type="text" class="form-control" placeholder="Search by name">
                                 </div>
                                 
                                 <h3 class="more-panel-title margintopnone">Studio Type</h3>
                                 <div class="clearfix"></div>
-                                <div class="btn-toolbars">
+                                <div class="btn-toolbars studio-tab">
 
                                     <a ng-repeat="type in studiotype" class="btn " ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiotypeclick(type.name,$index)">
                                         <span ng-class="type.icon">
@@ -50,7 +50,7 @@
 
                                 <h3 class="more-panel-title">Type</h3>
                                 <div class="clearfix"></div>
-                                <div class="btn-toolbars">
+                                <div class="btn-toolbars type-tab">
 
 
                                     <a ng-repeat="type in studiokind" class="btn" ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiokindclick(type.name,$index)">
@@ -180,7 +180,7 @@
     <div class="listheader">
         <label>We have discovered  {%verbatim%} {{filteredstudio.length}}{%endverbatim%} best parlours near you.</label>
         <span class="pull-right hiddenxsprt">
-                        <span class="icon-active">Map</span>
+                        <span class="fa fa-map-marker mappaddrgt5 icon-active">Map</span>
        <!-- <span class="sep">|</span>
         <span class="icon icon-text-hierarchy-06">List</span> -->
         </span>
@@ -260,21 +260,21 @@
     <div class="list-detail-box">
         <div class="rate-panel col-xs-12 no-padding">
 
-             <div ng-click="closeslider()" class="hidden-sm hidden-md hidden-lg col-xs-2 btn btn-primary btn-close">             
+             <div ng-click="closeslider()" class="hidden-sm hidden-md hidden-lg col-xs-1 btn btn-primary btn-close">             
                 <span class="text"> <a style="cursor:pointer;color:#fff;"  >X
                 </a></span>
             </div>  
 
-            <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
+            <div style="cursor:default;" class="col-sm-6 col-xs-5 no-padding">
                 <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
-            <div class="col-sm-6 col-xs-4 no-padding" >
+            <div class="col-sm-6 col-xs-6 no-padding" >
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
                 ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
                 <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
                        </button>
-                <button class="btn btn-primary col-xs-12" ng-if="has_online_payment == 0">No online booking.</button>
+                <button class="btn btn-primary col-xs-12 no-onlinebook" ng-if="has_online_payment == 0">No online booking.</button>
             </div>
         
         </div>

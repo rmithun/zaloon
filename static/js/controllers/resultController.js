@@ -38,7 +38,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.serviceduration=0;  
     $scope.morefilter = false;
     $scope.stariconset={1:'star1',2:'star2',3:'star3',4:'star4',5:'star5'};
-    $scope.studiotype = [{ id:1, name: "Salon", active: false, icon: "fa fa-scissors" }, { id:2, name: "Spa", active: false, icon: "icon icon-medical-19" }, { id:3, name: "Beauty parlor", active: false, icon: "icon icon-shopping-23" }];
+    $scope.studiotype = [{ id:1, name: "Salon", active: false, icon: "fa fa-scissors" }, { id:2, name: "Spa", active: false, icon: "fa fa-scissors" }, { id:3, name: "Beauty parlor", active: false, icon: "fa fa-scissors" }];
     $scope.studiokind = [{ id:1, name: "Men", active: false, icon: "fa-mars" }, {id:2, name: "Women", active: false, icon: "fa-venus" }, {id:3, name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
     $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "min_price", value: "priceasc", direction: false ,name:"Price"}, { property: "min_price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: false,name:"Rating" }];
