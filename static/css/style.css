@@ -701,7 +701,7 @@ h3.more-panel-title{color: #4c4c4c;
  
  .todo li:after {
   position: absolute;
-  top: 50%;
+  top: 20px;
   left:6px;
   display: block;
   width: 20px;
@@ -1102,6 +1102,34 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 .amntpay span{font-size:15px;}
 .fntbold{font-weight:bold;color:#f77d88;}
 .rate-panel .btn .no-onlinebook{background-color: #EBEBEB;}
+.selected-service{text-align: right;}
+.cartlistdiv{position: relative;}
+h4.shopname{font-size: 18px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+ .selected-service:after{position: absolute;
+    top: 50%;
+    left: 6px;
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    content: "\e609";
+    background: #F06370;
+    border-radius: 50%;
+    font-family: 'Flat-UI-Icons';
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 21px;
+    color: #fff;
+    text-align: center;
+  }
+  .fa-shopping-cart:before {color: #1BBC9B; font-size: 18px; }
 
 /* Mobile device 767px */
 @media (max-width: 767px) {

@@ -490,22 +490,24 @@
 </div>
 
 <!--Modal-->
-<div id="cartmodal" class=" modal fade" role="dialog">
+<div id="cartmodal" class="modal fade" role="dialog">
     
     <div class="modal-dialog" style="margin-top:15%;">    
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Selected Service</h4>
+            <h4 class="modal-title">Cart</h4>
         </div>
-        <div class="modal-body register">            
-            <div ng-repeat="ser in selected_service">
-                {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+        <div class="modal-body register">  
+        <h4 class="shopname">Green Trends</h4>          
+            <div ng-repeat="ser in selected_service" class="cartlistdiv text-right" >
                 <span ng-click="removeselectedservice(ser)">Delete</span>
+
+                <span class="selected-service">{%verbatim%} {{ser.servicename}} {%endverbatim%} </span>- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
             </div>
         </div>
         <div class="modal-footer">
-               <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
+               <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary pull-right">
                 <i class="icon icon-contact"></i>
                 <span class="text show.bs.modal" ng-if="has_online_payment" ng-disabled="su_booking"
                   ng-switch="su_booking" ng-click="book()">
@@ -544,7 +546,7 @@
         </div>
 
         <div class="modal-footer">
-               <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary">
+               <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary pull-right">
                 <i class="icon icon-contact"></i>
                 <span class="text show.bs.modal" ng-if="has_online_payment" ng-disabled="su_booking"
                   ng-switch="su_booking" ng-click="book()">
