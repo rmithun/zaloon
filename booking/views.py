@@ -225,7 +225,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                     'new booking', message = '').update(is_successful = sms,  \
                     service_updated = 'booking confirmed')
                     email_bms.save()
-                    sms_bms.save()
+                    #sms_bms.save()
                     notification_send = 1
                     logger_booking.info("Notification sent - "+str(notification_send))
                     BookingDetails.objects.filter(id = booking_id).update(notification_send =   \
