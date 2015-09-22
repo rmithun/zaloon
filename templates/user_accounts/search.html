@@ -94,6 +94,11 @@
                         </div>
                     </div>
                 </li>
+
+                <li ng-click="servicecart()" class="shoppingcart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span ng-show="selected_service.length>0" class="cart-count">{%verbatim%}{{selected_service.length}}{%endverbatim%}</span>
+                </li>
                 <li ng-show="is_logged == 0" class="hidden-xs hidden-sm">
                     <button data-ng-click='fetch();' class="btn  btn-social btn-facebook">
                         <i class="fa fa-facebook"></i>Login with Facebook
@@ -120,10 +125,7 @@
                         <i class="fa fa-facebook"></i>
                     </button>
                 </li>
-                <li ng-click="servicecart()">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span ng-show="selected_service.length>0" class="cart-count">{%verbatim%}{{selected_service.length}}{%endverbatim%}</span>
-                </li>
+                
             </ul>
         </div>
         <div class="searchdevice" id="searchdevice">
@@ -501,7 +503,7 @@
         <div class="modal-body register">  
         <h4 class="shopname">Green Trends</h4>          
             <div ng-repeat="ser in selected_service" class="cartlistdiv text-right" >
-                <span ng-click="removeselectedservice(ser)">Delete</span>
+                <span ng-click="removeselectedservice(ser)"><img width="50" height="50" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/email-cancelled.png' %}"></span>
 
                 <span class="selected-service">{%verbatim%} {{ser.servicename}} {%endverbatim%} </span>- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
             </div>
