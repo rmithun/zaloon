@@ -293,12 +293,13 @@ class StudioInvoices(models.Model):
 
 	"""all invoice details for studio"""
 	studio = models.ForeignKey(StudioProfile, related_name = "studio_invoice_detail")
-	amount_to_be_paid = models.PositiveIntegerField()
+	amount_to_be_paid = models.FloatField()
 	total_booking = models.PositiveIntegerField()
-	fee_amount = models.PositiveIntegerField()
+	fee_amount = models.FloatField()
 	invoice_date = models.DateField(default = datetime.now().date())
-	total_booking_amount = models.PositiveIntegerField()
-	service_updated = models.CharField(max_length = 25)
+	total_booking_amount = models.FloatField()
+	service_tax_amount = models.FloatField()
+	service_updated = models.CharField(max_length = 50)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 class StudioPasswordReset(models.Model):
