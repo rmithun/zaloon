@@ -1338,6 +1338,7 @@ $scope.makepayment = function(bookingForm)
             booking_data['mobile_no'] = $scope.mobileno
             booking_data['services'] = $scope.selected_services
             booking_data['studio'] = $scope.serviceschosen.studio.id
+            booking_data['studio_name'] = $scope.serviceschosen.studio.name
             booking_data['promo_code'] = $scope.coupon_code
             booking_data['serviceschosen'] = $scope.serviceschosen['services']
             var options = {
@@ -1353,8 +1354,10 @@ $scope.makepayment = function(bookingForm)
                     booking_data['razorpay_payment_id'] = response.razorpay_payment_id
                     httpServices.newBooking(booking_data).then(function(paydata)
                     {
-                        console.log(booking_data)
+                        console.log(paydata.new_booking.data)
+                        resp = JSON.parse(paydata.new_booking.data)
                         booking_data['has_booked'] = 1
+                        booking_data['booking_code'] = resp['code']
                         booking_data['razorpay_payment_id'] = null
                         putResultService.putBookingData(booking_data)
                         $('#processingmodal').modal('hide')
@@ -1467,15 +1470,30 @@ $scope.timeFilter =  function (value) {
 });
 
 
-noqapp.controller('modalController', ['$scope', function($scope) {
+noqapp.controller('modalController', ['$scope','$modalInstance', function($scope, $modalInstance) {
+
+    $scope.cancel = function () {
+    $modalInstance.dismiss('cancel')
+  };
     
 }]);
 noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServices,putResultService,sessionService,$window,$modal){
 
 
     $scope.new_booking = putResultService.getBookingData()
-    $scope.one =1
-
+    var modalInstance = null;
+    templates ='<div style="" class="modal-header modal-register-header">'+
+    '<button type="button" class="close" ng-click = "cancel()">&times;</button>'+
+    '<h4 class="modal-title">Cheers! Your booking is successful.</h4>'+
+    '</div><!-- /modal-header -->'+
+    '<div class="modal-body register"><span>{{new_booking.studio_name}}</span><br/>'+
+    '<span>Appnt date:{{new_booking.appnt_date| date: yyyy-mm-dd}}</span><br/>'+
+    '<span ng-bind="timeFilter(new_booking.appnt_time)">Appnt. time:</span><br/>'+
+    '<span>Purchase amount:₹-{{new_booking.purchase_amount}}</span><br/><span>'+
+    'Confirmation  sent to : {{new_booking.mobile_no}}</span><br/>'+
+    'Services booked:<span ng-repeat="ser in new_booking.serviceschosen">{{ser.servicename}}<br/></span><br/>'+
+    '<span>Booking code:{{new_booking.booking_code}}</span></div>',
+    console.log($scope.new_booking)
     if($scope.new_booking)
     {
         if(($scope.new_booking['has_booked'] == 1) && ($scope.new_booking['razorpay_payment_id'] == null))
@@ -1489,7 +1507,18 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
                 }
                 
             });
-            
+            //$('#bookingconfirm').modal('show')
+            modalInstance = $modal.open({
+                template: templates,
+                controller: 'modalController',
+                size:'lg',
+                scope:$scope,
+                backdrop:true,
+                resolve:{book:function()
+                    {
+                        return $scope.new_booking
+                    }}
+                })
             putResultService.clearData()
         }
     }
@@ -1791,5 +1820,6 @@ $scope.has_cancel = function(start_time,appnt_date)
         return true
     }
 }    
+
 });
     

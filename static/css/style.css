@@ -56,7 +56,7 @@ hr { width: 100%; border-top: 1px solid #E9E9E9; display: inline-block; }
 .resp-center {text-align:center;}
 
 .btn { font-size: 13px; border-radius: 0px; text-transform: uppercase; font-weight: 700; padding: 14px; min-width: 50px; max-width: 100%;border:none; }
-.btn:Hover, .btn.hovered { border: 1px solid #fff; }
+/*.btn:Hover, .btn.hovered { border: 1px solid #fff; }*/
 
 .dropdown-toggle:Active, .dropdown-toggle.pressed { border-top: 0; }
 .btn:focus, .btn:active:focus, .btn.active:focus { outline: 0; outline-offset: 0px;box-shadow: none; }
@@ -701,7 +701,7 @@ h3.more-panel-title{color: #4c4c4c;
  
  .todo li:after {
   position: absolute;
-  top: 50%;
+  top: 20px;
   left:6px;
   display: block;
   width: 20px;
@@ -1102,9 +1102,25 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 .amntpay span{font-size:15px;}
 .fntbold{font-weight:bold;color:#f77d88;}
 .rate-panel .btn .no-onlinebook{background-color: #EBEBEB;}
+.selected-service{text-align: right;}
+.cartlistdiv{position: relative;}
+h4.shopname{font-size: 18px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+ 
+  .fa-shopping-cart:before {color: #1BBC9B; font-size: 20px; }
+  .shoppingcart{position: relative;
+    padding-top: 6px;
+    padding-right: 15px;}
+  .cart-count{background-color: #fff;color:red;}
 
 /* Mobile device 767px */
 @media (max-width: 767px) {
+  .shoppingcart{padding-top: 12px; padding-right: 15px; padding-left: 10px;border-right: 1px solid #D23D4B;}
+  .fa-shopping-cart:before{ color: #fff;}
 .review-detail{padding-bottom: 80px;}
 .rate-panel .btn{min-width: 22px;}
 .list-view{
@@ -1113,7 +1129,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 .fbmobile{
   color:#fff;
   background-color: #F06370;
-  padding: 12px 17px 15px 17px;
+  padding: 12px 17px 11px 17px;
   font-size:20px;
 }
 .btnmore :first-child{background:none;position:inherit;width:30px;}
@@ -1237,7 +1253,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 .fbmobile{
   color:#fff;
   background-color: #F06370;
-  padding: 13px 17px 14px 17px;
+  padding: 13px 17px 11px 17px;
   font-size:20px;
 }
 .btn-toolbars a.btn{  min-width: 40px;}

@@ -191,7 +191,7 @@
             <div class="col-sm-4 no-padding">
             <div class="promo">
               <label class="mobspan" style="padding-top:0px">
-              <label>Mobile No:</label>  <span><input ng-model="mobileno" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
+              <label>Mobile No:</label>  <span><input ng-model="mobileno" style="border: 1px solid #ccc;" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
               <br/>
             <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.required">
                     Please enter your mobile no.</span></span>
@@ -205,8 +205,8 @@
           <div class="col-sm-4 col-xs-7 no-padding ">
             <div class="promobox"><label>Promo code:</label> 
             <div class="dispInlineblk"> <span><input type="text" ng-model="coupon_code" ng-focus="focus()">
-              </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length||su_booking" class="btn btn-primary promoapply" ng-switch="su_couponing">
-                  <span ng-switch-default>Apply</span>
+              </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length||su_booking" class="btn btn-primary promoapply" ng-switch="su_couponing" style="border: 1px solid #ccc;">
+                  <span ng-switch-default style="padding-left: 5px;">Apply</span>
                   <span ng-switch-when="true">Apply&nbsp;<i class="fa fa-spinner"></i></span>
               </button>
               </div>

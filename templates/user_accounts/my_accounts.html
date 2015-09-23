@@ -318,9 +318,10 @@ Loading your profile...
     </div>  
   </div> 
   </div>  
+  
+  <alert-popup alertmsg="" alertobj="new_booking"></alert-popup>
 
-<script type="text/ng-template" id="bookingconfirmodal.html">
-  <div  id="bookingconfirm" class=" modal fade" role="dialog">
+   <div  id="bookingconfirm" class=" modal fade" role="dialog">
     <div class="modal-dialog">
     <div class="modal-content signup">
      <div class="modal-header modal-register-header">
@@ -328,9 +329,7 @@ Loading your profile...
      <h4 class="modal-title">Cheers! Your booking is successful.</h4>
     </div> 
       <div class="modal-body register">   
-      <div class="socialpanel">
-         {%verbatim%}{{one}}{%endverbatim%}
-                
+      <div class="socialpanel">                
           <div ng-if="new_booking">
             <div>
               <span>
@@ -357,7 +356,6 @@ Loading your profile...
     </div>  
   </div>  
 </div>
-</script>
 
 
 <script type="text/ng-template" id="location.html">
