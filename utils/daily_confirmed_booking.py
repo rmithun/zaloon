@@ -47,11 +47,15 @@ today = datetime.today().date()
 till_hour = datetime.now().hour
 till_time = None
 buks = None
+sent = 0
+uniq_studios = 0
+mail_exception = []
+parse_exception = []
 def daily_confirmed_booking():
     try:
         ##get all used booking for the day
         time = datetime.now().replace(hour = 13, minute = 00)
-        global till_time,today
+        global till_time,today,uniq_studios,parse_exception
         if till_hour < 13:
             till_time = time.time().replace(hour = 13, minute = 00)
             bookings = BookingDetails.objects.filter( appointment_date = today, \
@@ -87,8 +91,10 @@ def daily_confirmed_booking():
                 obj['mobile_no'] = stud.mobile_no
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:
+                    uniq_studios = uniq_studios + 1
                     obx['studio_id'] =  stud.studio_id
                     obx['studio_name'] = stud.studio.name
+                    obx['commission_percent'] = int(stud.studio.commission_percent)
                     obx['studio_address1'] = stud.studio.address_1
                     obx['studio_address2'] = stud.studio.address_2
                     obx['studio_area'] = stud.studio.area
@@ -96,27 +102,35 @@ def daily_confirmed_booking():
                     obx['account_number'] = stud.studio.studio_account_detail.bank_acc_number
                     obx['bank_name'] = stud.studio.studio_account_detail.bank_name
                     obx['ifsc_code'] = stud.studio.studio_account_detail.bank_ifsc
-                    obx['total_amount'] = obj['booking_amount']
+                    #obx['total_amount'] = obj['booking_amount']
                     obx['total_booking_amount'] = stud.purchase.actual_amount
-                    obx['paid_amount'] = obj['booking_amount'] -  \
-                    (obj['booking_amount']/int(stud.studio.commission_percent))
-                    obx['fee_amount'] =  obx['total_booking_amount'] - obx['paid_amount']
+                    #obx['paid_amount'] = obj['booking_amount'] -  \
+                    #(obj['booking_amount']/int(stud.studio.commission_percent))
+                    #obx['fee_amount'] =  obx['total_booking_amount'] - obx['paid_amount']
                     studios_visited.append(stud.studio_id)
                     to_print[stud.studio_id] = obx
                 else:
                     to_print[stud.studio_id]['total_booking_amount'] = to_print[stud.studio_id]['total_booking_amount'] +  \
                     stud.purchase.actual_amount
-                    to_print[stud.studio_id]['total_amount'] = to_print[stud.studio_id]['total_amount'] +  \
-                        obj['booking_amount']
-                    to_print[stud.studio_id]['paid_amount'] =  (to_print[stud.studio_id]['paid_amount']  \
-                        + obj['booking_amount'] -  \
-                    (obj['booking_amount']/int(stud.studio.commission_percent)))
-                    to_print[stud.studio_id]['fee_amount'] = to_print[stud.studio_id]['total_booking_amount'] -  \
-                    to_print[stud.studio_id]['paid_amount'] 
+                    #to_print[stud.studio_id]['total_amount'] = to_print[stud.studio_id]['total_amount'] +  \
+                    #    obj['booking_amount']
+                    #to_print[stud.studio_id]['paid_amount'] =  (to_print[stud.studio_id]['paid_amount']  \
+                    #    + obj['booking_amount'] -  \
+                    #(obj['booking_amount']/int(stud.studio.commission_percent)))
+                    #to_print[stud.studio_id]['fee_amount'] = to_print[stud.studio_id]['total_booking_amount'] -  \
+                    #to_print[stud.studio_id]['paid_amount'] 
                     to_print[stud.studio_id]['data'].append(obj)
             except Exception,jsonerr:
+                err = {}
+                err['studio'] = "Parse error1"
+                err['Exception'] = jsonerr
+                parse_exception.append(err)
                 logger_error.error(traceback.format_exc())
     except Exception,majErr:
+        err = {}
+        err['studio'] = "Parse error2"
+        err['Exception'] = jsonerr
+        parse_exception.append(err)
         logger_error.error(traceback.format_exc())
     else:
         logger_booking.info(" data to render  "+str(to_print))
@@ -127,11 +141,11 @@ def render_to_pdf(template_url,data,studio):
     ##generate pdf with data
     #import pdb;pdb.set_trace();
     try:
-        global till_time,today
+        global till_time,today,mail_exception
+        response = 0 
         template = get_template(template_url)
         data['todayslist']['date'] = today
         data['todayslist']['time'] = till_time
-        print data
         context = Context(data)
         html =  template.render(context)
         filename = data['todayslist']['studio_name'] + str(datetime.today().date())+"__bookings"
@@ -142,7 +156,8 @@ def render_to_pdf(template_url,data,studio):
         try:
             pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
         except:
-            pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, encoding="UTF-8")
+            logger_error.error(traceback.format_exc())
+            pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
         result.close()
         if not pdf.err:
             ###get and save the pdf 
@@ -161,43 +176,87 @@ def render_to_pdf(template_url,data,studio):
                 #generic_utils.sendEmail(studio_email['email'],subject,message)
                 rep = DailyBookingConfirmation.objects.filter(studio_id = studio, report_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
+                response = 1
+                logger_booking.info('studio details %s '%(data))
             except Exception,e:
+                response = 0
+                err = {}
+                err['studio'] = studio
+                err['Exception'] = e
+                mail_exception.append(err)
                 logger_error.error(traceback.format_exc())
+                logger_error.error('studio details %s '%(data))
             ##save pdf to table
             ##location should be inside studio
             file_.close();
     except Exception,pdfrenderr:
         transaction.rollback()
+        err = {}
+        err['studio'] = studio
+        err['Exception'] = pdfrenderr
+        mail_exception.append(err)
         logger_error.error(traceback.format_exc())
+        return response
     else:
         transaction.commit()
+        return response
 
 
 def generate_pdf():
     to_generate = daily_confirmed_booking()
-    global buks
+    global buks, sent
     buks = len(to_generate)
     logger_booking.info("Sent mails to %s  studios - "%(str(buks)))
     for key,data in to_generate.iteritems():
         try:
+            fee_amount =((data['total_booking_amount']* data['commission_percent'])/100)
+            service_tax = (data['total_booking_amount']*responses.SERVICE_TAX)/100
+            amount_paid = data['total_booking_amount'] - fee_amount + service_tax
+            data['paid_amount'] = amount_paid
+            data['fee_amount'] = fee_amount
+            data['service_tax_amount'] = service_tax
+            data['service_tax'] = responses.SERVICE_TAX
             stud_invoice = StudioInvoices(studio_id = data['studio_id'],  \
-                amount_to_be_paid = data['total_booking_amount'],  \
+                amount_to_be_paid = data['paid_amount'],  \
                 total_booking = len(data['data']), fee_amount = data['fee_amount'],  \
-                total_booking_amount = data['total_amount'])
+                total_booking_amount = data['total_booking_amount'], service_tax_amount = \
+                data['service_tax_amount'], service_updated = 'daily_confirmed_bookings')
             stud_invoice.save()
             data['invoice_id'] =    stud_invoice.id
             logger_booking.info("data to be rendered - "+str(key)+"---"+str(data))
             pdf_file = render_to_pdf('../templates/emails/daily_confirmed_bookings.html',  \
                {'pagesize':'A4','todayslist':data},key)
+            if pdf_file > 0:
+                sent = sent + 1
+            logger_booking.info('studio details %s '%(data))
         except Exception,pdfgenrateerr:
+            sent = sent - 1
             logger_error.error(traceback.format_exc())
+            err = {}
+            err['studio'] = data['studio_id']
+            err['Exception'] = pdfgenrateerr
+            mail_exception.append(err)
+            logger_error.error('failed for %s'%(data))
 
      
 logger_booking.info("Confirmed booking script starts running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 generate_pdf()
-message = "Sent mails to %s  studios"%(str(buks))
-generic_utils.sendEmail('vbnetmithun@gmail.com', 'Daily report script run sucessfull',message)
+if buks != uniq_studios:
+   message = "Failed While parsing;<br/>Total uniq studios - %s; <br/> Total processes - %s; <br/> Total sent -%s ; <br/>  \
+   Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent),str(uniq_studios - buks),  \
+    mail_exception, parse_exception) 
+   generic_utils.sendEmail('vbnetmithun@gmail.com', 'Failures(parsing),Daily report script run sucessfull',message)
+else:
+    if buks != sent:
+        message = "Failed while EMALING;<br/>Total unique studios - %s; <br/> Total processes - %s ;<br/> Total sent -%s  ;<br/>  \
+        Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent), str(buks-sent),  \
+             mail_exception, parse_exception)
+        generic_utils.sendEmail('vbnetmithun@gmail.com', 'Failures(emailing),Daily report script run sucessfull',message)
+    else:
+        message = "Success.Have sent for %s out of %s"%(str(sent), str(buks))
+        generic_utils.sendEmail('vbnetmithun@gmail.com', 'Success.Daily report script run sucessfull',message)
+
 logger_booking.info("Confirmed booking script stops running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 

@@ -135,12 +135,16 @@
                   <span class="content">{{todayslist.total_booking_amount}}</span>
                 </th>
                 <th scope="col" class="bar-right">
-                  <span class="title">FEE (10%)(Rs)</span>
+                  <span class="title">FEE ({{todayslist.commission_percent}}%)(Rs)</span>
                   <span class="content">{{todayslist.fee_amount}}</span>
+                </th>
+                <th scope="col" class="bar-right">
+                  <span class="title">SERVICE TAX ({{todayslist.service_tax}}%)(Rs)</span>
+                  <span class="content">{{todayslist.service_tax_amount}}</span>
                 </th>
 				<th scope ="col" class="bar-paid">
                   <span class="title">AMOUNT PAID(Rs)</span>
-                  <span class="blue-content">{{todayslist.paid_amount }}</span>
+                  <span class="blue-content">{{todayslist.paid_amount}}</span>
                 </th>
             </tr>
         </table><!-- // Bar Section --> 
@@ -195,8 +199,18 @@
     <th class="left-align" width="15%" scope="col"></th>
     <th class="left-align" width="30%" scope="col"></th>
     <th class="left-align" width="10%" scope="col"></th>
-  <th class="blue-border left-align" width="15%" scope="col">Fee(10%)(Rs)</th>
+  <th class="blue-border left-align" width="15%" scope="col">Fee({{todayslist.commission_percent}}%)(Rs)</th>
     <th class="blue-border left-align"  width="15%" scope="col">- {{todayslist.fee_amount}}</th>
+  </tr>
+
+  <tr class="table-header">
+  <th class=" left-align"  width="5%" scope="col"></th>
+    <th class=" left-align" width="10%" scope="col"></th>
+    <th class=" left-align" width="15%" scope="col"></th>
+    <th class=" left-align" width="30%" scope="col"></th>
+    <th class="left-align" width="10%" scope="col"></th>
+  <th class="left-align" width="15%" scope="col">Service tax({{todayslist.service_tax}}Rs)</th>
+    <th class=" left-align"  width="15%" scope="col">+{{todayslist.service_tax_amount}}</th>
   </tr>
 
   <tr class="table-header">
