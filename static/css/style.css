@@ -1095,6 +1095,37 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   margin: 15px 0;
   text-align:right;
 }
+
+#about {
+  padding: 40px 0px;background-color: #f6f2f1;border-top: 1px solid #E9E9E9;
+}
+
+#mobileapp {
+  padding: 40px 0px;background-color: #f6f2f1;border-top: 1px solid #E9E9E9;
+}
+
+#others span{color:#1bbc9b;font-size:16px;}
+#others p.others-title{width: 60%; display: block; text-align: center; margin: 0 auto;padding-bottom:40px;padding-top:25px;}
+
+#others article:last-child{padding:0px;}
+#others article{padding:0 30px 0 0;}
+#others{padding-bottom:30px;}
+#landing-page .container h2{font-size:22px;color: #34495E;}
+#storemap{position:relative;height:500px;background-color: #A1A1A1;}
+#storemap h2{color:#fff;font-size:22px;}
+#storemap p{color:#fff;}
+#footer{background:#f4f7f9;padding:20px 0;}
+#footer ul li{display:inline-block;padding-right:10px;}
+#footer ul li a{font-size:12px;color:#424d56;}
+#footer ul {margin-bottom:15px;}
+#footer p{color:#929394;text-align: center;}
+.home-mapview{position: absolute;  width: 97%;  top: 30px;  bottom: 30px;}
+.home-mapview .mapview1{width:100%;position: absolute;top:0px;bottom: 0px;}
+#footer .social {text-align:right;padding:0;}
+#footer .social span{padding:0 5px;font-size: 18px;}
+#footer .social span a{color:#959DA0;}
+#footer .social span a:hover{color:#1bbc9b;}
+#footer ul{padding-left:0;}
 .circlebg{float:right; background:#f06471; border-radius: 27px !important; width: 45px; height: 45px;color:#fff;text-align: center;font-size: 22px; padding-top: 6px;display:inline-block;}
 .circlebg .info-rate{color:#fff;float: none;}
 .amntpayable{border-top:1px solid #EAE9E9;margin-top: 10px;}
@@ -1109,7 +1140,7 @@ h4.shopname{font-size: 18px;
     margin-bottom: 20px;
     font-weight: 500;
   }
-
+.aboutus{margin:0 auto;width:47%;}
  
   .fa-shopping-cart:before {color: #1BBC9B; font-size: 20px; }
   .shoppingcart{position: relative;
@@ -1126,6 +1157,11 @@ h4.shopname{font-size: 18px;
 .list-view{
   top:0;
 }
+#footer .social{text-align:left;padding-left: 15px;}
+#others p.others-title{width:100%;text-align:left;}
+#others article{padding:0px;}
+#mobileapp .pull-right {  float: none !important; margin: 0 auto;}
+#about .pull-right {  float: none !important;  margin: 0 auto;}
 .fbmobile{
   color:#fff;
   background-color: #F06370;
@@ -1250,6 +1286,7 @@ h4.shopname{font-size: 18px;
 .carousel-image{
   height: 230px;
 }
+.container-mapview{top:11px;}
 .fbmobile{
   color:#fff;
   background-color: #F06370;
@@ -1307,6 +1344,7 @@ h4.shopname{font-size: 18px;
   .mobspan span {padding-left: 9px;}
   .booking-aside{width: 100%;float:left; }
   .nav-tabs>li{width:150px;}
+  .container-mapview{top:11px;}
   .book-imgthumb{width: 100%; height: 150px; overflow: hidden;}
   .booking-panel .info, .booking-panel .info1, .book-details{width: 100%;}
   #bookingmodel{width:310px;}
