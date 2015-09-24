@@ -136,14 +136,14 @@
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                         <span class="service-icon"><i class="fa fa-gear icon-active"></i></span>
-                        <input type="text" ng-model="searchdata.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html">
+                        <input type="text" ng-model="searchdata.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                           <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
-                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:5   " typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html">
+                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:5   " typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" autocomplete="off">
                     </div>
                 </div>
                 <div class="col-custom-button">
@@ -186,7 +186,7 @@
     <div class="listheader">
         <label>We have discovered  {%verbatim%} {{filteredstudio.length}}{%endverbatim%} best parlours near you.</label>
         <span class="pull-right hiddenxsprt">
-                        <span class="fa fa-map-marker mappaddrgt5 icon-active">Map</span>
+                        <span class="fa fa-map mappaddrgt5 icon-active">Map</span>
        <!-- <span class="sep">|</span>
         <span class="icon icon-text-hierarchy-06">List</span> -->
         </span>
@@ -280,7 +280,7 @@
                 <span ng-switch-default>BOOK</span>
                 <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
                        </button>
-                <button class="btn btn-primary col-xs-12 no-onlinebook" ng-if="has_online_payment == 0">No online booking.</button>
+                <button class="btn btn-primary col-xs-12 no-onlinebook" ng-disabled="true" ng-if="!has_online_payment">No online booking</button>
             </div>
         
         </div>
@@ -417,7 +417,7 @@
 
 <!-- Modal -->
 <div id="infomodal" class=" modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="margin-top:15%;">
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
