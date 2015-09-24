@@ -97,7 +97,7 @@
                     </tr>
                     <tr style="margin:0; padding:0; border-spacing:0px;text-align:left;font-size:14px;font-family:'Times New Roman', Times, serif;color:#737171;">
                       <td style="margin:0; padding:0; border-spacing:0px;width:253px;font-family:'Times New Roman', Times, serif;text-align:left;"> 
-                        <span style="font-weight:bold;font-size:16px;">{{studio}}</span><br />
+                        <span style="font-weight:bold;font-size:16px;">{{studio|title}}</span><br />
                        {{studio_address.landmark}}<br />                       
 						{{studio_address.address_1 }}<br/>
 						{{studio_address.address_2 }}<br/>
@@ -105,8 +105,8 @@
                       
 						<td style="margin:0; padding:0; border-spacing:0px;text-align:left;font-family:'Times New Roman', Times, serif;vertical-align:top;"> 
 
-              {{contact.in_charge_person.name}} - {{contact.in_charge_person.mobile_no}}<br>
-                       {%if contact.conact_person.name%}{{contact.contact_person.name}} - {{contact.contact_person.mobile_no}}{%endif%}</td>
+              {{contact.in_charge_person.name|title}} - {{contact.in_charge_person.mobile_no}}<br>
+                       {%if contact.conact_person.name%}{{contact.contact_person.name | title}} - {{contact.contact_person.mobile_no}}{%endif%}</td>
                     </tr>
                   </table></td>
 

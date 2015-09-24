@@ -26,7 +26,7 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
 		}
 	}
 
-	function getAllAreaStudios = function()
+	$scope.getAllAreaStudios = function()
 	{
 		httpServices.getAllStudios().then(function(data)
 		{

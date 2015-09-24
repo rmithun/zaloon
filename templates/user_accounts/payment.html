@@ -92,7 +92,11 @@
 </div>
 
 <div id="slotter">
-  <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="avail.length != 0 && day_crossed">
+  <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="slots_is == 0"> 
+    <div class="clearfix"></div>
+    <p style="padding-top:15px">No slots available for the day.Try another day</p>
+    </div>
+  <div class="col-sm-12 col-xs-12 no-padding scrolltime" ng-if="slots_is && avail  && day_crossed">
   <p>&nbsp;</p> 
 <p><span class="notavailable"><span class="notavailablebg"></span><span>Not Available</span></span></p>
   <div class="clearfix"></div>
@@ -116,7 +120,7 @@
 
 
 
-    <div class="col-sm-12 col-xs-12 no-padding" ng-if="avail.length != 0">
+    <div class="col-sm-12 col-xs-12 no-padding" ng-if="slots_is && avail">
       <p>NOON(P.M)</p>
     <div class="time-meridiam"></div>
     <div class="time-wrap timepanel">   
@@ -133,7 +137,7 @@
       </div>
     </div>  
 
-  <div class="col-sm-12 col-xs-12 no-padding" ng-if="avail.length != 0">
+  <div class="col-sm-12 col-xs-12 no-padding" ng-if="slots_is && avail ">
     <p>EVENING(P.M)</p>
     <div class="time-meridiam"></div>
     <div class="time-wrap timepanel">   
