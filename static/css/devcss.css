@@ -155,6 +155,7 @@
 /* Custom CSS */
 #datepicker table tbody tr td{
   text-align:center;
+  padding: 7px;
 }
 
 .datepicker td.active, .datepicker td.active:hover {

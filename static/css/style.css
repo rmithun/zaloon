@@ -1157,6 +1157,8 @@ h4.shopname{font-size: 18px;
 .list-view{
   top:0;
 }
+.booking-panel{position:relative;margin-top:70px;}
+.overlay-loader{left: 47%;}
 #footer .social{text-align:left;padding-left: 15px;}
 #others p.others-title{width:100%;text-align:left;}
 #others article{padding:0px;}
@@ -1286,6 +1288,9 @@ h4.shopname{font-size: 18px;
 .carousel-image{
   height: 230px;
 }
+.nav-tabs {border-bottom: 2px solid #fff;}
+.overlay-loader{left: 44%;}
+.booking-panel{position:relative;margin-top:62px;}
 .container-mapview{top:11px;}
 .fbmobile{
   color:#fff;
@@ -1331,7 +1336,7 @@ h4.shopname{font-size: 18px;
   .list-detail-box-panel{width:100%;} 
   .direction button{min-width:12%;}
   .direction input.form-control { width: 88%;}
-  #signupmodel{width:300px;}
+  /*#signupmodel{width:300px;}*/
   .list-detail-image{height:auto;}
   .securepay{padding-bottom: 6px;padding-top:0px;width: 63px;border-right: 1px solid #FFFFFF;}
   .freecancelation {width: 78px;padding-top:0px;padding-bottom: 7px;border-right: 1px solid #FFFFFF;}
@@ -1373,6 +1378,7 @@ li.fbbutton:hover{
   border: :0;
   color: #fff !important;
 }
+.overlay-loader{left: 48%;}
 /*.modal-dialog{ margin: 20% auto;}*/
 .payment-wrapper .panel-default .panel-title{font-size:13px;}
   p { font-size:12px; line-height:25px; }  
@@ -1454,6 +1460,7 @@ li.fbbutton:hover{
 
 /* Desktop medium screen  */
 @media (min-width: 992px){  
+  .overlay-loader{left: 48%;}
   #landing-page .static-header h1 { font-size: 50px;}
   .navigation-bar li.logindetails button{color:#000;}
 .bookingdetails .promobox input{width:110px;}

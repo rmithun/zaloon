@@ -138,10 +138,10 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         var compiled;
         //console.log(studio.distance);
         if(typeof studio.distance !="undefined"){
-            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div class="landmark_details">'+ studio.address_1 +'</div><div class="sub-line-2"><span>'+ studio.distance +' KM</span><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.min_price +'</span></span></div></div></div></div>')($scope);            
+            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div style="color: #4c4c4c;font-size: 12px;width: 150px;line-height: 17px;">'+ studio.address_1 +'</div><div class="sub-line-2"><span>'+ studio.distance +' KM</span><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.min_price +'+</span></span></div></div></div></div>')($scope);            
         }        
         else{
-            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div class="landmark_details">'+ studio.address_1 +'</div><div class="sub-line-2"><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.min_price +'</span></span></div></div></div></div>')($scope);
+            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div style="color: #4c4c4c;font-size: 12px;width: 150px;line-height: 17px;">'+ studio.address_1 +'</div><div class="sub-line-2"><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.min_price +'+</span></span></div></div></div></div>')($scope);
         }
         marker.content = compiled[0];
         google.maps.event.addListener(marker, 'click', function () {
