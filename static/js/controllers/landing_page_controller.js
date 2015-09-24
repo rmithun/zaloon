@@ -25,4 +25,16 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
 			})
 		}
 	}
+
+	function getAllAreaStudios = function()
+	{
+		httpServices.getAllStudios().then(function(data)
+		{
+			$scope.studios = data.allstudios.data
+		},function()
+		{
+			console.log("Not getting studios")
+		})
+	}
+
 });
