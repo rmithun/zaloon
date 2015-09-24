@@ -520,7 +520,8 @@ $scope.bindstudio=function(data){
 
     $scope.confirm=function(id){
         if(typeof $scope.selectedstudio.id != "undefined"){
-            if($scope.selectedstudio.id!=id){
+            if($scope.selectedstudio.id!=id && $scope.selected_service.length>0){
+
                 $scope.confirmid=id;
                 $('#confirmmodal').modal('show');
             }
