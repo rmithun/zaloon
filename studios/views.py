@@ -259,6 +259,6 @@ class StudioLogin(ListAPIView):
 class AllStudios(ListAPIView):
     permission_classes = (ReadWithoutAuthentication,)
     serializer_class = AllStudiosSerializer
-    queryset = StudioProfile.objects.all()
+    queryset = StudioProfile.objects.all().order_by('-id')[:150]
 
 
