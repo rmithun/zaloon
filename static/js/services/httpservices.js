@@ -139,6 +139,12 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		return $q.all({'notify_user':notify_user})
 	}
 
+	loginData.getAllAreaStudios = function()
+	{
+		var allstudios = $http.get(studioURL+"all_studios/")
+		return $q.all({'allstudios':allstudios})	
+	}
+
     return loginData;
 });
 

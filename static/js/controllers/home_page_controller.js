@@ -3,8 +3,8 @@ $scope.is_logged = sessionService.isLogged();
 $scope.formsubmit=false;
 $scope.iswrongservice=false;
 
- function getFBKey()
- {
+function getFBKey()
+{
  	$scope.fb_key = httpServices.getFBKey()
  	/*
 	httpServices.getFBKey().then(function(data)
@@ -14,7 +14,18 @@ $scope.iswrongservice=false;
 	{
 		console.log("Error getting FB key")
 	});*/
- }
+}
+function getAllAreaStudios = function()
+{
+	httpServices.getAllStudios().then(function(data)
+	{
+		$scope.studios = data.allstudios.data
+	},function()
+	{
+		console.log("Not getting studios")
+	})
+}
+
 getFBKey()
 
 	$scope.fbLogin = function(dummy)
