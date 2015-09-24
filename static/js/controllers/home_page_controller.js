@@ -15,7 +15,7 @@ function getFBKey()
 		console.log("Error getting FB key")
 	});*/
 }
-function getAllAreaStudios = function()
+$scope.getAllAreaStudios = function()
 {
 	httpServices.getAllStudios().then(function(data)
 	{
