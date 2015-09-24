@@ -35,7 +35,8 @@ from django.core.cache import cache
 #application imports
 from serializers import ServiceSerializer, StudioServicesSerializer,  \
 StudioProfileSerializer, StudioReviewSerializer,StudioTypeSerializer,StudioSerializer,  \
-StudioKindSerializer,ServiceTypeSerializer,StudioProfileDetailsSerialzier
+StudioKindSerializer,ServiceTypeSerializer,StudioProfileDetailsSerialzier, \
+AllStudiosSerializer
 from models import *
 from booking.models import BookingDetails,StudioReviews
 from utils.permission_class import ReadWithoutAuthentication, PostWithoutAuthentication
@@ -255,5 +256,9 @@ class StudioLogin(ListAPIView):
     permission_classes = (ReadWithoutAuthentication,)
     serializer_class = StudioSerializer
 
+class AllStudios(ListAPIView):
+    permission_classes = (ReadWithoutAuthentication,)
+    serializer_class = AllStudiosSerializer
+    queryset = StudioProfile.objects.all()
 
 

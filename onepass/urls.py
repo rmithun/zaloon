@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^search/$',TemplateView.as_view(template_name='user_accounts/search.html'),name = 'search'),
     url(r'^lp/$',TemplateView.as_view(template_name='user_accounts/index.html'),name = 'lp'),
     url(r'^test/$',TemplateView.as_view(template_name='user_accounts/test.html'),name = 'test'),
+    url(r'^faqs/$',TemplateView.as_view(template_name='user_accounts/test.html'),name = 'faqs'),
     
 
 

@@ -67,7 +67,7 @@
             <div class="col-xs-12 col-md-4 col-lg-4 no-padding">
               <div class="form-group autocomplete">
               <span class="service-icon"><i class="fa fa-gear icon-active"></i></span>             
-              <span><input size="35" name="service" ng-model="searchdata_.service_name" type="text" class="form-control location" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-min-length='1'  typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" required></span>              
+              <span><input size="35" name="service" ng-model="searchdata_.service_name" type="text" class="form-control location" id="service_id" placeholder="eg., Haircut,Facial" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-min-length='1'  typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" autocomplete="off" required></span>              
               </div>
               <span class="error" style="color:#fff;" ng-show="formsubmit && searchservice.service.$error.required">Service is required.</span>
               <span class="error" style="color:#fff;" ng-show="iswrongservice">Please choose from list of service</span>
@@ -75,7 +75,7 @@
             <div class="col-xs-12 col-md-5 col-lg-6 no-padding">
               <div class="form-group autocomplete">
               <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>              
-                 <input id="location" name="location" size="35" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.searchlocation" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" required>       
+                 <input id="location" name="location" size="35" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.searchlocation" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" autocomplete="off" required>       
               </div>
               <span class="error" style="color:#fff;" ng-show="formsubmit && searchservice.location.$error.required">Location is required.</span>
             </div>  

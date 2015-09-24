@@ -196,6 +196,13 @@ class CloseDatesSerializer(serializers.ModelSerializer):
 		model  = CloseDates
 		fields = ('id', 'closed_on_day', 'closed_on_desc')
 
+class AllStudiosSerializer(serializers.ModelSerializer):
+	"""list all studios locations"""
+	class Meta:
+		model = StudioProfile
+		fields = ('latitude','longitude',)
+
+		
 """class StudioClosedDetailsSerializer(serializers.ModelSerializer):
 
 	studio closed on details
