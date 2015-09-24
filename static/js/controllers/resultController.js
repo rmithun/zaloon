@@ -518,6 +518,26 @@ $scope.bindstudio=function(data){
         autozoom();
     }
 
+    $scope.confirm=function(id){
+        if(typeof $scope.selectedstudio.id != "undefined"){
+            if($scope.selectedstudio.id!=id){
+                $scope.confirmid=id;
+                $('#confirmmodal').modal('show');
+            }
+            else{
+                $scope.studiodetails(id);
+            }
+        }
+        else
+        {
+            $scope.studiodetails(id);
+        }
+    }
+
+    $scope.confirmok=function(id){
+        $scope.studiodetails(id);
+    }
+
     $scope.studiodetails = function (id) { 
         console.log(id)
         var samestudio=false;          
@@ -698,9 +718,9 @@ $scope.bindstudio=function(data){
     }
 
     $scope.servicecart=function(){        
-        if($('#studiodetails').css('display') != 'none'){
-            $scope.closeslider();
-        } 
+        //if($('#studiodetails').css('display') != 'none'){
+        //    $scope.closeslider();
+        //} 
         $('#cartmodal').modal('show');
     }
 
@@ -1138,7 +1158,7 @@ $scope.end_date = angular.copy($scope.start_date)
 $scope.end_date.setDate($scope.start_date.getDate() + 30);
 
 
- $scope.avail = []
+ $scope.avail = {}
 
 
 $scope.date_accordion = "accordion-toggle"
@@ -1245,7 +1265,16 @@ $("#datepicker").on("changeDate", function(event) {
     {
         $('#loading').hide();
         $('#slotter').show();
-        $scope.avail = sdata.available_slots.data;        
+        $scope.avail = sdata.available_slots.data;  
+        $scope.slots_is = 0
+       for(key in $scope.avail)
+       {
+           if($scope.avail[key].length != 0)
+           {
+               $scope.slots_is = 1
+               break
+           }
+       }      
         //$('html, body').animate({scrollTop: $('#scrollhere').offset().top }, 'slow');
          $('html, body').animate({
         scrollTop: $('#scrollhere').offset().top + ($(window).height() - $('#scrollhere').outerHeight(true)) 

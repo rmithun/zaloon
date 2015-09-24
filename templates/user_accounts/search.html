@@ -206,7 +206,7 @@
     <div class="list-view" style="-webkit-overflow-scrolling: touch;"> 
 
         <ul>
-            <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="studiodetails(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
+            <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="confirm(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
                 <a class="list-item" style="cursor:pointer;">
                     <div class="details">
                         <img class="image loaded" style="height:100px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
@@ -468,6 +468,27 @@
 </div>
 </div>
 
+<div id="confirmmodal" class=" modal fade" role="dialog">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header modal-register-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            Confirm
+        </div>
+        <div class="modal-body">
+            <div class="todo">
+                Confirm
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" ng-click="confirmok(confirmid)">Ok</button>
+            <button type="button" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>
+</div>
+
 
 <!-- Modal -->
 <div id="signupmodel" class=" modal fade" role="dialog">
@@ -503,7 +524,7 @@
         <div class="modal-body register">  
         <h4 class="shopname">Green Trends</h4>          
             <div ng-repeat="ser in selected_service" class="cartlistdiv text-right" >
-                <span ng-click="removeselectedservice(ser)"><img width="50" height="50" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/email-cancelled.png' %}"></span>
+                <span ng-click="removeselectedservice(ser)"><img width="50" height="50" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/delete-icon.png' %}"></span>
 
                 <span class="selected-service">{%verbatim%} {{ser.servicename}} {%endverbatim%} </span>- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
             </div>
