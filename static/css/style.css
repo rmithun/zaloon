@@ -1119,7 +1119,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 #footer ul li a{font-size:12px;color:#424d56;}
 #footer ul {margin-bottom:15px;}
 #footer p{color:#929394;text-align: center;}
-.home-mapview{position: absolute;  width: 97%;  top: 30px;  bottom: 30px;}
+.home-mapview{position: absolute;  width: 97%;  top: 90px;  bottom: 30px;}
 .home-mapview .mapview1{width:100%;position: absolute;top:0px;bottom: 0px;}
 #footer .social {text-align:right;padding:0;}
 #footer .social span{padding:0 5px;font-size: 18px;}
