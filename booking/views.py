@@ -425,7 +425,6 @@ class ReviewFromEmail(CreateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace();
             data = self.request.DATA
             review_code = data['review_key'].split('&&')[0].split('=')[1]
             booking_id = data['review_key'].split('&&')[1].split('=')[1]

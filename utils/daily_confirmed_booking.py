@@ -189,6 +189,7 @@ def render_to_pdf(template_url,data,studio):
             ##save pdf to table
             ##location should be inside studio
             file_.close();
+            os.remove(file_)
     except Exception,pdfrenderr:
         transaction.rollback()
         err = {}

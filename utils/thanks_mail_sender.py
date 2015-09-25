@@ -48,7 +48,7 @@ def send_thanks_mail():
         booking_status = 'BOOKED', status_code = status_code, is_valid = True)
         ##log code starting
         status_code = responses.BOOKING_CODES['USED']
-         for every_book in bookings:
+        for every_book in bookings:
             try:
                 #code = every_book.booking_code
                 #studio_name = StudioProfile.objects.values('name').get(id = every_book.studio.id)
