@@ -522,7 +522,7 @@
             <h4 class="modal-title">Cart</h4>
         </div>
         <div class="modal-body register">  
-        <h4 class="shopname">Green Trends</h4>          
+        <h4 class="shopname" ng-if="selected_service.length>0">{%verbatim%}{{selectedstudio.name}}{%endverbatim%}</h4>          
             <div ng-repeat="ser in selected_service" class="cartlistdiv text-right" >
                 <span ng-click="removeselectedservice(ser)"><img width="50" height="50" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/delete-icon.png' %}"></span>
 

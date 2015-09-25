@@ -258,7 +258,7 @@ input[type=file]:focus, input[type=radio]:focus, input[type=checkbox]:focus { ou
 .col-custom{padding-left:0px;padding-right:0px;}
 .col-custom-button{padding-left:0px;padding-right:0px;height:42px;}
 .searchpanel .btn{height:42px;min-width:50px;padding:0px;}
-.glyphicon-search:before{font-size:20px;line-height:18px;}
+.glyphicon-search:before{font-size:19px;line-height:18px;}
 .moresearch{background-color:#f1f1f1;border:1px solid #fff;position:relative;}
 .moresearch a{color:#1bbc9b;padding: 7px 25px 8px; display: inline-block;font-size:13px;}
 .glyphicon-filter:before { font-size: 20px;}
@@ -1179,7 +1179,7 @@ h4.shopname{font-size: 18px;
   .searchdevice{position: absolute;width: 100%; height: auto; top: 55px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display: none;}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch{border-left: 1px solid #D23D4B;}
-  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 13px 13px 12px 13px; text-align: center;color:#fff;}
+  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 10px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active, .navigation-bar li.navsearch a:hover{background-color: #F1F1F1;  color: #1BBC9B;}
   
   .navigation-brand .logo{margin-left:10px;margin-top: 4px;}
@@ -1288,6 +1288,7 @@ h4.shopname{font-size: 18px;
 .carousel-image{
   height: 230px;
 }
+.shoppingcart{padding:14px 18px 11px 13px;border-right: 1px solid #D23D4B;}
 .nav-tabs {border-bottom: 2px solid #fff;}
 .overlay-loader{left: 44%;}
 .booking-panel{position:relative;margin-top:62px;}

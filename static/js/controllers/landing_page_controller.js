@@ -19,8 +19,8 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
     $scope.markers = [];
     var bounds = new google.maps.LatLngBounds();
     var imagUrls = {        
-        oneOff: '../static/img/blue24.png',
-        oneOn: '../static/img/green24.png'
+        oneOff: 'static/img/blue24.png',
+        oneOn: 'static/img/green24.png'
     };
     var images = {
         oneOn: new google.maps.MarkerImage(imagUrls.oneOn),

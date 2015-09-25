@@ -1,4 +1,4 @@
-noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $location,lodash,httpServices,sessionService,putResultService){
+noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $timeout, $location,lodash,httpServices,sessionService,putResultService){
 $scope.is_logged = sessionService.isLogged();
 $scope.formsubmit=false;
 $scope.iswrongservice=false;
@@ -171,4 +171,13 @@ httpServices.getUsrDetails().then(function(dataz)
 	$scope.onlocationselect = function ($item, $model, $label) {
 		$scope.searchdata_.searchlocation=$label;
 	};
+	$scope.onFocus = function (e) {
+        $timeout(function () {
+          $(e.target).trigger('input');
+          $(e.target).trigger('change'); // for IE
+        });
+      };
+      $scope.stateComparator = function (state, viewValue) {
+        return viewValue === secretEmptyKey || (''+state).toLowerCase().indexOf((''+viewValue).toLowerCase()) > -1;
+      };
 });
