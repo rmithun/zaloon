@@ -273,7 +273,7 @@ right: 0;
 background: #fff;
 opacity: 1;
 filter: alpha(opacity=80);
-z-index: 999;
+z-index: 9999;
 }
  
 
