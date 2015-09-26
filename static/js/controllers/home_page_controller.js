@@ -47,6 +47,7 @@ getFBKey()
 		  	{
 		  		$('.loader-overlay').hide();
 		  		$scope.is_logged = sessionService.isLogged()
+		  		$('#signuperrormodal').modal('show');
 		  		console.log("Error getting user data")
 		  	})
 		  	
@@ -55,6 +56,7 @@ getFBKey()
 		{
 		   //cannot login to fb try again
 		   $('.loader-overlay').hide();
+		   $('#signuperrormodal').modal('show');
 		   $scope.is_logging = 1
 		   console.log("Cannot login to FB")
 		});

@@ -1001,7 +1001,10 @@ httpServices.getFBKey().then(function(data)
 
 $scope.fbLogin = function(dummy)
 {    
-     $('.loader-overlay').show();
+    $('.loader-overlay').show();
+    $('#signupmodel').modal('hide');
+    $('#cartmodal').modal('hide');
+    $('#servicemodelbox').modal('hide');
     httpServices.loginUsingFB(dummy).then(function(data)
     {
         if(data)
@@ -1012,7 +1015,6 @@ $scope.fbLogin = function(dummy)
                 $scope.is_logged = sessionService.isLogged()
                 $scope.user_details = dataz['user_details'].data[0]
                 $scope.user_name = $scope.user_details.user_acc['first_name']
-                $('#signupmodel').modal('hide');
                 $('.loader-overlay').hide();
                 //redirect to booking page if clicked book
                 if ($scope.to_booking_flag == 1)
@@ -1027,7 +1029,7 @@ $scope.fbLogin = function(dummy)
             {
                 $scope.is_logged = sessionService.isLogged()
                 $('.loader-overlay').hide();
-                $('#signupmodel').modal('hide')
+                $('#signuperrormodal').modal('show');
                 console.log("Error getting user data")
             })
         }
@@ -1036,6 +1038,7 @@ $scope.fbLogin = function(dummy)
         //cannot login to fb try again
         $('.loader-overlay').hide();
         $('#signupmodel').modal('hide')
+        $('#signuperrormodal').modal('show');
         console.log("Cannot login to FB")
     });
 }
