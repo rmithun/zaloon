@@ -201,7 +201,7 @@ Loading your profile...
       </div>
       </div>
         <!-- <button class="rebookbtn btn">Rebook</button> -->
-        <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#reviewmodal">Write a review</button>
+        <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-studio="{%verbatim%}{{buking.studio.name}}{%endverbatim%}" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#reviewmodal">Write a review</button>
         <button class="cancelledbtn btn" ng-if="buking.status_code == 'B003'">Cancelled </button>
        <button class="reviewedbtn btn" ng-if="buking.is_reviewed == 1 && buking.status_code == 'B004' ">Reviewed </button>
               
@@ -224,14 +224,14 @@ Loading your profile...
     <div class="modal-content signup">
      <div class="modal-header modal-booking-header">
      <button type="button" class="close" ng-click="clearreviewdata()" data-dismiss="modal">&times;</button> 
-    
+    Help us serve you better by rating your experience
     </div> 
     <div class="modal-body register" ng-if="is_adding ==1">
       {%verbatim%}{{review_message}}{%endverbatim%}
     </div>
       <div class="modal-body register" ng-if="is_adding ==0">
       <div class="col-sm-12">
-         <h4 class="modal-title">Help us serve you better by rating your experience. We appreciate your feedback!</h4>
+         <h4 class="modal-title" style="color:#000 !important;">{%verbatim%}{{reviewstudio}}{%endverbatim%}</h4>
       </div>         
     <div class="row">
       <div class="col-sm-12 paddtop10">
@@ -288,8 +288,9 @@ Loading your profile...
       Do you really want to cancel the booking? 
       <div>
           <form>
-     <button type="button" class=""  ng-click="booking_cancel(cancel_booking_id)">Yes, Cancel it</button> 
-     <button type="button" class="" data-dismiss="modal">No, Dont cancel</button> 
+          <div class="resetpanel">
+     <button type="button" class="btn reset-btn"  ng-click="booking_cancel(cancel_booking_id)">Yes, Cancel it</button> 
+     <button type="button" class="btn apply-btn" data-dismiss="modal">No, Dont cancel</button> </div>
           </form>
       </div> 
       <div style="clear:both;"></div>       

@@ -169,7 +169,8 @@ text-transform: capitalize;font-weight:normal;}
 #bookingmodel textarea.form-control{height:100px;}
 #bookingmodel .rating, .rating{color:rgb(255, 182, 2);}
 .modal-booking-header .close { font-weight: 300; font-size: 28px; color: inherit !important; opacity: .8;margin-top:-5px;outline:0px; }
-.modal-booking-header {  background-color: #22ab81;  padding:13px 10px;  color: #F4F4F4;}
+.modal-booking-header {  background-color: #22ab81;  padding:13px 10px;  color: #fff;
+    font-weight: bold;font-size: 17px;}
 /* Hero section */
 #hero .btn-primary:hover, #hero .btn-primary.hovered { background:#1fa87e;  border:0px;}
 #hero .list-inline { margin:0; }

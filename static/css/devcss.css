@@ -299,3 +299,6 @@ z-index: 9999;
   height: 300px;
 }
 
+.glyphicon-star,.glyphicon-star-empty{
+  color:#f4c933;
+}

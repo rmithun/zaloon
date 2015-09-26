@@ -1765,6 +1765,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
 $(document).on("click", ".reviewbtn", function () {
      var myBookId = $(this).data('id');
      $scope.booking_id = myBookId
+     $scope.reviewstudio=$(this).data('studio');
      $scope.$apply()
     });  
 
