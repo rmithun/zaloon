@@ -121,7 +121,7 @@ class StudioProfileMixin(object):
             data = ser_data.data
             for studio in data:
                 min_price = StudioServices.objects.filter(studio_profile_id = studio['id'], is_active = 1  \
-                   ).aggregate(Min('price'))
+                   ,service_id__in = Service.objects.filter(service_type_id = service)).aggregate(Min('price'))
                 avg_rating = StudioReviews.objects.filter(studio_profile_id = studio['id'], \
                     is_active = 1).aggregate(Avg('rating'))
                 studio['min_price'] = min_price['price__min']

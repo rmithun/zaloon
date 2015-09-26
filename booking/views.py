@@ -102,6 +102,12 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                     'incharge_mobile_no','city','has_online_payment','landmark').get(id = studio_id, \
                     is_active = 1)
             except Exception,e:
+                logger_error.error(traceback.format_exc())
+                logger_error.error(rzp_payment_id)
+                url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                ##change refund amount if neede in future
+                resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                transaction.rollback()
                 logger_error.error("Studio not available/active - %s"%(studio_id))
                 return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
             if studio['has_online_payment'] is False:
@@ -214,6 +220,11 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],appnt_date,appnt_time,studio_id.booking_code)
                 email = sendEmail(to_user,subject,message)
+                studio_email = StudioProfile.objects.get(id = studio_id)
+                studio_subject = responses.MAIL_SUBJECTS['STUDIO_BOOKING_EMAIL']
+                studio_email.studio.email = 'vbnetmithun@gmail.com'
+                mail_to_studio = sendEmail(studio_email.studio.email,studio_subject,
+                    message)
                 #sms = sendSMS(studio_id.mobile_no,sms_message)
                 #email = 1
                 sms = 1
@@ -324,6 +335,8 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                     old_link.delete()
                     subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
                     email = sendEmail(user.email,subject,message)
+                    studio_subject = responses.MAIL_SUBJECTS['STUDIO_CANCEL_EMAIL']
+                    studio_email = sendEmail(studio.studio.email,studio_subject,message)
             else:
                 transaction.rollback()
                 logger_booking.info("No booking with booking id - "+str(is_booking))
