@@ -111,7 +111,6 @@ class StudioProfileMixin(object):
             service = self.request.GET['service']
             cache_key = location.replace(" ","")+str(service)
             if cache.get(cache_key):
-                print "here"
                 return Response(cache.get(cache_key))
             logger_studios.info("Search Query - "+str(self.request.GET))
             studios = StudioServiceTypes.objects.filter(service_type_id = service, is_active = 1).values('studio_profile_id')
@@ -122,7 +121,7 @@ class StudioProfileMixin(object):
             data = ser_data.data
             for studio in data:
                 min_price = StudioServices.objects.filter(studio_profile_id = studio['id'], is_active = 1  \
-                    ).aggregate(Min('price'))
+                   ,service_id__in =(Services.objects.filter(service_type_id =  service))).aggregate(Min('price'))
                 avg_rating = StudioReviews.objects.filter(studio_profile_id = studio['id'], \
                     is_active = 1).aggregate(Avg('rating'))
                 studio['min_price'] = min_price['price__min']
@@ -160,7 +159,8 @@ class StudioDetailed(APIView):
             ser_data = StudioProfileDetailsSerialzier(studios_data, many = True)
             data = ser_data.data
             now = datetime.now()
-            expiration_sec = ((23 - now.hour)*60 +(59 - now.minute)*60)
+            #expiration_sec = ((23 - now.hour)*60 +(59 - now.minute)*60)
+            expiration_sec = 1800
             cache.set(cache_key, data, expiration_sec)
         except Exception,e:
             logger_error.error(traceback.format_exc())

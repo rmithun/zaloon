@@ -96,9 +96,14 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
             logger_booking.info("User - "+str(user))
-            studio = StudioProfile.objects.values('name','address_1', \
-                'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
-                'incharge_mobile_no','city','has_online_payment','landmark').get(id = studio_id)
+            try:
+                studio = StudioProfile.objects.values('name','address_1', \
+                    'address_2','area','in_charge_person','contact_person','contact_mobile_no',  \
+                    'incharge_mobile_no','city','has_online_payment','landmark').get(id = studio_id, \
+                    is_active = 1)
+            except Exception,e:
+                logger_error.error("Studio not available/active - %s"%(studio_id))
+                return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
             if studio['has_online_payment'] is False:
                 logger_error.error("No online payment")
                 logger_error.error(rzp_payment_id)
