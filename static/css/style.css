@@ -122,7 +122,7 @@ article { text-align: left; }
 .navigation-bar li{float:left;}
 .navigation-bar-left { float: left; }
 .navigation-bar-right { float: right; }
-.navigation-header { position: absolute; top:10px; background: transparent; left: 0; right: 0; width: 100%; z-index: 99; padding:10px 20px 0 20px;}
+.navigation-header { position: absolute; top:6px; background: transparent; left: 0; right: 0; width: 100%; z-index: 99; padding:2px 15px 0 6px;}
 .navigation-header .navigation-bar > li > a { font-size: 13px; text-transform: uppercase; color: #eff3f6; border-bottom: 2px solid transparent; padding: 10px 0; line-height: 13px; opacity: 0.8; }
 .navigation-header .navigation-bar > li > a:Hover { opacity: 0.9; }
 .navigation-header .navigation-bar-left > li.active > a { color: #fff; border-bottom: 2px solid #1ac6ff; opacity: 0.9; }
@@ -1148,6 +1148,8 @@ h4.shopname{font-size: 18px;
     padding-right: 15px;}
   .cart-count{background-color: #fff;color:red;}
 
+
+
 /* Mobile device 767px */
 @media (max-width: 767px) {
   .shoppingcart{padding-top: 12px; padding-right: 15px; padding-left: 10px;border-right: 1px solid #D23D4B;}
@@ -1157,6 +1159,18 @@ h4.shopname{font-size: 18px;
 .list-view{
   top:0;
 }
+.cart-count{
+  position: absolute;
+    top: 4px;
+    right: 10px;
+    text-align: center;
+    font-size: 9px;
+    padding: 2px 3px;
+    line-height: .9;
+    background-color: #f06471;
+    color: white;
+  }
+
 .booking-panel{position:relative;margin-top:70px;}
 .overlay-loader{left: 47%;}
 #footer .social{text-align:left;padding-left: 15px;}
@@ -1182,7 +1196,7 @@ h4.shopname{font-size: 18px;
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 10px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active, .navigation-bar li.navsearch a:hover{background-color: #F1F1F1;  color: #1BBC9B;}
   
-  .navigation-brand .logo{margin-left:10px;margin-top: 4px;}
+  .navigation-brand .logo{/*margin-left:10px;margin-top: 4px;*/}
   
   p { font-size: 14px; line-height: 25px; }  
 
