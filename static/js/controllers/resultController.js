@@ -1617,13 +1617,18 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     $scope.has_cancelled = null
    
     $scope.booking_cancel = function(id)
-    {
+    {        
         $scope.is_cancelling = 1;
         httpServices.cancelBooking(id).then(function(data)
         {
             $scope.has_cancelled = 1
             $scope.is_cancelling = null
-            $scope.getBookings();
+            //$scope.getBookings();
+            var index=lodash.findIndex($scope.active_bookings, 'id', id);
+            var cancelstudio=$scope.active_bookings[index];
+            $scope.active_bookings.splice(index, 1);
+            cancelstudio.status_code="B003";
+            $scope.expired_bookings.push(cancelstudio)
             console.log("Booking successfully cancelled")
         },
         function()
@@ -1765,6 +1770,8 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
 $(document).on("click", ".reviewbtn", function () {
      var myBookId = $(this).data('id');
      $scope.booking_id = myBookId
+     $scope.is_adding = 0
+     $scope.submitting = 0
      $scope.reviewstudio=$(this).data('studio');
      $scope.$apply()
     });  
@@ -1778,17 +1785,19 @@ $scope.clearreviewdata = function()
     $scope.review_data['rate'] = 0
 
 }
+$scope.titleMsg = 'Successfully added review'; 
+$scope.review_message = 'Thanks for your valuable rating!.It will help us serve you better.';
+$scope.is_adding = 0
+$scope.submitting = 0
 $scope.add_review = function()
 {
-    
+   $scope.submitting = 1
    $scope.review_data['booking_id'] = $scope.booking_id
-    $scope.is_adding = 1
     httpServices.addReview($scope.review_data).then(function(rdata)
     {
-        $scope.is_adding = 0
-        $('#reviewmodal').modal('hide')
-        $scope.titleMsg = 'Successfully added review'; 
-        $scope.review_message = 'Thanks for your valuable rating!.It will help us serve you better.';
+        $scope.is_adding = 1
+        $scope.submitting = 0
+        //$('#reviewmodal').modal('hide')
         console.log(rdata)
         lodash.find($scope.expired_bookings,function(booking) 
             { if(booking['id'] == $scope.review_data['booking_id'])
@@ -1799,9 +1808,10 @@ $scope.add_review = function()
         $scope.review_data = {}
     },function()
     {
-        $('#reviewmodal').modal('hide')
-        $scope.is_adding = 0
-        $('#notificationmodal').modal('show')
+        //$('#reviewmodal').modal('hide')
+        $scope.is_adding = 1
+        $scope.submitting = 0
+        //$('#notificationmodal').modal('show')
         $scope.titleMsg = 'Review not added'; 
         $scope.review_message = 'Could not add review try again'; 
         console.log("Could not add review.")

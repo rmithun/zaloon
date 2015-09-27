@@ -257,8 +257,8 @@ Loading your profile...
       <div class="col-sm-12 paddtop10">
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 "></label>
-          <div class="col-md-7 col-sm-6 col-xs-11">
-          <button ng-click="add_review()" ng-disabled="is_adding==1" class="rebookbtn btn" ng-switch on="is_adding">
+          <div class="col-md-7 col-sm-6 col-xs-11 resetpanel">
+          <button ng-click="add_review()" ng-disabled="is_adding==1" class="rebookbtn btn apply-btn" ng-switch on="submitting">
             <span ng-switch-when="0">Submit</span>
             <span ng-switch-when="1">Submitting...</span></button>
           </div>
