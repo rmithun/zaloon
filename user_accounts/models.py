@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
 
 	"""table holding user related basic infos"""
-	user_acc = models.OneToOneField(User, blank=True, null=True, unique=True)
+	user_acc = models.OneToOneField(User, blank=True, null=True, unique=True,db_index = True)
 	dob = models.DateField(null = True)
 	sex = models.CharField(max_length = 10) # 1 - female 0 -male
 	city_state = models.CharField(max_length = 60, null = True)

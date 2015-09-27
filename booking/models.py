@@ -30,7 +30,7 @@ class Purchase(models.Model):
 class Coupon(models.Model):
 	"""table contaning all coupon details"""
 
-	coupon_code = models.CharField(max_length = 10)
+	coupon_code = models.CharField(db_index = True, max_length = 10)
 	expiry_date = models.DateTimeField()
 	for_all_studios = models.BooleanField()
 	#is_service_level = models.BooleanField()
@@ -51,7 +51,7 @@ class CouponForUsers(models.Model):
 	"""table for coupon applicable users"""
 
 	coupon = models.ForeignKey(Coupon, related_name = "coupon_for_user")
-	user = models.ForeignKey(User, related_name = "user_have_coupon")
+	user = models.ForeignKey(User, related_name = "user_have_coupon",db_index = True)
 	is_active = models.BooleanField()
 	expiry_date = models.DateField()
 	service_updated = models.CharField(max_length = 25)
@@ -61,8 +61,8 @@ class CouponForUsers(models.Model):
 class CouponForStudios(models.Model):
 
 	"""table for coupon applicable studios,if for_all_studios is 0"""
-	coupon = models.ForeignKey(Coupon, related_name = "coupon_for_studio")
-	studio = models.ForeignKey(StudioProfile, related_name = "studio_have_coupon")
+	coupon = models.ForeignKey(Coupon, related_name = "coupon_for_studio",db_index = True)
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_have_coupon",db_index = True)
 	is_active = models.BooleanField()
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
@@ -73,7 +73,7 @@ class CouponForStudios(models.Model):
 class BookingDetails(models.Model):
 
 	"""table holding all booking related infos"""
-	user = models.ForeignKey(User, related_name = "booked_by_user")
+	user = models.ForeignKey(User, related_name = "booked_by_user",db_index = True)
 	booked_date = models.DateTimeField()
 	appointment_date = models.DateField()
 	appointment_start_time = models.TimeField() # ex 13.15 14.30
@@ -154,7 +154,7 @@ class Payments(models.Model):
 class StudioReviews(models.Model):
 
 	"""reviews for studio"""
-	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_review")
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_review",db_index = True)
 	user = models.ForeignKey(User, related_name = "reviewed_by_user")
 	booking = models.ForeignKey(BookingDetails, related_name = "reviewed_on_booking")
 	#service = models.ForeignKey(Service, related_name = "reviewed_the_service", null = True)

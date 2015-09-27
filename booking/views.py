@@ -199,6 +199,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 'contact':contacts,'total':purchase_amount,'discount':promo_amount,'service_tax':service_tax}
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
+                studio_msg = get_template('emails/studio_booking.html').render(Context(booking_details))
                 to_user = user['email']
                 if promo_code:
                     coupon_detail = Coupon.objects.get(coupon_code__icontains = promo_code, is_active = 1,  \
@@ -220,11 +221,11 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 sms_template = responses.SMS_TEMPLATES['BOOKING_SMS']
                 sms_message = sms_template%(user['first_name'],studio['name'],appnt_date,appnt_time,studio_id.booking_code)
                 email = sendEmail(to_user,subject,message)
-                studio_email = StudioProfile.objects.get(id = studio_id)
+                studio_email = StudioProfile.objects.get(id = studio_id.studio.id)
                 studio_subject = responses.MAIL_SUBJECTS['STUDIO_BOOKING_EMAIL']
                 studio_email.studio.email = 'vbnetmithun@gmail.com'
                 mail_to_studio = sendEmail(studio_email.studio.email,studio_subject,
-                    message)
+                    studio_msg)
                 #sms = sendSMS(studio_id.mobile_no,sms_message)
                 #email = 1
                 sms = 1
@@ -293,6 +294,7 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                 booking_details = {'name':user.first_name,'studio':studio.name,'date':purchase['appointment_date'],  \
                 'appnt_time':appnt_time,'amount':refund_amt['purchase_amount']}
                 message = get_template('emails/cancelled.html').render(Context(booking_details))
+                studio_message = get_template('emails/studio_cancelled.html').render(Context(booking_details))
                 if today.date() == purchase['appointment_date']:
                     if today.hour < 5 and purchase['appointment_start_time'].hour < 13:
                         pass
@@ -336,7 +338,7 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                     subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
                     email = sendEmail(user.email,subject,message)
                     studio_subject = responses.MAIL_SUBJECTS['STUDIO_CANCEL_EMAIL']
-                    studio_email = sendEmail(studio.studio.email,studio_subject,message)
+                    studio_email = sendEmail(studio.studio.email,studio_subject,studio_message)
             else:
                 transaction.rollback()
                 logger_booking.info("No booking with booking id - "+str(is_booking))

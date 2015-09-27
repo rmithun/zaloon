@@ -17,7 +17,7 @@ from user_accounts.models import User
 class ServiceType(models.Model):
 
 	"""type of service types available"""
-	service_name = models.CharField(max_length = 100)
+	service_name = models.CharField(max_length = 100,db_index = True)
 	description = models.TextField()
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25, default = 'Admin')
@@ -31,8 +31,8 @@ class Service(models.Model):
 
 	"""table holding all list of services"""
 
-	service_name = models.CharField(max_length = 100)
-	service_type = models.ForeignKey(ServiceType, related_name = "type_of_service")
+	service_name = models.CharField(max_length = 100,db_index = True)
+	service_type = models.ForeignKey(ServiceType, related_name = "type_of_service",db_index = True)
 	#is_dependent = models.BooleanField(default = 0)
 	min_duration = models.IntegerField() ##duration in mins
 	is_active = models.BooleanField(default = 1)
@@ -215,8 +215,8 @@ class StudioAmenities(models.Model):
 class StudioServiceTypes(models.Model):
 	"""list of available activities in studio"""
 
-	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_service_type")
-	service_type = models.ForeignKey(ServiceType, related_name = "service_type_in_studio")
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_service_type",db_index = True)
+	service_type = models.ForeignKey(ServiceType, related_name = "service_type_in_studio",db_index = True)
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
@@ -226,8 +226,8 @@ class StudioServices(models.Model):
 
 	"""list of available activities in studio"""
 
-	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_activity")
-	service = models.ForeignKey(Service, related_name = "service_in_studio")
+	studio_profile = models.ForeignKey(StudioProfile, related_name = "studio_detail_for_activity",db_index = True)
+	service = models.ForeignKey(Service, related_name = "service_in_studio",db_index = True)
 	is_active = models.BooleanField(default = 1)
 	mins_takes = models.PositiveIntegerField()
 	price = models.FloatField()
@@ -326,7 +326,7 @@ class CloseDates(models.Model):
 class StudioClosedDetails(models.Model):
 
 	"""days on which the studio is closed"""
-	studio = models.ForeignKey(StudioProfile, related_name = "studio_closed_details")
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_closed_details",db_index = True)
 	closed_on = models.ForeignKey(CloseDates, related_name = "studio_close_dates")
 	is_active = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
@@ -350,7 +350,7 @@ class StudioClosedFromTill(models.Model):
 class StudioPicture(models.Model):
 
     """studios and its pictures"""
-    studio_profile  = models.ForeignKey(StudioProfile, related_name = "pic_of_studio")
+    studio_profile  = models.ForeignKey(StudioProfile, related_name = "pic_of_studio",db_index = True)
     picture = models.ImageField(upload_to = 'img_gallery', null = True, blank = True)
     service_updated = models.CharField(max_length = 25)
     updated_date_time = models.DateTimeField(default = datetime.now())
