@@ -347,7 +347,8 @@
                         <ul>
                             <li ng-if="ser.isactive" ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
-                                    {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                                    {%verbatim%} {{ser.servicename|limitTo:31}}
+                                    {{ser.servicename.length > 31 ? '...' : ''}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
                             </li>
                             <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
@@ -429,8 +430,8 @@
             </div>
         </div>
 
-        <div class="modal-footer">
-            <button type="button" data-dismiss="modal">Ok</button>
+        <div class="modal-footer resetpanel">
+            <button  class="btn apply-btn  pull-right"type="button" data-dismiss="modal">Ok</button>
             <!-- <div class="service-rate-panel col-sm-12 no-padding">
             <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
                 <i class="icon icon-contact"></i>
@@ -447,16 +448,16 @@
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            Duration
+            Duration Alert!
         </div>
         <div class="modal-body">
             <div class="todo">
-                Duration
+                The studio is having much space for another service in the slot.
             </div>
         </div>
 
-        <div class="modal-footer">
-            <button type="button" data-dismiss="modal">Ok</button>
+        <div class="modal-footer resetpanel">
+            <span class="btn apply-btn  pull-right" type="button" data-dismiss="modal">Ok</span>
             <!-- <div class="service-rate-panel col-sm-12 no-padding">
             <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
                 <i class="icon icon-contact"></i>
@@ -473,17 +474,17 @@
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            Confirm
+            Alert! 
         </div>
         <div class="modal-body">
             <div class="todo">
-                Confirm
+                You already have items in cart, opening this studio will empty your cart.Do you want continue?
             </div>
         </div>
 
-        <div class="modal-footer">
-            <button type="button" data-dismiss="modal" ng-click="confirmok(confirmid)">Ok</button>
-            <button type="button" data-dismiss="modal">Cancel</button>
+        <div class="modal-footer resetpanel">
+            <span  class="btn apply-btn  pull-right" type="button" data-dismiss="modal" ng-click="confirmok(confirmid)">Ok</span>
+            <span  class="btn reset-btn  pull-right"type="button" data-dismiss="modal">Cancel</span>
         </div>
     </div>
 </div>
@@ -536,25 +537,37 @@
 </div>
 </div>
 
-<!--Modal-->
-<div id="cartmodal" class="modal fade" role="dialog">
-    
-    <div class="modal-dialog" style="margin-top:15%;">    
+
+
+<!-- Modal -->
+<div id="cartmodal" class="modal fade" style="padding-left:0px !important;marigin-top:-2%" role="dialog">
+<div id="servicemodel" class="modal-dialog">
     <div class="modal-content">
-        <div class="modal-header modal-register-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Cart</h4>
+        <div style="height:45px;" class="modal-header modal-register-header">
+            <button type="button"  class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">MY CART</h4>
         </div>
-        <div class="modal-body register">  
-        <h4 class="shopname" ng-if="selected_service.length>0">{%verbatim%}{{selectedstudio.name}}{%endverbatim%}</h4>          
-            <div ng-repeat="ser in selected_service" class="cartlistdiv" >
+        <div  ng-if="selected_service.length<1" class="service-checkboxcolumn col-sm-12">
+            Sorry, Your cart is empty.
+        </div>
+        <div  ng-if="selected_service.length>0" class="service-checkboxcolumn col-sm-12">
+             <h4 class="shopname" >{%verbatim%}{{selectedstudio.name}}{%endverbatim%}</h4>  
+            <div class="todo">
+                
+                   <div ng-repeat="ser in selected_service" class="cartlistdiv" >
                 <span ng-click="removeselectedservice(ser)"><img width="15" height="15" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/delete-icon.png' %}"></span>
 
                 <span class="selected-service">{%verbatim%} {{ser.servicename}} {%endverbatim%} </span> <span class ="text-right" style="float:right;">  ₹ {%verbatim%}{{ser.price}}{%endverbatim%}</span>
             </div>
+            </div>
+         
         </div>
+
         <div class="modal-footer">
-        <div class="col-sm-4 col-xs-4 no-padding" >
+             <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
+                <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
+            </div>
+            <div class="col-sm-6 col-xs-6 no-padding" >
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
                 ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
@@ -562,31 +575,29 @@
                        </button>
                 <button class="btn btn-primary col-xs-12 no-onlinebook" ng-disabled="true" ng-if="!has_online_payment">No online booking</button>
             </div>
-            <div>Total Amount  ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}
-            </div>
-               
-            
 
         </div>
     </div>
 </div>
 </div>
 
-<!-- Modal -->
-<div id="servicemodelbox" class="modal fade" role="dialog">
+
+
+<!-- SERVICE Modal -->
+<div id="servicemodelbox" class="modal fade"  style="padding-left:0px !important;" role="dialog">
 <div id="servicemodel" class="modal-dialog">
     <div class="modal-content">
-        <div class="modal-header modal-register-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            More Services
-            <span class="service-totamnt">Total Amount - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
+        <div style="height:45px;" class="modal-header modal-register-header">
+            <button type="button"  class="close" data-dismiss="modal">&times;</button>
+            <input type="text" style="width:260px;" class="form-control col-xs-10" placeholder="Search services" ng-model="searchservice">
+            
         </div>
         <div class="service-checkboxcolumn col-sm-12">
             <div class="todo">
                 <ul>
-                    <li ng-repeat="ser in servicelist" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
+                    <li ng-repeat="ser in servicelist | filter:searchservice" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
-                            {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                            {%verbatim%} {{ser.servicename | limitTo:45}}{{ser.servicename.length > 45 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>
                     </li>
                 </ul>
@@ -595,16 +606,17 @@
         </div>
 
         <div class="modal-footer">
-               <div class="col-sm-3 col-xs-6 btn contact contact-section btn-primary pull-right">
-                <i class="icon icon-contact"></i>
-                <span class="text show.bs.modal" ng-if="has_online_payment" ng-disabled="su_booking"
-                  ng-switch="su_booking" ng-click="book()">
+             <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
+                <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
+            </div>
+            <div class="col-sm-6 col-xs-6 no-padding" >
+                <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
+                ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
                 <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
-                       </button></span>
-                <span class="text" ng-if="has_online_payment == 0">No online booking</span>
+                       </button>
+                <button class="btn btn-primary col-xs-12 no-onlinebook" ng-disabled="true" ng-if="!has_online_payment">No online booking</button>
             </div>
-            
 
         </div>
     </div>

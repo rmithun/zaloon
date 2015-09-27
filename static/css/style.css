@@ -1191,7 +1191,7 @@ h4.shopname{font-size: 18px;
 .btn-facebook-small.icon-socialmedia-08:before{font-size:18px;}
 
   .searchpanel{ padding:20px 15px; border: 0; }
-  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;height:52px;}
+  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;height:55px;}
   .searchdevice{position: absolute;width: 100%; height: auto; top: 55px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display: none;}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch{border-left: 1px solid #D23D4B;}
@@ -1251,7 +1251,7 @@ h4.shopname{font-size: 18px;
   .list-detail-box-panel{width:100%;}
   .rate-panel{bottom:0}
   .distance{padding: 40px 0;}
-  #servicemodel{width:310px;height:400px;}
+  #servicemodel{width:510px;height:600px;}
    .direction input.form-control{width:90%;} 
    .direction button{min-width:10%;}
   .service-rate-panel{width: 100%; padding: 0;}
@@ -1304,6 +1304,7 @@ h4.shopname{font-size: 18px;
 .carousel-image{
   height: 230px;
 }
+#servicemodel{width:300px;height:470px;}
 .shoppingcart{padding:14px 18px 11px 13px;border-right: 1px solid #D23D4B;}
 .nav-tabs {border-bottom: 2px solid #fff;}
 .overlay-loader{left: 44%;}
@@ -1497,7 +1498,7 @@ li.fbbutton:hover{
 @media (min-width: 992px){  
   .shoppingcart{ padding-top: 8px;
     padding-right: 15px;
-    padding-left: 10px;
+    padding-left: 3px;
     border-right: 0px;
     padding-bottom: 14px;
   }

@@ -789,7 +789,8 @@ $scope.bindstudio=function(data){
                     return false;   
                 }
                 else{
-
+                        $('#serviceinfomodal').modal('show');
+                    return false;  
                 }
             }          
         }  
