@@ -1246,7 +1246,7 @@ h4.shopname{font-size: 18px;
   .moresearch .btn-toolbars.ratingbar a{min-width:53px;width: 60px;}
   .resetpanel {left:10px;bottom:13px;right:inherit;}
   
-  .list-detail-box, .list-detail-box-panel{top: 55px;}
+  .list-detail-box, .list-detail-box-panel{top: 52px;}
   .list-detail-box-panel{width:100%;}
   .rate-panel{bottom:0}
   .distance{padding: 40px 0;}
@@ -1439,7 +1439,7 @@ li.fbbutton:hover{
     #servicemodel .modal-footer{padding:0;margin-top:0;}
     .service-rate-panel{width:100%;}
     .modal-footer .btn+.btn{margin-left:0px;}
-    #servicemodel .todo ul { -webkit-column-count: 3;column-count: 3;-moz-column-count: 3;}
+    #servicemodel .todo ul { -webkit-column-count: 2;column-count: 2;-moz-column-count: 2;}
     .list-detail-header{padding-top:0;}
     .payment-wrapper{width:724px;padding-top:80px;margin:0 auto;background-color: transparent;}
    .payment-servicemodel .todo ul { margin: 0;padding: 0;list-style-type: none;}
@@ -1511,7 +1511,7 @@ li.fbbutton:hover{
 .rate-panel{top: 81px;}
  .list-detail-box{margin-top: 13%;height: 88%;}
  .distance{margin: 20px 0 0 0;}
- #servicemodel{width:800px;}
+ #servicemodel{width:900px;}
  .securepayment-panel span {color:#000;}
  .securepayment-panel .fa { color: #1bbc9b;}
   .securepay, .freecancelation{border-right: 1px solid #1bbc9b;}
@@ -1529,6 +1529,10 @@ li.fbbutton:hover{
   
    .searchpanel .service-icon .icon-active{padding-bottom: 13px;}
    .booking-list-item-container h4 span{padding-left: 14.5%;}
+  #servicemodel .todo li .todo-content{white-space: nowrap;
+    width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;}
 }
 
 /* Desktop large screen 1200px */
