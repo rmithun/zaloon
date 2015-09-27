@@ -965,9 +965,9 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   width: 100px;
   line-height: 15px;
   padding-left: 10px;font-size:14px;}
- .securepay{float:left;border-right:1px solid #1bbc9b;width: 130px;padding-top: 9px; padding-bottom: 11px;}
- .freecancelation{float:left;width: 150px;border-right:1px solid #1bbc9b;padding-top: 9px; padding-bottom: 11px;}
- .satisfaction{float:left;width: 134px;padding-top: 9px; padding-bottom: 11px;}
+ .securepay{float:left;border-right:1px solid #1bbc9b;width: 130px;padding-top: 17px; padding-bottom: 11px;}
+ .freecancelation{float:left;width: 150px;border-right:1px solid #1bbc9b;padding-top: 17px; padding-bottom: 11px;}
+ .satisfaction{float:left;width: 134px;padding-top: 17px; padding-bottom: 11px;}
 .pay-container .searchheader .navigation{padding:0px;}
 .payment-wrapper .panel-default .panel-title{font-size:14px;}
 .panel-heading .accordion-toggle:before { font-family: 'Glyphicons Halflings'; content: "\e082"; color: #fff;padding: 4px 10px 1px 5px; }
@@ -1260,7 +1260,7 @@ h4.shopname{font-size: 18px;
   .modal-register-header input{width:80%;}
   .list-detail-header{padding-top:0;}
   .mapview-mob{height:170px;  margin: 20px 0 55px 0;}
-  .payment-wrapper{padding-top: 100px; margin: 0 auto;}
+  .payment-wrapper{padding-top: 65px; margin: 0 auto;}
   .payment-wrapper .panel-default .panel-title{font-size:12px;}
    .securepayment-panel span {color:#fff;width:70px;padding-left:5px;font-size:11px;}
    .securepayment-panel .fa{color:#fff;padding-left:5px;}
@@ -1268,7 +1268,7 @@ h4.shopname{font-size: 18px;
    .securepay{width:80px;}
    .securepay span{width:57px;}
    .freecancelation{width:103px;}
-  .satisfaction{padding-top: 16px; padding-bottom: 14px;width:98px;}
+  .satisfaction{padding-top: 12px; padding-bottom: 13px;width:98px;}
   .payment-wrapper .date-wrap{width:100%;margin-left:0px;}
   .payment-wrapper .time-wrap{width:100%;margin-bottom:10px;}
   .time-meridiam{text-align:center;margin:0;padding:0;float:none;width:auto;}
@@ -1358,9 +1358,9 @@ h4.shopname{font-size: 18px;
   .securepay{padding-bottom: 6px;padding-top:0px;width: 63px;border-right: 1px solid #FFFFFF;}
   .freecancelation {width: 78px;padding-top:0px;padding-bottom: 7px;border-right: 1px solid #FFFFFF;}
   .satisfaction {width: 78px;padding-top:0px;}
-  .securepayment-panel .fa {font-size: 18px; padding-top: 5px; color: #FFFFFF; padding-left: 10px;}
-  .securepayment-panel span {width: 100px;line-height: 15px; padding-left: 10px; font-size: 12px; color: #fff;}
-  .hidden480{display:none;}
+  .securepayment-panel .fa {font-size: 25px; padding-top: 15px; color: #FFFFFF; padding-left: 10px;margin-left: 20px;height: 45px;}
+  .securepayment-panel span {width: 100px;line-height: 15px; padding-left: 10px; font-size: 12px; color: #fff;display:none;}
+  .hidden480{}
   .payment-wrapper .date-wrap table, .payment-wrapper .time-wrap table{font-size:10px;}
   .promoapply{width: 70px; padding:5px;}
   .mobspan span {padding-left: 9px;}
@@ -1460,7 +1460,7 @@ li.fbbutton:hover{
     .modal-footer .btn+.btn{margin-left:0px;}
     #servicemodel .todo ul { -webkit-column-count: 2;column-count: 2;-moz-column-count: 2;}
     .list-detail-header{padding-top:0;}
-    .payment-wrapper{width:724px;padding-top:80px;margin:0 auto;background-color: transparent;}
+    .payment-wrapper{width:724px;padding-top:70px;margin:0 auto;background-color: transparent;}
    .payment-servicemodel .todo ul { margin: 0;padding: 0;list-style-type: none;}
    .securepayment-panel .fa{color:#fff;}
    .securepayment-panel span {color:#fff;}
