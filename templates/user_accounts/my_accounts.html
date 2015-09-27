@@ -68,11 +68,11 @@ Loading your profile...
         <div ng-show="!locationshow" class="editable-controls form-group acconts" style="margin-bottom: 0px;">
             <form name="formlocation" novalidate>
             <input name="location" type="text" class="editable-has-buttons editable-input" style="height: 34px; padding: 6px 12px; margin-top: 2px;" ng-model="txtlocation" ng-keyup="areacomplete()" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" required />
-            <span class="editable-buttons">
-                <button type="submit" style="padding: 8px;min-width: 50px;" class="btn btn-primary" ng-click="loceditableok(formlocation)">
+            <span class="editable-buttons resetpanel">
+                <button type="submit" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn apply-btn" ng-click="loceditableok(formlocation)">
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
-                <button type="button" style="padding: 8px;min-width: 50px;" class="btn btn-default" ng-click="loceditablecancel()">
+                <button type="button" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn reset-btn" ng-click="loceditablecancel()">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
             </span>
@@ -91,11 +91,11 @@ Loading your profile...
             <input name="mobile" type="text" class="editable-has-buttons editable-input" style="height: 34px;
                 padding: 6px 12px; margin-top: 2px;" ng-model="txtphone" ng-pattern="/^[7-9][0-9]{9}$/"
                 required />
-            <span class="editable-buttons">
-                <button type="submit" style="padding: 8px;min-width: 50px;" class="btn btn-primary" ng-click="pheditableok(formphone)">
+            <span class="editable-buttons resetpanel">
+                <button type="submit" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn apply-btn" ng-click="pheditableok(formphone)">
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
-                <button type="button" style="padding: 8px;min-width: 50px;" class="btn btn-default" ng-click="pheditablecancel()">
+                <button type="button" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn reset-btn" ng-click="pheditablecancel()">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
             </span>
@@ -115,10 +115,9 @@ Loading your profile...
   
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation"  style="cursor:pointer;" class="active"><a ng-init="tabx = 1" ng-click="tabx = 1" aria-controls="booking" role="tab" data-toggle="tab">Active Booking</a></li>
-      <li role="presentation" style="cursor:pointer;"><a ng-click="tabx = 2" aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
-      </ul>
-
+      <li role="presentation" ng-init="tabx = 1" ng-click="tabx = 1" style="cursor:pointer;" class="active"><a aria-controls="booking" role="tab" data-toggle="tab">Active Booking</a></li>
+      <li role="presentation" ng-click="tabx = 2" style="cursor:pointer;"><a aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
+      </ul>      
       <!-- Tab panes -->
   <div class="tab-content">     
     

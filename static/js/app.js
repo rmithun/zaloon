@@ -52,11 +52,11 @@ angular.module("ui.editable", []).directive('txtEditable', function (httpService
                            '&nbsp;<i ng-show="show" ng-click="editshow()" style="cursor:pointer;" class="glyphicon glyphicon-pencil"></i>' +
                            '<div ng-show="!show" class="editable-controls form-group">' +
                                '<input type="text" class="editable-has-buttons editable-input form-control" ng-model="txtval" />' +
-                               '<span class="editable-buttons" style="margin-top:2px">' +
-                                   '<button type="submit" class="btn btn-primary" ng-click="editableok()">' +
+                               '<span class="editable-buttons resetpanel" style="margin-top:2px">' +
+                                   '<button type="submit" class="btn apply-btn" style="margin:0px 3px;" ng-click="editableok()">' +
                                        '<span class="glyphicon glyphicon-ok"></span>' +
                                    '</button>' +
-                                   '<button type="button" class="btn btn-default" ng-click="editablecancel()">' +
+                                   '<button type="button" class="btn reset-btn" style="margin:0px 3px;" ng-click="editablecancel()">' +
                                        '<span class="glyphicon glyphicon-remove"></span>' +
                                    '</button></span></div>',
        controller: function ($scope) {
