@@ -136,7 +136,7 @@ class BookingServices(models.Model):
 
 	"""table for services booked for a booking id"""
 	booking = models.ForeignKey(BookingDetails, related_name = "service_booked_with")
-	service = models.ForeignKey(Service, related_name = "service_booked")
+	service = models.ForeignKey(Service, related_name = "service_booked",db_index = True)
 	status = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
