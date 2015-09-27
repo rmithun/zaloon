@@ -1709,6 +1709,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     }
     $scope.pheditablecancel = function () {
         $scope.phoneshow = true;
+        $scope.phonesubmit=false;
     }
     //For location
     $scope.location = "";
@@ -1735,6 +1736,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     }
     $scope.loceditablecancel = function () {
         $scope.locationshow = true;
+        $scope.locationsubmit=false;
     }
     //AutoComplete
     $scope.searchdata_ = {};    

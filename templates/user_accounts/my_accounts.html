@@ -61,53 +61,52 @@ Loading your profile...
       <h3>Profile</h3>      
       <p><span>Name:</span> {%verbatim%}{{user_details.user_acc.first_name}}   {{user_details.user_acc.last_name}}{%endverbatim%} </p>  
       <p><span>Email:</span> {%verbatim%}{{user_details.user_acc.email}}{%endverbatim%}</p> 
-      <p><span>Area:</span>
+      <div style="padding: 0 0 5px 15px;margin: 0;font-size: 14px;"><span>Area:</span>
           <span ng-show="locationshow"><span style="font-size: 15px;font-weight:400;" ng-model="location" class="ng-scope ng-binding editable editable-click">
             {%verbatim%} {{location || ""}}{%endverbatim%}</span>&nbsp;<i ng-click="editlocation()" style="cursor: pointer;
                 font-size: 12px;" class="glyphicon glyphicon-pencil"></i></span>
-        <div ng-show="!locationshow" class="editable-controls form-group acconts" style="margin-bottom: 0px;">
+        <div ng-show="!locationshow" class="editable-controls form-group acconts" style="margin-bottom: 0px;display: inline-block;">
             <form name="formlocation" novalidate>
-            <input name="location" type="text" class="editable-has-buttons editable-input" style="height: 34px; padding: 6px 12px; margin-top: 2px;" ng-model="txtlocation" ng-keyup="areacomplete()" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" required />
+            <input name="location" type="text" class="editable-has-buttons editable-input" style="height: 36px; padding: 6px 12px;" ng-model="txtlocation" ng-keyup="areacomplete()" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" required />
             <span class="editable-buttons resetpanel">
-                <button type="submit" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn apply-btn" ng-click="loceditableok(formlocation)">
+                <button type="submit" style="padding: 8px;min-width: 40px;margin:0px 1px;" class="btn apply-btn" ng-click="loceditableok(formlocation)">
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
-                <button type="button" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn reset-btn" ng-click="loceditablecancel()">
+                <button type="button" style="padding: 8px;min-width: 40px;margin:0px 1px;" class="btn reset-btn" ng-click="loceditablecancel()">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
-            </span>
-            <br />
-            <span class="red" ng-show="locationsubmit && formlocation.location.$error.required">
-                Location is required</span>
+            </span>                  
             </form>
         </div>
-      </p>
-      <p><span>Mobile:</span>
+        <span class="red" ng-show="locationsubmit && formlocation.location.$error.required">
+                Location is required</span>
+      </div>
+      <div style="padding: 0 0 5px 15px;margin: 0;font-size: 14px;"><span>Mobile:</span>
         <span ng-show="phoneshow"><span style="font-size: 15px;font-weight:400;" ng-model="phoneno" class="ng-scope ng-binding editable editable-click">
            {%verbatim%} {{phoneno || ""}}{%endverbatim%}</span>&nbsp;<i ng-click="editphone()" style="cursor: pointer;
                 font-size: 12px;" class="glyphicon glyphicon-pencil"></i></span>
-        <div ng-show="!phoneshow" class="editable-controls form-group" style="margin-bottom: 0px;">
+        <div ng-show="!phoneshow" class="editable-controls form-group" style="margin-bottom: 0px;display: inline-block;">
             <form name="formphone" novalidate>
-            <input name="mobile" type="text" class="editable-has-buttons editable-input" style="height: 34px;
-                padding: 6px 12px; margin-top: 2px;" ng-model="txtphone" ng-pattern="/^[7-9][0-9]{9}$/"
+            <input name="mobile" type="text" class="editable-has-buttons editable-input" style="height: 36px;
+                padding: 6px 12px;" ng-model="txtphone" ng-pattern="/^[7-9][0-9]{9}$/"
                 required />
             <span class="editable-buttons resetpanel">
-                <button type="submit" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn apply-btn" ng-click="pheditableok(formphone)">
+                <button type="submit" style="padding: 8px;min-width: 40px;margin:0px 1px;" class="btn apply-btn" ng-click="pheditableok(formphone)">
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
-                <button type="button" style="padding: 8px;min-width: 50px;margin:0px 3px;" class="btn reset-btn" ng-click="pheditablecancel()">
+                <button type="button" style="padding: 8px;min-width: 40px;margin:0px 1px;" class="btn reset-btn" ng-click="pheditablecancel()">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
             </span>
-            <br />
-            <span class="red" ng-show="phonesubmit && formphone.mobile.$error.required">Mobile is
-                required</span> <span ng-show="phonesubmit"><span class="red" ng-show="formphone.mobile.$error.number || formphone.mobile.$error.pattern">
-                    Enter valid mobile</span></span>
+            <br />            
             </form>
         </div>
-      </p>   
+        <span class="red" ng-show="phonesubmit && formphone.mobile.$error.required">Mobile is
+                required</span> <span ng-show="phonesubmit"><span class="red" ng-show="formphone.mobile.$error.number || formphone.mobile.$error.pattern">
+                    Enter valid mobile</span></span>
+      </div>   
     </div>
-    <!--<input type="button" value="Update" ng-click="updateprofile()"/>-->
+    <!--<input type="button" value="Update" ng-click="updateprofile()"/>-->    
   </div>    
   
   <div class="booking-panel-list-box">
