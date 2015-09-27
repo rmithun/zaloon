@@ -74,6 +74,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
+            import pdb;pdb.set_trace();
             user = self.request.user
             data = self.request.DATA
             appnt_date = datetime.strptime(data['appnt_date'],'%Y-%m-%d')
@@ -184,7 +185,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 UserProfile.objects.filter(user_acc = user).update(mobile = mobile_no )
                 services_booked = BookingServices.objects.filter(booking_id = booking_id)
                 services_booked_list = [(ser.service.service_name,ser.mins_takes,ser.price) for ser in service_details]
-                user = User.objects.values('first_name','email').get(email = user)
+                user = User.objects.values('first_name','email').get(email = user.email)
                 contacts = {'in_charge_person':{'name':studio['in_charge_person'],'mobile_no': \
                 studio['incharge_mobile_no']},'contact_person':{'name':studio['contact_person'],\
                 'mobile_no':studio['contact_mobile_no']}}

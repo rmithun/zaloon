@@ -1147,13 +1147,14 @@ h4.shopname{font-size: 18px;
   .shoppingcart{position: relative;
     padding-top: 6px;
     padding-right: 15px;}
-  .cart-count{background-color: #fff;color:red;}
+  
 
 
 
 /* Mobile device 767px */
 @media (max-width: 767px) {
-  .shoppingcart{padding-top: 12px; padding-right: 15px; padding-left: 10px;border-right: 1px solid #D23D4B;}
+  .shoppingcart{padding-top: 12px; padding-right: 15px; padding-left: 10px;border-right: 1px solid #D23D4B;
+    padding-bottom:14px;}
   .fa-shopping-cart:before{ color: #fff;}
 .review-detail{padding-bottom: 80px;}
 .rate-panel .btn{min-width: 22px;}
@@ -1168,8 +1169,8 @@ h4.shopname{font-size: 18px;
     font-size: 9px;
     padding: 2px 3px;
     line-height: .9;
-    background-color: #f06471;
-    color: white;
+    background-color: #fff;
+    color: #f06471;
   }
 
 .booking-panel{position:relative;margin-top:70px;}
@@ -1379,6 +1380,24 @@ h4.shopname{font-size: 18px;
 
 /* Tablet device Landscape 1024px and 768px */
 @media (min-width: 768px) {
+ .shoppingcart{ padding-top: 18px;
+    padding-right: 15px;
+    padding-left: 10px;
+    border-right: 1px solid #D23D4B;
+    padding-bottom: 14px;
+  }
+  .fa-shopping-cart:before {  color: #fff;}
+    .cart-count{
+  position: absolute;
+    top: 14px;
+    right: 10px;
+    text-align: center;
+    font-size: 9px;
+    padding: 2px 3px;
+    line-height: .9;
+    background-color: #fff;
+    color: #f06471;
+  }
   .moresearch .btn-toolbars.ratingbar a{width: 60px;}
   .fbmobile{
   color:#fff;
@@ -1476,6 +1495,27 @@ li.fbbutton:hover{
 
 /* Desktop medium screen  */
 @media (min-width: 992px){  
+  .shoppingcart{ padding-top: 8px;
+    padding-right: 15px;
+    padding-left: 10px;
+    border-right: 0px;
+    padding-bottom: 14px;
+  }
+  .fa-shopping-cart:before {
+    color: #1BBC9B;
+}
+  .cart-count{
+  position: absolute;
+    top: 4px;
+    right: 10px;
+    text-align: center;
+    font-size: 9px;
+    padding: 2px 3px;
+    line-height: .9;
+    background-color: #f06471;
+    color: #fff;
+    border
+  }
   .overlay-loader{left: 48%;}
   #landing-page .static-header h1 { font-size: 50px;}
   .navigation-bar li.logindetails button{color:#000;}
