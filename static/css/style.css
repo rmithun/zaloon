@@ -1351,7 +1351,7 @@ h4.shopname{font-size: 18px;
   .form-register-small {  display: block; margin-top: 30px; }
   .form-register-small .form-group { margin-left:0; margin-right:0; } 
   .container-mapview{top:11px;}
-  .more-filters-dropdown-menu{width:315px;}
+  .more-filters-dropdown-menu{width:323px;left:-165px;}
   .list-detail-box-panel{width:100%;} 
   .direction button{min-width:12%;}
   .direction input.form-control { width: 88%;}
@@ -1383,10 +1383,10 @@ h4.shopname{font-size: 18px;
 /* Tablet device Landscape 1024px and 768px */
 @media (min-width: 768px) {
  .shoppingcart{ padding-top: 18px;
-    padding-right: 15px;
-    padding-left: 10px;
+    padding-right: 17px;
+    padding-left: 14px;
     border-right: 1px solid #D23D4B;
-    padding-bottom: 14px;
+    padding-bottom: 17px;
   }
   .fa-shopping-cart:before {  color: #fff;}
     .cart-count{
