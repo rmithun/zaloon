@@ -41,16 +41,17 @@
         </nav>
     </header>
 
-<div class="getdetails-panel">
+<div class="getdetails-panel" ng-if="added == 1" >
 <div class="getdetails-panel-wrapper">
 <div class="container-fluid getpanel">
 
- <div class="row" ng-if="added == 1">
+ <div class="row" >
   <div class="form-group">
-      <label class="col-md-12 col-sm-12 col-xs-12 ">Thanks for your valuable rating!.It will help us serve you better.</label>
+      <label class="col-md-12 col-sm-12 col-xs-12 ">Thanks for your valuable rating!.It will help us serve you better.<a href="http://www.zaloon.in">Go to Home</a></label>
   </div>
 
 </div> 
+</div>
 </div>
 </div>
 
@@ -91,11 +92,18 @@
   </div>
 
    {%else%}
- <p> <div class="row">
-      
-        <div class="form-group">
-          <label class="col-md-4 col-sm-4 col-xs-12 ">You have reviewed this booking already.</label>
-        </div></p>
+
+   <div class="container-fluid getpanel">
+
+ <div class="row" >
+  <div class="form-group">
+      <label class="col-md-12 col-sm-12 col-xs-12 ">You have reviewed this booking already.<a href="http://www.zaloon.in">Go to Home</a></label>
+  </div>
+
+</div> 
+</div>
+
+ 
  {%endif%}
 </div>    
  </div>  
