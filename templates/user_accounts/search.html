@@ -271,7 +271,7 @@
     <div class="list-detail-box">
         <div class="rate-panel col-xs-12 no-padding">
 
-             <div ng-click="closeslider()" class="hidden-sm hidden-md hidden-lg col-xs-1 btn btn-primary btn-close">             
+             <div ng-click="closeslider()" class="hidden-sm hidden-md hidden-lg col-xs-2 btn btn-primary btn-close">             
                 <span class="text"> <a style="cursor:pointer;color:#fff;"  >X
                 </a></span>
             </div>  
@@ -279,7 +279,7 @@
             <div style="cursor:default;" class="col-sm-6 col-xs-5 no-padding">
                 <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
-            <div class="col-sm-6 col-xs-6 no-padding" >
+            <div class="col-sm-6 col-xs-5 no-padding" >
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
                 ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
@@ -545,7 +545,7 @@
 
 
 <!-- Modal -->
-<div id="cartmodal" class="modal fade" style="padding-left:0px !important;marigin-top:-2%" role="dialog">
+<div id="cartmodal" class="modal fade" style="padding-left:0px !important;top:-30px;" role="dialog">
 <div id="servicemodel" class="modal-dialog">
     <div class="modal-content">
         <div style="height:45px;" class="modal-header modal-register-header">
@@ -589,7 +589,7 @@
 
 
 <!-- SERVICE Modal -->
-<div id="servicemodelbox" class="modal fade"  style="padding-left:0px !important;" role="dialog">
+<div id="servicemodelbox" class="modal fade"  style="padding-left:0px !important;top:-30px;" role="dialog">
 <div id="servicemodel" class="modal-dialog">
     <div class="modal-content">
         <div style="height:45px;" class="modal-header modal-register-header">

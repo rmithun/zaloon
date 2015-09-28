@@ -1148,7 +1148,7 @@ h4.shopname{font-size: 18px;
     padding-top: 6px;
     padding-right: 15px;}
   
-
+.cart-count{border-radius: 7px !important; -webkit-border-radius:7px !important; -moz-border-radius:7px !important;}
 
 
 /* Mobile device 767px */
@@ -1195,7 +1195,7 @@ h4.shopname{font-size: 18px;
   .searchdevice{position: absolute;width: 100%; height: auto; top: 55px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display: none;}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch{border-left: 1px solid #D23D4B;}
-  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 10px 13px; text-align: center;color:#fff;}
+  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 13px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active, .navigation-bar li.navsearch a:hover{background-color: #F1F1F1;  color: #1BBC9B;}
   
   .navigation-brand .logo{/*margin-left:10px;margin-top: 4px;*/}
@@ -1239,7 +1239,7 @@ h4.shopname{font-size: 18px;
   .list-box #namesearch{width:180px;}
   .mapview{top:24px;}
   .moresearch{background:none;border:none;color:#fff;border-left: 1px solid #D23D4B;border-right: 1px solid #D23D4B;}  
-   .moresearch >.btnmore{background:none;color:#fff; padding: 15px 7px 13px 17px; min-width: 54px;}
+   .moresearch >.btnmore{background:none;color:#fff; padding: 15px 7px 16px 17px; min-width: 54px;}
   .moresearch >.btnmore:hover { background-color: #F1F1F1;color: #1BBC9B;}
   .moresearch >.btnmore.active { background-color: #F1F1F1;color: #1BBC9B;}
   .more-filters-dropdown-menu{overflow-x:hidden;overflow-y:auto;background:#f7f5ee;top:101%;padding-top:13px;}
@@ -1304,8 +1304,9 @@ h4.shopname{font-size: 18px;
 .carousel-image{
   height: 230px;
 }
-#servicemodel{width:300px;height:430px;}
-.shoppingcart{padding:14px 18px 11px 13px;border-right: 1px solid #D23D4B;}
+.service-checkboxcolumn{height:300px;}
+#servicemodel{width:300px;height:420px;}
+.shoppingcart{padding:14px 18px 13px 13px;border-right: 1px solid #D23D4B;}
 .nav-tabs {border-bottom: 2px solid #fff;}
 .overlay-loader{left: 44%;}
 .booking-panel{position:relative;margin-top:62px;}
@@ -1507,11 +1508,11 @@ li.fbbutton:hover{
 }
   .cart-count{
   position: absolute;
-    top: 4px;
+    top: 1px;
     right: 10px;
     text-align: center;
     font-size: 9px;
-    padding: 2px 3px;
+    padding: 3px 5px;
     line-height: .9;
     background-color: #f06471;
     color: #fff;
