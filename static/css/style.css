@@ -1198,7 +1198,7 @@ h4.shopname{font-size: 18px;
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 13px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active, .navigation-bar li.navsearch a:hover{background-color: #F1F1F1;  color: #1BBC9B;}
   
-  .navigation-brand .logo{/*margin-left:10px;margin-top: 4px;*/}
+  .navigation-brand .logo{/*margin-left:10px;*/margin-top: 4px;}
   
   p { font-size: 14px; line-height: 25px; }  
 
@@ -1433,7 +1433,7 @@ li.fbbutton:hover{
    .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 16px 13px; text-align: center;color:#fff;}
   
   .searchpanel{ padding:20px 15px; border: 0; }
-  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;}
+  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;height: 60px;}
   .searchdevice{position: absolute;width: 100%; height: auto; top: 60px; padding-right: 0; background-color: #F1F1F1; z-index: 2; display: none;/*Jawahar*/}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding:20px 13px 14px 13px; text-align: center;color:#fff;}

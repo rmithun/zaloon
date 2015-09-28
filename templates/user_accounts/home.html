@@ -17,15 +17,13 @@
             <div class="container no-padding">
                 <div class="navigation-brand">
                     
-                     <a href="#/"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/logo.png' %}"> </a>
-            <a href="#/"><img width="47" height="47" class="logo hidden-md hidden-lg" alt="" src="{% static 'img/logo-mobile.png' %}"> </a>
+                     <a href="#/"><img width="141" height="41" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/logo.png' %}" style="margin-top:0px;"> </a>
+            <a href="#/"><img width="47" height="47" class="logo hidden-md hidden-lg" alt="" src="{% static 'img/logo-mobile.png' %}" style="margin-top:0px;"> </a>
             
                     
                 </div>
                 <div  class="navigation-navbar">                    
-                    <ul class="navigation-bar navigation-bar-right">  
-
-
+                    <ul class="navigation-bar navigation-bar-right" style="margin-top:3px;">
                       <li ng-show = "is_logged == 0"  >
                        <button data-ng-click='fetch();' class="btn btn-block btn-social btn-facebook">
               <i class="fa fa-facebook"></i>Login with Facebook
