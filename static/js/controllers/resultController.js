@@ -885,6 +885,7 @@ $scope.bindstudio=function(data){
         var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location,'servicename':$scope.searchdata.servicename};        
         $('#lister').hide();
         $('#loading').show();
+        $('#lister1').hide();
         httpServices.getstudioDetails(obj).then(function(data)
         {            
             $cookies.putObject('searchdata',obj,{path:'/'});                     
@@ -893,6 +894,7 @@ $scope.bindstudio=function(data){
             setTimeout(function(){
                 $('#lister').show();
                 $('#loading').hide();
+                $('#lister1').show();
             },500);                                
         },function()
         {
