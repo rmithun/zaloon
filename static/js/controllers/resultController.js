@@ -521,7 +521,6 @@ $scope.bindstudio=function(data){
     $scope.confirm=function(id){
         if(typeof $scope.selectedstudio.id != "undefined"){
             if($scope.selectedstudio.id!=id && $scope.selected_service.length>0){
-
                 $scope.confirmid=id;
                 $('#confirmmodal').modal('show');
             }
@@ -536,6 +535,7 @@ $scope.bindstudio=function(data){
     }
 
     $scope.confirmok=function(id){
+        $('#confirmmodal').modal('hide');
         $scope.studiodetails(id);
     }
 
@@ -1693,7 +1693,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     $scope.editphone = function () {
         $scope.phoneshow = !$scope.phoneshow;
         $scope.txtphone = $scope.phoneno;
-        
+        $scope.locationshow=true;
     }
     $scope.pheditableok = function (formphone) {
         $scope.phonesubmit = true;
@@ -1721,6 +1721,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     $scope.editlocation = function () {
         $scope.locationshow = !$scope.locationshow;
         $scope.txtlocation = $scope.location;
+        $scope.phoneshow=true;
     }
     $scope.loceditableok = function (formlocation) {
         $scope.locationsubmit = true;

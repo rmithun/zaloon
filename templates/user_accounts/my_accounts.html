@@ -216,7 +216,7 @@ Loading your profile...
     
   
   <!-- Model -->
-   <div  id="reviewmodal" class="modal fade" data-backdrop="static" 
+   <div  id="reviewmodal" class="modal fade"
    data-keyboard="false" role="dialog">
     <div class="modal-dialog">
     <div class="modal-content signup">
@@ -245,7 +245,7 @@ Loading your profile...
       <div class="col-sm-12 paddtop10">
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 ">Your Review</label>
-          <div class="col-md-7 col-sm-8 col-xs-11">
+          <div class="col-md-7 col-sm-8 col-xs-12">
           <textarea name="" ng-model="review_data.comment" type="text" class="form-control"></textarea>
           </div>
         </div>
@@ -255,8 +255,8 @@ Loading your profile...
       <div class="col-sm-12 paddtop10">
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 "></label>
-          <div class="col-md-7 col-sm-6 col-xs-11 resetpanel">
-          <button ng-click="add_review()" ng-disabled="is_adding==1" class="rebookbtn btn apply-btn" ng-switch on="submitting">
+          <div class="col-md-7 col-sm-6 col-xs-12 resetpanel" style="left: 0px;bottom:0px;">
+          <button ng-click="add_review()" ng-disabled="is_adding==1" class="rebookbtn btn apply-btn col-md-4 col-sm-6 col-xs-12" ng-switch on="submitting">
             <span ng-switch-when="0">Submit</span>
             <span ng-switch-when="1">Submitting...</span></button>
           </div>
