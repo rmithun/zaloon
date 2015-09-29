@@ -55,9 +55,13 @@ class ActiveBookingMixin(object):
     required_scopes = ['write','read']
     serializer_class = ActiveBookingSerializer
     def get_queryset(self):
-        logger_booking.info("User - "+str(self.request.user))
-        data = BookingDetails.objects.filter(user = self.request.user)
-        logger_booking.info("Active Booking Mixin data - "+str(data))
+        try:
+            logger_booking.info("User - "+str(self.request.user))
+            data = BookingDetails.objects.filter(user = self.request.user)
+            logger_booking.info("Active Booking Mixin data - "+str(data))
+        except Exception,e:
+            logger_error.error(traceback.format_exc())
+            return None
         return data
 
 class GetActiveBookings(ActiveBookingMixin, ListAPIView):
@@ -74,7 +78,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace();
+            #import pdb;pdb.set_trace();
             user = self.request.user
             data = self.request.DATA
             appnt_date = datetime.strptime(data['appnt_date'],'%Y-%m-%d')

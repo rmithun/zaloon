@@ -61,27 +61,27 @@
                 <table width="492" border="0" cellspacing="0" cellpadding="0" style="margin:0; padding:0; border-spacing:0px;text-align:right;font-size:16px;font-family:'Times New Roman', Times, serif;line-height:24px;">
                   {%for serv in services %}
                     <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">{{serv.0}} </td>
-                      <td style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">₹ {{serv.2|floatformat:2}}</td>
+                      <td  width="422px" style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;padding-left:25px;text-align:left;">{{serv.0}} </td>
+                      <td  width="70px"  style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;">₹ {{serv.2|floatformat:2}}</td>
                     </tr>
                     {%endfor%}
                     {%if discount > 0 %}
                      <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">Discount Amount </td>
-                      <td style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">- ₹ {{discount|floatformat:2}}</td>
+                      <td width="422px" style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;padding-left:25px;text-align:left;">Discount Amount </td>
+                      <td width="70px" style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">- ₹ {{discount|floatformat:2}}</td>
                     </tr>
                     {%endif%}
                      <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">Service tax </td>
-                      <td style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">+ ₹ {{service_tax|floatformat:2}}</td>
+                      <td  width="392px" style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;padding-left:25px;text-align:left;">Service tax </td>
+                      <td  width="100px" style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">+ ₹ {{service_tax|floatformat:2}}</td>
                     </tr>
                     <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;"></td>
-                      <td style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">-------------------------</td>
+                      <td width="392px" style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;"></td>
+                      <td   width="100px" style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">---------------</td>
                     </tr>
                     <tr style="margin:0; padding:0; border-spacing:0px;text-align:right;">
-                      <td style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">Grand Total </td>
-                      <td style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">₹ {{total|floatformat:2}}</td>
+                      <td width="392px" style="margin:0; padding:0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;text-align:right;">Grand Total </td>
+                      <td width="100px" style="margin:0; padding:0 25px 0 0; border-spacing:0px;font-family:'Times New Roman', Times, serif;font-size:16px;color:#0da183;">₹ {{total|floatformat:2}}</td>
                     </tr>
                   </table>
                   </td>

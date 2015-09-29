@@ -230,7 +230,8 @@ Loading your profile...
       <div class="modal-body register" ng-if="is_adding ==0">
       <div class="col-sm-12">
          <h4 class="modal-title" style="color:#000 !important;">{%verbatim%}{{reviewstudio}}{%endverbatim%}</h4>
-      </div>         
+      </div>     
+    <form  n ng-if="is_adding ==0"  name="reviewform" style="padding:0px;" novalidate>    
     <div class="row">
       <div class="col-sm-12 paddtop10">
         <div class="form-group">
@@ -246,7 +247,7 @@ Loading your profile...
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 ">Your Review</label>
           <div class="col-md-7 col-sm-8 col-xs-12">
-          <textarea name="" ng-model="review_data.comment" type="text" class="form-control"></textarea>
+          <textarea name="comment" ng-model="review_data.comment" type="text" class="form-control" required></textarea>
           </div>
         </div>
       </div>
@@ -256,13 +257,16 @@ Loading your profile...
         <div class="form-group">
           <label for="sidebar-info" class="col-md-4 col-sm-4 col-xs-12 "></label>
           <div class="col-md-7 col-sm-6 col-xs-12 resetpanel" style="left: 0px;bottom:0px;">
-          <button ng-click="add_review()" ng-disabled="is_adding==1" class="rebookbtn btn apply-btn col-md-4 col-sm-6 col-xs-12" ng-switch on="submitting">
+          <button ng-click="add_review(reviewform)" ng-disabled="is_adding==1" class="rebookbtn btn apply-btn col-md-4 col-sm-6 col-xs-12" ng-switch on="submitting">
             <span ng-switch-when="0">Submit</span>
             <span ng-switch-when="1">Submitting...</span></button>
           </div>
         </div>
       </div>
-    </div>    
+    </div>   
+    <span class="error" style="color:#E55454;" ng-show="formsubmit && reviewform.comment.$error.required">Please enter your comment.</span>
+   
+    </form> 
     
       </div>
     </div>  

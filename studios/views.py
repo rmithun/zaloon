@@ -111,6 +111,7 @@ class StudioProfileMixin(object):
             service = self.request.GET['service']
             cache_key = location.replace(" ","")+str(service)
             if cache.get(cache_key):
+                print datetime.now()
                 return Response(cache.get(cache_key))
             logger_studios.info("Search Query - "+str(self.request.GET))
             studios = StudioServiceTypes.objects.filter(service_type_id = service, is_active = 1).values('studio_profile_id')
@@ -136,6 +137,7 @@ class StudioProfileMixin(object):
             logger_error.error(traceback.format_exc())
             return Response()
         else:
+            print datetime.now()
             return Response(data)
         
 
@@ -149,10 +151,12 @@ class StudioDetailed(APIView):
     model = StudioProfile
     def get(self, request, *args, **kw):
         try:
+            print datetime.now()
             studio_id = self.request.GET['id']
             cache_key = 'studio'+str(studio_id)
             if cache.get(cache_key):
                 data = cache.get(cache_key)
+                print datetime.now()
                 return Response(data)
             studios_data = StudioProfile.objects.filter(id = studio_id).select_related('studio_detail_for_activity',  \
                 'studio_review')
@@ -166,6 +170,7 @@ class StudioDetailed(APIView):
             logger_error.error(traceback.format_exc())
             return Response()
         else:
+            print datetime.now()
             return Response(data)
 
 

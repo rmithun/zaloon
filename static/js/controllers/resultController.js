@@ -1135,7 +1135,7 @@ else{
 }
 if ($scope.serviceschosen['services'].length > 1)
 {
-    $scope.rp_service_txt = $scope.serviceschosen['services'][0].servicename +" & "+String(($scope.serviceschosen['services'].length) - 1) +' more services'
+    $scope.rp_service_txt = $scope.serviceschosen['services'][0].servicename +"+"+String(($scope.serviceschosen['services'].length) - 1) +' services'
     
 }
 else
@@ -1396,8 +1396,8 @@ $scope.makepayment = function(bookingForm)
                         booking_data['booking_code'] = resp['code']
                         booking_data['razorpay_payment_id'] = null
                         putResultService.putBookingData(booking_data)
-                        $('#processingmodal').modal('hide')
                         $location.path("/my_account");
+                        //$('#processingmodal').modal('hide')
                     }, function()
                     {                        
                         $('#processingmodal').modal('hide');
@@ -1633,6 +1633,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             cancelstudio.status_code="B003";
             $scope.expired_bookings.push(cancelstudio)
             console.log("Booking successfully cancelled")
+
         },
         function()
         {
@@ -1790,40 +1791,49 @@ $scope.clearreviewdata = function()
 {
     $scope.review_data['comment'] = ""
     $scope.review_data['rate'] = 0
+    $scope.formsubmit=false;
 
 }
 $scope.titleMsg = 'Successfully added review'; 
 $scope.review_message = 'Thanks for your valuable rating!.It will help us serve you better.';
 $scope.is_adding = 0
 $scope.submitting = 0
-$scope.add_review = function()
+$scope.formsubmit=false;
+$scope.add_review = function(form)
 {
-   $scope.submitting = 1
+   $scope.formsubmit=true;
    $scope.review_data['booking_id'] = $scope.booking_id
-    httpServices.addReview($scope.review_data).then(function(rdata)
+   if(form.$valid)
     {
-        $scope.is_adding = 1
-        $scope.submitting = 0
-        //$('#reviewmodal').modal('hide')
-        console.log(rdata)
-        lodash.find($scope.expired_bookings,function(booking) 
-            { if(booking['id'] == $scope.review_data['booking_id'])
-                {
-                    booking['is_reviewed'] = 1
-                }
-        });
-        $scope.review_data = {}
-    },function()
-    {
-        //$('#reviewmodal').modal('hide')
-        $scope.is_adding = 1
-        $scope.submitting = 0
-        //$('#notificationmodal').modal('show')
-        $scope.titleMsg = 'Review not added'; 
-        $scope.review_message = 'Could not add review try again'; 
-        console.log("Could not add review.")
-        
-    })
+       $scope.submitting = 1
+       httpServices.addReview($scope.review_data).then(function(rdata)
+        {
+            $scope.is_adding = 1
+            $scope.submitting = 0
+            //$('#reviewmodal').modal('hide')
+            console.log(rdata)
+            lodash.find($scope.expired_bookings,function(booking) 
+                { if(booking['id'] == $scope.review_data['booking_id'])
+                    {
+                        booking['is_reviewed'] = 1
+                    }
+            });
+            $scope.review_data = {}
+            $('#notificationmodal').modal('show')
+            $scope.titleMsg = 'Review added'; 
+            $scope.review_message = 'Thanks your review has been added.'; 
+        },function()
+        {
+            //$('#reviewmodal').modal('hide')
+            $scope.is_adding = 1
+            $scope.submitting = 0
+            $('#notificationmodal').modal('show')
+            $scope.titleMsg = 'Review not added'; 
+            $scope.review_message = 'Could not add review try again'; 
+            console.log("Could not add review.")
+            
+        })
+    }
 }
 
 
