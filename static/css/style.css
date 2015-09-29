@@ -133,7 +133,7 @@ article { text-align: left; }
 /*Model*/
 /*#signupmodel { width: 400px;  margin: 15% auto;  overflow:hidden;}*/
 .modal-content{border-radius:0px;}
-.modal-register-header {  background-color: #22ab81;  padding:5px 10px;  color: #F4F4F4;}
+.modal-register-header {  background-color: #22ab81;  color: #F4F4F4;}
 .modal-register-header  input{width:50%;padding-left:10px;}
 .modal-register-header h4{font-size:20px;color: #fff;font-weight: normal;}
 .modal-body.register p{font-size:13px;color:#424d56;text-align:center;}
@@ -1167,7 +1167,7 @@ h4.shopname{font-size: 18px;
     right: 10px;
     text-align: center;
     font-size: 9px;
-    padding: 2px 3px;
+    padding: 3px 5px;
     line-height: .9;
     background-color: #fff;
     color: #f06471;
@@ -1455,7 +1455,7 @@ li.fbbutton:hover{
    .distance{padding: 40px 0;margin-bottom:50px;}
  
    #servicemodel{width:750px;height:450px;}
-   .service-checkboxcolumn{height:240px;padding:10px;}
+   .service-checkboxcolumn{height:300px;padding:10px;}
    .service-checkboxcolumn .btn{width:100px;padding:10px;float:right;margin:15px 7px 0 0;}
     #servicemodel .modal-footer{padding:0;margin-top:0;}
     .service-rate-panel{width:100%;}
