@@ -595,7 +595,7 @@
         <div style="height:62px;" class="modal-header modal-register-header">
         &nbsp;
             <button type="button"  class="close" data-dismiss="modal">&times;</button>
-            <input type="text" style="width:260px;" class="form-control col-xs-10" placeholder="Search services" ng-model="searchservice">
+            <input type="text" style="width:240px;" class="form-control col-xs-10" placeholder="Search services" ng-model="searchservice">
             
         </div>
         <div class="service-checkboxcolumn col-sm-12">
@@ -603,7 +603,7 @@
                 <ul>
                     <li ng-repeat="ser in servicelist | filter:searchservice" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
-                            {%verbatim%} {{ser.servicename | limitTo:45}}{{ser.servicename.length > 45 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>
                     </li>
                 </ul>

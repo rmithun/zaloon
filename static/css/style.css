@@ -1304,8 +1304,8 @@ h4.shopname{font-size: 18px;
 .carousel-image{
   height: 230px;
 }
-.service-checkboxcolumn{height:300px;}
-#servicemodel{width:300px;height:420px;}
+.service-checkboxcolumn{height:240px;}
+#servicemodel{width:300px;height:380px;}
 .shoppingcart{padding:14px 18px 13px 13px;border-right: 1px solid #D23D4B;}
 .nav-tabs {border-bottom: 2px solid #fff;}
 .overlay-loader{left: 44%;}
