@@ -1,4 +1,4 @@
-  <div class="profile-overlay" style="display:none;">
+    <div class="profile-overlay" style="display:none;">
       <div style="position:absolute;color:#000;top:50%;width:100%;text-align:center;">
         <!--<i class="fa fa-spinner fa-spin"></i>-->
         <div class="la-line-scale" style="left:48%;color:#000;">
@@ -110,12 +110,10 @@ Loading your profile...
   </div>    
   
   <div class="booking-panel-list-box">
-  
-  
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" ng-init="tabx = 1" ng-click="tabx = 1" style="cursor:pointer;" class="active"><a aria-controls="booking" role="tab" data-toggle="tab">Active Booking</a></li>
-      <li role="presentation" ng-click="tabx = 2" style="cursor:pointer;"><a aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
+      <li role="presentation" ng-init="tabx = 1" ng-click="tabx = 1" style="cursor:pointer;" ng-class="{'active':tabx == 1}"><a aria-controls="booking" role="tab" data-toggle="tab">Active Booking</a></li>
+      <li role="presentation" ng-click="tabx = 2" style="cursor:pointer;" ng-class="{'active':tabx == 2}"><a aria-controls="booking-history" role="tab" data-toggle="tab">Booking History</a></li>      
       </ul>      
       <!-- Tab panes -->
   <div class="tab-content">     
@@ -149,7 +147,7 @@ Loading your profile...
         <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>             
         
         <div class="landmark_details">
-        <span>Service(s) Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
+        <span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
           ,</span></span></div>       
         <div class="landmark_details"><span>Duration:</span>  <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"></span> mins</div>
         <div class="landmark_details"><span>Booking date:</span> {%verbatim%}{{buking.booking_date | date: mm-dd}}{%endverbatim%}</div>
@@ -190,7 +188,7 @@ Loading your profile...
         <div class="landmark_details"><span>Booking Code:</span>{%verbatim%}{{buking.booking_code}}{%endverbatim%}</div>             
         
         <div class="landmark_details">
-        <span>Service(s) Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
+        <span>Service Booked:</span><span ng-repeat="bukserv in buking.service_booked_with">{%verbatim%}{{bukserv.service.service_name}}{%endverbatim%}<span ng-show="$last != true">
           ,</span></span></div>       
         <div class="landmark_details"><span>Duration:</span>  <span ng-bind="findDuration(buking.appointment_start_time, buking.appointment_end_time)"> </span> mins</div>
         <div class="landmark_details"><span>Booking date:</span> {%verbatim%}{{buking.booking_date | date: mm-dd}}{%endverbatim%}</div>

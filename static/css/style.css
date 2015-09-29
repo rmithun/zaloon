@@ -1154,7 +1154,7 @@ h4.shopname{font-size: 18px;
 /* Mobile device 767px */
 @media (max-width: 767px) {
   .shoppingcart{padding-top: 12px; padding-right: 15px; padding-left: 10px;border-right: 1px solid #D23D4B;
-    padding-bottom:14px;}
+    padding-bottom:15px;}
   .fa-shopping-cart:before{ color: #fff;}
 .review-detail{padding-bottom: 80px;}
 .rate-panel .btn{min-width: 22px;}
@@ -1275,7 +1275,7 @@ h4.shopname{font-size: 18px;
   .service-checkboxcolumn{height:332px;}
   .service-checkboxcolumn .btn{width:100px;padding:10px;float:left;margin:15px 0;}
   .service-totamnt{font-weight:700;color:#fff;display: block;}
-  .navigation-bar li.logindetails {font-size: 13px; color: #fff; max-width: 150px;  padding-top: 13px;}
+  .navigation-bar li.logindetails {font-size: 13px; color: #fff; max-width: 150px;  padding-top: 4px;}
   .nav-tabs>li{width:200px;text-align:center;}
   .booking-panel-wrapper { margin: 0 auto; width: 95%;}
   .booking-aside{width: 100%;}
@@ -1386,7 +1386,7 @@ h4.shopname{font-size: 18px;
     padding-right: 17px;
     padding-left: 14px;
     border-right: 1px solid #D23D4B;
-    padding-bottom: 17px;
+    padding-bottom: 15px;
   }
   .fa-shopping-cart:before {  color: #fff;}
     .cart-count{
@@ -1404,7 +1404,7 @@ h4.shopname{font-size: 18px;
   .fbmobile{
   color:#fff;
   background-color: #F06370;
-  padding: 18px 17px 16px 17px;
+  padding: 18px 17px 14px 17px;
   font-size:20px;
 }
 li.fbbutton{
@@ -1433,14 +1433,14 @@ li.fbbutton:hover{
    .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 16px 13px; text-align: center;color:#fff;}
   
   .searchpanel{ padding:20px 15px; border: 0; }
-  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;/*height: 60px;*/}
+  .searchheader .navigation{padding:0px;background: #F06370;border-top:0px;height: 60px;}
   .searchdevice{position: absolute;width: 100%; height: auto; top: 60px; padding-right: 0; background-color: #F1F1F1; z-index: 2; display: none;/*Jawahar*/}
   .searchpanel .btn{width:100%;}
-  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding:20px 13px 14px 13px; text-align: center;color:#fff;}
+  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding:20px 13px 13px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
   .navigation-bar li.navsearch a:hover{background-color: #e7e7e7;  color: #1BBC9B;}
   .moresearch{background:none;border:none;color:#fff;border-left: 1px solid #D23D4B;border-right: 1px solid #D23D4B;}
-  .moresearch >.btnmore{background:none;color:#fff; padding: 21px 7px 17px 17px; min-width: 54px;}
+  .moresearch >.btnmore{background:none;color:#fff; padding: 22px 7px 14px 17px; min-width: 54px;}
   .moresearch >.btnmore:hover{ background-color: #e7e7e7;color:#1BBC9B;}
   .moresearch >.btnmore.active { color: #1BBC9B;}
   .navigation-brand .logo{margin-left:15px;margin-top: 7px;}
@@ -1524,7 +1524,7 @@ li.fbbutton:hover{
 .bookingdetails .promobox input{width:110px;}
 .distance{margin-bottom:0px;}
 #landing-page .static-header-landing, #landing-page .static-header{height:400px;}
-.searchheader .navigation{background:#f8f8f8;padding:15px 20px 8px 0px ;border-top: 5px solid #f06471;}
+.searchheader .navigation{background:#f8f8f8;padding:15px 20px 8px 0px ;border-top: 5px solid #f06471;height:80px;}
 .searchdevice{position: initial;  background-color: transparent;display:block;/*Jawahar*/}
 .searchpanel{padding:0px;}
 .searchpanel .form-group{margin-bottom:10px;}
