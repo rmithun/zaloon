@@ -13,7 +13,8 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 	{
 		//var fb_key = $http.get(accountURL+'fb_key/')
 		//return $q.all({'fb_key':fb_key
-		fb_key = 442685319234348
+		fb_key = 442685319234348 //test
+		fb_key = 442681529234727 //production
 		return fb_key
 	}
 

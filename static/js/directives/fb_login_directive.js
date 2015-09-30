@@ -8,31 +8,39 @@ noqapp.directive('facebook', function($http,httpServices) {
         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
         if (d.getElementById(id)) {return;}
         js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "https://connect.facebook.net/en_US/all.js"; 
+        js.src = "https://connect.facebook.net/en_US/sdk.js"; 
         ref.parentNode.insertBefore(js, ref);
       }(document));
 
-      function login() {
-        FB.login(function(response) {
-          if (response.authResponse) {
-            console.log(response)
-            $scope.login_status =  response.status
-            $scope.fbLogin(response.authResponse.accessToken)
-            console.log('FB.login connected');
-          } else {
-            console.log('FB.login cancelled');
-          }
-          }, { scope: 'email,user_location,user_birthday' }
-        );
-      };
-
     
       $scope.fetch = function() {
-        console.log($scope.login_status)
-        if ($scope.login_status != 'connected') {
-          login();
-          return false
-         } 
+        event.preventDefault()
+        FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+          // the user is logged in and has authenticated your
+          // app, and response.authResponse supplies
+          // the user's ID, a valid access token, a signed
+          // request, and the time the access token 
+          // and signed request each expire
+          var uid = response.authResponse.userID;
+          $scope.fbLogin(response.authResponse.accessToken)
+        } 
+        else
+        {
+            FB.login(function(response) {
+            console.log(response)
+            if (response.authResponse) {
+              console.log(response)
+              $scope.login_status =  response.status
+              $scope.fbLogin(response.authResponse.accessToken)
+              console.log('FB.login connected');
+            } else {
+              console.log('FB.login cancelled');
+            }
+            }, { scope: 'email,user_location,user_birthday'});
+        }
+       });
+        
       };
     },
     link: function(scope, element, attrs, controller) {
@@ -40,11 +48,12 @@ noqapp.directive('facebook', function($http,httpServices) {
       window.fbAsyncInit = function() {
         FB.init({
           appId      : attrs.facebook, // App ID
-          channelUrl : '//localhost:8000/static/js/channel.html', // Channel File
-          //channelUrl : '//zaloon.in/static/js/channel.html', // Channel File
+          channelUrl : 'http://localhost/static/js/channel.html', // Channel File
+          //channelUrl : 'http//zaloon.in/static/js/channel.html', // Channel File
           status     : true, // check login status
           cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
+          xfbml      : true,  // parse XFBML
+          version    : 'v2.4'
         });
       }; // end of fbAsyncInit
     }
