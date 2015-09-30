@@ -1506,8 +1506,8 @@ $scope.timeFilter =  function (value) {
 });
 
 
-noqapp.controller('modalController', ['$scope','$modalInstance', function($scope, $modalInstance) {
-
+noqapp.controller('modalController', ['$scope','$modalInstance', function($scope, $modalInstance,book) {
+console.log(book)
     $scope.cancel = function () {
     $modalInstance.dismiss('cancel')
   };
@@ -1548,8 +1548,9 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
                 template: templates,
                 controller: 'modalController',
                 size:'lg',
-                scope:$scope,
-                backdrop:true,
+                backdrop: 'static',
+                keyboard: false,
+                scope:$scope,                
                 resolve:{book:function()
                     {
                         return $scope.new_booking

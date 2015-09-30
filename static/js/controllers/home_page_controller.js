@@ -174,12 +174,15 @@ httpServices.getUsrDetails().then(function(dataz)
 		$scope.searchdata_.searchlocation=$label;
 	};
 	$scope.onFocus = function (e) {
+		console.log(e.target)
         $timeout(function () {
           $(e.target).trigger('input');
           $(e.target).trigger('change'); // for IE
         });
       };
       $scope.stateComparator = function (state, viewValue) {
+      	console.log(state)
+      	console.log(viewValue)
         return viewValue === secretEmptyKey || (''+state).toLowerCase().indexOf((''+viewValue).toLowerCase()) > -1;
       };
 });
