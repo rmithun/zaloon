@@ -104,7 +104,7 @@
                         <i class="fa fa-facebook"></i>Login with Facebook
                     </button>
                 </li>
-                <li ng-show = "is_logged == 1 && !user_name"><i style="color:#E65555;" class="fa fa-spinner"></i></li>
+                <li ng-show = "is_logged == 1 && !user_name"><i style="color:#E65555;" class="fa fa-spinner fa-spin"></i></li>
                 <li ng-show="is_logged == 1 && user_name" class="dropdown logindetails">
                     <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Hi {%verbatim%}{{user_name}}{%endverbatim%}
@@ -283,7 +283,7 @@
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
                 ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
-                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner fa-spin"></i></span>
                        </button>
                 <button class="btn btn-primary col-xs-12 no-onlinebook" ng-disabled="true" ng-if="!has_online_payment">No online booking</button>
             </div>
@@ -576,7 +576,7 @@
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
                 ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
-                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner fa-spin"></i></span>
                        </button>
                 <button class="btn btn-primary col-xs-12 no-onlinebook" ng-disabled="true" ng-if="!has_online_payment">No online booking</button>
             </div>
@@ -619,7 +619,7 @@
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
                 ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
-                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner"></i></span>
+                <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner fa-spin"></i></span>
                        </button>
                 <button class="btn btn-primary col-xs-12 no-onlinebook" ng-disabled="true" ng-if="!has_online_payment">No online booking</button>
             </div>
