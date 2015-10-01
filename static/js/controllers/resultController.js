@@ -1515,7 +1515,7 @@ console.log(book)
 }]);
 noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServices,putResultService,sessionService,$window,$modal){
 
-
+    $('.profile-overlay').show();
     $scope.new_booking = putResultService.getBookingData()
     var modalInstance = null;
     templates ='<div style="" class="modal-header modal-register-header">'+
@@ -1534,15 +1534,6 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     {
         if(($scope.new_booking['has_booked'] == 1) && ($scope.new_booking['razorpay_payment_id'] == null))
         {
-            $scope.$on('$routeChangeStart', function(scope, next, current)
-            {
-                if(next['templateUrl'] ='/booking/booking_page/')
-                {
-                    //window.location.href = "http://localhost:8000/#/search";
-                    window.location.href = "http://dev.zaloon.in";                
-                }
-                
-            });
             //$('#bookingconfirm').modal('show')
             modalInstance = $modal.open({
                 template: templates,
@@ -1628,7 +1619,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
 
     $scope.getBookings = function()
     {
-        $('.profile-overlay').show();
+        
         httpServices.getDetails().then(function(data)
         {            
             $scope.user_details = data.user_details.data[0]

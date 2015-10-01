@@ -29,7 +29,8 @@
               <i class="fa fa-facebook"></i>Login with Facebook
             </button>  
                     </li>
-                    <li ng-show = "is_logged == 1" class="dropdown logindetails">
+                    <li ng-show = "is_logged == 1 && !user_name"><i style="color:white;" class="fa fa-spinner"></i></li>
+                    <li ng-show = "is_logged == 1 && user_name" class="dropdown logindetails">
                         <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             Hi {%verbatim%}{{user_name}}{%endverbatim%}
                             <span class="caret"></span>
