@@ -29,6 +29,7 @@ from rest_framework import status
 from django.db.models import Sum, Q
 from django.template.loader import get_template
 from django.template import Context
+from rest_framework.pagination import PageNumberPagination
 
 #application imports
 from serializers import *
@@ -49,15 +50,39 @@ def booking_page(request):
     """returns booking page html"""
     return render(request,'user_accounts/payment.html',{})
 
+
+
+class CustomPagination(PageNumberPagination):
+    def get_paginated_response(self, data):
+        return Response({
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'count': self.page.paginator.count,
+            'results': data
+        })
+
+class LargeResultsSetPagination(CustomPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+
+
+
 class ActiveBookingMixin(object):
     authentication_classes = [OAuth2Authentication]
     permission_classes = (TokenHasScope,)
     required_scopes = ['write','read']
     serializer_class = ActiveBookingSerializer
+    pagination_class = LargeResultsSetPagination
     def get_queryset(self):
         try:
+            #import pdb;pdb.set_trace();
+            active = self.request.GET['active']
             logger_booking.info("User - "+str(self.request.user))
-            data = BookingDetails.objects.filter(user = self.request.user)
+            if int(active):
+                data = BookingDetails.objects.filter(user = self.request.user, status_code = 'B001').order_by('id').reverse()
+            else:
+                data = BookingDetails.objects.filter(Q(user = self.request.user), ~Q(status_code = 'B001')).order_by('id').reverse()
             logger_booking.info("Active Booking Mixin data - "+str(data))
         except Exception,e:
             logger_error.error(traceback.format_exc())

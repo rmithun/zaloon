@@ -110,6 +110,15 @@ class StudioProfileDetailsSerialzier(serializers.ModelSerializer):
 		fields = ('id', 'studio_detail_for_activity','studio_review',)
 
 
+class StudioProfileBookingSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = StudioProfile
+		fields = ('id','studio_type', 'name', 'address_1', 'address_2',  \
+			'city', 'area', 'state', 'incharge_mobile_no', 'contact_mobile_no',  \
+			'in_charge_person', 'contact_person', 'landmark','thumbnail')
+
+
 class StudioProfileSerializer(serializers.ModelSerializer):
 
 	"""serializer to get  studio details"""

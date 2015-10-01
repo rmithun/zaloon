@@ -39,10 +39,21 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 	loginData.getDetails = function()
 	{
 		//$http.defaults.headers.get['Authorization'] = "Bearer " + sessionService.getAccessToken();
-		var booking = $http.get(bookingURL+"my_booking/")
+		var active_booking = $http.get(bookingURL+"my_booking/",{params:{'active':1}})
+		var expired_booking = $http.get(bookingURL+"my_booking/",{params:{'active':0}})
 		var user_details = $http.get(accountURL+'user_details/')
 		//var booking_history = $http.get(accountURL+'booking_history/')
-		return $q.all({'booking':booking,'user_details':user_details})
+		return $q.all({'active_booking':active_booking,'user_details':user_details,'expired_booking':expired_booking})
+	}
+	loginData.getMoreBooking = function(url)
+	{
+		var more_booking = null
+		if(url)
+		{
+			more_booking = $http.get(url)
+		}
+		return $q.all({'more_booking':more_booking})
+
 	}
 	loginData.getService=function()
 	{

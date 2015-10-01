@@ -51,12 +51,13 @@ sent = 0
 uniq_studios = 0
 mail_exception = []
 parse_exception = []
+bookings = None
 def daily_confirmed_booking():
     try:
         ##get all used booking for the day
         time = datetime.now().replace(hour = 13, minute = 00)
         global till_time,today,uniq_studios,parse_exception
-        if till_hour < 13:
+        if till_hour < 12:
             till_time = time.time().replace(hour = 13, minute = 00)
             bookings = BookingDetails.objects.filter( appointment_date = today, \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
@@ -134,7 +135,7 @@ def daily_confirmed_booking():
         logger_error.error(traceback.format_exc())
     else:
         logger_booking.info(" data to render  "+str(to_print))
-        return to_print
+        return to_print,len(bookings)
 
 @transaction.commit_manually
 def render_to_pdf(template_url,data,studio):
@@ -172,7 +173,7 @@ def render_to_pdf(template_url,data,studio):
                 #send email
                 message  = "Please find the booking data"
                 subject = (responses.MAIL_SUBJECTS['DAILY_BOOKING_MAIL'])%(today)
-                generic_utils.sendEmail('vbnetmithun@gmail.com',subject,message,filename+'.pdf')
+                generic_utils.sendEmail('asha.ruku93@gmail.com ',subject,message,filename+'.pdf')
                 #generic_utils.sendEmail(studio_email['email'],subject,message)
                 rep = DailyBookingConfirmation.objects.filter(studio_id = studio, report_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
@@ -189,7 +190,7 @@ def render_to_pdf(template_url,data,studio):
             ##save pdf to table
             ##location should be inside studio
             file_.close();
-            os.remove(file_)
+            os.remove(filename+'.pdf')
     except Exception,pdfrenderr:
         transaction.rollback()
         err = {}
@@ -206,9 +207,9 @@ def render_to_pdf(template_url,data,studio):
 def generate_pdf():
     to_generate = daily_confirmed_booking()
     global buks, sent
-    buks = len(to_generate)
+    buks =to_generate[1]
     logger_booking.info("Sent mails to %s  studios - "%(str(buks)))
-    for key,data in to_generate.iteritems():
+    for key,data in to_generate[0].iteritems():
         try:
             fee_amount =((data['total_booking_amount']* data['commission_percent'])/100)
             service_tax = (data['total_booking_amount']*responses.SERVICE_TAX)/100
@@ -247,16 +248,16 @@ if buks != uniq_studios:
    message = "Failed While parsing;<br/>Total uniq studios - %s; <br/> Total processes - %s; <br/> Total sent -%s ; <br/>  \
    Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent),str(uniq_studios - buks),  \
     mail_exception, parse_exception) 
-   generic_utils.sendEmail('vbnetmithun@gmail.com', 'Failures(parsing),Daily report script run sucessfull',message)
+   generic_utils.sendEmail('asha.ruku93@gmail.com ', 'Failures(parsing),Daily report script run sucessfull',message)
 else:
     if buks != sent:
         message = "Failed while EMALING;<br/>Total unique studios - %s; <br/> Total processes - %s ;<br/> Total sent -%s  ;<br/>  \
         Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent), str(buks-sent),  \
              mail_exception, parse_exception)
-        generic_utils.sendEmail('vbnetmithun@gmail.com', 'Failures(emailing),Daily report script run sucessfull',message)
+        generic_utils.sendEmail('asha.ruku93@gmail.com ', 'Failures(emailing),Daily report script run sucessfull',message)
     else:
         message = "Success.Have sent for %s out of %s"%(str(sent), str(buks))
-        generic_utils.sendEmail('vbnetmithun@gmail.com', 'Success.Daily report script run sucessfull',message)
+        generic_utils.sendEmail('asha.ruku93@gmail.com ', 'Success.Daily report script run sucessfull',message)
 
 logger_booking.info("Confirmed booking script stops running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))

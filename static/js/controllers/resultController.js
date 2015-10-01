@@ -1583,6 +1583,48 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
         })
     }
 
+ $scope.active_next = null
+ $scope.expired_next = null
+ $scope.active_loading_more = false
+ $scope.inactive_loading_more = false
+    $scope.loadMore = function(which)
+    {
+        if ($scope.active_next != null || $scope.expired_next != null)
+        {
+            if(which == 'active')
+            {
+                $scope.active_loading_more = true
+                httpServices.getMoreBooking($scope.active_next).then(function(data)
+                {
+                    $scope.active_loading_more = false
+                    $scope.active_bookings = $scope.active_bookings.concat(data.more_booking.data.results)
+                    $scope.active_next = data.more_booking.data.next
+                    console.log(data.more_booking.data)
+                    console.log($scope.active_bookings.concat(data.more_booking.data.results))
+                    if($scope.active_next != null)
+                    {
+                        $scope.loadMore('active')   
+                    }
+                });
+            }
+            else
+            {
+                    $scope.inactive_loading_more = true
+                    httpServices.getMoreBooking($scope.expired_next).then(function(data)
+                    {
+                        $scope.inactive_loading_more = false
+                        $scope.expired_bookings = $scope.expired_bookings.concat(data.more_booking.data.results)
+                        $scope.expired_next = data.more_booking.data.next
+                        if($scope.expired_next != null)
+                        {
+                            $scope.loadMore('inactive')   
+                        }
+                    });
+                
+            }
+        }
+    }
+
 
     $scope.getBookings = function()
     {
@@ -1592,17 +1634,31 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             $scope.user_details = data.user_details.data[0]
             $scope.location = $scope.user_details.area
             $scope.phoneno = $scope.user_details.mobile
-            $scope.booking_details = data.booking.data
-            httpServices.splitBookings($scope.booking_details).then(function(data)
+            $scope.active_bookings = data.active_booking.data.results
+            $scope.expired_bookings = data.expired_booking.data.results
+            $scope.expired_next = data.expired_booking.data.next
+            $scope.active_next = data.active_booking.data.next
+            $scope.active_count = data.active_booking.data.count
+            $scope.inactive_count = data.expired_booking.data.count
+            $('.profile-overlay').hide();
+            if($scope.active_next !=  null)
+            {
+                 $scope.loadMore('active')
+            }
+            if($scope.expired_next != null)
+            {
+                $scope.loadMore('inactive')   
+            }
+            /*httpServices.splitBookings($scope.booking_details).then(function(data)
             {
                 $scope.active_bookings = data.active_booking
                 $scope.expired_bookings = data.inactive_booking
-                $('.profile-overlay').hide();
-            },
+                
+            },  
             function()
             {
                 console.log("Error splitting bookings")
-            });
+            });*/
         },
         function()
         {

@@ -80,7 +80,7 @@ class BookingDetails(models.Model):
 	appointment_end_time = models.TimeField() # ex 13.15 14.30
 	mobile_no = models.CharField(max_length = 30, null = True)
 	booking_code = models.CharField(max_length = 25)
-	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio")
+	studio = models.ForeignKey(StudioProfile, related_name = "booked_on_studio",db_index = True)
 	coupon = models.ForeignKey(Coupon, related_name = "applied_promo_code", null = True)
 	status_code = models.CharField(max_length = 10)
 	booking_status = models.CharField(max_length = 30)
@@ -135,7 +135,7 @@ class BookedMessageSent(models.Model):
 class BookingServices(models.Model):
 
 	"""table for services booked for a booking id"""
-	booking = models.ForeignKey(BookingDetails, related_name = "service_booked_with")
+	booking = models.ForeignKey(BookingDetails, related_name = "service_booked_with",db_index = True)
 	service = models.ForeignKey(Service, related_name = "service_booked",db_index = True)
 	status = models.BooleanField(default = 1)
 	service_updated = models.CharField(max_length = 25)

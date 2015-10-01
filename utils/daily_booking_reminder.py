@@ -82,7 +82,7 @@ def get_Bookings_for_day():
 logger_booking.info("Booking reminder start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 get_Bookings_for_day()
 message = "Sent %s reminder SMS"%(str(buks))
-generic_utils.sendEmail('vbnetmithun@gmail.com', 'Booking reminder script run successful',message)
+generic_utils.sendEmail('asha.ruku93@gmail.com', 'Booking reminder script run successful',message)
 logger_booking.info("Booking reminder end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
 

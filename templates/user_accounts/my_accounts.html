@@ -61,10 +61,10 @@ Loading your profile...
     <div class="summary-panel">   
       <h3>Summary</h3>
       <div class="col-sm-6 col-xs-6 summary">
-        <h4>{%verbatim%}{{expired_bookings.length}}{%endverbatim%}</h4><span>Used</span>      
+        <h4>{%verbatim%}{{active_count}}/{{active_bookings.length}}{%endverbatim%}</h4><span>Used</span>      
       </div>
       <div class="col-sm-6 col-xs-6 summary">
-        <h4>{%verbatim%}{{active_bookings.length}}{%endverbatim%}</h4><span>Upcoming</span>     
+        <h4>{%verbatim%}{{inactive_count}}/{{expired_bookings.length}}{%endverbatim%}</h4><span>Upcoming</span>     
       </div>
     </div>
     
@@ -168,7 +168,7 @@ Loading your profile...
       </div>
       <button class="bookbtn btn" data-toggle="modal" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}"  ng-if="has_cancel(buking.appointment_start_time,buking.appointment_date)"  data-target="#cancelmodal">Cancel</button>       
     </li>
-        
+    <div ng-show='active_loading_more'>Loading more data...</div>
     </ul>
   </div>
     
@@ -213,6 +213,7 @@ Loading your profile...
        <button class="reviewedbtn btn" ng-if="buking.is_reviewed == 1 && buking.status_code == 'B004' ">Reviewed </button>
               
     </li>
+    <div ng-show='inactive_loading_more'>Loading more data...</div>
     </ul>
   </div>
      </div>

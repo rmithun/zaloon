@@ -8,7 +8,7 @@ from rest_framework import serializers
 from models import *
 #from studios.serializers import StudioProfileSerializer
 #from user_accounts.serializers import UserNameOnlySerializer
-from studios.serializers import StudioProfileSerializer, ServiceSerializer
+from studios.serializers import StudioProfileBookingSerializer, ServiceSerializer
 
 class ServicesBooked(serializers.ModelSerializer):
 
@@ -22,7 +22,7 @@ class ActiveBookingSerializer(serializers.ModelSerializer):
 	"""list of available active bookings for user"""
 	#studio = StudioProfileSerializer(many = True)
 	service_booked_with = ServicesBooked(many = True)
-	studio = StudioProfileSerializer()
+	studio = StudioProfileBookingSerializer()
 	class Meta:
 		model = BookingDetails
 		fields = ('id', 'user', 'booked_date', 'appointment_date', 'appointment_start_time',  \
