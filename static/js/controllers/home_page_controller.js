@@ -173,16 +173,20 @@ httpServices.getUsrDetails().then(function(dataz)
 	$scope.onlocationselect = function ($item, $model, $label) {
 		$scope.searchdata_.searchlocation=$label;
 	};
-	$scope.onFocus = function (e) {
-		console.log(e.target)
-        $timeout(function () {
-          $(e.target).trigger('input');
+	$scope.onFocus = function (e) {		
+		var textbox=$(event.target);
+		console.log(textbox)
+		textbox.find('#service_id').attr('aria-expanded', true);
+		//textbox['aria-expanded']=true;
+		//console.log(textbox)
+        $timeout(function () {             
+          $(e.target).trigger('input');          
           $(e.target).trigger('change'); // for IE
         });
       };
       $scope.stateComparator = function (state, viewValue) {
-      	console.log(state)
-      	console.log(viewValue)
+      	//console.log(state)
+      	//console.log(viewValue)
         return viewValue === secretEmptyKey || (''+state).toLowerCase().indexOf((''+viewValue).toLowerCase()) > -1;
       };
 });

@@ -1521,14 +1521,15 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     templates ='<div style="" class="modal-header modal-register-header">'+
     '<button type="button" class="close" ng-click = "cancel()">&times;</button>'+
     '<h4 class="modal-title">Cheers! Your booking is successful.</h4>'+
-    '</div><!-- /modal-header -->'+
-    '<div class="modal-body register"><span>{{new_booking.studio_name}}</span><br/>'+
-    '<span>Appnt date:{{new_booking.appnt_date| date: yyyy-mm-dd}}</span><br/>'+
-    '<span ng-bind="timeFilter(new_booking.appnt_time)">Appnt. time:</span><br/>'+
+    '</div><!-- /modal-header --><div class="modal-body register">'+    
+    '<div class="col-md-12"><h4 style="margin-top: 0;">{{new_booking.studio_name}}</h4></div><br/>'+
+    '<div class="col-md-2">Date & Time:</div>'+
+    '<div class="col-md-4">{{new_booking.appnt_date| date: yyyy-mm-dd}} <span ng-bind="timeFilter(new_booking.appnt_time)"></span></div><br/>'+
+    '<div class="col-md-2">Booking code:</div>'+
+    '<div class="col-md-4">{{new_booking.booking_code}}</div><br/>'+
     '<span>Purchase amount:₹-{{new_booking.purchase_amount}}</span><br/><span>'+
-    'Confirmation  sent to : {{new_booking.mobile_no}}</span><br/>'+
-    'Services booked:<span ng-repeat="ser in new_booking.serviceschosen">{{ser.servicename}}<br/></span><br/>'+
-    '<span>Booking code:{{new_booking.booking_code}}</span></div>',
+    'Confirmation sent to : {{new_booking.mobile_no}}</span><br/>'+
+    'Services booked:<span ng-repeat="ser in new_booking.serviceschosen">{{ser.servicename}}<br/></span><br/>';
     console.log($scope.new_booking)
     if($scope.new_booking)
     {
