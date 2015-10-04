@@ -253,7 +253,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 email = sendEmail(to_user,subject,message)
                 studio_email = StudioProfile.objects.get(id = studio_id.studio.id)
                 studio_subject = (responses.MAIL_SUBJECTS['STUDIO_BOOKING_EMAIL'])%(user['first_name'])
-                studio_email.studio.email = 'vbnetmithun@gmail.com'
+                studio_email.studio.email = 'vbnetmithun@gmail.com' ##comment in production
                 mail_to_studio = sendEmail(studio_email.studio.email,studio_subject,
                     studio_msg)
                 #sms = sendSMS(studio_id.mobile_no,sms_message)
@@ -368,6 +368,7 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                     subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
                     email = sendEmail(user.email,subject,message)
                     studio_subject = responses.MAIL_SUBJECTS['STUDIO_CANCEL_EMAIL']%(purchase['booking_code'])
+                    studio.studio.email = 'vbnetmithun@gmail.com' ##comment in production
                     studio_email = sendEmail(studio.studio.email,studio_subject,studio_message)
             else:
                 transaction.rollback()
