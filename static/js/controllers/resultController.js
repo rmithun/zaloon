@@ -1527,19 +1527,25 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     $('.profile-overlay').show();
     $scope.new_booking = putResultService.getBookingData()
     var modalInstance = null;
-    templates ='<div style="" class="modal-header modal-register-header">'+
-    '<button type="button" class="close" ng-click = "cancel()">&times;</button>'+
+    templates ='<div style=""   class="modal-header modal-register-header">'+
+    '<button type="button" class="close"  ng-click="cancel()">&times;</button>'+
     '<h4 class="modal-title">Cheers! Your booking is successful.</h4>'+
     '</div><!-- /modal-header --><div class="modal-body register">'+    
     '<div class="col-md-12"><h4 style="margin-top: 0;">{{new_booking.studio_name}}</h4></div><br/>'+
-    '<div class="col-md-2">Date & Time:</div>'+
+    '<div class="col-md-3">Date & Time:</div>'+
     '<div class="col-md-4">{{new_booking.appnt_date| date: yyyy-mm-dd}} <span ng-bind="timeFilter(new_booking.appnt_time)"></span></div><br/>'+
-    '<div class="col-md-2">Booking code:</div>'+
+    '<div class="col-md-3">Booking code:</div>'+
     '<div class="col-md-4">{{new_booking.booking_code}}</div><br/>'+
-    '<span>Purchase amount:₹-{{new_booking.purchase_amount}}</span><br/><span>'+
-    'Confirmation sent to : {{new_booking.mobile_no}}</span><br/>'+
-    'Services booked:<span ng-repeat="ser in new_booking.serviceschosen">{{ser.servicename}}<br/></span><br/>';
-    console.log($scope.new_booking)
+    '<div class="col-md-3">SMS sent to:</div>'+
+    '<div class="col-md-4">{{new_booking.mobile_no}}</div><br/>'+
+    '<div class="col-md-3">Total amount:</div>'+
+    '<div class="col-md-4">₹ {{new_booking.purchase_amount}}</div><br/>'+
+    '<div class="col-md-3">Services booked:</div>'+
+    '<div class="col-md-9"><span ng-repeat="ser in new_booking.serviceschosen | startFrom : 1">{{$index}} - {{ser.servicename}}<br/></span><br/></div><br/>'+
+    '<div style="clear:both"> </div>'+
+    '<div class="col-md-7 col-sm-6 col-xs-12 resetpanel" style="left: 0px;bottom:0px;">'+
+    '<button ng-click="cancel()" class="rebookbtn btn apply-btn col-md-4 col-sm-6 col-xs-12">'+
+    '<span>Ok</span></button></div><div style="clear:both"> </div>'
     if($scope.new_booking)
     {
         if(($scope.new_booking['has_booked'] == 1) && ($scope.new_booking['razorpay_payment_id'] == null))
@@ -1548,7 +1554,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             modalInstance = $modal.open({
                 template: templates,
                 controller: 'modalController',
-                size:'lg',
+                size:'md',
                 backdrop: 'static',
                 keyboard: false,
                 scope:$scope,                
