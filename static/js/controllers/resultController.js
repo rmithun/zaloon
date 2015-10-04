@@ -1855,7 +1855,7 @@ $scope.clearreviewdata = function()
 
 }
 $scope.titleMsg = 'Successfully added review'; 
-$scope.review_message = 'Thanks for your valuable rating!.It will help us serve you better.';
+$scope.review_message = 'That was cool! We’ve added your review of ‘Parlor name’ to our site. Many thanks for sharing your experience with us.';
 $scope.is_adding = 0
 $scope.submitting = 0
 $scope.formsubmit=false;

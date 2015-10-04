@@ -240,12 +240,10 @@
     </div>
 </div>
 <div class="list-box" id = "lister1" style="text-align:center;" ng-show="filteredstudio.length == 0">
-    Sorry, No results found
-    <div>
-        We currently serve only in the 
-        <pre>Porur, Rampuram, Nadambakam, Valasarvakkam area.</pre>
-        </br>Drop your email below we will reach you first when we launch in {%verbatim%}{{searchdata.location}}{%endverbatim%}
-    </div>
+    <span>
+        Sorry Folks! Zaloon doesn’t provide you services in this area. <br/>
+You can still enter your email ID to get notified when we launch our service here.
+    </span>
     <form  ng-hide="inviteflag == 1;" class="form-inline form-register form-register-small" name="inviteform" style="padding:0px;" novalidate>
               
               <div class="form-group">
@@ -258,12 +256,12 @@
                   <span>Notify Me</span>
               </button>
               </div>
-              <span ng-show = "inviteflag == 0;" class="prioritylist">Try Again</span>
+              <span ng-show = "inviteflag == 0;" class="prioritylist">Sorry Some error occurred, Try Again</span>
               <span class="error" ng-show="formsubmit && inviteform.email.$error.required">Please enter your email.</span>
               <span class="error" ng-show="formsubmit && inviteform.email.$error.pattern">Please enter valid email.</span>
     </form>
     <div>
-        <span ng-show="inviteflag == 1">We will notify you</span>
+        <span ng-show="inviteflag == 1">Thank you for your interest towards us. We will notify you through email once our service gets launched.</span>
     </div>
 </div>
 
@@ -433,7 +431,7 @@
         </div>
         <div class="modal-body">
             <div class="todo">
-                Please select atleast one service to book;
+                You have not chosen any services to book!
             </div>
         </div>
 
@@ -459,7 +457,7 @@
         </div>
         <div class="modal-body">
             <div class="todo">
-                The studio is having much space for another service in the slot.
+                Oops! Your services selection limit has been exceeds available duration in the studio.
             </div>
         </div>
 
@@ -481,11 +479,11 @@
     <div class="modal-content">
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            Alert! 
+            Message from Your Cart
         </div>
         <div class="modal-body">
             <div class="todo">
-                You already have items in cart, opening this studio will empty your cart.Do you want continue?
+                Hold On! You are about to empty up your cart if you want to open another Studio. Do you wish to continue?
             </div>
         </div>
 
@@ -538,7 +536,10 @@
                     <i class="fa fa-facebook"></i>Login using Facebook</button>
 
             </div>
-            <p class="hidden-xs"><i>* We remember our promise of no posts on your wall</i></p>
+            <p class="hidden-xs"><i>We request you to login using your FB account before proceeding to book your appointment.We remember our promise of no posts on your wall.
+</i></p>
+
+            
         </div>
     </div>
 </div>
@@ -555,7 +556,7 @@
             <h4 class="modal-title">MY CART</h4>
         </div>
         <div  ng-if="selected_service.length<1" class="service-checkboxcolumn col-sm-12">
-            Sorry, Your cart is empty.
+            Your cart seems to be empty! Please choose services to add to your cart for booking.
         </div>
         <div  ng-if="selected_service.length>0" class="service-checkboxcolumn col-sm-12">
              <h4 class="shopname" >{%verbatim%}{{selectedstudio.name}}{%endverbatim%}</h4>  
