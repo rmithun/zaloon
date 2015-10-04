@@ -370,9 +370,9 @@
             <div class="direction">
                 <h3>Direction</h3>
                 <p>Enter from Location <span class="pull-right hidden-md hidden-lg">{%verbatim%} {{shopdistance}}{%endverbatim%}km</span></p>
-                <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
+               
                 <div class="searchloc">
-                    
+                     <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
                     <div class="form-group autocomplete">
                         <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="directionlocation" placeholder="Location: Porur" ng-keyup="areacomplete(directionlocation)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
                         <button type="button" class="btn btn-primary" ng-click="changedirection()">
@@ -560,7 +560,7 @@
             <div class="todo">
                 
                    <div ng-repeat="ser in selected_service" class="cartlistdiv" >
-                <span ng-click="removeselectedservice(ser)"><img width="15" height="15" class="logo hidden-xs hidden-sm" alt="" src="{% static 'img/delete-icon.png' %}"></span>
+                <span ng-click="removeselectedservice(ser)"><img width="15" height="15" class="logo" alt="" src="{% static 'img/delete-icon.png' %}"></span>
 
                 <span class="selected-service">{%verbatim%} {{ser.servicename}} {%endverbatim%} </span> <span class ="text-right" style="float:right;">  ₹ {%verbatim%}{{ser.price}}{%endverbatim%}</span>
             </div>

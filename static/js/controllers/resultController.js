@@ -726,9 +726,12 @@ $scope.bindstudio=function(data){
     }
 
     $scope.removeselectedservice=function(service){
-        console.log($scope.servicelist);
+        //console.log($scope.servicelist);
+        var idx = lodash.findIndex($scope.servicelist, service);
+        console.log(idx)
         var index = lodash.findIndex($scope.selected_service, service);
         $scope.selected_service.splice(index, 1);
+        $scope.servicelist.splice(idx, 1);
         $scope.serviceprice = $scope.serviceprice - service.price;
         $scope.serviceduration=$scope.serviceduration-service.duration;
         //var flag = $scope.servicelist[index].flag;
