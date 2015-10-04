@@ -41,7 +41,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.studiotype = [{ id:1, name: "Salon", active: false, icon: "fa fa-scissors" }, { id:2, name: "Spa", active: false, icon: "fa fa-scissors" }, { id:3, name: "Beauty parlor", active: false, icon: "fa fa-scissors" }];
     $scope.studiokind = [{ id:1, name: "Men", active: false, icon: "fa-mars" }, {id:2, name: "Women", active: false, icon: "fa-venus" }, {id:3, name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
-    $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "min_price", value: "priceasc", direction: false ,name:"Price"}, { property: "min_price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: false,name:"Rating" }];
+    $scope.studiosort = [{ property: "distance", value: "distanceasc", direction: false,name:"Distance" }, { property: "min_price", value: "priceasc", direction: false ,name:"Price"}, { property: "min_price", value: "pricedsc", direction: true,name:"Price dsc" }, { property: "rating", value: "ratingdsc", direction: true,name:"Rating" }];
     $scope.orderProp = 'min_price';
     $scope.direction = false;    
     $scope.studiotypefilter = [];
@@ -58,6 +58,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     var directionsDisplay = new google.maps.DirectionsRenderer();
     var mdirectionsDisplay = new google.maps.DirectionsRenderer();
     var infoWindow = new google.maps.InfoWindow();
+    var geocoder =  new google.maps.Geocoder();
     var mapOptions = {
         zoom: 4,
         center: new google.maps.LatLng(40.0000, -98.0000),
@@ -106,14 +107,15 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         }
     }
 
-    $scope.getprice_rating = function (index, studio) {        
+    $scope.getprice_rating = function (index, studio) {  
+        var rating=studio.avg_rating;   
         if(studio.avg_rating!=0 || studio.avg_rating!=null){
             rating = Math.round(studio.avg_rating);            
         }        
-        $scope.studio[index].rating = studio.avg_rating;
-        $scope.filteredstudio[index].rating = studio.avg_rating;            
-        $scope.filteredstudio[index].staricon=$scope.stariconset[studio.avg_rating];
-        $scope.studio[index].staricon=$scope.stariconset[studio.avg_rating];        
+        $scope.studio[index].rating = rating;
+        $scope.filteredstudio[index].rating = rating;            
+        $scope.filteredstudio[index].staricon=$scope.stariconset[rating];
+        $scope.studio[index].staricon=$scope.stariconset[rating];        
     }
 
         //Google Maps    
@@ -272,7 +274,7 @@ $scope.bindstudio=function(data){
 
     function getlatlong(location){
         var obj={};
-        var geocoder =  new google.maps.Geocoder();
+        //var geocoder =  new google.maps.Geocoder();
         geocoder.geocode( { 'address': location}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 obj['latitude']=results[0].geometry.location.lat();
@@ -312,7 +314,7 @@ $scope.bindstudio=function(data){
     }
 
     function getgeocode(place){        
-        var geocoder =  new google.maps.Geocoder();
+        //var geocoder =  new google.maps.Geocoder();
         geocoder.geocode( { 'address': place}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 $scope.searchplace['lat']=results[0].geometry.location.lat();
@@ -757,11 +759,12 @@ $scope.bindstudio=function(data){
     $scope.changedirection=function(){
         directionsDisplay.setMap(null);
         mdirectionsDisplay.setMap(null);
-        drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
-        var request = { origin: new google.maps.LatLng($scope.selectedstudio.latitude, $scope.selectedstudio.longitude), destination: $scope.directionlocation, travelMode: google.maps.DirectionsTravelMode.DRIVING };
-        directionsService.route(request, function (response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {                
-                $scope.shopdistance = parseFloat(response.routes[0].legs[0].distance.text);
+        drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);        
+        geocoder.geocode( { 'address': $scope.directionlocation}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {                
+                var studiogeo = new google.maps.LatLng($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
+                var searchgeo = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()); 
+                $scope.shopdistance = parseFloat(google.maps.geometry.spherical.computeDistanceBetween(searchgeo, studiogeo)/1000).toFixed(2);                
                 $scope.$apply();
             }
         });        
