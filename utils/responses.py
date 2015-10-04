@@ -27,8 +27,8 @@ MAIL_SUBJECTS = {'THANKS_EMAIL':"How was %s?",
                  'DAILY_REPORT_EMAIL':"Daily booking report from zaloon for %s",
                  'STUDIO_REQ_REGISTER':"We will contact you shortly.",
                  'DAILY_BOOKING_MAIL':"Confirmed Booking details for %s.",
-                 'STUDIO_BOOKING_EMAIL':"Hey You have a new booking",
-                 'STUDIO_CANCEL_EMAIL':"Hey a booking has been cancelled"}
+                 'STUDIO_BOOKING_EMAIL':"Hey! You have a new Booking from %s",
+                 'STUDIO_CANCEL_EMAIL':"Booking cancellation for %s"}
 
 
 

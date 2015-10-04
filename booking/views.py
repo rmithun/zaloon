@@ -252,7 +252,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 sms_message = sms_template%(user['first_name'],studio['name'],appnt_date,appnt_time,studio_id.booking_code)
                 email = sendEmail(to_user,subject,message)
                 studio_email = StudioProfile.objects.get(id = studio_id.studio.id)
-                studio_subject = responses.MAIL_SUBJECTS['STUDIO_BOOKING_EMAIL']
+                studio_subject = (responses.MAIL_SUBJECTS['STUDIO_BOOKING_EMAIL'])%(user['first_name'])
                 studio_email.studio.email = 'vbnetmithun@gmail.com'
                 mail_to_studio = sendEmail(studio_email.studio.email,studio_subject,
                     studio_msg)
@@ -317,12 +317,12 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
             today = datetime.now()
             if is_booking:
                 purchase = BookingDetails.objects.values('purchase_id','appointment_date',  \
-                    'appointment_start_time','studio').get(id = booking_id)
+                    'appointment_start_time','studio','booking_code').get(id = booking_id)
                 studio = StudioProfile.objects.get(id = purchase['studio'])
                 appnt_time =  purchase['appointment_start_time'].strftime('%I:%M %p' )
                 refund_amt = Purchase.objects.values('purchase_amount').get(id = purchase['purchase_id'])
                 booking_details = {'name':user.first_name,'studio':studio.name,'date':purchase['appointment_date'],  \
-                'appnt_time':appnt_time,'amount':refund_amt['purchase_amount']}
+                'appnt_time':appnt_time,'amount':refund_amt['purchase_amount'],'booking_code':purchase['booking_code']}
                 message = get_template('emails/cancelled.html').render(Context(booking_details))
                 studio_message = get_template('emails/studio_cancelled.html').render(Context(booking_details))
                 if today.date() == purchase['appointment_date']:
@@ -367,7 +367,7 @@ class CancelBooking(ActiveBookingMixin,UpdateAPIView):
                     old_link.delete()
                     subject = responses.MAIL_SUBJECTS['CANCEL_EMAIL']
                     email = sendEmail(user.email,subject,message)
-                    studio_subject = responses.MAIL_SUBJECTS['STUDIO_CANCEL_EMAIL']
+                    studio_subject = responses.MAIL_SUBJECTS['STUDIO_CANCEL_EMAIL']%(purchase['booking_code'])
                     studio_email = sendEmail(studio.studio.email,studio_subject,studio_message)
             else:
                 transaction.rollback()
