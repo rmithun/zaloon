@@ -74,7 +74,7 @@ httpServices.getUsrDetails().then(function(dataz)
 }
 
 
-	$scope.logOut = function()
+$scope.logOut = function()
 	{	
 		httpServices.logOut().then(function(logout_data)
 		{
@@ -84,7 +84,7 @@ httpServices.getUsrDetails().then(function(dataz)
             });
             console.log("Logged out successfully")
             $scope.is_logged = sessionService.isLogged();
-            $window.location.href = "/"
+            window.location.reload()
 		},
 		function()
 		{

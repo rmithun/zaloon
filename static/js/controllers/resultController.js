@@ -1066,27 +1066,30 @@ if(sessionService.isLogged())
 }
 
 
+$scope.logging_out = null
 $scope.logOut = function()
     {   
+        $scope.logging_out = true
         httpServices.logOut().then(function(logout_data)
         {
-            //alert("Here")
-            //$cookies.remove('token')
-            //$scope.is_logged = sessionService.isLogged()
-            var cookies = $cookies.getAll();
-            angular.forEach(cookies, function (v, k) {
-                $cookies.remove(k,{path:'/'});
-            });
-            console.log("Logged out successfully")
+            $cookies.remove('token',{path:'/'});
+            $cookies.remove('expiretime',{path:'/'});
+            $cookies.remove('refreshtoken',{path:'/'})
+            $cookies.remove('client_id',{path:'/'})
+            $cookies.remove('client_secret',{path:'/'})
+            window.location.reload()
+            $scope.logging_out = false
             $scope.is_logged = sessionService.isLogged();
-            $window.location.href = "/"
             
         },
         function()
         {
+            $scope.logging_out = false
             console.log("Logout Error")
         })
     }
+
+
 $scope.searchicon=false;
     $scope.showsearch=function(){
         if($('#searchdevice').css('display') == 'none')
@@ -1558,28 +1561,30 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
         }
     }
 
-
-    $scope.logOut = function()
+$scope.logOut = function()
     {   
+        $scope.logging_out = true
         httpServices.logOut().then(function(logout_data)
         {
-            //alert("Here")
-            //$cookies.remove('token')
-            //$scope.is_logged = sessionService.isLogged()
-            var cookies = $cookies.getAll();
-            angular.forEach(cookies, function (v, k) {
-                $cookies.remove(k,{path:'/'});
-            });
-            console.log("Logged out successfully")
-            $scope.is_logged = sessionService.isLogged();
+            $cookies.remove('token',{path:'/'});
+            $cookies.remove('expiretime',{path:'/'});
+            $cookies.remove('refreshtoken',{path:'/'})
+            $cookies.remove('client_id',{path:'/'})
+            $cookies.remove('client_secret',{path:'/'})
+            window.location.reload()
             $window.location.href = "/"
+            $scope.logging_out = false
+            $scope.is_logged = sessionService.isLogged();
+            
             
         },
         function()
         {
+            $scope.logging_out = false
             console.log("Logout Error")
         })
     }
+
 
  $scope.active_next = null
  $scope.expired_next = null
