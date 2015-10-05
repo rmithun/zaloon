@@ -139,7 +139,9 @@ noqapp.directive('emptyTypeahead', function () {
 angular.module('am.resetField', []).directive('amResetField', ['$compile', '$timeout', function($compile, $timeout) {
   return {
     require: 'ngModel',
-    scope: {},
+    scope: {
+      resetclass:'='
+    },
     link: function(scope, el, attrs, ctrl) {
       // limit to input element of specific types
       var inputTypes = /text|search|tel|url|email|password/i;
@@ -149,7 +151,7 @@ angular.module('am.resetField', []).directive('amResetField', ['$compile', '$tim
         throw new Error("Invalid input type for resetField: " + attrs.type);
 
       // compiled reset icon template
-      var template = $compile('<i ng-show="enabled" ng-mousedown="reset()" class="fa fa-times"></i>')(scope);
+      var template = $compile('<i ng-show="enabled" ng-mousedown="reset()" class="fa fa-times" ng-class="resetclass"></i>')(scope);
       el.after(template);
 
       scope.reset = function() {

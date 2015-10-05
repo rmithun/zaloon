@@ -96,7 +96,7 @@
                 </li>
 
                 <li ng-click="servicecart()" class="shoppingcart">
-                    <i class="fa fa-shopping-cart"></i>
+                    <i class="fa fa-shopping-cart" style="cursor:pointer;"></i>
                     <span ng-show="selected_service.length>0" class="cart-count">{%verbatim%}{{selected_service.length}}{%endverbatim%}</span>
                 </li>
                 <li ng-show="is_logged == 0" class="hidden-xs hidden-sm">
@@ -145,7 +145,7 @@
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                           <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
-                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:5   " typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" autocomplete="off">
+                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:5   " typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" am-reset-field resetclass="test" autocomplete="off">
                     </div>
                 </div>
                 <div class="col-custom-button">

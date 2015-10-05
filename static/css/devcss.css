@@ -326,7 +326,7 @@ input[am-reset-field] + .fa {
     color: #C0C0C0;
     cursor: default;
     font-size: 22px;
-    padding: 12px 12px 12px 12px;
+    padding: 10px 12px 12px 12px;
 }
 
 /* animations for ngAnimate */

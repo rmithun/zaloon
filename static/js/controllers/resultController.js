@@ -81,6 +81,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.totalItems;
     $scope.itemLimit = 5;
     $scope.currentPage = 1;
+    $scope.directionlocation='';
     var top;
     var serviceheight;
     var data;        
@@ -578,7 +579,8 @@ $scope.bindstudio=function(data){
             $('.header-tabs').removeClass('stick-lap');
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
             $scope.reviewPage = 1;
-            $scope.directionlocation=$scope.searchdata.location;            
+            $scope.directionlocation=$scope.searchdata.location;    
+            console.log($scope.directionlocation)        
             serviceheight= $('.service-list').height();            
             $scope.shopdistance = $scope.selectedstudio.distance;   
             if($scope.selectedstudio.daily_studio_closed_from == null){
@@ -877,6 +879,7 @@ $scope.bindstudio=function(data){
         $scope.searchdata.location=$label;        
     };
     $scope.ondirectionselect = function ($item, $model, $label) {
+        console.log($label)
         $scope.directionlocation=$label;
     };
     $scope.searchservicestudio=function(){
