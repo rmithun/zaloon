@@ -14,19 +14,7 @@ noqapp.directive('facebook', function($http,httpServices) {
 
     
       $scope.fetch = function() {
-        FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-          // the user is logged in and has authenticated your
-          // app, and response.authResponse supplies
-          // the user's ID, a valid access token, a signed
-          // request, and the time the access token 
-          // and signed request each expire
-          var uid = response.authResponse.userID;
-          $scope.fbLogin(response.authResponse.accessToken)
-        } 
-        else
-        {
-            FB.login(function(response) {
+       FB.login(function(response) {
             console.log(response)
             if (response.authResponse) {
               console.log(response)
@@ -37,10 +25,6 @@ noqapp.directive('facebook', function($http,httpServices) {
               console.log('FB.login cancelled');
             }
             }, { scope: 'email,user_location,user_birthday'});
-        }
-       },true);
-        
-      };
     },
     link: function(scope, element, attrs, controller) {
       // Additional JS functions here
