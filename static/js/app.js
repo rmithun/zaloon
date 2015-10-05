@@ -3,41 +3,62 @@ var noqapp = angular.module('accountApp', ['ngAnimate','ngCookies','ngRoute','ui
 
 noqapp.run(function($http,$cookies,sessionService) {
 
-	$http.defaults.headers.post['X-CSRFToken'] = $cookies.get('csrftoken');
+  $http.defaults.headers.post['X-CSRFToken'] = $cookies.get('csrftoken');
 
 });
 
 // configure our routes
 noqapp.config(function($routeProvider,$httpProvider) {
 
-	$httpProvider.interceptors.push('authInterceptor');
+  var $cookies;
+  angular.injector(['ngCookies']).invoke(['$cookies', function(_$cookies_) {
+    $cookies = _$cookies_;
+  }]);
+  $httpProvider.interceptors.push('authInterceptor');
   
 
-		$routeProvider
-			// route for the home page
-			.when('/', {
-				templateUrl : '/home/',
-				controller  : 'homepagecontroller'
-			})
-			
-			.when('/search', {
-				templateUrl : '/search/',
-				controller  : 'resultCtrl'
-			})
+    $routeProvider
+      // route for the home page
+      .when('/', {
+        templateUrl : '/home/',
+        controller  : 'homepagecontroller'
+      })
+      
+      .when('/search', {
+        templateUrl : '/search/',
+        controller  : 'resultCtrl'
+      })
 
-			.when('/my_account', {
-				templateUrl : '/account/user_account/',
-				controller  : 'accountscontroller'
-			})
+      .when('/my_account', {
+        templateUrl : '/account/user_account/',
+        controller  : 'accountscontroller',
+         resolve:{
+        "check":function($location){   
+            if($cookies.get('token') == undefined || $cookies.get('token') == null){
+              $location.path('/');
+            }
 
-			.when('/home', {
-				templateUrl : '/home/',
-				controller  : 'homepagecontroller'
-			})
+              }
+          }
+      })
 
-			.when('/booking', {
-				templateUrl : '/booking/booking_page/'
-			})
+      .when('/home', {
+        templateUrl : '/home/',
+        controller  : 'homepagecontroller'
+      })
+
+      .when('/booking', {
+        templateUrl : '/booking/booking_page/',
+        resolve:{
+        "check":function($location){   
+            if($cookies.get('token') == undefined || $cookies.get('token') == null){
+              $location.path('/');
+            }
+            
+              }
+          }
+
+      })
 
 });
 
@@ -71,17 +92,17 @@ angular.module("ui.editable", []).directive('txtEditable', function (httpService
                $scope.show = true;
                obj = {}
                obj[$scope.editableKey] =  $scope.editableModel
-        	   httpServices.updateUserProfile(obj).then(function(data)
-        	   	{
-        	   		console.log("Updated successfully")
-        	   		console.log(data)
+             httpServices.updateUserProfile(obj).then(function(data)
+              {
+                console.log("Updated successfully")
+                console.log(data)
        
-        	   		//message as updated
-        	   	},function()
-        	   	{
-        	   		$scope.editableModel = $scope.oldval
-        	   		//error message that it is not updated
-        	   	});
+                //message as updated
+              },function()
+              {
+                $scope.editableModel = $scope.oldval
+                //error message that it is not updated
+              });
 
            }
            $scope.editablecancel = function () {
@@ -139,9 +160,7 @@ noqapp.directive('emptyTypeahead', function () {
 angular.module('am.resetField', []).directive('amResetField', ['$compile', '$timeout', function($compile, $timeout) {
   return {
     require: 'ngModel',
-    scope: {
-      resetclass:'='
-    },
+    scope: {},
     link: function(scope, el, attrs, ctrl) {
       // limit to input element of specific types
       var inputTypes = /text|search|tel|url|email|password/i;
@@ -151,7 +170,7 @@ angular.module('am.resetField', []).directive('amResetField', ['$compile', '$tim
         throw new Error("Invalid input type for resetField: " + attrs.type);
 
       // compiled reset icon template
-      var template = $compile('<i ng-show="enabled" ng-mousedown="reset()" class="fa fa-times" ng-class="resetclass"></i>')(scope);
+      var template = $compile('<i ng-show="enabled" ng-mousedown="reset()" class="fa fa-times"></i>')(scope);
       el.after(template);
 
       scope.reset = function() {

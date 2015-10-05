@@ -14,7 +14,6 @@ noqapp.directive('facebook', function($http,httpServices) {
 
     
       $scope.fetch = function() {
-        event.preventDefault()
         FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
           // the user is logged in and has authenticated your
@@ -39,7 +38,7 @@ noqapp.directive('facebook', function($http,httpServices) {
             }
             }, { scope: 'email,user_location,user_birthday'});
         }
-       });
+       },true);
         
       };
     },
