@@ -1025,6 +1025,7 @@ $scope.fbLogin = function(dummy)
             httpServices.getUsrDetails().then(function(dataz)
             {
                 $scope.is_logged = sessionService.isLogged()
+                $scope.logging_out = false
                 $scope.user_details = dataz['user_details'].data[0]
                 $scope.user_name = $scope.user_details.user_acc['first_name']
                 $('.loader-overlay').hide();
@@ -1057,6 +1058,7 @@ $scope.fbLogin = function(dummy)
 
 if(sessionService.isLogged())
 {
+    $scope.logging_out = false
     httpServices.getUsrDetails().then(function(dataz)
     {
         $scope.user_details = dataz['user_details'].data[0]
@@ -1069,7 +1071,7 @@ if(sessionService.isLogged())
 }
 
 
-$scope.logging_out = null
+
 $scope.logOut = function()
     {   
         $scope.logging_out = true
@@ -1081,13 +1083,11 @@ $scope.logOut = function()
             $cookies.remove('client_id',{path:'/'})
             $cookies.remove('client_secret',{path:'/'})
             window.location.reload()
-            $scope.logging_out = false
-            $scope.is_logged = sessionService.isLogged();
+            //$scope.is_logged = sessionService.isLogged();
             
         },
         function()
         {
-            $scope.logging_out = false
             console.log("Logout Error")
         })
     }
@@ -1570,6 +1570,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
         }
     }
 
+$scope.logging_out = false
 $scope.logOut = function()
     {   
         $scope.logging_out = true
@@ -1582,14 +1583,12 @@ $scope.logOut = function()
             $cookies.remove('client_secret',{path:'/'})
             window.location.reload()
             $window.location.href = "/"
-            $scope.logging_out = false
-            $scope.is_logged = sessionService.isLogged();
+            //$scope.is_logged = sessionService.isLogged();
             
             
         },
         function()
         {
-            $scope.logging_out = false
             console.log("Logout Error")
         })
     }

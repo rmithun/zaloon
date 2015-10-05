@@ -36,7 +36,7 @@ Loading your profile...
                     <ul class="navigation-bar navigation-bar-right">          
                                     
              <li ng-show = "logging_out"><i style="color:#E65555;" class="fa fa-spinner fa-spin"></i></li>
-             <li class="dropdown logindetails">
+             <li ng-hide="logging_out" class="dropdown logindetails">
              <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
              Hi {%verbatim%}{{user_details.user_acc.first_name}}{%endverbatim%}
               <span class="caret"></span>
