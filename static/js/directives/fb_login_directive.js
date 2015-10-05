@@ -14,7 +14,8 @@ noqapp.directive('facebook', function($http,httpServices) {
 
     
       $scope.fetch = function() {
-       FB.login(function(response) {
+
+         FB.login(function(response) {
             console.log(response)
             if (response.authResponse) {
               console.log(response)
@@ -25,6 +26,10 @@ noqapp.directive('facebook', function($http,httpServices) {
               console.log('FB.login cancelled');
             }
             }, { scope: 'email,user_location,user_birthday'});
+
+      
+        
+      };
     },
     link: function(scope, element, attrs, controller) {
       // Additional JS functions here
