@@ -208,7 +208,7 @@ Loading your profile...
       </div>
       </div>
         <!-- <button class="rebookbtn btn">Rebook</button> -->
-        <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-studio="{%verbatim%}{{buking.studio.name}}{%endverbatim%}" data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#reviewmodal">Write a review</button>
+        <button ng-if="buking.is_reviewed == 0 && buking.status_code == 'B004'" class="reviewbtn btn" data-toggle="modal" data-studio="{%verbatim%}{{buking.studio.name}}{%endverbatim%}" ng-click="clearreviewdata()"  data-id="{%verbatim%}{{buking.id}}{%endverbatim%}" data-target="#reviewmodal">Write a review</button>
         <button class="cancelledbtn btn" ng-if="buking.status_code == 'B003'">Cancelled </button>
        <button class="reviewedbtn btn" ng-if="buking.is_reviewed == 1 && buking.status_code == 'B004' ">Reviewed </button>
               
@@ -235,7 +235,7 @@ Loading your profile...
   
   <!-- Model -->
    <div  id="reviewmodal" class="modal fade"
-   data-keyboard="false" role="dialog">
+   data-keyboard="false"  role="dialog">
     <div class="modal-dialog">
     <div class="modal-content signup">
      <div class="modal-header modal-booking-header">
