@@ -39,7 +39,7 @@
                                 <div class="clearfix"></div>
                                 <div class="btn-toolbars studio-tab">
 
-                                    <a ng-repeat="type in studiotype" class="btn " ng-class="{'active':type.active == true,'borderrgtnone':$last == true}" ng-click="studiotypeclick(type.name,$index)">
+                                    <a ng-repeat="type in studiotype" class="btn " ng-class="{'active':type.active == true,'borderrgtnone':$last == true,'stu-type-last':$last == true}" ng-click="studiotypeclick(type.name,$index)">
                                         <span ng-class="type.icon">
                                                 {%verbatim%}{{type.name}}{%endverbatim%}</span>
                                     </a>
@@ -269,7 +269,7 @@ You can still enter your email ID to get notified when we launch our service her
 <div id="studiodetails" class="list-detail-box-panel" style="display:none;-webkit-overflow-scrolling: touch;">
     <a style="cursor:pointer;" ng-click="closeslider()" class="listclose hidden-xs">X</a>
     <div class="list-detail-box">
-        <div class="rate-panel col-xs-12 no-padding">
+        <div class="rate-panel col-xs-12 no-padding" style="z-index: 2;">
 
              <div ng-click="closeslider()" class="hidden-sm hidden-md hidden-lg col-xs-2 btn btn-primary btn-close">             
                 <span class="text"> <a style="cursor:pointer;color:#fff;"  >X
