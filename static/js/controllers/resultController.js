@@ -1582,7 +1582,7 @@ $scope.logOut = function()
             $cookies.remove('client_id',{path:'/'})
             $cookies.remove('client_secret',{path:'/'})
             window.location.reload()
-            $window.location.href = "/"
+            $location.path('/')
             //$scope.is_logged = sessionService.isLogged();
             
             
