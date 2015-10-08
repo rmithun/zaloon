@@ -122,6 +122,9 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             service_tax = data['service_tax']
             if data.has_key('promo_code'):
                 promo_code = data['promo_code']
+                if promo_code:
+                    coupon_detail = Coupon.objects.get(coupon_code__iexact = promo_code, is_active = 1,  \
+                            expiry_date__gte =  datetime.today().date())
             ##check purchase amount is not changed
             ##set total duration for the booking taking all duration on the studio
             ##make entry in purchase table
@@ -232,8 +235,6 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 studio_msg = get_template('emails/studio_booking.html').render(Context(booking_details))
                 to_user = user['email']
                 if promo_code:
-                    coupon_detail = Coupon.objects.get(coupon_code__icontains = promo_code, is_active = 1,  \
-                        expiry_date__gte =  datetime.today().date())
                     if not coupon_detail:
                         logger_error.error("Invalid promo code")
                         logger_error.error(rzp_payment_id)
@@ -652,12 +653,12 @@ class ApplyCoupon(APIView):
             #check coupon code is there
             logger_booking.info("Coupon request -" +str(data))
             try:
-                coupon_detail = Coupon.objects.get(coupon_code__icontains = coupon_code)
+                coupon_detail = Coupon.objects.get(coupon_code__iexact= coupon_code,is_active = 1)
             except:
                 response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['INVALID_COUPON'])
                 return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
             try:
-                coupon_detail = Coupon.objects.get(coupon_code__icontains = coupon_code, is_active = 1,   \
+                coupon_detail = Coupon.objects.get(coupon_code__iexact = coupon_code, is_active = 1,   \
                 expiry_date__gte =  datetime.today().date())
             except Exception,e:
                 logger_error.info(traceback.format_exc())
