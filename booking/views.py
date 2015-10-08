@@ -695,6 +695,11 @@ class ApplyCoupon(APIView):
                         return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
                 """
                 to_deduct = 0
+                if coupon_detail.min_booking_amount > 0:
+                    if amount < coupon_detail.min_booking_amount:
+                        logger_booking.info("Minimum booking amount not reached")
+                        response_to_ng = simplejson.dumps(responses.COUPON_RESPONSE['COUPON_MIN_AMOUNT'])%(coupon_detail.min_booking_amount)
+                        return Response(data = response_to_ng, status = status.HTTP_400_BAD_REQUEST)
                 if coupon_detail.coupon_type == 'PERCENT' or coupon_detail.coupon_type == 'percent':
                     logger_booking.info("Coupon type is PERCENT")
                     to_deduct = (amount * coupon_detail.discount_value)/100

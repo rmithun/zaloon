@@ -34,7 +34,7 @@ class CouponSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Coupon
 		fields = ('coupon_code','expiry_date','is_one_time','is_active', \
-			'coupon_type','discount_value','for_all_studios')
+			'coupon_type','discount_value','for_all_studios','min_booking_amount')
 
 class EmailReviewLinkSerializer(serializers.ModelSerializer):
 

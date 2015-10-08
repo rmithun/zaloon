@@ -44,7 +44,8 @@ COUPON_RESPONSE = {'NO_COUPON':'Sorry, Coupon expired.', \
                    'INVALID_COUPON':'The coupon code is invalid', \
                    'NOT_APPLICABLE':'Sorry, Coupon code not applicable.',\
                    'COUPON_USED':'Sorry, Coupon code not applicable.This Coupon code was already used.',
-                   'COUPON_EXPIRED_USED':'Sorry, Coupon code not applicable.This Coupon code was already used/expired.'}
+                   'COUPON_EXPIRED_USED':'Sorry, Coupon code not applicable.This Coupon code was already used/expired.',
+                   'COUPON_MIN_AMOUNT':'The minimum booking amount should be %s to apply this coupon'}
 
 
 SERVICE_TAX = 14
