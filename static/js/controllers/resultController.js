@@ -12,7 +12,7 @@ noqapp.filter('startFrom', function () {
 
 
 
-noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,lodash,httpServices,sessionService,putResultService) {
+noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,lodash,httpServices,sessionService,putResultService,gService) {
     
     //detect device
     $scope.device = navigator.platform
@@ -34,6 +34,9 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.selectedstudio = {};
     $scope.searchdata={};
     $scope.searchplace={};
+    $scope.studioservicegroup=[];
+    $scope.studioactiveservice=[];
+    $scope.studiolocation=[];
     $scope.serviceprice = 0;  
     $scope.serviceduration=0;  
     $scope.morefilter = false;
@@ -123,8 +126,8 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     var imagUrls = {
         //oneOn: 'http://maps.google.com/mapfiles/kml/pal3/icon47.png',
         //oneOff: 'http://maps.google.com/mapfiles/kml/pal3/icon39.png'
-        oneOff: 'static/img/blue24.png',
-        oneOn: 'static/img/green24.png'
+        oneOff: '../static/img/blue24.png',
+        oneOn: '../static/img/green24.png'
     };
     var images = {
         oneOn: new google.maps.MarkerImage(imagUrls.oneOn),
@@ -139,7 +142,6 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             icon: images.oneOff
         });
         var compiled;
-        //console.log(studio.distance);
         if(typeof studio.distance !="undefined"){
             compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div style="color: #4c4c4c;font-size: 12px;width: 150px;line-height: 17px;">'+ studio.address_1 +'</div><div class="sub-line-2"><span>'+ studio.distance +' KM</span><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.min_price +'+</span></span></div></div></div></div>')($scope);            
         }        
@@ -248,12 +250,11 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
 
 $scope.bindstudio=function(data){ 
     $scope.studio=[];
-    $scope.filteredstudio=[]; 
-    console.log(data)  
+    $scope.filteredstudio=[];     
     if(data.length>0){  
     $scope.totalItems=data.length;                 
             angular.forEach(data, function (value, key) {
-            $scope.studio.push(value);
+            $scope.studio.push(value);            
             $scope.filteredstudio.push(value);            
             $scope.getprice_rating(key, value);
             var kind=lodash.where($scope.studiokind,{'id':value.studio_kind})[0];
@@ -309,9 +310,7 @@ $scope.bindstudio=function(data){
     function getdistance(key, lat, lon) {        
         var studiogeo = new google.maps.LatLng(lat, lon);
         var searchgeo = new google.maps.LatLng($scope.searchplace['lat'], $scope.searchplace['lon']); 
-        $scope.studio[key].distance =parseFloat(google.maps.geometry.spherical.computeDistanceBetween(searchgeo, studiogeo)/1000).toFixed(2);
-             
-        //console.log(google.maps.geometry.spherical.computeDistanceBetween(_pCord, _kCord));
+        $scope.studio[key].distance =parseFloat(google.maps.geometry.spherical.computeDistanceBetween(searchgeo, studiogeo)/1000).toFixed(2);       
     }
 
     function getgeocode(place){        
@@ -319,8 +318,7 @@ $scope.bindstudio=function(data){
         geocoder.geocode( { 'address': place}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 $scope.searchplace['lat']=results[0].geometry.location.lat();
-                $scope.searchplace['lon']=results[0].geometry.location.lng();
-                console.log($scope.searchplace)
+                $scope.searchplace['lon']=results[0].geometry.location.lng();                
                 angular.forEach($scope.studio, function (value, key) {
                     getdistance(key, value.latitude, value.longitude); 
                 });
@@ -542,11 +540,9 @@ $scope.bindstudio=function(data){
         $scope.studiodetails(id);
     }
 
-    $scope.studiodetails = function (id) { 
-        console.log(id)
+    $scope.studiodetails = function (id) {        
         var samestudio=false;          
-        $('.service-overlay').show(); 
-        console.log($scope.selectedstudio.id);
+        $('.service-overlay').show();         
         if(typeof $scope.selectedstudio.id != "undefined"){
             if($scope.selectedstudio.id!=id){
                 $scope.selected_service = [];  
@@ -559,8 +555,7 @@ $scope.bindstudio=function(data){
         }            
         $scope.servicelist = [];
         $scope.selectedstudio = {};
-        var studio = lodash.where($scope.studio, { 'id': id });
-        console.log(studio)
+        var studio = lodash.where($scope.studio, { 'id': id });        
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
             $('.tab-street').addClass('active');
@@ -578,9 +573,8 @@ $scope.bindstudio=function(data){
             $('.header-tabs').removeClass('stick-tablet');
             $('.header-tabs').removeClass('stick-lap');
             $('#studiodetails').toggle('slide', { direction: 'right' }, 200);
-            $scope.reviewPage = 1;
-            $scope.directionlocation=$scope.searchdata.location;    
-            console.log($scope.directionlocation)        
+            $scope.reviewPage = 1;            
+            $scope.directionlocation=$scope.searchdata_.searchlocation;
             serviceheight= $('.service-list').height();            
             $scope.shopdistance = $scope.selectedstudio.distance;   
             if($scope.selectedstudio.daily_studio_closed_from == null){
@@ -600,7 +594,7 @@ $scope.bindstudio=function(data){
                 removemarker();                
                 drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
             },300);
-            setTimeout(function () {                
+            setTimeout(function () {                   
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
             }, 500);
             httpServices.getServicebyid({id:id}).then(function(res)
@@ -609,8 +603,7 @@ $scope.bindstudio=function(data){
                 $scope.selectedstudio.studio_review=res['service_details'].data[0].studio_review;
                 var page = Math.floor($scope.selectedstudio.studio_review.length / 5);                   
                 page = page + ($scope.selectedstudio.studio_review.length % 5 > 0 ? 1 : 0);                  
-                $scope.reviewtotalpage = page;
-                console.log(samestudio)
+                $scope.reviewtotalpage = page;                
                 if(samestudio){
                     $scope.updateselectedflag();
                 }        
@@ -622,42 +615,34 @@ $scope.bindstudio=function(data){
     }
 
     $scope.sortservicebyfilter = function (studioactivity) {        
-        $scope.servicelist = [];
+        $scope.servicelist = [];        
         var res = lodash.where(studioactivity, { service: { service_type: $scope.searchdata.service } });        
-        angular.forEach(res,function(service,key){
-            //console.log(service.service.service_name+" - "+service.is_active)
+        angular.forEach(res,function(service,key){            
             $scope.servicelist.push({id:service.service.id,servicename: service.service.service_name, price: service.price, flag: false , duration:service.mins_takes,isactive:service.is_active });
         });        
-        angular.forEach(studioactivity, function (service, key) {
-            //console.log(service.service.service_name+" - "+service.is_active)
+        angular.forEach(studioactivity, function (service, key) {            
             if (lodash.findIndex($scope.servicelist, { 'id': service.service.id }) == -1) {
                 $scope.servicelist.push({id:service.service.id, servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes,isactive:service.is_active });
             }
         });
         $('.service-overlay').hide();
         setTimeout(function () {           
-            var tempheight=serviceheight;  
-            //console.log(serviceheight);   
+            var tempheight=serviceheight;              
             serviceheight=$('.service-list').height();            
-            console.log(serviceheight);
                 top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
             }, 1000);        
     }
 
-    $scope.updateselectedflag=function(){
-        console.log($scope.selected_service)
-        angular.forEach($scope.selected_service,function(service,key){
-            console.log(service)
-            var index=lodash.findIndex($scope.servicelist, { 'id': service.id });
-            console.log(index)
+    $scope.updateselectedflag=function(){       
+        angular.forEach($scope.selected_service,function(service,key){            
+            var index=lodash.findIndex($scope.servicelist, { 'id': service.id });            
             if(index!=-1){
                 $scope.servicelist[index].flag=true;
             }
         });
     }
 
-    $scope.easyscroll = function (clsname,tab) {   
-    //console.log(top)       
+    $scope.easyscroll = function (clsname,tab) {    
         if($(window).width() <= 480){            
             $('.list-detail-box').animate({
                 scrollTop: top[clsname] - 92
@@ -729,17 +714,14 @@ $scope.bindstudio=function(data){
         $('#cartmodal').modal('show');
     }
 
-    $scope.removeselectedservice=function(service){
-        //console.log($scope.servicelist);
-        var idx = lodash.findIndex($scope.servicelist, service);
-        console.log(idx)
+    $scope.removeselectedservice=function(service){        
+        var idx = lodash.findIndex($scope.servicelist, service);       
         var index = lodash.findIndex($scope.selected_service, service);
         $scope.selected_service.splice(index, 1);
         $scope.servicelist.splice(idx, 1);
         $scope.serviceprice = $scope.serviceprice - service.price;
         $scope.serviceduration=$scope.serviceduration-service.duration;
-        //var flag = $scope.servicelist[index].flag;
-             
+        //var flag = $scope.servicelist[index].flag;             
         //if (flag) {                        
         //    var inx=lodash.findIndex($scope.selected_service, { 'servicename': service.servicename });
         //    $scope.servicelist[index].flag = !$scope.servicelist[index].flag;   
@@ -758,7 +740,7 @@ $scope.bindstudio=function(data){
         $scope.reviewPage = 1;   
     }
 
-    $scope.changedirection=function(){
+    $scope.changedirection=function(){        
         directionsDisplay.setMap(null);
         mdirectionsDisplay.setMap(null);
         drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);        
@@ -801,8 +783,7 @@ $scope.bindstudio=function(data){
                     return false;  
                 }
             }          
-        }  
-        console.log($scope.selectedstudio.daily_studio_duration+"-"+$scope.serviceduration);
+        }          
     }
 
     $scope.calculate=function(start,closed) {        
@@ -834,90 +815,81 @@ $scope.bindstudio=function(data){
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
         autozoom();
     }
-    //AutoComplete
-    $scope.searchdata_ = {};    
-    $scope.searchdata_['arealist'] = [];    
-    var acService = new google.maps.places.AutocompleteService();
-    $scope.areacomplete = function (val) {     
-        if (val != "" && typeof val != 'undefined') {
-            acService.getPlacePredictions({
-                input: val,
-                types: ['(regions)'],
-                componentRestrictions: { 'country': 'in' }
-            }, function (places, status) {
-                if (status === google.maps.places.PlacesServiceStatus.OK) {                    
-                    var _places = [];                    
-                    for (var i = 0; i < places.length; ++i) {
-                        _places.push({
-                            id: places[i].place_id,
-                            value: places[i].description,
-                            label: places[i].description
-                        });
-                    }                   
-                    $scope.searchdata_['arealist'] = _places;     
-                }
-            });
-        }
+    //AutoComplete    
+    $scope.areacomplete = function (val) { 
+         return gService.getPlace(val).then(function (data) {           
+            return data.location;
+        });
     }
-    //Get All Services    
-    $scope.searchdata_['servicelist']='';
-    httpServices.getServiceType().then(function(data)
-        {           
-            $scope.searchdata_['servicelist'] = data['service_details'].data;
-
-        },function()
-        {
-            console.log("Try again to get service")
-        });    
-
+    //Get All Services        
+    httpServices.getServiceType().then(function(data) {             
+        $scope.studioservicegroup = data['service_details'].data;    
+        $scope.studioactiveservice = lodash.pluck(lodash.where(data['service_details'].data, { 'is_active': true }),'service_name');        
+    },function() {
+        console.log("Try again to get service")
+    });  
     //Search Studio Details Event    
     $scope.onserviceselect = function ($item, $model, $label) {     
-        $scope.searchdata.servicename=$item.service_name;
-        $scope.searchdata_.service=$model;    
+        $scope.searchdata_.servicename =$label;            
+        $scope.iswrongservice=false;   
     };
     $scope.onlocationselect = function ($item, $model, $label) {
-        $scope.searchdata.location=$label;        
+        if($label!="Notfound"){
+            $scope.searchdata_.searchlocation=$label;
+        }
+        else{           
+            $scope.searchdata_.searchlocation="";
+        }       
     };
     $scope.ondirectionselect = function ($item, $model, $label) {
-        console.log($label)
-        $scope.directionlocation=$label;
-    };
-    $scope.searchservicestudio=function(){
-        if($('.navsearch').css('display') != "none"){
-            $('#searchdevice').hide();
-        }         
-        //$scope.studio=[];
-        //$scope.filteredstudio=[];  
-        $scope.searchicon=false;        
-        removemarker();
-        clearlatlongbound();
-        var obj={'service':$scope.searchdata.service,'location':$scope.searchdata.location,'servicename':$scope.searchdata.servicename};        
-        $('#lister').hide();
-        $('#loading').show();
-        $('#lister1').hide();
-        httpServices.getstudioDetails(obj).then(function(data)
-        {            
-            $cookies.putObject('searchdata',obj,{path:'/'});                     
-            putResultService.setresult(data.studio_details.data);
-            $scope.bindstudio(data.studio_details.data); 
-            setTimeout(function(){
-                $('#lister').show();
-                $('#loading').hide();
-                $('#lister1').show();
-            },500);                                
-        },function()
-        {
-            console.log("Try again to get service")
-        });
-        if($('#studiodetails').css('display') != 'none'){
-            $('#studiodetails').hide();
-            directionsDisplay.setMap(null);
-            mdirectionsDisplay.setMap(null);
-            clearlatlongbound();
+        if($label!="Notfound"){
+            $scope.directionlocation=$label;
         }
+        else{           
+            $scope.directionlocation="";
+        }        
+    };
+    $scope.searchservicestudio=function(){        
+        var idx=lodash.findIndex($scope.studioservicegroup, { service_name: $scope.searchdata_.servicename.trim() });        
+        if (idx != -1) {
+            if($('.navsearch').css('display') != "none"){
+                $('#searchdevice').hide();
+            }            
+            $scope.searchicon=false;        
+            removemarker();
+            clearlatlongbound();
+            var obj={'service':$scope.studioservicegroup[idx].id,'location':$scope.searchdata_.searchlocation,'servicename':$scope.studioservicegroup[idx].service_name};
+            $('#lister').hide();
+            $('#loading').show();
+            $('#lister1').hide();
+            httpServices.getstudioDetails(obj).then(function(data)
+            {            
+                $cookies.putObject('searchdata',obj,{path:'/'});   
+                $scope.searchdata=obj;                  
+                putResultService.setresult(data.studio_details.data);
+                $scope.bindstudio(data.studio_details.data); 
+                setTimeout(function(){
+                    $('#lister').show();
+                    $('#loading').hide();
+                    $('#lister1').show();
+                },500);                                
+            },function()
+            {
+                console.log("Try again to get service")
+            });
+            if($('#studiodetails').css('display') != 'none'){
+                $('#studiodetails').hide();
+                directionsDisplay.setMap(null);
+                mdirectionsDisplay.setMap(null);
+                clearlatlongbound();
+            }            
+        }        
     }
 
-    $scope.searchdata=$cookies.getObject('searchdata');       
+    $scope.searchdata=$cookies.getObject('searchdata');  
+    $scope.searchdata_ = {};
+    $scope.searchdata_.servicename=$scope.searchdata.servicename;
+    $scope.searchdata_.searchlocation=$scope.searchdata.location;
     $('.finder-overlay').hide();
     if(typeof $scope.searchdata == "undefined"){
         $location.path("/");
@@ -939,8 +911,7 @@ $scope.bindstudio=function(data){
                     $location.path("/");
                 });
         }
-        else{
-            console.log(putResultService.getresult())
+        else{            
            data=putResultService.getresult(); 
            $scope.bindstudio(data);
         }
@@ -1061,8 +1032,7 @@ if(sessionService.isLogged())
     $scope.logging_out = false
     httpServices.getUsrDetails().then(function(dataz)
     {
-        $scope.user_details = dataz['user_details'].data[0]
-        console.log($scope.user_details)
+        $scope.user_details = dataz['user_details'].data[0]        
         $scope.user_name = $scope.user_details.user_acc['first_name']
     }, function()
     {
@@ -1110,6 +1080,12 @@ $scope.searchicon=false;
         }        
     }
 
+    $scope.reloadpage = function()
+    {
+       //reload page when login error occurs
+       window.location.reload() 
+    }
+
     $(document).click(function(e) {  
         if($scope.morefilter){      
             if (!$(e.target).is('#morefilter, #morefilter *')) {        
@@ -1155,7 +1131,6 @@ else
     $scope.rp_service_txt = $scope.serviceschosen['services'][0].servicename   
 }
 $scope.user_details = $scope.serviceschosen['user_details']
-console.log($scope.user_details)
 $scope.mobileno = $scope.user_details.mobile
 $scope.total_duration=lodash.sum($scope.serviceschosen.services,'duration');
 $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
@@ -1165,7 +1140,6 @@ $scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
 $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
 $scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
 
-console.log($scope.serviceschosen.studio);
 angular.forEach($scope.serviceschosen.studio.studio_closed_details, function(value, key) {    
     $scope.closed_days.push(value.closed_on.id-1);    
 });
@@ -1569,6 +1543,14 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
             putResultService.clearData()
         }
     }
+
+$scope.$on('$routeChangeStart', function(next, current) 
+   { 
+       if($scope.new_booking)
+       {
+           modalInstance.dismiss('cancel');
+       }
+   });
 
 $scope.logging_out = false
 $scope.logOut = function()

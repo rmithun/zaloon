@@ -66,24 +66,7 @@
                                 <div class="btn-toolbars ratingbar">
                                     <a ng-repeat="star in studiostar" class="btn" ng-class="{'active':star.active == true,'borderrgtnone':$last == true}" ng-click="studioreviewclick(star.star,$index)"><span>{%verbatim%}{{star.star}}{%endverbatim%}</span></a>
                                 </div>
-                            </div>
-                            <!--<div class="col-xs-12 col-sm-6 more-services hidden-xs">
-                                <h3 class="more-panel-title">Services</h3>
-                                <div class="hidden-xs">
-                                    <input size="3" type="text" class="form-control" ng-model="service" placeholder="filter service">
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="checkboxcolumn-more-panel">
-                                    <div class="checkboxcolumn-more">
-                                    <label ng-repeat="ser in  services_filtered = ( studioservice | filter:service)" class="checkbox">
-                                        <input type="checkbox" ng-click="studioserviceclick(ser)">
-                                        <span ng-bind="ser"></span>
-                                    </label>
-                                    <span ng-hide="services_filtered.length">No Services found</span>
-                                </div>
-                                 </div>
-                            </div>-->
-
+                            </div>                            
                             <div class="col-xs-12 col-sm-12  more-footer">
                                 <div class="resetpanel">
                                     <span class="btn apply-btn  pull-right" ng-click="applyfilter()">Apply</span>
@@ -138,14 +121,14 @@
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                         <span class="service-icon"><i class="fa fa-gear icon-active"></i></span>
-                        <input type="text" ng-model="searchdata.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" autocomplete="off">
+                        <input type="text" ng-model="searchdata_.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service for service in studioactiveservice | filter:$viewValue:$emptyOrMatch | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" typeahead-focus am-reset-field autocomplete="off">
                     </div>
                 </div>
 
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                           <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
-                        <input type="text" ng-model="searchdata.location" class="form-control location" placeholder="Location: Porur" ng-keyup="areacomplete(searchdata.location)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:5   " typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" am-reset-field resetclass="test" autocomplete="off">
+                        <input type="text" ng-model="searchdata_.searchlocation" class="form-control location" placeholder="Location: Porur" typeahead="area for area in areacomplete($viewValue) | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" am-reset-field resetclass="test" autocomplete="off">
                     </div>
                 </div>
                 <div class="col-custom-button">
@@ -368,13 +351,13 @@ You can still enter your email ID to get notified when we launch our service her
 
             </div>
             <div class="direction">
-                <h3>Direction</h3>
+                <h3>Direction</h3>                
                 <p>Enter from Location <span class="pull-right hidden-md hidden-lg">{%verbatim%} {{shopdistance}}{%endverbatim%}km</span></p>
                
                 <div class="searchloc">
                      <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
                     <div class="form-group autocomplete">
-                        <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="directionlocation" placeholder="Location: Porur" ng-keyup="areacomplete(directionlocation)" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
+                        <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="$parent.directionlocation" placeholder="Location: Porur" typeahead="area for area in areacomplete($viewValue) | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
                         <button type="button" class="btn btn-primary" ng-click="changedirection()">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>

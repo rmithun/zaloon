@@ -1,5 +1,4 @@
-var secretEmptyKey = '[$empty$]'
-var noqapp = angular.module('accountApp', ['ngAnimate','ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable','ngTouch','ui.bootstrap.setNgAnimate', 'am.resetField']);
+var noqapp = angular.module('accountApp', ['ngAnimate','ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable','ui.bootstrap.setNgAnimate', 'am.resetField','typeahead-focus']);
 
 noqapp.run(function($http,$cookies,sessionService) {
 
@@ -121,42 +120,6 @@ angular.module('ui.bootstrap.setNgAnimate', ['ngAnimate']).directive('disableNgA
     };
 } ]);
 
-
-noqapp.directive('focusMe', function($timeout, $parse) {
-      return {
-          //scope: true,   // optionally create a child scope
-          link: function(scope, element, attrs) {
-              var model = $parse(attrs.focusMe);
-              scope.$watch(model, function(value) {
-                  if(value === true) { 
-                      $timeout(function() {
-                          element[0].focus();
-                      });
-                  }
-              });
-          }
-      };
-    });
-
-noqapp.directive('emptyTypeahead', function () {
-      return {
-        require: 'ngModel',
-        link: function (scope, element, attrs, modelCtrl) {
-          // this parser run before typeahead's parser
-          modelCtrl.$parsers.unshift(function (inputValue) {
-            var value = (inputValue ? inputValue : secretEmptyKey); // replace empty string with secretEmptyKey to bypass typeahead-min-length check
-            modelCtrl.$viewValue = value; // this $viewValue must match the inputValue pass to typehead directive
-            return value;
-          });
-          
-          // this parser run after typeahead's parser
-          modelCtrl.$parsers.push(function (inputValue) {
-            return inputValue === secretEmptyKey ? '' : inputValue; // set the secretEmptyKey back to empty string
-          });
-        }
-      }
-    });
-
 angular.module('am.resetField', []).directive('amResetField', ['$compile', '$timeout', function($compile, $timeout) {
   return {
     require: 'ngModel',
@@ -195,3 +158,51 @@ angular.module('am.resetField', []).directive('amResetField', ['$compile', '$tim
     }
   };
 }]);
+
+angular.module('typeahead-focus', [])
+    .directive('typeaheadFocus', function () {
+      return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModel) {
+
+          // Array of keyCode values for arrow keys
+          const ARROW_KEYS = [37,38,39,40];
+
+          function manipulateViewValue(e) {
+            /* we have to check to see if the arrow keys were in the input because if they were trying to select
+             * a menu option in the typeahead, this may cause unexpected behavior if we were to execute the rest
+             * of this function
+             */
+            if( ARROW_KEYS.indexOf(e.keyCode) >= 0 )
+              return;
+
+            var viewValue = ngModel.$viewValue;
+
+            //restore to null value so that the typeahead can detect a change
+            if (ngModel.$viewValue == ' ') {
+              ngModel.$setViewValue(null);
+            }
+
+            //force trigger the popup
+            ngModel.$setViewValue(' ');
+
+            //set the actual value in case there was already a value in the input
+            ngModel.$setViewValue(viewValue || ' ');
+          }
+
+          /* trigger the popup on 'click' because 'focus'
+           * is also triggered after the item selection.
+           * also trigger when input is deleted via keyboard
+           */
+          element.bind('click keyup', manipulateViewValue);
+
+          //compare function that treats the empty space as a match
+          scope.$emptyOrMatch = function (actual, expected) {
+            if (expected == ' ') {
+              return true;
+            }
+            return actual ? actual.toString().toLowerCase().indexOf(expected.toLowerCase()) > -1 : false;
+          };
+        }
+      };
+    });
