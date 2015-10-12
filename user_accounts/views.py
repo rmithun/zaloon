@@ -25,12 +25,13 @@ from oauth2_provider.ext.rest_framework import OAuth2Authentication, TokenHasSco
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework import status
+from django.conf import settings
 
 #application imports
 from serializers import *
 #from models import *
 from utils.permission_class import PostWithoutAuthentication
-from django.conf import settings
+
 
 
 logger_user = logging.getLogger('log.user_account')
@@ -58,9 +59,10 @@ class AuthView(APIView ):
 
     def delete(self, request,*args,**kwargs):
         auth.logout(request)
-        return Response(data = None, status = status.HTTP_200_OK)
+        data = None
+        return Response(data = data, status = status.HTTP_200_OK)
 
-    def post(self,request,*args,**kwargs):
+    """def post(self,request,*args,**kwargs):
         try:
             token = self.request.DATA
             user = request.backend.do_auth(token)
@@ -68,12 +70,12 @@ class AuthView(APIView ):
                 login(request,user)
             else:
                 return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception,e:
-            print repr(e)
+        except Exception as e:
+            logger_error.error(traceback.format_exc())
             return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             data = access_token_gen(user)
-            return Response(data, status.HTTP_200_OK)
+            return Response(data, status.HTTP_200_OK)"""
 
     def get(self,request,*args,**kwargs):
         try:
@@ -81,9 +83,10 @@ class AuthView(APIView ):
             required_scopes = ['read']
             data = UserProfile.objects.filter(user_acc = self.request.user)
             serializer = UserProfileSerializer(data, many = True)
-        except Exception,e:
-            print repr
-            return None
+        except Exception:
+            logger_error.error(traceback.format_exc())
+            data = None
+            return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializer.data)
 
