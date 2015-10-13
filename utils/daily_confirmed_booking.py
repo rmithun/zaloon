@@ -94,6 +94,7 @@ def daily_confirmed_booking():
                 if stud.studio_id not in studios_visited:
                     uniq_studios = uniq_studios + 1
                     obx['studio_id'] =  stud.studio_id
+                    obx['has_service_tax'] =  stud.has_service_tax
                     obx['studio_name'] = stud.studio.name
                     obx['commission_percent'] = int(stud.studio.commission_percent)
                     obx['studio_address1'] = stud.studio.address_1
@@ -212,7 +213,9 @@ def generate_pdf():
     for key,data in to_generate[0].iteritems():
         try:
             fee_amount =((data['total_booking_amount']* data['commission_percent'])/100)
-            service_tax = (data['total_booking_amount']*responses.SERVICE_TAX)/100
+            service_tax = 0
+            if data['has_service_tax'] == 1:
+                service_tax = (data['total_booking_amount']*responses.SERVICE_TAX)/100
             amount_paid = data['total_booking_amount'] - fee_amount + service_tax
             data['paid_amount'] = amount_paid
             data['fee_amount'] = fee_amount

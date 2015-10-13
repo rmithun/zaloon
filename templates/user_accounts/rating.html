@@ -135,9 +135,9 @@ noqapp.controller('reviewcontroller', function ($scope,$http,$window) {
 $scope.submit_review = function(review_form)
 {
   $scope.formsubmit = true
-  $scope.is_submitting = 0
   if (review_form.$valid)
   {
+    $scope.is_submitting = 0
     data = {'rating':$scope.review['rate'],'comment':$scope.review['comment'],
          'review_key':$window.location.search}
     $http.post('../add_review_from_email/',data).then(function()
@@ -150,6 +150,7 @@ $scope.submit_review = function(review_form)
       $scope.failed = 1
     })
   }
+
   
 }
 

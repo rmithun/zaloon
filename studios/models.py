@@ -186,6 +186,7 @@ class StudioProfile(models.Model):
 	longitude = models.CharField(max_length = 30)
 	has_online_payment = models.BooleanField(default = 1)
 	commission_percent = models.IntegerField(default = 10)
+	has_service_tax = models.BooleanField(default = 1) #1- has 0- no
 	def __unicode__(self):
 		return str(self.name +'--'+self.area)
 	"""def save(self):
