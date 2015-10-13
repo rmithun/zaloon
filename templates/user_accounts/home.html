@@ -66,8 +66,7 @@
             <div class="col-xs-12 col-md-4 col-lg-4 no-padding">
               <div class="form-group autocomplete">
               <span class="service-icon"><i class="fa fa-gear icon-active"></i></span>             
-              <span><input size="35" name="service" ng-model="searchdata_.service_name" type="text" class="form-control location" id="service_id" placeholder="eg., Haircut" typeahead="service as service.service_name for service in searchdata_.servicelist | filter:$viewValue:stateComparator | limitTo:5" typeahead-min-length='1'  typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" autocomplete="off" ng-focus="onFocus($event)" required></span>              
-              <!--focus-me="opened" empty-typeahead ng-focus="onFocus($event)"-->
+              <span><input size="35" name="service" ng-model="searchdata_.servicename" type="text" class="form-control location" id="service_id" placeholder="eg., Haircut" typeahead="service for service in studioactiveservice | filter:$viewValue:$emptyOrMatch | limitTo:8" typeahead-min-length='1'  typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" autocomplete="off" typeahead-focus am-reset-field required></span>                       
               </div>
               <span class="error" style="color:#fff;" ng-show="formsubmit && searchservice.service.$error.required">Service is required.</span>
               <span class="error" style="color:#fff;" ng-show="iswrongservice">Please choose from list of service</span>
@@ -75,14 +74,14 @@
             <div class="col-xs-12 col-md-5 col-lg-6 no-padding">
               <div class="form-group autocomplete">
               <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>              
-                 <input id="location" name="location" size="35" ng-keyup="areacomplete()" type="text" ng-model="searchdata_.searchlocation" placeholder="Enter your Location" typeahead="area as area.value for area in searchdata_.arealist | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" autocomplete="off" am-reset-field required>       
+                 <input id="location" name="location" size="35" type="text" ng-model="searchdata_.searchlocation" placeholder="Enter your Location" typeahead="area for area in areacomplete($viewValue) | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" class="form-control location" autocomplete="off" am-reset-field required>       
               </div>
               <span class="error" style="color:#fff;" ng-show="formsubmit && searchservice.location.$error.required">Location is required.</span>
             </div>  
             <div class="col-xs-12 col-md-3 col-lg-2 no-padding">
               <div class="form-group submit-wrap">                
                 <input type="submit"  class="btn btn-primary btn-md" ng-click="searchstudio(searchservice)" value="Find"/>
-              </div>
+              </div>              
             </div>             
             </form>
         </div>
@@ -147,8 +146,8 @@
 </div>
 </div>
   <script type="text/ng-template" id="location.html" >
-<a ng-if="match.label" class="form-control" style="cursor: pointer;"><i class="fa fa-map-marker"></i><span bind-html-unsafe="match.label" style="padding-left: 5px;"></span></a>
-<span style="padding: 10px 5px;display: inline-block;height: 46px;" ng-if="!match.label">
+<a ng-if="match.label != 'Notfound'" class="form-control" style="cursor: pointer;"><i class="fa fa-map-marker"></i><span bind-html-unsafe="match.label" style="padding-left: 5px;"></span></a>
+<span style="padding: 10px 5px;display: inline-block;height: 46px;" ng-if="match.label == 'Notfound'">
         <i class="fa fa-frown-o"></i><span style="padding-left: 5px;">Sorry! No Matching Found</span></span>
   </script>
 

@@ -64,3 +64,35 @@ noqapp.factory('putResultService', function(){
     }
     return putresult; 
 });
+
+noqapp.factory('gService', function ($q) {
+    var acService = new google.maps.places.AutocompleteService();   
+    return {
+        getPlace: function (val) {
+            var deferred = $q.defer();
+            acService.getPlacePredictions({
+                input: val,
+                types: ['(regions)'],
+                componentRestrictions: { 'country': 'in' }
+            }, function (places, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    var location = [];
+                    for (var i = 0; i < places.length; ++i) {
+                        location.push(places[i].description);
+                    }                    
+                    deferred.resolve({
+                        location: location
+                    });
+                }
+                else {
+                    var location = [];
+                    location.push('Notfound');
+                    deferred.resolve({
+                        location: location
+                    });
+                }
+            });
+            return deferred.promise;
+        }
+    }
+});
