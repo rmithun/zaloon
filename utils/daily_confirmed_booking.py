@@ -17,6 +17,7 @@ django.setup()
 
 
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import transaction
 import cStringIO as StringIO
 from xhtml2pdf import pisa
@@ -208,7 +209,7 @@ def render_to_pdf(template_url,data,studio):
 def generate_pdf():
     to_generate = daily_confirmed_booking()
     global buks, sent
-    buks =to_generate[1]
+    buks = to_generate[1]
     logger_booking.info("Sent mails to %s  studios - "%(str(buks)))
     for key,data in to_generate[0].iteritems():
         try:
@@ -235,7 +236,7 @@ def generate_pdf():
                 sent = sent + 1
             logger_booking.info('studio details %s '%(data))
         except Exception,pdfgenrateerr:
-            sent = sent - 1
+            #sent = sent - 1
             logger_error.error(traceback.format_exc())
             err = {}
             err['studio'] = data['studio_id']
@@ -247,20 +248,14 @@ def generate_pdf():
 logger_booking.info("Confirmed booking script starts running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 generate_pdf()
-if buks != uniq_studios:
-   message = "Failed While parsing;<br/>Total uniq studios - %s; <br/> Total processes - %s; <br/> Total sent -%s ; <br/>  \
-   Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent),str(uniq_studios - buks),  \
-    mail_exception, parse_exception) 
-   generic_utils.sendEmail('asha.ruku93@gmail.com ', 'Failures(parsing),Daily report script run sucessfull',message)
+if uniq_studios != sent:
+    message = "Failed;<br/>Total unique studios - %s; <br/> Total processes - %s ;<br/> Total sent -%s  ;<br/>  \
+    Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent), str(uniq_studios-sent),  \
+        mail_exception, parse_exception)
+    generic_utils.sendEmail(settings.ADMINS[1][1], 'Failures(emailing),Daily report script run sucessfull',message,cc = 1)
 else:
-    if buks != sent:
-        message = "Failed while EMALING;<br/>Total unique studios - %s; <br/> Total processes - %s ;<br/> Total sent -%s  ;<br/>  \
-        Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent), str(buks-sent),  \
-             mail_exception, parse_exception)
-        generic_utils.sendEmail('asha.ruku93@gmail.com ', 'Failures(emailing),Daily report script run sucessfull',message)
-    else:
-        message = "Success.Have sent for %s out of %s"%(str(sent), str(buks))
-        generic_utils.sendEmail('asha.ruku93@gmail.com ', 'Success.Daily report script run sucessfull',message)
+    message = "Success.Have sent for %s out of %s"%(str(sent), str(buks))
+    generic_utils.sendEmail(settings.ADMINS[1][1], 'Success.Daily report script run sucessfull',message,cc = 1 )
 
 logger_booking.info("Confirmed booking script stops running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))

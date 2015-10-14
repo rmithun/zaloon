@@ -18,6 +18,7 @@ from booking.models import BookingDetails,DailyReminder
 from studios.models import StudioProfile
 from utils import responses, generic_utils
 from django.contrib.auth.models import User
+from django.conf import settings
 
 logger_booking = logging.getLogger('log.daily_scripts')
 logger_error = logging.getLogger('log.errors')
@@ -82,7 +83,7 @@ def get_Bookings_for_day():
 logger_booking.info("Booking reminder start time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 get_Bookings_for_day()
 message = "Sent %s reminder SMS"%(str(buks))
-generic_utils.sendEmail('asha.ruku93@gmail.com', 'Booking reminder script run successful',message)
+generic_utils.sendEmail(settings.ADMINS[1][1], 'Booking reminder script run successful',message,cc = 1)
 logger_booking.info("Booking reminder end  time- "+ str(datetime.strftime(datetime.now(),'%y-%m-%d  %H:%M')))
 
 

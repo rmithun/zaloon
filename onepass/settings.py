@@ -23,7 +23,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ADMINS = (('Mithun', 'vbnetmithun@gmail.com'), ('Asha', 'ruksheee@yahoo.in'),('Jawahar', 'jawahar7.ceg@gmail.com'))
+ADMINS = (('Mithun', 'vbnetmithun@gmail.com'), ('Asha', 'asha.ruku93@gmail.com'),('Jawahar', 'jawahar7.ceg@gmail.com'))
 
 
 SERVER_EMAIL = "donotreply@zaloon.in"

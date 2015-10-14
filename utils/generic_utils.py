@@ -122,7 +122,7 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
         return user
 
 
-def sendEmail(to, subject, message, *args):
+def sendEmail(to, subject, message, *args,**cc):
     server = smtplib.SMTP(host = SMTP_SERVER,port = SMTP_PORT,timeout = 10)
     server.starttls()
     server.login(SMTP_USERNAME, SMTP_PASSWORD)
@@ -132,8 +132,11 @@ def sendEmail(to, subject, message, *args):
     msg['From'] = "Zaloon.in <donotreply@zaloon.in>"
     to = to
     msg['To'] = to
+    if cc['cc']:
+        msg['Cc'] =  settings.ADMINS[0][1]
+        msg['Bcc'] = settings.ADMINS[2][1]
+        to = [to,msg['Cc'],msg['Bcc']]
     msg.attach(MIMEText(message, 'html','utf-8'))
-    
     if args:
         attachFile = MIMEBase('application', 'pdf')    
         attachFile.set_payload( open(args[0],"rb").read())    

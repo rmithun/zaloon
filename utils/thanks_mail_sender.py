@@ -90,7 +90,7 @@ def send_thanks_mail():
         buks = len(bookings)
         logger_booking.info("Total thanks mail sent - "+str(buks))
         message = "Sent %s mails"%(str(buks))
-        status = generic_utils.sendEmail('asha.ruku93@gmail.com', 'Thanks mail run successful',message)
+        status = generic_utils.sendEmail(settings.ADMINS[1][1], 'Thanks mail run successful',message,cc=1)
 
         ###log code end stats
 
