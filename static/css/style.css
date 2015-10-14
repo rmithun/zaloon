@@ -720,6 +720,9 @@ h3.more-panel-title{color: #4c4c4c;
   color: #fff;
    text-align: center;
   }
+  .todo li:last-child:after{
+    background: #1abc9c;
+  }
 .todo li.todo-done:after {
   font-family: 'Flat-UI-Icons';
   font-size: 12px;
