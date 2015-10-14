@@ -598,23 +598,16 @@ You can still enter your email ID to get notified when we launch our service her
             
         </div>
         <div class="service-checkboxcolumn col-sm-12">
-            <div class="todo">
-                <!--<ul>
-                    <li ng-repeat="ser in servicelist | filter:searchservice" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
-                        <div class="todo-content">
-                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
-                        </div>
-                    </li>
-                </ul>-->
+            <div class="todo">                
                 <ul ng-repeat="(key, value) in sergroup">
                 <b ng-if="service.length>0">{%verbatim%} {{key}} ({{value.length}}) {%endverbatim%}</b>
-                <br/>
+                <br ng-if="service.length>0"/>
                     <li ng-repeat="ser in service=(value | filter:searchservice)" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
                             {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>
                     </li>   
-                    <br style="clear:both;height:0;font-size: 1px;line-height: 0px;" />            
+                    <br ng-if="service.length>0" style="clear:both;height:0;font-size: 1px;line-height: 0px;" />            
                 </ul>                
             </div>
          
