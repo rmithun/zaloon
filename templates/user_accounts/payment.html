@@ -12,7 +12,7 @@
         <div class="pull-right">
           <div class="securepayment-panel hidden480">
             <div class="securepay"><i class="fa fa-unlock-alt"></i><span>SECURE Payment</span></div>
-            <div class="freecancelation"><i class="fa fa-retweet"></i><span>FREE Cancelation</span></div>
+            <div class="freecancelation"><i class="fa fa-retweet"></i><span>FREE Cancellation</span></div>
             <div class="satisfaction"><i class="fa fa-thumbs-o-up"></i><span>100% Satisfication</span></div>
           </div>
           <!-- <div class="btn btn-primary pull-right">Done</div> -->
@@ -189,6 +189,18 @@
         </div>
       </div>
        </div>
+         <div class="row">
+        <div class="col-sm-12 ">
+          
+          <div class="col-sm-4">
+          </div>
+           <div class="col-sm-4">
+          </div>
+          
+          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">
+              <span > Total : ₹{%verbatim%}{{total_amount}}{%endverbatim%}</span>
+          </div>
+        </div>
         <div class="row paddtop10 paddbtm">       
         <div class="col-sm-12">
 
@@ -218,7 +230,7 @@
             <span class="red" style="float:right;">{%verbatim%}{{coupon_resp}}{%endverbatim%}</span>
           </div>
 
-          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding">- ₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
+          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" ng-if="promo_amount>0">Discount - ₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
      
         </div>        
         </div> 
@@ -230,7 +242,9 @@
           
           <div class="col-sm-4">
           </div>
-          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">
+           <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" ng-if="service_tax > 0" style="color:#63696a">
             <span > Service tax : + ₹{%verbatim%}{{service_tax}}{%endverbatim%}</span>
           </div>
          <!-- <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">

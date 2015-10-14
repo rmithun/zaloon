@@ -1144,7 +1144,11 @@ $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
 $scope.selected_services = lodash.pluck($scope.serviceschosen.services, 'id');
 $scope.promo_amount = 0
 $scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
-$scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+$scope.service_tax = 0
+if ($scope.serviceschosen.studio['has_service_tax'] == true)
+{
+    $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+}
 $scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
 
 angular.forEach($scope.serviceschosen.studio.studio_closed_details, function(value, key) {    
@@ -1301,7 +1305,10 @@ $scope.applyPromo = function()
         $scope.promo_amount = parseInt(cdata.apply_coupon.data)
         $scope.coupon_resp = "Coupon applied"
         $scope.amount_to_pay = ($scope.total_amount - $scope.promo_amount)
-        $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+        if ($scope.serviceschosen.studio['has_service_tax'] == true)
+        {
+            $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+        }
         $scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
         //$scope.promo_amount = cdata.
     },function(cdata)
@@ -1310,7 +1317,10 @@ $scope.applyPromo = function()
         $scope.coupon_resp = cdata.data;
         $scope.promo_amount = 0
         $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
-        $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+        if ($scope.serviceschosen.studio['has_service_tax'] == true)
+        {
+            $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+        }
         $scope.amount_to_pay = $scope.total_amount + $scope.service_tax 
         $scope.coupon_code="";
         console.log("Error applying coupon data")
