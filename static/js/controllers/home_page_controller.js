@@ -76,9 +76,10 @@ httpServices.getUsrDetails().then(function(dataz)
 })	
 }
 
-
+$scope.logging_out = false
 $scope.logOut = function()
 	{	
+		$scope.logging_out = true
 		httpServices.logOut().then(function(logout_data)
 		{
 			var cookies = $cookies.getAll();

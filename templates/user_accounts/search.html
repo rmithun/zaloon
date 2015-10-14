@@ -117,23 +117,23 @@
 
             <!-- search -->
 
-            <form role="form" name="searchForm" class="searchpanel">
+            <form role="form" name="searchservice" class="searchpanel">
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                         <span class="service-icon"><i class="fa fa-gear icon-active"></i></span>
-                        <input type="text" ng-model="searchdata_.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service for service in studioactiveservice | filter:$viewValue:$emptyOrMatch | limitTo:5" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" typeahead-focus am-reset-field autocomplete="off">
+                        <input type="text" name="service" ng-model="searchdata_.servicename" class="form-control location" placeholder="Service: Haircut" typeahead="service for service in studioactiveservice | filter:$viewValue:$emptyOrMatch | limitTo:8" typeahead-on-select='onserviceselect($item, $model, $label)' typeahead-template-url="service.html" typeahead-focus am-reset-field autocomplete="off" required>
                     </div>
                 </div>
 
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                           <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
-                        <input type="text" ng-model="searchdata_.searchlocation" class="form-control location" placeholder="Location: Porur" typeahead="area for area in areacomplete($viewValue) | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" am-reset-field resetclass="test" autocomplete="off">
+                        <input type="text" name="location" ng-model="searchdata_.searchlocation" class="form-control location" placeholder="Location: Porur" typeahead="area for area in areacomplete($viewValue) | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" am-reset-field resetclass="test" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="col-custom-button">
                     <div class="form-group">
-                        <button type="button" class="btn btn-primary" ng-click="searchservicestudio()">
+                        <button type="button" class="btn btn-primary" ng-click="searchservicestudio()" ng-disabled="searchservice.$invalid">
                             <span class="glyphicon glyphicon-search hidden-xs hidden-sm"></span><span class="hidden-md hidden-lg hidden-md">Search</span>
                         </button>
                     </div>
@@ -222,7 +222,12 @@
         </div>
     </div>
 </div>
-<div class="list-box" id = "lister1" style="text-align:center;" ng-show="filteredstudio.length == 0">
+<div class="list-box" id = "lister1" style="text-align:center;" ng-show="filteredstudio.length == 0 && studio.length > 0">
+   <span>
+       Sorry Folks! The filter gives you 0 results.Reset the filter<br/>
+   </span>
+</div>
+<div class="list-box" id = "lister1" style="text-align:center;" ng-show="studio.length == 0">
     <span>
         Sorry Folks! Zaloon doesn’t provide you services in this area. <br/>
 You can still enter your email ID to get notified when we launch our service here.
@@ -330,31 +335,17 @@ You can still enter your email ID to get notified when we launch our service her
                     </div>        
                 </div>            
                 <div class="checkboxcolumn">
-
-                    <!--<div class="todo">
-                        <ul>
-                            <li ng-if="ser.isactive" ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
-                                <div class="todo-content">
-                                    {%verbatim%} {{ser.servicename|limitTo:29}}
-                                    {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
-                                </div>
-                            </li>
-                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
-                                <div class="todo-content"> Click to add more services...</div>
-                            </li>
-                        </ul>
-                    </div>-->
                     <div class="todo">
                         <ul ng-repeat="(key, value) in sergroup | myLimitTo:1">
-                        <b>{%verbatim%} {{key}} ({{value.length}}) {%endverbatim%}</b>
-                            <li ng-if="ser.isactive" ng-repeat="ser in value | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
+                        <b>{%verbatim%} {{key}} ({{value.length}}) {%endverbatim%}</b><span style="float:right;cursor:pointer;" data-toggle="modal" data-target="#servicemodelbox">Click to view more servies...</span>
+                            <li ng-if="ser.isactive" ng-repeat="ser in value | limitTo:5" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
                                     {%verbatim%} {{ser.servicename|limitTo:29}}
                                     {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
                             </li>
                             <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
-                                <div class="todo-content"> Click to add more services...</div>
+                                <div class="todo-content"> Click to view more services...</div>
                             </li>
                         </ul>
                     </div>
@@ -505,9 +496,8 @@ You can still enter your email ID to get notified when we launch our service her
             </div>
         </div>
 
-        <div class="modal-footer">
-            <button type="button" data-dismiss="modal" data-dismiss="modal">Ok</button>
-            
+        <div class="modal-footer resetpanel">
+            <span  class="btn apply-btn  pull-right" type="button" data-dismiss="modal" ng-click="reloadpage()">Ok</span>            
         </div>
     </div>
 </div>
@@ -594,7 +584,7 @@ You can still enter your email ID to get notified when we launch our service her
         <div style="height:62px;" class="modal-header modal-register-header">
         &nbsp;
             <button type="button"  class="close" data-dismiss="modal">&times;</button>
-            <input type="text" style="width:240px;" class="form-control col-xs-10" placeholder="Search services" ng-model="searchservice">
+            <input type="text" style="width:240px;" class="form-control col-xs-10" placeholder="Search services" ng-model="filterservicebyname">
             
         </div>
         <div class="service-checkboxcolumn col-sm-12">
@@ -602,7 +592,7 @@ You can still enter your email ID to get notified when we launch our service her
                 <ul ng-repeat="(key, value) in sergroup">
                 <b ng-if="service.length>0">{%verbatim%} {{key}} ({{value.length}}) {%endverbatim%}</b>
                 <br ng-if="service.length>0"/>
-                    <li ng-repeat="ser in service=(value | filter:searchservice)" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
+                    <li ng-repeat="ser in service=(value | filter:filterservicebyname)" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
                             {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>

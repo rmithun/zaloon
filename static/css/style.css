@@ -820,6 +820,9 @@ h3.more-panel-title{color: #4c4c4c;
   border-right: 1px solid #ffbec4;
   border-top:none;
   }
+  .moresearch .btn-toolbars.ratingbar a.active:hover{
+    background:#f06471;color:#fff; box-shadow:none;border-bottom: 4px solid #bcbcbc;border-right: 1px solid #ffbec4;
+  }
   .moresearch .btn-toolbars.ratingbar a:hover:last-child{border-right:none;}
   .triangle-up {
   width: 0;
@@ -1159,8 +1162,8 @@ h4.shopname{font-size: 18px;
 .panel-open .heading-bar{
   width:102.2%;
 }  
-  .shoppingcart{padding-top: 12px; padding-right: 15px; padding-left: 10px;border-right: 1px solid #D23D4B;
-    padding-bottom:15px;}
+  .shoppingcart{padding-top: 15px; padding-right: 15px; padding-left: 10px;border-right: 1px solid #D23D4B;
+    padding-bottom:13px;}
   .fa-shopping-cart:before{ color: #fff;}
 .review-detail{padding-bottom: 80px;}
 .rate-panel .btn{min-width: 22px;}
@@ -1201,7 +1204,7 @@ h4.shopname{font-size: 18px;
   .searchdevice{position: absolute;width: 100%; height: auto; top: 55px; padding-right: 0; background-color: #F1F1F1; z-index: 2;display: none;}
   .searchpanel .btn{width:100%;}
   .navigation-bar li.navsearch{border-left: 1px solid #D23D4B;}
-  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 15px 13px 13px 13px; text-align: center;color:#fff;}
+  .navigation-bar li.navsearch a{ width: 54px;display: inline-block; padding: 17px 13px 11px 13px; text-align: center;color:#fff;}
   .navigation-bar li.navsearch a.active, .navigation-bar li.navsearch a:hover{background-color: #F1F1F1;  color: #1BBC9B;}
   
   .navigation-brand .logo{/*margin-left:10px;*/margin-top: 4px;}
@@ -1245,7 +1248,7 @@ h4.shopname{font-size: 18px;
   .list-box #namesearch{width:180px;}
   .mapview{top:24px;}
   .moresearch{background:none;border:none;color:#fff;border-left: 1px solid #D23D4B;border-right: 1px solid #D23D4B;}  
-   .moresearch >.btnmore{background:none;color:#fff; padding: 15px 7px 16px 17px; min-width: 54px;}
+   .moresearch >.btnmore{background:none;color:#fff; padding: 17px 7px 14px 17px; min-width: 54px;}
   .moresearch >.btnmore:hover { background-color: #F1F1F1;color: #1BBC9B;}
   .moresearch >.btnmore.active { background-color: #F1F1F1;color: #1BBC9B;}
   .more-filters-dropdown-menu{overflow-x:hidden;overflow-y:auto;background:#f7f5ee;top:101%;padding-top:13px;}
@@ -1281,7 +1284,7 @@ h4.shopname{font-size: 18px;
   .service-checkboxcolumn{height:332px;}
   .service-checkboxcolumn .btn{width:100px;padding:10px;float:left;margin:15px 0;}
   .service-totamnt{font-weight:700;color:#fff;display: block;}
-  .navigation-bar li.logindetails {font-size: 13px; color: #fff; max-width: 150px;  padding-top: 4px;}
+  .navigation-bar li.logindetails {font-size: 13px; color: #fff; max-width: 150px;  padding-top: 12px;}
   .nav-tabs>li{width:200px;text-align:center;}
   .booking-panel-wrapper { margin: 0 auto; width: 95%;}
   .booking-aside{width: 100%;}
@@ -1458,7 +1461,7 @@ li.fbbutton:hover{
   .navigation-bar li.navsearch a.active{background-color: #F1F1F1;  color: #1BBC9B;}
   .navigation-bar li.navsearch a:hover{background-color: #e7e7e7;  color: #1BBC9B;}
   .moresearch{background:none;border:none;color:#fff;border-left: 1px solid #D23D4B;border-right: 1px solid #D23D4B;}
-  .moresearch >.btnmore{background:none;color:#fff; padding: 22px 7px 14px 17px; min-width: 54px;}
+  .moresearch >.btnmore{background:none;color:#fff; padding: 21px 7px 14px 17px; min-width: 54px;}
   .moresearch >.btnmore:hover{ background-color: #e7e7e7;color:#1BBC9B;}
   .moresearch >.btnmore.active { color: #1BBC9B;}
   .navigation-brand .logo{margin-left:15px;margin-top: 7px;}

@@ -641,7 +641,7 @@ $scope.bindstudio=function(data){
             serviceheight=$('.service-list').height();  
             console.log(serviceheight)          
             console.log(top)        
-                top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
+                top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-75)+serviceheight), 'direction': ((top['direction']-75)+serviceheight) };
                 console.log(top)
             }, 2000);             
     }
@@ -856,7 +856,7 @@ $scope.bindstudio=function(data){
             $scope.directionlocation="";
         }        
     };
-    $scope.searchservicestudio=function(){        
+    $scope.searchservicestudio=function(){    
         var idx=lodash.findIndex($scope.studioservicegroup, { service_name: $scope.searchdata_.servicename.trim() });        
         if (idx != -1) {
             if($('.navsearch').css('display') != "none"){
@@ -1309,6 +1309,9 @@ $scope.applyPromo = function()
         $scope.su_couponing = false
         $scope.coupon_resp = cdata.data;
         $scope.promo_amount = 0
+        $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
+        $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
+        $scope.amount_to_pay = $scope.total_amount + $scope.service_tax 
         $scope.coupon_code="";
         console.log("Error applying coupon data")
     })
