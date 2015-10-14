@@ -331,7 +331,7 @@ You can still enter your email ID to get notified when we launch our service her
                 </div>            
                 <div class="checkboxcolumn">
 
-                    <div class="todo">
+                    <!--<div class="todo">
                         <ul>
                             <li ng-if="ser.isactive" ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
@@ -343,8 +343,21 @@ You can still enter your email ID to get notified when we launch our service her
                                 <div class="todo-content"> Click to add more services...</div>
                             </li>
                         </ul>
+                    </div>-->
+                    <div class="todo">
+                        <ul ng-repeat="(key, value) in sergroup | myLimitTo:1">
+                        <b>{%verbatim%} {{key}} ({{value.length}}) {%endverbatim%}</b>
+                            <li ng-if="ser.isactive" ng-repeat="ser in value | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
+                                <div class="todo-content">
+                                    {%verbatim%} {{ser.servicename|limitTo:29}}
+                                    {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                                </div>
+                            </li>
+                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
+                                <div class="todo-content"> Click to add more services...</div>
+                            </li>
+                        </ul>
                     </div>
-
                 </div>
 
                 <div class="servicemore"></div>
@@ -586,13 +599,23 @@ You can still enter your email ID to get notified when we launch our service her
         </div>
         <div class="service-checkboxcolumn col-sm-12">
             <div class="todo">
-                <ul>
+                <!--<ul>
                     <li ng-repeat="ser in servicelist | filter:searchservice" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
                             {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>
                     </li>
-                </ul>
+                </ul>-->
+                <ul ng-repeat="(key, value) in sergroup">
+                <b ng-if="service.length>0">{%verbatim%} {{key}} ({{value.length}}) {%endverbatim%}</b>
+                <br/>
+                    <li ng-repeat="ser in service=(value | filter:searchservice)" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
+                        <div class="todo-content">
+                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                        </div>
+                    </li>   
+                    <br style="clear:both;height:0;font-size: 1px;line-height: 0px;" />            
+                </ul>                
             </div>
          
         </div>

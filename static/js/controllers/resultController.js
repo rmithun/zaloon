@@ -31,6 +31,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.studio = [];
     $scope.filteredstudio = [];
     $scope.servicelist = [];
+    $scope.sergroup={};    
     $scope.selectedstudio = {};
     $scope.searchdata={};
     $scope.searchplace={};
@@ -555,6 +556,7 @@ $scope.bindstudio=function(data){
         }            
         $scope.servicelist = [];
         $scope.selectedstudio = {};
+        $scope.sergroup={};
         var studio = lodash.where($scope.studio, { 'id': id });        
         if (studio.length > 0) {
             $('.detail-tab').removeClass('active');
@@ -591,46 +593,57 @@ $scope.bindstudio=function(data){
                 }
             }            
             setTimeout(function(){
+                top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };
+                console.log(top);
                 removemarker();                
-                drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
+                drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);                
             },300);
-            setTimeout(function () {                   
-                top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };                
+            setTimeout(function () {                                   
+                httpServices.getServicebyid({id:id}).then(function(res)
+                {     
+                    console.log(res['service_details'].data[0].studio_detail_for_activity)                          
+                    $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);                
+                    $scope.selectedstudio.studio_review=res['service_details'].data[0].studio_review;
+                    var page = Math.floor($scope.selectedstudio.studio_review.length / 5);                   
+                    page = page + ($scope.selectedstudio.studio_review.length % 5 > 0 ? 1 : 0);                  
+                    $scope.reviewtotalpage = page;                
+                    if(samestudio){
+                        $scope.updateselectedflag();
+                    }        
+                },function()
+                {
+                    console.log("Try again to get service")
+                });
             }, 500);
-            httpServices.getServicebyid({id:id}).then(function(res)
-            {                               
-                $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);                
-                $scope.selectedstudio.studio_review=res['service_details'].data[0].studio_review;
-                var page = Math.floor($scope.selectedstudio.studio_review.length / 5);                   
-                page = page + ($scope.selectedstudio.studio_review.length % 5 > 0 ? 1 : 0);                  
-                $scope.reviewtotalpage = page;                
-                if(samestudio){
-                    $scope.updateselectedflag();
-                }        
-            },function()
-            {
-                console.log("Try again to get service")
-            }); 
+             
         }
     }
 
     $scope.sortservicebyfilter = function (studioactivity) {        
-        $scope.servicelist = [];        
-        var res = lodash.where(studioactivity, { service: { service_type: $scope.searchdata.service } });        
+        $scope.servicelist = [];         
+        var res = lodash.where(studioactivity, { service: { service_type: $scope.searchdata.service } });
+        var stugroup =lodash.groupBy($scope.studioservicegroup, 'id');             
         angular.forEach(res,function(service,key){            
-            $scope.servicelist.push({id:service.service.id,servicename: service.service.service_name, price: service.price, flag: false , duration:service.mins_takes,isactive:service.is_active });
+            var sergroupname=stugroup[service.service.service_type][0].service_name;
+            $scope.servicelist.push({id:service.service.id,servicename: service.service.service_name, price: service.price, flag: false , duration:service.mins_takes,isactive:service.is_active, servicegroupid:service.service.service_type,servicegroupname:sergroupname });
         });        
-        angular.forEach(studioactivity, function (service, key) {            
+        angular.forEach(studioactivity, function (service, key) {       
             if (lodash.findIndex($scope.servicelist, { 'id': service.service.id }) == -1) {
-                $scope.servicelist.push({id:service.service.id, servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes,isactive:service.is_active });
+                var sergroupname=stugroup[service.service.service_type][0].service_name;
+                $scope.servicelist.push({id:service.service.id, servicename: service.service.service_name, price: service.price, flag: false, duration:service.mins_takes,isactive:service.is_active, servicegroupid:service.service.service_type ,servicegroupname:sergroupname});
             }
-        });
+        });        
+        $scope.sergroup=lodash.groupBy($scope.servicelist,'servicegroupname');             
         $('.service-overlay').hide();
         setTimeout(function () {           
-            var tempheight=serviceheight;              
-            serviceheight=$('.service-list').height();            
+            var tempheight=serviceheight; 
+            console.log(serviceheight)             
+            serviceheight=$('.service-list').height();  
+            console.log(serviceheight)          
+            console.log(top)        
                 top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-tempheight)+serviceheight), 'direction': ((top['direction']-tempheight)+serviceheight) };
-            }, 1000);        
+                console.log(top)
+            }, 2000);             
     }
 
     $scope.updateselectedflag=function(){       
@@ -718,17 +731,10 @@ $scope.bindstudio=function(data){
         var idx = lodash.findIndex($scope.servicelist, service);       
         var index = lodash.findIndex($scope.selected_service, service);
         $scope.selected_service.splice(index, 1);
-        $scope.servicelist.splice(idx, 1);
+        //$scope.servicelist.splice(idx, 1);
+        $scope.servicelist[idx].flag = false;
         $scope.serviceprice = $scope.serviceprice - service.price;
-        $scope.serviceduration=$scope.serviceduration-service.duration;
-        //var flag = $scope.servicelist[index].flag;             
-        //if (flag) {                        
-        //    var inx=lodash.findIndex($scope.selected_service, { 'servicename': service.servicename });
-        //    $scope.servicelist[index].flag = !$scope.servicelist[index].flag;   
-        //    $scope.selected_service.splice(inx, 1);
-        //    $scope.serviceprice = $scope.serviceprice - service.price;
-        //    $scope.serviceduration=$scope.serviceduration-service.duration;
-        //}
+        $scope.serviceduration=$scope.serviceduration-service.duration;        
     }
 
     $scope.morereview = function () {
@@ -757,7 +763,7 @@ $scope.bindstudio=function(data){
     $scope.addservice = function (from,service) {       
         var index = lodash.findIndex($scope.servicelist, service);
         var flag = $scope.servicelist[index].flag;
-             
+            
         if (flag) {                        
             var inx=lodash.findIndex($scope.selected_service, { 'servicename': service.servicename });
             $scope.servicelist[index].flag = !$scope.servicelist[index].flag;   
@@ -783,7 +789,8 @@ $scope.bindstudio=function(data){
                     return false;  
                 }
             }          
-        }          
+        } 
+        console.log($scope.sergroup)         
     }
 
     $scope.calculate=function(start,closed) {        
