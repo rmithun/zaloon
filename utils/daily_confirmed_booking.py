@@ -95,7 +95,7 @@ def daily_confirmed_booking():
                 if stud.studio_id not in studios_visited:
                     uniq_studios = uniq_studios + 1
                     obx['studio_id'] =  stud.studio_id
-                    obx['has_service_tax'] =  stud.has_service_tax
+                    obx['has_service_tax'] =  stud.studio.has_service_tax
                     obx['studio_name'] = stud.studio.name
                     obx['commission_percent'] = int(stud.studio.commission_percent)
                     obx['studio_address1'] = stud.studio.address_1

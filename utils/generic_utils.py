@@ -132,10 +132,11 @@ def sendEmail(to, subject, message, *args,**cc):
     msg['From'] = "Zaloon.in <donotreply@zaloon.in>"
     to = to
     msg['To'] = to
-    if cc['cc']:
-        msg['Cc'] =  settings.ADMINS[0][1]
-        msg['Bcc'] = settings.ADMINS[2][1]
-        to = [to,msg['Cc'],msg['Bcc']]
+    if cc:
+        if cc['cc']:
+            msg['Cc'] =  settings.ADMINS[0][1]
+            msg['Bcc'] = settings.ADMINS[1][1]
+            to = [to,msg['Cc'],msg['Bcc']]
     msg.attach(MIMEText(message, 'html','utf-8'))
     if args:
         attachFile = MIMEBase('application', 'pdf')    
