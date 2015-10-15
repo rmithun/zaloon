@@ -215,7 +215,7 @@ def generate_pdf():
         try:
             fee_amount =((data['total_booking_amount']* data['commission_percent'])/100)
             service_tax = 0
-            if data['has_service_tax'] == 1:
+            if data['has_service_tax']> 0:
                 service_tax = (data['total_booking_amount']*responses.SERVICE_TAX)/100
             amount_paid = data['total_booking_amount'] - fee_amount + service_tax
             data['paid_amount'] = amount_paid

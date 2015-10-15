@@ -1145,7 +1145,7 @@ $scope.selected_services = lodash.pluck($scope.serviceschosen.services, 'id');
 $scope.promo_amount = 0
 $scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
 $scope.service_tax = 0
-if ($scope.serviceschosen.studio['has_service_tax'] == true)
+if ($scope.serviceschosen.studio['has_service_tax'] > 0)
 {
     $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
 }
@@ -1154,10 +1154,10 @@ $scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
 angular.forEach($scope.serviceschosen.studio.studio_closed_details, function(value, key) {    
     $scope.closed_days.push(value.closed_on.id-1);    
 });
-if ($scope.start_date.getHours() > 11)
+/*if ($scope.start_date.getHours() > 11)
 {
     $scope.start_date.setDate($scope.start_date.getDate() + 1);
-}
+}*/
 $scope.end_date = angular.copy($scope.start_date)
 $scope.end_date.setDate($scope.start_date.getDate() + 30);
 
@@ -1305,7 +1305,7 @@ $scope.applyPromo = function()
         $scope.promo_amount = parseInt(cdata.apply_coupon.data)
         $scope.coupon_resp = "Coupon applied"
         $scope.amount_to_pay = ($scope.total_amount - $scope.promo_amount)
-        if ($scope.serviceschosen.studio['has_service_tax'] == true)
+        if ($scope.serviceschosen.studio['has_service_tax'] > 0)
         {
             $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
         }
@@ -1317,7 +1317,7 @@ $scope.applyPromo = function()
         $scope.coupon_resp = cdata.data;
         $scope.promo_amount = 0
         $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
-        if ($scope.serviceschosen.studio['has_service_tax'] == true)
+        if ($scope.serviceschosen.studio['has_service_tax'] > 0)
         {
             $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
         }

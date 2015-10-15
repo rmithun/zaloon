@@ -154,17 +154,33 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 return Response(data = data, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
             appointment_start_time = datetime.strptime(appnt_time,'%H:%M')
             if appnt_date.date() < datetime.today().date():
+                logger_error.error(rzp_payment_id)
+                url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                ##change refund amount if neede in future
+                resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
                 data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
+                logger_error.error(rzp_payment_id)
                 return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
             if appnt_date.date() == datetime.today().date():
-                if datetime.now().hour > 5:
-                    if appointment_start_time.hour < 12:
+                if appointment_start_time.hour < datetime.now().hour:
+                        logger_error.error(rzp_payment_id)
+                        url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                        ##change refund amount if neede in future
+                        resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                        data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
+                        logger_error.error(rzp_payment_id)
                         data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
                         return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
-                    else:
-                        if datetime.now().hour > 12:
-                            data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
-                            return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+                else:
+                    if appointment_start_time.minute < datetime.now().minute:
+                        logger_error.error(rzp_payment_id)
+                        url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                        ##change refund amount if neede in future
+                        resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                        data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
+                        logger_error.error(rzp_payment_id)
+                        data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
+                        return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
             logger_booking.info("New booking - "+str(data))
             total_duration = StudioServices.objects.filter(service_id__in = services_chosen,  \
                 studio_profile_id = studio_id).values('mins_takes').aggregate(Sum('mins_takes'))
@@ -511,7 +527,6 @@ class  GetSlots(APIView):
     serializer_class = ActiveBookingSerializer
     def get(self,request,*args,**kwargs):
         try:
-            #import pdb;pdb.set_trace();
             data = self.request.GET
             studio = data['studio_id']
             date = data['date']
@@ -622,8 +637,16 @@ class  GetSlots(APIView):
             for key, values in obj.iteritems():
                 if len(values) > 0 and slots.has_key(key):
                     slots[key] = [s for s in slots[key] if s not in values]
-
-            
+            #import pdb;pdb.set_trace();
+            if datetime.strptime(date,'%Y-%m-%d').date() == datetime.today().date():
+                td_hr = datetime.now().time().hour
+                td_min = datetime.now().time().minute
+                for i in range(0, td_hr):
+                    if i in slots:
+                        slots.pop(i,None)
+                if td_hr in slots:
+                    new_slot = [i for i in slots[td_hr] if td_min < i]
+                slots[td_hr] = new_slot
         except Exception,e:
             logger_error.error(traceback.format_exc())
             data = None

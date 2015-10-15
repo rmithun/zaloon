@@ -16,6 +16,27 @@
         }
     }
 
+    @page invoice_header
+    {
+      size: a4 portrait;
+        @frame content_frame {          /* Content Frame */
+            left: 20pt; width: 555pt; top: 40pt; height: 740pt;
+            /* -pdf-frame-border: 1; */
+        }
+
+        @frame header_frame {          
+            -pdf-frame-content: header_invoice;
+            left: 20pt; width: 555pt; top: 10pt; height:30pt;
+        }
+    
+        @frame footer_frame {           /* Static Frame */
+            -pdf-frame-content: footer_content;
+            left: 20pt; width: 555pt; top: 780pt;
+            /* -pdf-frame-border: 1; */
+        }
+    }
+
+
 
   body {  font-family:Arial, Helvetica, sans-serif; line-height: normal;
   margin-bottom:0; margin-left:0; margin-right:0; margin-top:0;
@@ -75,6 +96,18 @@
 <pdf:pagenumber> of <pdf:pagecount>
     </div>
 
+       <div class="header" id="header_invoice">
+          <table class="invoice-table" width="100%" border="0">
+  <tr class="table-header">
+  <th class="blue-border left-align"  width="5%" scope="col">#</th>
+    <th class="blue-border left-align" width="10%" scope="col">Name</th>
+    <th class="blue-border left-align" width="15%" scope="col">Mobile no</th>
+    <th class="blue-border left-align" width="30%" scope="col">Services Booked</th>
+    <th class="blue-border left-align" width="10%" scope="col">Booking Code</th>
+  <th class="blue-border left-align" width="15%" scope="col">Time</th>
+    <th class="blue-border left-align"  width="15%" scope="col">Amount Paid(Rs)</th>
+  </tr>
+    </div>
 
     <!-- HTML Content -->      
         <!-- Header Section -->
@@ -162,8 +195,9 @@
     <th class="blue-border left-align" width="10%" scope="col">Booking Code</th>
 	<th class="blue-border left-align" width="15%" scope="col">Time</th>
     <th class="blue-border left-align"  width="15%" scope="col">Amount Paid(Rs)</th>
-  </tr>
+  </tr> 
 
+<pdf:nexttemplate name="invoice_header"/>
 
   {%for buk in todayslist.data %}
   <tr class="table-row">
@@ -212,7 +246,7 @@
     <th class=" left-align" width="15%" scope="col"></th>
     <th class=" left-align" width="30%" scope="col"></th>
     <th class="left-align" width="10%" scope="col"></th>
-  <th class="left-align" width="15%" scope="col">Service tax({{todayslist.service_tax}}Rs)</th>
+  <th class="left-align" width="15%" scope="col">Service tax({{todayslist.service_tax}}14%)(Rs)</th>
     <th class=" left-align"  width="15%" scope="col">+{{todayslist.service_tax_amount |floatformat:"0"}}</th>
   </tr>
   {%endif%}
