@@ -909,8 +909,15 @@ $scope.bindstudio=function(data){
                 {                           
                     data=res.studio_details.data;
                     putResultService.setresult(res.studio_details.data);  
-                    $scope.bindstudio(data);                              
+                    $scope.bindstudio(data);                                                  
                     $('.finder-overlay').hide();
+                    var tut1=$cookies.getObject('tut1cookie');
+                    if(typeof tut1 == 'undefined'){
+                        $('#tutorialoverlay').addClass('tutorialoverlay');
+                    }
+                    else{
+                        $('#tutorialoverlay').removeClass('tutorialoverlay');
+                    }
                 },function()
                 {
                     console.log("Try again to get service");
@@ -921,10 +928,25 @@ $scope.bindstudio=function(data){
         else{            
            data=putResultService.getresult(); 
            $scope.bindstudio(data);
+           var tut1=$cookies.getObject('tut1cookie');
+            if(typeof tut1 == 'undefined'){
+                $('#tutorialoverlay').addClass('tutorialoverlay');
+            }
+            else{
+                $('#tutorialoverlay').removeClass('tutorialoverlay');
+            }
         }
     }
 
-
+$(document).click(function(e) {              
+    if ($(e.target).is('#tutorialoverlay')) {    
+        var now = new Date(),exp = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+        //var exp = new Date();
+        //exp.setTime(exp.getTime() + (60*1000));    
+        $cookies.putObject('tut1cookie','tut1',{path:'/',expires: exp}); 
+        $('#tutorialoverlay').removeClass('tutorialoverlay');
+    }
+});
 
 $scope.inviteflag = null
 $scope.emailid = null
