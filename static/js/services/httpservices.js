@@ -130,9 +130,10 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		today = new Date()
 		for(i=0;i<bookings.length;i++)
 		{
-			buking_date = new Date(bookings[i].appointment_date)
-			if(bookings[i].booking_status == 'BOOKED' && bookings[i].status_code == 'B001' && 
-			buking_date	>= today )	
+			appnt_date = new Date(bookings[i].appointment_date)
+			//if(bookings[i].booking_status == 'BOOKED' && bookings[i].status_code == 'B001' && 
+			//appnt_date	>= today )	
+			if(appnt_date >= today)
 			{
 				active_booking.push(bookings[i])
 			}
