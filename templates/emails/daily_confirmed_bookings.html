@@ -132,21 +132,21 @@
                 </th>
                 <th scope="col" class="bar-middle">
                   <span class="title">Total Amount(Rs)</span>
-                  <span class="content">{{todayslist.total_booking_amount}}</span>
+                  <span class="content">{{todayslist.total_booking_amount |floatformat:"0" }}</span>
                 </th>
                 <th scope="col" class="bar-right">
                   <span class="title">FEE ({{todayslist.commission_percent}}%)(Rs)</span>
-                  <span class="content">{{todayslist.fee_amount}}</span>
+                  <span class="content">{{todayslist.fee_amount |floatformat:"0"}}</span>
                 </th>
                 {%if todayslist.has_service_tax %}
                 <th scope="col" class="bar-right">
                   <span class="title">SERVICE TAX ({{todayslist.service_tax}}%)(Rs)</span>
-                  <span class="content">{{todayslist.service_tax_amount}}</span>
+                  <span class="content">{{todayslist.service_tax_amount |floatformat:"0"}}</span>
                 </th>
                 {%endif%}
 				<th scope ="col" class="bar-paid">
                   <span class="title">AMOUNT PAID(Rs)</span>
-                  <span class="blue-content">{{todayslist.paid_amount}}</span>
+                  <span class="blue-content">{{todayslist.paid_amount |floatformat:"0"}}</span>
                 </th>
             </tr>
         </table><!-- // Bar Section --> 
@@ -192,7 +192,7 @@
     <th class="left-align" width="30%" scope="col"></th>
     <th class="left-align" width="10%" scope="col"></th>
   <th class="left-align" width="15%" scope="col">Total(Rs)</th>
-    <th class="left-align"  width="15%" scope="col">{{todayslist.total_booking_amount}}</th>
+    <th class="left-align"  width="15%" scope="col">{{todayslist.total_booking_amount |floatformat:"0"}}</th>
   </tr>
 
   <tr class="table-header">
@@ -202,7 +202,7 @@
     <th class="left-align" width="30%" scope="col"></th>
     <th class="left-align" width="10%" scope="col"></th>
   <th class="blue-border left-align" width="15%" scope="col">Fee({{todayslist.commission_percent}}%)(Rs)</th>
-    <th class="blue-border left-align"  width="15%" scope="col">- {{todayslist.fee_amount}}</th>
+    <th class="blue-border left-align"  width="15%" scope="col">- {{todayslist.fee_amount |floatformat:"0"}}</th>
   </tr>
 
 {%if todayslist.has_service_tax %}
@@ -213,7 +213,7 @@
     <th class=" left-align" width="30%" scope="col"></th>
     <th class="left-align" width="10%" scope="col"></th>
   <th class="left-align" width="15%" scope="col">Service tax({{todayslist.service_tax}}Rs)</th>
-    <th class=" left-align"  width="15%" scope="col">+{{todayslist.service_tax_amount}}</th>
+    <th class=" left-align"  width="15%" scope="col">+{{todayslist.service_tax_amount |floatformat:"0"}}</th>
   </tr>
   {%endif%}
 
@@ -224,7 +224,7 @@
     <th class=" left-align" width="30%" scope="col"></th>
     <th class="left-align" width="10%" scope="col"></th>
   <th class="left-align" width="15%" scope="col">Amount Paid(Rs)</th>
-    <th class=" left-align"  width="15%" scope="col">{{todayslist.paid_amount }}</th>
+    <th class=" left-align"  width="15%" scope="col">{{todayslist.paid_amount |floatformat:"0"}}</th>
   </tr>
 
 </table>
