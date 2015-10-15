@@ -186,7 +186,7 @@ class StudioProfile(models.Model):
 	longitude = models.CharField(max_length = 30)
 	has_online_payment = models.BooleanField(default = 1)
 	commission_percent = models.IntegerField(default = 10)
-	has_service_tax = models.IntegerField(default = 0) #1- has 0- no
+	has_service_tax = models.IntegerField(default = 14) #1- has 0- no
 	def __unicode__(self):
 		return str(self.name +'--'+self.area)
 	"""def save(self):
@@ -287,6 +287,20 @@ class StudioPayment(models.Model):
 	paid_date = models.DateTimeField(default = datetime.now())
 	disputed = models.BooleanField(default = 0) # 1 - disputed
 	service_updated = models.CharField(max_length = 25)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class StudioBookingDetails(models.Model):
+
+	"""all booking details for studio"""
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_booking_detail")
+	amount_to_be_paid = models.FloatField()
+	total_booking = models.PositiveIntegerField()
+	fee_amount = models.FloatField()
+	invoice_date = models.DateField(default = datetime.now().date())
+	total_booking_amount = models.FloatField()
+	service_tax_amount = models.FloatField()
+	service_updated = models.CharField(max_length = 50)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
 

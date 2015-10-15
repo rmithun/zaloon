@@ -1,0 +1,251 @@
+
+<html>
+<head>
+
+<style>
+    @page {
+        size: a4 portrait;
+        @frame content_frame {          /* Content Frame */
+            left: 20pt; width: 555pt; top: 20pt; height: 780pt;
+            /* -pdf-frame-border: 1; */
+        }
+        @frame footer_frame {           /* Static Frame */
+            -pdf-frame-content: footer_content;
+            left: 20pt; width: 555pt; top: 810pt;
+            /* -pdf-frame-border: 1; */
+        }
+    }
+
+    @page invoice_header
+    {
+      size: a4 portrait;
+        @frame content_frame {          /* Content Frame */
+            left: 20pt; width: 555pt; top: 40pt; height: 740pt;
+            /* -pdf-frame-border: 1; */
+        }
+
+        /*@frame header_frame {          
+            -pdf-frame-content: header_invoice;
+            left: 20pt; width: 555pt; top: 10pt; height:30pt;
+        }*/
+    
+        @frame footer_frame {           /* Static Frame */
+            -pdf-frame-content: footer_content;
+            left: 20pt; width: 555pt; top: 780pt;
+            /* -pdf-frame-border: 1; */
+        }
+    }
+
+
+
+  body {  font-family:Arial, Helvetica, sans-serif; line-height: normal;
+  margin-bottom:0; margin-left:0; margin-right:0; margin-top:0;
+  padding-bottom:0; padding-left:0; padding-right:0; padding-top:0; }
+  th {margin-bottom:0; margin-left:0; margin-right:0; margin-top:0; 
+    padding-bottom:4px; padding-left:4px; padding-right:4px; padding-top:4px;}
+  td {margin-bottom:0; margin-left:0; margin-right:0; margin-top:0;
+  padding-bottom:4px; padding-left:4px; padding-right:4px; padding-top:4px;}
+  span {margin-bottom:0; margin-left:0; margin-right:0; margin-top:0;
+  padding-bottom:0; padding-left:0; padding-right:0; padding-top:0; }
+
+  .link { color:#5576fc;}
+  .center-align { text-align:center; }
+  .left-align { text-align:left; }
+  .right-align { text-align:right; }
+  .pad-0 {padding-bottom:0; padding-left:0; padding-right:0; padding-top:0; }
+  .mar-0 {margin-bottom:0; margin-left:0; margin-right:0; margin-top:0; }
+  .header-sec {border-collapse:collapse;border-spacing:0;}
+  .logo { width:200px; height: 50px; display: block;}
+  .main-title {color: #5576fc; font-size: 27px; text-align: right; font-weight:normal; vertical-align: top;}
+  .address-sec { margin-top:30px; border-collapse:collapse;border-spacing:0;}
+  .billed-to { text-align:left; }
+  .billed-date { text-align:right; vertical-align: top;}
+  .invoice-no { text-align:right; vertical-align: bottom;}
+  .title { color: #666; display: block; font-weight: bold; margin-bottom:2px; font-size:14px; }
+  .content { color: #333; display: block; font-weight: normal; line-height:20px; font-size:14px; }
+  .title-rgt { color: #666;  font-weight: bold; margin-bottom:2px; font-size:14px;  line-height: 22px; }
+  .content-rgt { color: #333;  font-weight: normal; line-height:22px; font-size:14px;width: 120px;  padding-left: 20px; }
+  .blue-content { color: #5576fc; display: block; font-weight: bold; line-height:20px; font-size:14px; }
+  .main-content { color: #5576fc; font-weight: bold; line-height:20px; font-size:14px; }
+
+  .bar-wrap {border: 1px solid #999; margin-top: 20px; text-align: center;border-collapse:collapse;border-spacing:0;}
+  .bar-left {border-right:#999 1px solid; width:25%; padding-top:6px;}
+  .bar-middle {border-right:#999 1px solid; width:25%; padding-top:6px;}
+  .bar-right {border-right:#999 1px solid; width:25%; padding-top:6px;}
+  .bar-paid {width:25%; padding-top:6px;}
+  .footer {bottom: 20px; color: #666; font-size: 14px; left: 0; position: absolute; text-align: center; width: 100%;}
+  .blue-txt {color:#5576fc;}
+
+  .invoice-table {margin-top:30px;font-size:13px;border-collapse:collapse;border-spacing:0;}   
+  .table-header {text-transform:uppercase;color:#5576fc} 
+  .table-row {border-bottom:#bebebe 1px solid; color:#333;} 
+  .table-footer {border-top:2px solid #5576fc}
+  .blue-border {border-bottom:2px solid #5576fc;border-top:2px solid #5576fc;}  
+  .total {border-bottom:2px solid #5576fc; color:#5576fc; font-weight: bold;}  
+  .invoice-details{width: 100%; float: right;}
+    
+  
+  
+</style>
+
+</head>
+<body>
+
+   <!-- Content for Static Frame 'footer_frame' -->
+    <div class="footer" id="footer_content">Footer
+<pdf:pagenumber> of <pdf:pagecount>
+    </div>
+
+       
+    <!-- HTML Content -->      
+        <!-- Header Section -->
+      <table class="header-sec" width="100%" border="0">
+          <tr>
+            <th scope="col">
+             
+              <img class="logo" alt="logo" src="http://dev.zaloon.in/static/img/logo.png">
+            </th>
+            <th scope="col"> </th>
+            <th class="main-title" scope="col">INVOICE</th>
+          </tr>
+        </table><!-- // Header Section -->
+        
+        
+       <!-- Address Section --> 
+      <table width="100%" border="0" class="address-sec">
+            <tr>
+            <th  class="billed-to" scope="col">
+              <span class="title">Billed To:</span>
+                <span class="content">
+                       {{todayslist.studio_name}}<br/>
+                       {{todayslist.studio_address1}}
+                       {{todayslist.studio_address2}}<br/>
+                       {{todayslist.studio_area}}<br/>
+                </span>
+            </th>
+            <th  scope="col" class=""> </th>
+            <th scope="col" class="billed-date">
+			 <span class="invoice-details"> <span class="title-rgt">Invoice Date : <span class="content-rgt">{{todayslist.date}}</span></span></span><br/><br/>
+             <span class="invoice-details"><span class="title-rgt">Invoice No# : <span class="content-rgt">{{todayslist.invoice_id}}</span></span></span><br/><br/>
+      <span class="invoice-details"><span class="title-rgt">Bank Name : <span class="content-rgt main-content">{{todayslist.bank_name}}</span></span></span><br/><br/>
+			 <span class="invoice-details"><span class="title-rgt">Account No# : <span class="content-rgt main-content">{{todayslist.account_number}}</span></span></span><br/><br/>
+			 <span class="invoice-details"><span class="title-rgt">IFSC Code# : <span class="content-rgt main-content">{{todayslist.ifsc_code}}</span></span></span><br/><br/>
+				
+            </th>
+            </tr>
+          
+        </table><!-- // Address Section --> 
+        
+        
+
+
+         
+
+
+
+        <!-- Bar Section --> 
+        <table width="100%" border="0" class="bar-wrap">
+            <tr>
+                <th scope="col" class="bar-left">
+                  <span class="title">Total Bookings</span>
+                  <span class="content">{{todayslist.data|length}}</span>
+                </th>
+                <th scope="col" class="bar-middle">
+                  <span class="title">Total Amount(Rs)</span>
+                  <span class="content">{{todayslist.total_booking_amount |floatformat:"0" }}</span>
+                </th>
+                <th scope="col" class="bar-right">
+                  <span class="title">FEE ({{todayslist.commission_percent}}%)(Rs)</span>
+                  <span class="content">{{todayslist.fee_amount |floatformat:"0"}}</span>
+                </th>
+                {%if todayslist.has_service_tax %}
+                <th scope="col" class="bar-right">
+                  <span class="title">SERVICE TAX ({{todayslist.service_tax}}%)(Rs)</span>
+                  <span class="content">{{todayslist.service_tax_amount |floatformat:"0"}}</span>
+                </th>
+                {%endif%}
+				<th scope ="col" class="bar-paid">
+                  <span class="title">AMOUNT PAID(Rs)</span>
+                  <span class="blue-content">{{todayslist.paid_amount |floatformat:"0"}}</span>
+                </th>
+            </tr>
+        </table><!-- // Bar Section --> 
+
+
+<!-- Invoice Section -->
+<table class="invoice-table" width="100%" border="0">
+  <tr class="table-header">
+  <th class="blue-border left-align"  width="5%" scope="col">#</th>
+    <th class="blue-border left-align" width="10%" scope="col">Bookinf ID</th>
+    <th class="blue-border left-align" width="30%" scope="col">Services Booked</th>
+    <th class="blue-border left-align" width="10%" scope="col">Booking Code</th>
+    <th class="blue-border left-align"  width="15%" scope="col">Amount Paid(Rs)</th>
+  </tr> 
+
+
+  {%for buk in todayslist.data %}
+  <tr class="table-row">
+    <td class="left-align">{{forloop.counter}}</td>
+    <td class="left-align">{{buk.booking_id}}</td>
+<td class="left-align">
+   {%for serv in buk.services_booked%}
+<span>{{serv}}</span>
+{%endfor%}</td> 
+    
+	  <td class="left-align">{{buk.booking_code}}</td>
+    
+    <td class="left-align">{{buk.actual_amount}}</td>
+  </tr>
+  {%endfor%}
+  
+</table> 
+
+<br/>
+<table>
+  <tr class="table-header">
+  <th class="left-align"  width="5%" scope="col"></th>
+    <th class="left-align" width="10%" scope="col"></th>
+    <th class="left-align" width="15%" scope="col"></th>
+    <th class="left-align" width="30%" scope="col"></th>
+    <th class="left-align" width="10%" scope="col"></th>
+  <th class="left-align" width="15%" scope="col">Total(Rs)</th>
+    <th class="left-align"  width="15%" scope="col">{{todayslist.total_booking_amount |floatformat:"0"}}</th>
+  </tr>
+
+  <tr class="table-header">
+  <th class="left-align"  width="5%" scope="col"></th>
+    <th class="left-align" width="10%" scope="col"></th>
+    <th class="left-align" width="15%" scope="col"></th>
+    <th class="left-align" width="30%" scope="col"></th>
+    <th class="left-align" width="10%" scope="col"></th>
+  <th class="blue-border left-align" width="15%" scope="col">Fee({{todayslist.commission_percent}}%)(Rs)</th>
+    <th class="blue-border left-align"  width="15%" scope="col">- {{todayslist.fee_amount |floatformat:"0"}}</th>
+  </tr>
+
+{%if todayslist.has_service_tax %}
+  <tr class="table-header">
+  <th class=" left-align"  width="5%" scope="col"></th>
+    <th class=" left-align" width="10%" scope="col"></th>
+    <th class=" left-align" width="15%" scope="col"></th>
+    <th class=" left-align" width="30%" scope="col"></th>
+    <th class="left-align" width="10%" scope="col"></th>
+  <th class="left-align" width="15%" scope="col">Service tax({{todayslist.service_tax}}14%)(Rs)</th>
+    <th class=" left-align"  width="15%" scope="col">+{{todayslist.service_tax_amount |floatformat:"0"}}</th>
+  </tr>
+  {%endif%}
+
+  <tr class="table-header">
+  <th class=" left-align"  width="5%" scope="col"></th>
+    <th class=" left-align" width="10%" scope="col"></th>
+    <th class=" left-align" width="15%" scope="col"></th>
+    <th class=" left-align" width="30%" scope="col"></th>
+    <th class="left-align" width="10%" scope="col"></th>
+  <th class="left-align" width="15%" scope="col">Amount Paid(Rs)</th>
+    <th class=" left-align"  width="15%" scope="col">{{todayslist.paid_amount |floatformat:"0"}}</th>
+  </tr>
+
+</table>
+
+</body>
+
+</html>

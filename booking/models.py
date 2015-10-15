@@ -1,6 +1,6 @@
 
 #standard library imports
-from datetime import datetime
+from datetime import datetime,timedelta
 
 #third party imports
 from django.conf import settings
@@ -221,6 +221,17 @@ class DailyBookingConfirmation(models.Model):
 	studio = models.ForeignKey(StudioProfile, related_name = "studio_confirmed_booking")
 	report_date = models.DateField(default = datetime.now().date())
 	booking_pdf = models.FileField(upload_to = 'reports/%Y/%m/%d')
+	mail_sent = models.BooleanField(default = 0)
+	service_updated = models.CharField(max_length = 50)
+	updated_date_time = models.DateTimeField(default = datetime.now())
+
+
+class DailyInvoiceConfirmation(models.Model):
+
+	"""table holding all information status for invoices sent to merchants"""
+	studio = models.ForeignKey(StudioProfile, related_name = "studio_invoices")
+	report_for_date = models.DateField(default = datetime.today().date()-timedelta(days = 1))
+	booking_pdf = models.FileField(upload_to = 'invoices/%Y/%m/%d')
 	mail_sent = models.BooleanField(default = 0)
 	service_updated = models.CharField(max_length = 50)
 	updated_date_time = models.DateTimeField(default = datetime.now())

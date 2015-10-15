@@ -1,9 +1,8 @@
-##script which send reports to all merchants about the booking
-##they had previous day.The script should run every day 6AM
+##script which send invoice reports to all merchants for previous day
 
 
 #standard library imports
-from datetime import datetime
+from datetime import datetime,timedelta
 import logging
 import traceback
 
@@ -30,7 +29,7 @@ from django.db import transaction
 
 #application imports
 from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus, DailyBookingConfirmation
-from studios.models import StudioProfile, Studio,StudioBookingDetails
+from studios.models import StudioProfile, Studio,StudioInvoices
 from utils import responses, generic_utils
 
 
@@ -39,12 +38,12 @@ logger_error = logging.getLogger('log.errors')
 
 
 """"
---------------------------------------------------------------------------------------------------------------
-Name | Mobile | Booking id | Services Booked | From Time | To Time | Booking Code | Booking Amount | Mark Used  
---------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------
+Booking id | Services Booked | Booking Code | Booking Amount 
+-------------------------------------------------------------
 """
 
-today = datetime.today().date()
+today = datetime.today().date()-timedelta(days = 1)
 till_hour = datetime.now().hour
 till_time = None
 buks = None
@@ -53,21 +52,14 @@ uniq_studios = 0
 mail_exception = []
 parse_exception = []
 bookings = None
+
 def daily_confirmed_booking():
     try:
-        ##get all used booking for the day
-        time = datetime.now().replace(hour = 13, minute = 00)
         global till_time,today,uniq_studios,parse_exception
-        if till_hour < 12:
-            till_time = time.time().replace(hour = 13, minute = 00)
-            bookings = BookingDetails.objects.filter( appointment_date = today, \
+        ##get all used booking for the day
+        bookings = BookingDetails.objects.filter(appointment_date = today,  \
             booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
-            appointment_start_time__lt = time)
-        else:
-            till_time = time.time().replace(hour = 23, minute = 59)
-            bookings = BookingDetails.objects.filter( appointment_date = today,  \
-            booking_status = 'BOOKED', status_code = 'B001', is_valid = True,  \
-            appointment_start_time__gte = time)
+            )
         studios_visited = []
         to_print = {}
         for stud in bookings:
@@ -82,15 +74,15 @@ def daily_confirmed_booking():
                 obx['data'] = []
                 obj = {}
                 obj['booking_id'] = stud.id
-                obj['user'] = stud.user.first_name
+                #obj['user'] = stud.user.first_name
                 obj['services_booked'] = services[:]
-                obj['appointment_date'] = today
-                obj['appointment_start_time'] = stud.appointment_start_time
-                obj['appointment_end_time'] = stud.appointment_end_time
+                #obj['appointment_date'] = today
+                #obj['appointment_start_time'] = stud.appointment_start_time
+                #obj['appointment_end_time'] = stud.appointment_end_time
                 obj['booking_code'] = stud.booking_code
                 obj['booking_amount'] = stud.purchase.purchase_amount
                 obj['actual_amount'] = stud.purchase.actual_amount
-                obj['mobile_no'] = stud.mobile_no
+                #obj['mobile_no'] = stud.mobile_no
                 obx['data'].append(obj)
                 if stud.studio_id not in studios_visited:
                     uniq_studios = uniq_studios + 1
@@ -145,13 +137,14 @@ def render_to_pdf(template_url,data,studio):
     #import pdb;pdb.set_trace();
     try:
         global till_time,today,mail_exception
+        import pdb;pdb.set_trace();
         response = 0 
         template = get_template(template_url)
         data['todayslist']['date'] = today
         data['todayslist']['time'] = till_time
         context = Context(data)
         html =  template.render(context)
-        filename = data['todayslist']['studio_name'] + str(datetime.today().date())+"__bookings"
+        filename = data['todayslist']['studio_name'] + str(today)+"__bookings"
         result = open(filename+'.pdf', 'wb')
         #result = StringIO.StringIO()
         logger_booking.info("File name "+str(filename))
@@ -166,7 +159,7 @@ def render_to_pdf(template_url,data,studio):
             ###get and save the pdf 
             file_ = open(filename+'.pdf', 'r')
             pdf = File(file_)
-            rep = DailyBookingConfirmation(studio_id = studio, booking_pdf = pdf,  \
+            rep = DailyInvoiceConfirmation(studio_id = studio, booking_pdf = pdf,  \
                 service_updated = "studio report sender")
             rep.save()
             studio_dt = StudioProfile.objects.values('studio').get(id = studio)
@@ -174,10 +167,10 @@ def render_to_pdf(template_url,data,studio):
             try:
                 #send email
                 message  = "Please find the booking data"
-                subject = (responses.MAIL_SUBJECTS['DAILY_BOOKING_MAIL'])%(today)
+                subject = (responses.MAIL_SUBJECTS['DAILY_INVOICE_MAIL'])%(today)
                 generic_utils.sendEmail('asha.ruku93@gmail.com ',subject,message,filename+'.pdf')
                 #generic_utils.sendEmail(studio_email['email'],subject,message)
-                rep = DailyBookingConfirmation.objects.filter(studio_id = studio, report_date = \
+                rep = DailyInvoiceConfirmation.objects.filter(studio_id = studio, report_for_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
                 response = 1
                 logger_booking.info('studio details %s '%(data))
@@ -222,7 +215,7 @@ def generate_pdf():
             data['fee_amount'] = fee_amount
             data['service_tax_amount'] = service_tax
             data['service_tax'] = responses.SERVICE_TAX
-            stud_invoice = StudioBookingDetails(studio_id = data['studio_id'],  \
+            stud_invoice = StudioInvoices(studio_id = data['studio_id'],  \
                 amount_to_be_paid = data['paid_amount'],  \
                 total_booking = len(data['data']), fee_amount = data['fee_amount'],  \
                 total_booking_amount = data['total_booking_amount'], service_tax_amount = \
@@ -230,7 +223,7 @@ def generate_pdf():
             stud_invoice.save()
             data['invoice_id'] =    stud_invoice.id
             logger_booking.info("data to be rendered - "+str(key)+"---"+str(data))
-            pdf_file = render_to_pdf('../templates/emails/daily_confirmed_bookings.html',  \
+            pdf_file = render_to_pdf('../templates/emails/daily_invoice.html',  \
                {'pagesize':'A4','todayslist':data},key)
             if pdf_file > 0:
                 sent = sent + 1
@@ -245,19 +238,19 @@ def generate_pdf():
             logger_error.error('failed for %s'%(data))
 
      
-logger_booking.info("Confirmed booking script starts running  "+datetime.strftime(datetime.now(),  \
+logger_booking.info("Daily invoice script starts running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 generate_pdf()
 if uniq_studios != sent:
-    message = "Failed;<br/>Total unique studios - %s; <br/> Total processes - %s ;<br/> Total sent -%s  ;<br/>  \
+    message = "Daily invoice Failed;<br/>Total unique studios - %s; <br/> Total processes - %s ;<br/> Total sent -%s  ;<br/>  \
     Failed for - %s;<br/><br/><br/>Mail Exceptions:<br/>%s<br/></br/>Parse Exceptions:<br/>%s"%(str(uniq_studios),str(buks), str(sent), str(uniq_studios-sent),  \
         mail_exception, parse_exception)
-    generic_utils.sendEmail(settings.ADMINS[1][1], 'Failures(emailing),Daily report script run failed',message,cc = 1)
+    generic_utils.sendEmail(settings.ADMINS[1][1], 'Failures(emailing),Daily invoice script run failed',message,cc = 1)
 else:
-    message = "Success.Have sent for %s out of %s"%(str(sent), str(uniq_studios))
+    message = "Daily invoice Success.Have sent for %s out of %s"%(str(sent), str(uniq_studios))
     generic_utils.sendEmail(settings.ADMINS[1][1], 'Success.Daily report script run sucessfull',message,cc = 1 )
 
-logger_booking.info("Confirmed booking script stops running  "+datetime.strftime(datetime.now(),  \
+logger_booking.info("Daily invoice script stops running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
 
 
