@@ -913,7 +913,8 @@ $scope.bindstudio=function(data){
                     $('.finder-overlay').hide();
                     var tut1=$cookies.getObject('tut1cookie');
                     if(typeof tut1 == 'undefined'){
-                        $('#tutorialoverlay').addClass('tutorialoverlay');
+                        //$('#tutorialoverlay').addClass('tutorialoverlay');
+                        console.log("Remove later")
                     }
                     else{
                         $('#tutorialoverlay').removeClass('tutorialoverlay');
@@ -930,7 +931,8 @@ $scope.bindstudio=function(data){
            $scope.bindstudio(data);
            var tut1=$cookies.getObject('tut1cookie');
             if(typeof tut1 == 'undefined'){
-                $('#tutorialoverlay').addClass('tutorialoverlay');
+                //$('#tutorialoverlay').addClass('tutorialoverlay');
+                        console.log("Remove later")
             }
             else{
                 $('#tutorialoverlay').removeClass('tutorialoverlay');
