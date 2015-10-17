@@ -248,7 +248,7 @@ if uniq_studios != sent:
     generic_utils.sendEmail(settings.ADMINS[1][1], 'Failures(emailing),Daily invoice script run failed',message,cc = 1)
 else:
     message = "Daily invoice Success.Have sent for %s out of %s"%(str(sent), str(uniq_studios))
-    generic_utils.sendEmail(settings.ADMINS[1][1], 'Success.Daily report script run sucessfull',message,cc = 1 )
+    generic_utils.sendEmail(settings.ADMINS[1][1], 'Success.Daily invoice script run sucessfull',message,cc = 1 )
 
 logger_booking.info("Daily invoice script stops running  "+datetime.strftime(datetime.now(),  \
             '%y-%m-%d %H:%M'))
