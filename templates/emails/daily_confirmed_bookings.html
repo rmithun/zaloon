@@ -24,10 +24,10 @@
             /* -pdf-frame-border: 1; */
         }
 
-        @frame header_frame {          
+        /*@frame header_frame {          
             -pdf-frame-content: header_invoice;
             left: 20pt; width: 555pt; top: 10pt; height:30pt;
-        }
+        }*/
     
         @frame footer_frame {           /* Static Frame */
             -pdf-frame-content: footer_content;
@@ -105,7 +105,6 @@
     <th class="blue-border left-align" width="30%" scope="col">Services Booked</th>
     <th class="blue-border left-align" width="10%" scope="col">Booking Code</th>
   <th class="blue-border left-align" width="15%" scope="col">Time</th>
-    <th class="blue-border left-align"  width="15%" scope="col">Amount Paid(Rs)</th>
   </tr>
     </div>
 
@@ -118,7 +117,7 @@
               <img class="logo" alt="logo" src="http://dev.zaloon.in/static/img/logo.png">
             </th>
             <th scope="col"> </th>
-            <th class="main-title" scope="col">INVOICE</th>
+            <th class="main-title" scope="col">BOOKINGS</th>
           </tr>
         </table><!-- // Header Section -->
         
@@ -139,52 +138,12 @@
             <th scope="col" class="billed-date">
 			 <span class="invoice-details"> <span class="title-rgt">Date : <span class="content-rgt">{{todayslist.date}}</span></span></span><br/><br/>
        <span class="invoice-details"> <span class="title-rgt">Bookings till time : <span class="content-rgt">{{todayslist.time|time:'h:i A'}}</span></span></span><br/><br/>
-             <span class="invoice-details"><span class="title-rgt">Invoice No# : <span class="content-rgt">{{todayslist.invoice_id}}</span></span></span><br/><br/>
-      <span class="invoice-details"><span class="title-rgt">Bank Name : <span class="content-rgt main-content">{{todayslist.bank_name}}</span></span></span><br/><br/>
-			 <span class="invoice-details"><span class="title-rgt">Account No# : <span class="content-rgt main-content">{{todayslist.account_number}}</span></span></span><br/><br/>
-			 <span class="invoice-details"><span class="title-rgt">IFSC Code# : <span class="content-rgt main-content">{{todayslist.ifsc_code}}</span></span></span><br/><br/>
-				
+             <span class="invoice-details"><span class="title-rgt">Document No# : <span class="content-rgt">{{todayslist.invoice_id}}</span></span></span><br/><br/>
             </th>
             </tr>
           
         </table><!-- // Address Section --> 
         
-        
-
-
-         
-
-
-
-        <!-- Bar Section --> 
-        <table width="100%" border="0" class="bar-wrap">
-            <tr>
-                <th scope="col" class="bar-left">
-                  <span class="title">Total Bookings</span>
-                  <span class="content">{{todayslist.data|length}}</span>
-                </th>
-                <th scope="col" class="bar-middle">
-                  <span class="title">Total Amount(Rs)</span>
-                  <span class="content">{{todayslist.total_booking_amount |floatformat:"0" }}</span>
-                </th>
-                <th scope="col" class="bar-right">
-                  <span class="title">FEE ({{todayslist.commission_percent}}%)(Rs)</span>
-                  <span class="content">{{todayslist.fee_amount |floatformat:"0"}}</span>
-                </th>
-                {%if todayslist.has_service_tax %}
-                <th scope="col" class="bar-right">
-                  <span class="title">SERVICE TAX ({{todayslist.service_tax}}%)(Rs)</span>
-                  <span class="content">{{todayslist.service_tax_amount |floatformat:"0"}}</span>
-                </th>
-                {%endif%}
-				<th scope ="col" class="bar-paid">
-                  <span class="title">AMOUNT PAID(Rs)</span>
-                  <span class="blue-content">{{todayslist.paid_amount |floatformat:"0"}}</span>
-                </th>
-            </tr>
-        </table><!-- // Bar Section --> 
-
-
 <!-- Invoice Section -->
 <table class="invoice-table" width="100%" border="0">
   <tr class="table-header">
@@ -194,7 +153,6 @@
     <th class="blue-border left-align" width="30%" scope="col">Services Booked</th>
     <th class="blue-border left-align" width="10%" scope="col">Booking Code</th>
 	<th class="blue-border left-align" width="15%" scope="col">Time</th>
-    <th class="blue-border left-align"  width="15%" scope="col">Amount Paid(Rs)</th>
   </tr> 
 
 <pdf:nexttemplate name="invoice_header"/>
@@ -211,57 +169,13 @@
     
 	  <td class="left-align">{{buk.booking_code}}</td>
     <td class="left-align">{{buk.appointment_start_time|time:'h:i A'}} to {{buk.appointment_end_time|time:'h:i A'}}</td>
-    <td class="left-align">{{buk.actual_amount}}</td>
   </tr>
   {%endfor%}
   
 </table> 
 
 <br/>
-<table>
-  <tr class="table-header">
-  <th class="left-align"  width="5%" scope="col"></th>
-    <th class="left-align" width="10%" scope="col"></th>
-    <th class="left-align" width="15%" scope="col"></th>
-    <th class="left-align" width="30%" scope="col"></th>
-    <th class="left-align" width="10%" scope="col"></th>
-  <th class="left-align" width="15%" scope="col">Total(Rs)</th>
-    <th class="left-align"  width="15%" scope="col">{{todayslist.total_booking_amount |floatformat:"0"}}</th>
-  </tr>
 
-  <tr class="table-header">
-  <th class="left-align"  width="5%" scope="col"></th>
-    <th class="left-align" width="10%" scope="col"></th>
-    <th class="left-align" width="15%" scope="col"></th>
-    <th class="left-align" width="30%" scope="col"></th>
-    <th class="left-align" width="10%" scope="col"></th>
-  <th class="blue-border left-align" width="15%" scope="col">Fee({{todayslist.commission_percent}}%)(Rs)</th>
-    <th class="blue-border left-align"  width="15%" scope="col">- {{todayslist.fee_amount |floatformat:"0"}}</th>
-  </tr>
-
-{%if todayslist.has_service_tax %}
-  <tr class="table-header">
-  <th class=" left-align"  width="5%" scope="col"></th>
-    <th class=" left-align" width="10%" scope="col"></th>
-    <th class=" left-align" width="15%" scope="col"></th>
-    <th class=" left-align" width="30%" scope="col"></th>
-    <th class="left-align" width="10%" scope="col"></th>
-  <th class="left-align" width="15%" scope="col">Service tax({{todayslist.service_tax}}14%)(Rs)</th>
-    <th class=" left-align"  width="15%" scope="col">+{{todayslist.service_tax_amount |floatformat:"0"}}</th>
-  </tr>
-  {%endif%}
-
-  <tr class="table-header">
-  <th class=" left-align"  width="5%" scope="col"></th>
-    <th class=" left-align" width="10%" scope="col"></th>
-    <th class=" left-align" width="15%" scope="col"></th>
-    <th class=" left-align" width="30%" scope="col"></th>
-    <th class="left-align" width="10%" scope="col"></th>
-  <th class="left-align" width="15%" scope="col">Amount Paid(Rs)</th>
-    <th class=" left-align"  width="15%" scope="col">{{todayslist.paid_amount |floatformat:"0"}}</th>
-  </tr>
-
-</table>
 
 </body>
 
