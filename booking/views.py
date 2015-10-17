@@ -103,7 +103,6 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
-            #import pdb;pdb.set_trace();
             user = self.request.user
             data = self.request.DATA
             appnt_date = datetime.strptime(data['appnt_date'],'%Y-%m-%d')
@@ -172,15 +171,16 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                         data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
                         return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
                 else:
-                    if appointment_start_time.minute < datetime.now().minute:
-                        logger_error.error(rzp_payment_id)
-                        url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
-                        ##change refund amount if neede in future
-                        resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
-                        data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
-                        logger_error.error(rzp_payment_id)
-                        data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
-                        return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+                    if appointment_start_time.hour == datetime.now().hour:
+                        if appointment_start_time.minute < datetime.now().minute:
+                            logger_error.error(rzp_payment_id)
+                            url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                            ##change refund amount if neede in future
+                            resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                            data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
+                            logger_error.error(rzp_payment_id)
+                            data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
+                            return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
             logger_booking.info("New booking - "+str(data))
             total_duration = StudioServices.objects.filter(service_id__in = services_chosen,  \
                 studio_profile_id = studio_id).values('mins_takes').aggregate(Sum('mins_takes'))
@@ -245,7 +245,8 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 'date':appnt_date, 'appnt_time':appnt_time,  \
                 'services':services_booked_list,  \
                 'studio':studio['name'],'studio_address':studio_address,  \
-                'contact':contacts,'total':purchase_amount,'discount':promo_amount,'service_tax':service_tax}
+                'contact':contacts,'total':purchase_amount,'discount':promo_amount,'service_tax':service_tax, \
+                'mobile_no':mobile_no}
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 studio_msg = get_template('emails/studio_booking.html').render(Context(booking_details))

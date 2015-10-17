@@ -1560,7 +1560,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     '<div class="col-md-3">Total amount:</div>'+
     '<div class="col-md-4">₹ {{new_booking.purchase_amount}}</div><br/>'+
     '<div class="col-md-3">Services booked:</div>'+
-    '<div class="col-md-9"><span ng-repeat="ser in new_booking.serviceschosen | startFrom : 1">{{$index}} - {{ser.servicename}}<br/></span><br/></div><br/>'+
+    '<div class="col-md-9"><span ng-repeat="ser in new_booking.serviceschosen">{{$index + 1}} - {{ser.servicename}}<br/></span><br/></div><br/>'+
     '<div style="clear:both"> </div>'+
     '<div class="col-md-7 col-sm-6 col-xs-12 resetpanel" style="left: 0px;bottom:0px;">'+
     '<button ng-click="cancel()" class="rebookbtn btn apply-btn col-md-4 col-sm-6 col-xs-12">'+
