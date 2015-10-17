@@ -28,7 +28,7 @@ from django.core.files import File
 from django.db import transaction
 
 #application imports
-from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus, DailyBookingConfirmation
+from booking.models import BookingDetails,BookingServices,MerchantDailyReportStatus, DailyInvoiceConfirmation
 from studios.models import StudioProfile, Studio,StudioInvoices
 from utils import responses, generic_utils
 
