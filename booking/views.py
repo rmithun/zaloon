@@ -639,6 +639,7 @@ class  GetSlots(APIView):
                 if len(values) > 0 and slots.has_key(key):
                     slots[key] = [s for s in slots[key] if s not in values]
             #import pdb;pdb.set_trace();
+            new_slot = []
             if datetime.strptime(date,'%Y-%m-%d').date() == datetime.today().date():
                 td_hr = datetime.now().time().hour
                 td_min = datetime.now().time().minute
