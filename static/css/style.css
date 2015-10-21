@@ -884,7 +884,7 @@ h3.more-panel-title{color: #4c4c4c;
 
 /*feature*/
 
-#features-list article { margin:40px 0px 0px 0px; padding: 0px 10px; }
+#features-list article { margin:40px 0px 40px 0px; padding: 0px 10px; }
 #features-list article  .icon { font-size:3.3em; }
 #features-list article  p { font-size:14px; color:#424d56;}
 
@@ -1105,21 +1105,30 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 
 #about {
   padding: 40px 0px;background-color: #f6f2f1;border-top: 1px solid #E9E9E9;
+      
+    background-image: url("../img/background/bg-2.jpg");
+    background-position: 0 0;
+    background-size: cover;
 }
+#about h1{color:#252a40}
 
 #mobileapp {
   padding: 40px 0px;background-color: #f6f2f1;border-top: 1px solid #E9E9E9;
+  background-image: url("../img/background/bg-1.jpg");
+    background-position: 0 0;
+    background-size: cover;
 }
+#mobileapp h1{color:#fff}
 
-#others span{color:#1bbc9b;font-size:16px;}
-#others p.others-title{width: 60%; display: block; text-align: center; margin: 0 auto;padding-bottom:40px;padding-top:25px;}
+#others span{color:#a1b0db;margin-bottom: 20px;font-weight: 700;}
+#others p.others-title{width: 60%; display: block; text-align: center; margin: 0 auto;padding-bottom:40px;padding-top:10px;color: #252a40;font-size: 15px;line-height: 1.3em;letter-spacing: .05em;}
 
 #others article:last-child{padding:0px;}
 #others article{padding:0 30px 0 0;}
 #others{padding-bottom:30px;}
-#landing-page .container h2{font-size:22px;color: #34495E;}
-#storemap{position:relative;height:500px;background-color: #A1A1A1;}
-#storemap h2{color:#fff;font-size:22px;}
+#landing-page .container h2{font-size:22px;color: #34495E; font-weight: 400;}
+#storemap{position:relative;height:500px;background-color: #252a40;}
+#storemap h2{color:#fff;font-size:42px;}
 #storemap p{color:#fff;}
 #footer{background:#f4f7f9;padding:20px 0;}
 #footer ul li{display:inline-block;padding-right:10px;}
@@ -1148,7 +1157,9 @@ h4.shopname{font-size: 18px;
     font-weight: 500;
   }
 .aboutus{margin:0 auto;width:47%;}
- 
+.mobileapptxt{margin:0 auto;}
+.mobileapptxt h2{color:#fff !important;}
+
   .fa-shopping-cart:before {color: #1BBC9B; font-size: 20px; }
   .shoppingcart{position: relative;
     padding-top: 6px;
@@ -1522,7 +1533,18 @@ li.fbbutton:hover{
 
 /* Desktop medium screen  */
 @media (min-width: 992px){  
+  #about {height:600px;}
+  .aboutus{position: relative; top:180px;}
+
+  #mobileapp {height:600px;}
+  .mobileapptxt{position: relative; top:90px;}
+
+  .mobileapptxt-overlay{color: #fff;
+    max-width: 770px;
+    padding: 80px;
+    background-color: rgba(37,42,64,.8);}
    #servicemodel .todo ul li{float: left;}
+  
   .panel-open .heading-bar{
     width:101.6%;
   }

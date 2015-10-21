@@ -128,11 +128,13 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 	{
 		var active_booking = [], inactive_booking = [];
 		today = new Date()
+		console.log(today)
 		for(i=0;i<bookings.length;i++)
 		{
 			appnt_date = new Date(bookings[i].appointment_date)
 			//if(bookings[i].booking_status == 'BOOKED' && bookings[i].status_code == 'B001' && 
 			//appnt_date	>= today )	
+console.log(appnt_date)
 			if(appnt_date >= today)
 			{
 				active_booking.push(bookings[i])
