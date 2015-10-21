@@ -137,7 +137,6 @@ def render_to_pdf(template_url,data,studio):
     #import pdb;pdb.set_trace();
     try:
         global till_time,today,mail_exception
-        import pdb;pdb.set_trace();
         response = 0 
         template = get_template(template_url)
         data['todayslist']['date'] = today

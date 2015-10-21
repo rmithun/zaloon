@@ -160,7 +160,9 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
                 logger_error.error(rzp_payment_id)
                 return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+            is_today = 0
             if appnt_date.date() == datetime.today().date():
+                is_today = 1
                 if appointment_start_time.hour < datetime.now().hour:
                         logger_error.error(rzp_payment_id)
                         url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
@@ -170,6 +172,15 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                         logger_error.error(rzp_payment_id)
                         data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
                         return Response(data = data, status = status.HTTP_400_BAD_REQUEST)
+                elif appointment_start_time.hour > datetime.now().hour:
+                    if appointment_start_time.hour - datetime.now().hour  == 1:
+                        logger_error.error(rzp_payment_id)
+                        url = ('https://api.razorpay.com/v1/payments/%s/refund')%(rzp_payment_id)
+                        ##change refund amount if neede in future
+                        resp = requests.post(url, auth=(settings.RZP_KEY_ID,settings.RZP_SECRET_KEY))
+                        data  = {'data':responses.BOOKING_RESPONSES['DATE_EXPIRED']}
+                        logger_error.error(rzp_payment_id)
+                        data  = {'data':responses.BOOKING_RESPONSES['TIME_EXPIRED']}
                 else:
                     if appointment_start_time.hour == datetime.now().hour:
                         if appointment_start_time.minute < datetime.now().minute:
@@ -246,7 +257,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 'services':services_booked_list,  \
                 'studio':studio['name'],'studio_address':studio_address,  \
                 'contact':contacts,'total':purchase_amount,'discount':promo_amount,'service_tax':service_tax, \
-                'mobile_no':mobile_no}
+                'mobile_no':mobile_no,'is_today':is_today}
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 studio_msg = get_template('emails/studio_booking.html').render(Context(booking_details))
