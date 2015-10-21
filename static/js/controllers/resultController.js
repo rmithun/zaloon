@@ -14,8 +14,10 @@ noqapp.filter('startFrom', function () {
 
 noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,lodash,httpServices,sessionService,putResultService,gService) {
     
-    //detect device
+    //detect device    
     $scope.device = navigator.platform
+    console.log($scope.device)
+    console.log(navigator.userAgent)
     if($scope.device.indexOf("iPhone") != -1 || $scope.device.indexOf("iPod") != -1 || $scope.device.indexOf("iPad") != -1)
     {
         $scope.which_device = 1
@@ -541,7 +543,18 @@ $scope.bindstudio=function(data){
         $scope.studiodetails(id);
     }
 
-    $scope.studiodetails = function (id) {        
+    $scope.studiodetails = function (id) {    
+        var windowWidth = $(window).width();
+        if (windowWidth >= 993) {
+            var tut2=$cookies.get('tut2cookie');
+            if(typeof tut2 == 'undefined'){
+                $('#tutorialslideroverlay').addClass('tutorialoverlay');
+                console.log("Remove later")
+            }
+            else{
+                $('#tutorialslideroverlay').removeClass('tutorialoverlay');
+            }    
+        }
         var samestudio=false;          
         $('.service-overlay').show();         
         if(typeof $scope.selectedstudio.id != "undefined"){
@@ -594,14 +607,14 @@ $scope.bindstudio=function(data){
             }            
             setTimeout(function(){
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };
-                console.log(top);
+                //console.log(top);
                 removemarker();                
                 drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);                
             },300);
             setTimeout(function () {                                   
                 httpServices.getServicebyid({id:id}).then(function(res)
                 {     
-                    console.log(res['service_details'].data[0].studio_detail_for_activity)                          
+                    //console.log(res['service_details'].data[0].studio_detail_for_activity)                          
                     $scope.sortservicebyfilter(res['service_details'].data[0].studio_detail_for_activity);                
                     $scope.selectedstudio.studio_review=res['service_details'].data[0].studio_review;
                     var page = Math.floor($scope.selectedstudio.studio_review.length / 5);                   
@@ -637,12 +650,12 @@ $scope.bindstudio=function(data){
         $('.service-overlay').hide();
         setTimeout(function () {           
             var tempheight=serviceheight; 
-            console.log(serviceheight)             
+            //console.log(serviceheight)             
             serviceheight=$('.service-list').height();  
-            console.log(serviceheight)          
-            console.log(top)        
+            //console.log(serviceheight)          
+            //console.log(top)        
                 top = { 'street-info': top['street-info'], 'service-list': top['service-list'], 'review-detail': ((top['review-detail']-75)+serviceheight), 'direction': ((top['direction']-75)+serviceheight) };
-                console.log(top)
+                //console.log(top)
             }, 2000);             
     }
 
@@ -790,7 +803,7 @@ $scope.bindstudio=function(data){
                 }
             }          
         } 
-        console.log($scope.sergroup)         
+        //console.log($scope.sergroup)         
     }
 
     $scope.calculate=function(start,closed) {        
@@ -893,16 +906,17 @@ $scope.bindstudio=function(data){
         }        
     }
 
-    $scope.searchdata=$cookies.getObject('searchdata');  
-    $scope.searchdata_ = {};
-    $scope.searchdata_.servicename=$scope.searchdata.servicename;
-    $scope.searchdata_.searchlocation=$scope.searchdata.location;
+    $scope.searchdata=$cookies.getObject('searchdata'); 
+    console.log($scope.searchdata) 
+    $scope.searchdata_ = {};    
     $('.finder-overlay').hide();
     if(typeof $scope.searchdata == "undefined"){
         $location.path("/");
     }
     else
     {
+        $scope.searchdata_.servicename=$scope.searchdata.servicename;
+        $scope.searchdata_.searchlocation=$scope.searchdata.location;
         if(putResultService.getresult().length ==0){
             $('.finder-overlay').show();
             httpServices.getstudioDetails($scope.searchdata).then(function(res)
@@ -911,13 +925,16 @@ $scope.bindstudio=function(data){
                     putResultService.setresult(res.studio_details.data);  
                     $scope.bindstudio(data);                                                  
                     $('.finder-overlay').hide();
-                    var tut1=$cookies.getObject('tut1cookie');
-                    if(typeof tut1 == 'undefined'){
-                        //$('#tutorialoverlay').addClass('tutorialoverlay');
-                        console.log("Remove later")
-                    }
-                    else{
-                        $('#tutorialoverlay').removeClass('tutorialoverlay');
+                    var windowWidth = $(window).width();
+                    if (windowWidth >= 993) {
+                        var tut1=$cookies.get('tut1cookie');
+                        if(typeof tut1 == 'undefined'){
+                            $('#tutorialoverlay').addClass('tutorialoverlay');
+                            console.log("Remove later")
+                        }
+                        else{
+                            $('#tutorialoverlay').removeClass('tutorialoverlay');
+                        }
                     }
                 },function()
                 {
@@ -927,26 +944,38 @@ $scope.bindstudio=function(data){
                 });
         }
         else{            
-           data=putResultService.getresult(); 
-           $scope.bindstudio(data);
-           var tut1=$cookies.getObject('tut1cookie');
-            if(typeof tut1 == 'undefined'){
-                //$('#tutorialoverlay').addClass('tutorialoverlay');
-                        console.log("Remove later")
-            }
-            else{
-                $('#tutorialoverlay').removeClass('tutorialoverlay');
+            data=putResultService.getresult(); 
+            $scope.bindstudio(data);
+            var windowWidth = $(window).width();
+            if (windowWidth >= 993) {
+                var tut1=$cookies.get('tut1cookie');
+                if(typeof tut1 == 'undefined'){
+                    $('#tutorialoverlay').addClass('tutorialoverlay');
+                    console.log("Remove later")
+                }
+                else{
+                    $('#tutorialoverlay').removeClass('tutorialoverlay');
+                }
             }
         }
     }
 
 $(document).click(function(e) {              
     if ($(e.target).is('#tutorialoverlay')) {    
+        //alert("tutorialoverlay")
         var now = new Date(),exp = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
         //var exp = new Date();
-        //exp.setTime(exp.getTime() + (60*1000));    
-        $cookies.putObject('tut1cookie','tut1',{path:'/',expires: exp}); 
+        exp.setTime(exp.getTime() + (24*60*60*1000));    
+        $cookies.put('tut1cookie','tut1',{path:'/',expires: exp}); 
         $('#tutorialoverlay').removeClass('tutorialoverlay');
+    }
+    else if ($(e.target).is('#tutorialslideroverlay')) {    
+        //alert("tutorialslideroverlay")
+        var now = new Date(),exp = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+        //var exp = new Date();
+        exp.setTime(exp.getTime() + (24*60*60*1000));    
+        $cookies.put('tut2cookie','tut2',{path:'/',expires: exp}); 
+        $('#tutorialslideroverlay').removeClass('tutorialoverlay');
     }
 });
 

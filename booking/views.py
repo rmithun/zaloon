@@ -643,7 +643,7 @@ class  GetSlots(APIView):
             if datetime.strptime(date,'%Y-%m-%d').date() == datetime.today().date():
                 td_hr = datetime.now().time().hour
                 td_min = datetime.now().time().minute
-                for i in range(0, td_hr):
+                for i in range(0, td_hr+1):
                     if i in slots:
                         slots.pop(i,None)
                 if td_hr in slots:
