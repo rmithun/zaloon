@@ -80,9 +80,9 @@ class ActiveBookingMixin(object):
             active = self.request.GET['active']
             logger_booking.info("User - "+str(self.request.user))
             if int(active):
-                data = BookingDetails.objects.filter(user = self.request.user, status_code = 'B001').order_by('id').reverse()
+                data = BookingDetails.objects.filter(user = self.request.user, appointment_date_gte = datetime.today().date()).order_by('id').reverse()
             else:
-                data = BookingDetails.objects.filter(Q(user = self.request.user), ~Q(status_code = 'B001')).order_by('id').reverse()
+                data = BookingDetails.objects.filter(Q(user = self.request.user), Q(appointment_date_lt = datetime.today().date())).order_by('id').reverse()
             logger_booking.info("Active Booking Mixin data - "+str(data))
         except Exception,e:
             logger_error.error(traceback.format_exc())
