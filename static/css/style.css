@@ -1118,7 +1118,7 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
     background-position: 0 0;
     background-size: cover;
 }
-#mobileapp h1{color:#fff}
+#mobileapp h1{color:#fff;text-transform: uppercase;font-size:44px;}
 
 #others span{color:#a1b0db;margin-bottom: 20px;font-weight: 700;}
 #others p.others-title{width: 60%; display: block; text-align: center; margin: 0 auto;padding-bottom:40px;padding-top:10px;color: #252a40;font-size: 15px;line-height: 1.3em;letter-spacing: .05em;}
@@ -1128,14 +1128,14 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 #others{padding-bottom:30px;}
 #landing-page .container h2{font-size:22px;color: #34495E; font-weight: 400;}
 #storemap{position:relative;height:500px;background-color: #252a40;}
-#storemap h2{color:#fff;font-size:42px;}
-#storemap p{color:#fff;}
+#storemap h2{color:#fff;font-size:34px;text-transform: uppercase;margin: 0;padding: 20px 0 15px 0;}
+#storemap p{color:#fff;font-size: 22px;}
 #footer{background:#f4f7f9;padding:20px 0;}
-#footer ul li{display:inline-block;padding-right:10px;}
+#footer ul li{display:inline-block;padding-right:9px;}
 #footer ul li a{font-size:12px;color:#424d56;}
 #footer ul {margin-bottom:15px;}
 #footer p{color:#929394;text-align: center;}
-.home-mapview{position: absolute;  width: 97%;  top: 90px;  bottom: 30px;}
+.home-mapview{position: absolute;  width: 90%;  top: 90px;  bottom: 30px;left:5%;}
 .home-mapview .mapview1{width:100%;position: absolute;top:0px;bottom: 0px;}
 #footer .social {text-align:right;padding:0;}
 #footer .social span{padding:0 5px;font-size: 18px;}
@@ -1157,6 +1157,7 @@ h4.shopname{font-size: 18px;
     font-weight: 500;
   }
 .aboutus{margin:0 auto;width:47%;}
+.aboutus h1{text-transform: uppercase;font-size:34px;margin-bottom:50px;}
 .mobileapptxt{margin:0 auto;}
 .mobileapptxt h2{color:#fff !important;}
 
@@ -1170,6 +1171,7 @@ h4.shopname{font-size: 18px;
 
 /* Mobile device 767px */
 @media (max-width: 767px) {
+  .home-mapview{top:120px;}
   .stu-type-last{
   width: 137px;
 }
@@ -1320,6 +1322,9 @@ h4.shopname{font-size: 18px;
 }
 
 @media (max-width: 480px) {
+  #mobileapp h2{font-size: 24px;padding: 20px 0 15px 0;}
+  #storemap h2{font-size: 24px;padding: 20px 0 15px 0;}
+  .home-mapview{top:134px;}
 .stu-type-last{
   width: 125px;
 }
@@ -1533,8 +1538,11 @@ li.fbbutton:hover{
 
 /* Desktop medium screen  */
 @media (min-width: 992px){  
+  .home-mapview{width: 94%;left:3%;right:3%;top:130px;}
   #about {height:600px;}
   .aboutus{position: relative; top:180px;}
+  .aboutus h1{text-transform: uppercase;font-size:44px;margin-bottom:50px;}
+  #storemap h2{font-size: 44px;}
 
   #mobileapp {height:600px;}
   .mobileapptxt{position: relative; top:90px;}
