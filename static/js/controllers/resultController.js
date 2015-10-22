@@ -67,6 +67,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     var geocoder =  new google.maps.Geocoder();
     var mapOptions = {
         zoom: 4,
+        scrollwheel: false,
         center: new google.maps.LatLng(40.0000, -98.0000),
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         disableDefaultUI: true,

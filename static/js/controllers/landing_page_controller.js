@@ -5,6 +5,7 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
     $scope.lp_invited = false;
     var mapOptions = {
         zoom: 10,
+        scrollwheel: false,
         center: new google.maps.LatLng(13.0827, 80.2707),
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         disableDefaultUI: true,
