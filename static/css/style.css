@@ -532,7 +532,7 @@ content: ' ';
   line-height: normal;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
   }
   .list-item .details .sub-line-2 {
   font-size: 12px;
@@ -1107,8 +1107,8 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
   padding: 40px 0px;background-color: #f6f2f1;border-top: 1px solid #E9E9E9;
       
     background-image: url("../img/background/bg-2.jpg");
-    background-position: 0 0;
-    background-size: cover;
+    background-position: -188px -314px;
+    background-size: initial;
 }
 #about h1{color:#252a40}
 

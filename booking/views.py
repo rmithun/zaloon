@@ -80,9 +80,9 @@ class ActiveBookingMixin(object):
             active = self.request.GET['active']
             logger_booking.info("User - "+str(self.request.user))
             if int(active):
-                data = BookingDetails.objects.filter(user = self.request.user, appointment_date_gte = datetime.today().date()).order_by('id').reverse()
+                data = BookingDetails.objects.filter(user = self.request.user, appointment_date__gte = datetime.today().date()).order_by('id').reverse()
             else:
-                data = BookingDetails.objects.filter(Q(user = self.request.user), Q(appointment_date_lt = datetime.today().date())).order_by('id').reverse()
+                data = BookingDetails.objects.filter(Q(user = self.request.user), Q(appointment_date__lt = datetime.today().date())).order_by('id').reverse()
             logger_booking.info("Active Booking Mixin data - "+str(data))
         except Exception,e:
             logger_error.error(traceback.format_exc())
@@ -561,9 +561,9 @@ class  GetSlots(APIView):
             closed_from = studio_time['daily_studio_closed_from']
             closed_to = studio_time['daily_studio_closed_till']
             if closed_from is None:
-                closed_from = datetime.strptime('22:00:00','%H:%M:%S')
+                closed_from = datetime.strptime('23:45:00','%H:%M:%S')
             if closed_to is None:
-                closed_to = datetime.strptime('23:00:00','%H:%M:%S')
+                closed_to = datetime.strptime('23:59:00','%H:%M:%S')
             slots = copy.deepcopy(responses.HOURS_DICT)
             #logger_booking.info("Studio time details - "+ str(start),str(end),str(closed_from),str(closed_to))
             #check  total duration not to cross closed hours or other bookings

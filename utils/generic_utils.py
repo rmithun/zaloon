@@ -52,9 +52,9 @@ def get_token_json(access_token,app,refresh_token):
 def access_token_gen(user):
     try:
         app = Application.objects.get(name="Facebook")
-        old_access_token = AccessToken.objects.get(user=user,  \
+        old_access_token = AccessToken.objects.filter(user=user,  \
             application=app)
-        old_refresh_token = RefreshToken.objects.get(user=user,  \
+        old_refresh_token = RefreshToken.objects.filter(user=user,  \
             access_token=old_access_token)
     except:
         pass

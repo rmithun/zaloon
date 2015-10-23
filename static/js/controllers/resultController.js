@@ -191,7 +191,9 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
                 }
             }
         });
-        google.maps.event.trigger(selectedmarker, 'mouseover');
+        if(typeof selectedmarker !='undefined'){
+            google.maps.event.trigger(selectedmarker, 'mouseover');
+        }  
     }
     $scope.hoverOut = function (studioname) {
         if($('#studiodetails').css('display') == 'block')
@@ -208,7 +210,9 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
                 }
             }
         });
-        google.maps.event.trigger(selectedmarker, 'mouseout');
+        if(typeof selectedmarker !='undefined'){
+            google.maps.event.trigger(selectedmarker, 'mouseout');
+        }        
     }
     function removemarker() {
         angular.forEach($scope.markers, function (marker) {
