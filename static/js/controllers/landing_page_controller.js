@@ -20,12 +20,20 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
     $scope.markers = [];
     var bounds = new google.maps.LatLngBounds();
     var imagUrls = {        
-        oneOff: 'static/img/blue24.png',
-        oneOn: 'static/img/green24.png'
+        //oneOff: '../static/img/blue24.png',
+        //oneOn: '../static/img/green24.png'
+        iconsaloon:'../static/img/saloon.png',
+        iconparlor:'../static/img/beautyparlor.png',
+        iconspa:'../static/img/spa.png',
+        iconuser:'../static/img/user.png'
     };
     var images = {
-        oneOn: new google.maps.MarkerImage(imagUrls.oneOn),
-        oneOff: new google.maps.MarkerImage(imagUrls.oneOff)
+        //oneOn: new google.maps.MarkerImage(imagUrls.oneOn),
+        //oneOff: new google.maps.MarkerImage(imagUrls.oneOff)
+        iconsaloon: new google.maps.MarkerImage(imagUrls.iconsaloon),
+        iconparlor: new google.maps.MarkerImage(imagUrls.iconparlor),
+        iconspa: new google.maps.MarkerImage(imagUrls.iconspa),
+        iconuser:new google.maps.MarkerImage(imagUrls.iconuser)
     };
 	$scope.invite=function(form)
 	{
@@ -65,18 +73,22 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
 		})
 	}
 	var createmarker = function (studio) {
-		console.log(studio)
+		//console.log(studio)
+        var icon;
+        if(studio.type_desc=="Salon"){
+            icon=images.iconsaloon;            
+        }
+        else if(studio.type_desc=="Spa"){
+            icon=images.iconspa;            
+        }
+        else{
+            icon=images.iconparlor;            
+        }
         var marker = new google.maps.Marker({
             map: $scope.map,
             position: new google.maps.LatLng(studio.latitude, studio.longitude),            
-            icon: images.oneOff
+            icon: icon            
         });        
-        google.maps.event.addListener(marker, 'mouseover', function (event) {
-            this.setIcon(images.oneOn);
-        });
-        google.maps.event.addListener(marker, 'mouseout', function (event) {
-            this.setIcon(images.oneOff);
-        });
         $scope.markers.push(marker);
         var latlong = new google.maps.LatLng(studio.latitude, studio.longitude);
         latlongcollection.push(latlong);

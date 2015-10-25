@@ -82,6 +82,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.mobilemap;
     $scope.markers = [];
     $scope.dirmarkers=[];
+    $scope.mdirmarkers=[];
     var latlongcollection = [];
     $scope.shopdistance;
     $scope.reviewPage = 1;
@@ -253,6 +254,13 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         for (var i = 0; i < end; i++) {
             $scope.dirmarkers.splice(0, 1);
         }
+        angular.forEach($scope.mdirmarkers, function (marker) {
+            marker.setMap(null);
+        });
+        end = $scope.mdirmarkers.length;
+        for (var i = 0; i < end; i++) {
+            $scope.mdirmarkers.splice(0, 1);
+        }        
     }
     function autozoom() {
         var latlngbounds = new google.maps.LatLngBounds();
@@ -268,12 +276,12 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             latlongcollection.splice(0, 1);
         }
     }
-    function drawdirection(studiotype, lat, lon) {  
-        console.log(studiotype)    
+    function drawdirection(studiotype, lat, lon) {           
         $scope.mobilemap = new google.maps.Map(document.getElementById('mobgooglemap'), mapOptions);  
         directionsDisplay.setMap($scope.map);
         directionsDisplay.setOptions({ suppressMarkers: true });
         mdirectionsDisplay.setMap($scope.mobilemap);
+        mdirectionsDisplay.setOptions({ suppressMarkers: true });
         var request = {
             origin: new google.maps.LatLng(lat, lon),
             destination: $scope.directionlocation,
@@ -306,8 +314,9 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             position: position,
             map: $scope.map,
             icon: icon        
-        });
+        });        
         $scope.dirmarkers.push(marker)
+        $scope.mdirmarkers.push(new google.maps.Marker({position: position,map: $scope.mobilemap,icon: icon}));
     }
 
 $scope.bindstudio=function(data){ 
@@ -823,6 +832,7 @@ $scope.bindstudio=function(data){
     $scope.changedirection=function(studiotype){        
         directionsDisplay.setMap(null);
         mdirectionsDisplay.setMap(null);
+        removedirmarker();
         drawdirection(studiotype ,$scope.selectedstudio.latitude, $scope.selectedstudio.longitude);        
         geocoder.geocode( { 'address': $scope.directionlocation}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {                
