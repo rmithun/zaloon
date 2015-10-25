@@ -81,6 +81,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     //$scope.mobilemap = new google.maps.Map(document.getElementById('mobgooglemap'), mapOptions);
     $scope.mobilemap;
     $scope.markers = [];
+    $scope.dirmarkers=[];
     var latlongcollection = [];
     $scope.shopdistance;
     $scope.reviewPage = 1;
@@ -127,23 +128,44 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     }
 
         //Google Maps    
-    var imagUrls = {
-        //oneOn: 'http://maps.google.com/mapfiles/kml/pal3/icon47.png',
-        //oneOff: 'http://maps.google.com/mapfiles/kml/pal3/icon39.png'
-        oneOff: '../static/img/blue24.png',
-        oneOn: '../static/img/green24.png'
+    var imagUrls = {        
+        //oneOff: '../static/img/blue24.png',
+        //oneOn: '../static/img/green24.png'
+        iconsaloon:'../static/img/saloon.png',
+        iconparlor:'../static/img/beautyparlor.png',
+        iconspa:'../static/img/spa.png',
+        iconuser:'../static/img/user.png'
     };
     var images = {
-        oneOn: new google.maps.MarkerImage(imagUrls.oneOn),
-        oneOff: new google.maps.MarkerImage(imagUrls.oneOff)
+        //oneOn: new google.maps.MarkerImage(imagUrls.oneOn),
+        //oneOff: new google.maps.MarkerImage(imagUrls.oneOff)
+        iconsaloon: new google.maps.MarkerImage(imagUrls.iconsaloon),
+        iconparlor: new google.maps.MarkerImage(imagUrls.iconparlor),
+        iconspa: new google.maps.MarkerImage(imagUrls.iconspa),
+        iconuser:new google.maps.MarkerImage(imagUrls.iconuser)
     };
     var bounds = new google.maps.LatLngBounds();
-    var createmarker = function (studio) {
+    var createmarker = function (studio) {        
+        var mousein,mouseout;
+        if(studio.type_desc=="Salon"){
+            mousein=images.iconsaloon;
+            mouseout=images.iconsaloon;
+        }
+        else if(studio.type_desc=="Spa"){
+            mousein=images.iconspa;
+            mouseout=images.iconspa;
+        }
+        else{
+            mousein=images.iconparlor;
+            mouseout=images.iconparlor;
+        }
         var marker = new google.maps.Marker({
             map: $scope.map,
             position: new google.maps.LatLng(studio.latitude, studio.longitude),
-            title: studio.name,
-            icon: images.oneOff
+            title: studio.name,            
+            icon: mouseout,
+            mover:mousein,
+            mout:mouseout
         });
         var compiled;
         if(typeof studio.distance !="undefined"){
@@ -158,11 +180,11 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             infoWindow.setContent(marker.content);
             infoWindow.open($scope.map, marker);
         });
-        google.maps.event.addListener(marker, 'mouseover', function (event) {
-            this.setIcon(images.oneOn);
+        google.maps.event.addListener(marker, 'mouseover', function (event) {            
+            this.setIcon(marker.mover);
         });
         google.maps.event.addListener(marker, 'mouseout', function (event) {
-            this.setIcon(images.oneOff);
+            this.setIcon(marker.mout);
         });
         $scope.markers.push(marker);
         var latlong = new google.maps.LatLng(studio.latitude, studio.longitude);
@@ -223,6 +245,15 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             $scope.markers.splice(0, 1);
         }
     }
+    function removedirmarker() {
+        angular.forEach($scope.dirmarkers, function (marker) {
+            marker.setMap(null);
+        });
+        var end = $scope.dirmarkers.length;
+        for (var i = 0; i < end; i++) {
+            $scope.dirmarkers.splice(0, 1);
+        }
+    }
     function autozoom() {
         var latlngbounds = new google.maps.LatLngBounds();
         for (var i = 0; i < latlongcollection.length; i++) {
@@ -237,9 +268,11 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
             latlongcollection.splice(0, 1);
         }
     }
-    function drawdirection(lat, lon) {      
+    function drawdirection(studiotype, lat, lon) {  
+        console.log(studiotype)    
         $scope.mobilemap = new google.maps.Map(document.getElementById('mobgooglemap'), mapOptions);  
         directionsDisplay.setMap($scope.map);
+        directionsDisplay.setOptions({ suppressMarkers: true });
         mdirectionsDisplay.setMap($scope.mobilemap);
         var request = {
             origin: new google.maps.LatLng(lat, lon),
@@ -248,12 +281,33 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         };
         directionsService.route(request, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
+                var starticon;
                 $scope.distance = response.routes[0].legs[0].distance.text;
+                console.log(response.routes[0].legs[0])
+                if(studiotype=="Salon"){
+                    starticon=images.iconsaloon;
+                }
+                else if(studiotype=="Spa"){
+                    starticon=images.iconspa;
+                }
+                else{
+                    starticon=images.iconparlor;
+                }
+                makeMarker(response.routes[0].legs[0].start_location, starticon);
+                makeMarker(response.routes[0].legs[0].end_location, images.iconuser);                
                 $scope.$apply();                
                 directionsDisplay.setDirections(response);                
                 mdirectionsDisplay.setDirections(response);                    
             }
         });
+    }
+    function makeMarker(position, icon) {
+        var marker=new google.maps.Marker({
+            position: position,
+            map: $scope.map,
+            icon: icon        
+        });
+        $scope.dirmarkers.push(marker)
     }
 
 $scope.bindstudio=function(data){ 
@@ -586,6 +640,7 @@ $scope.bindstudio=function(data){
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];
+            console.log($scope.selectedstudio)
             $scope.has_online_payment = $scope.selectedstudio.has_online_payment            
             //$scope.sortservicebyfilter();
             $('.header-tabs').removeClass('stick');
@@ -614,7 +669,7 @@ $scope.bindstudio=function(data){
                 top = { 'street-info': $('.street-info').position().top, 'service-list': $('.service-list').position().top, 'review-detail': $('.review-detail').position().top, 'direction': $('.direction').position().top };
                 //console.log(top);
                 removemarker();                
-                drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);                
+                drawdirection($scope.selectedstudio.type_desc,$scope.selectedstudio.latitude, $scope.selectedstudio.longitude);                
             },300);
             setTimeout(function () {                                   
                 httpServices.getServicebyid({id:id}).then(function(res)
@@ -732,6 +787,7 @@ $scope.bindstudio=function(data){
         setTimeout(function(){
             directionsDisplay.setMap(null);
             mdirectionsDisplay.setMap(null);
+            removedirmarker();
             clearlatlongbound();
             $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
             autozoom();
@@ -764,10 +820,10 @@ $scope.bindstudio=function(data){
         $scope.reviewPage = 1;   
     }
 
-    $scope.changedirection=function(){        
+    $scope.changedirection=function(studiotype){        
         directionsDisplay.setMap(null);
         mdirectionsDisplay.setMap(null);
-        drawdirection($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);        
+        drawdirection(studiotype ,$scope.selectedstudio.latitude, $scope.selectedstudio.longitude);        
         geocoder.geocode( { 'address': $scope.directionlocation}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {                
                 var studiogeo = new google.maps.LatLng($scope.selectedstudio.latitude, $scope.selectedstudio.longitude);
