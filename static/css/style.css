@@ -850,7 +850,7 @@ h3.more-panel-title{color: #4c4c4c;
  .apply-btn:hover{background:#1bbc9b ;color:#fff;}
 /* Mapview */
 
-.form-register-small {margin:64px 0px 0px 0px; border-radius: 0px; }
+.form-register-small {margin:16px 0px 0px 0px; border-radius: 0px; }
 .form-register-small .form-control {height:46px; border-radius:0px;padding-left:34px;border:0px;background-color:#F2F2F2;}
 .form-register-small .form-control.location{border-left: 1px solid #ADADAD;}
 

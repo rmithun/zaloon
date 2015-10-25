@@ -362,7 +362,7 @@ You can still enter your email ID to get notified when we launch our service her
                      <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
                     <div class="form-group autocomplete">
                         <input type="text" class="form-control col-xs-10 location" placeholder="Search by location" ng-model="$parent.directionlocation" placeholder="Location: Porur" typeahead="area for area in areacomplete($viewValue) | limitTo:10" typeahead-min-length='1' typeahead-on-select='ondirectionselect($item, $model, $label)' typeahead-template-url="location.html">
-                        <button type="button" class="btn btn-primary" ng-click="changedirection()">
+                        <button type="button" class="btn btn-primary" ng-click="changedirection(selectedstudio.type_desc)">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>
                     </div>
