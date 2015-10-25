@@ -175,60 +175,61 @@
             <div id="collapseThree" class="panel-collapse collapse bookingdetails">
                 <div class="panel-body">
 
-                        <div class="text-center">
-        <div class="col-sm-12">
-          <div class="col-sm-4 col-xs-6 bookdetail-title">SERVICES</div>
-          <div class="col-sm-4 hidden-xs bookdetail-title">DURATION</div>
-          <div class="col-sm-4 col-xs-6 bookdetail-title">PRICE</div>
+                        <div class="servicepaypanel">
+        <div class="col-sm-12 no-padding">
+          <div class="col-sm-6 col-xs-6 bookdetail-title">SERVICES</div>
+          <div class="col-sm-3 hidden-xs bookdetail-title">DURATION</div>
+          <div class="col-sm-3 col-xs-6 bookdetail-title">PRICE</div>
         </div>
-        <div class ="row">
-        <div class="col-sm-12" ng-repeat = "servs in serviceschosen.services">
-          <div class="col-sm-4 col-xs-6">{%verbatim%}{{servs.servicename}}{%endverbatim%}</div>
-          <div class="col-sm-4 hidden-xs">{%verbatim%}{{servs.duration}}{%endverbatim%} Min</div>
-          <div class="col-sm-4 col-xs-6">₹ {%verbatim%}{{servs.price}}{%endverbatim%}</div>
+        <div class ="row" ng-repeat = "servs in serviceschosen.services">
+        <div class="col-sm-12" >
+          <div class="col-sm-6 col-xs-6 servicenametxt">{%verbatim%}{{servs.servicename}}{%endverbatim%}</div>
+          <div class="col-sm-3 hidden-xs">{%verbatim%}{{servs.duration}}{%endverbatim%} Min</div>
+          <div class="col-sm-3 col-xs-6">₹ {%verbatim%}{{servs.price}}{%endverbatim%}</div>
         </div>
       </div>
        </div>
-         <div class="row">
-        <div class="col-sm-12 ">
-          
-          <div class="col-sm-4">
-          </div>
-           <div class="col-sm-4">
-          </div>
-          
-          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">
-              <span > Total : ₹{%verbatim%}{{total_amount}}{%endverbatim%}</span>
-          </div>
-        </div>
+         
+        
+       
+
         <div class="row paddtop10 paddbtm">       
         <div class="col-sm-12">
 
-            <div class="col-sm-4 no-padding">
+           
             <div class="promo">
-              <label class="mobspan" style="padding-top:0px">
-              <label>Mobile No:</label>  <span><input ng-model="mobileno" style="border: 1px solid #ccc;" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
+             
+              <label>Mobile No:</label>  
+              <div>
+              <input ng-model="mobileno" style="border: 1px solid #ccc;" name="mobile" type="tel" ng-blur="continueclick=true" ng-pattern="/^[7-9][0-9]{9}$/" required>
               <br/>
-            <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.required">
-                    Please enter your mobile no.</span></span>
-                <span ng-show="continueclick"><span class="red" ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
-                    Enter your mobile number ex:9213233423</span></span></span>
-              </label>
+            <span ng-show="continueclick">
+                  <span class="red" ng-show="bookingForm.mobile.$error.required">
+                    Please enter your mobile no.</span>
+            </span>
+                <span ng-show="continueclick">
+                <span class="red" ng-show="bookingForm.mobile.$error.number || bookingForm.mobile.$error.pattern">
+                    Enter your mobile number ex:9213233423</span>
+                    </span>
+
+                    </div>
+             
             </div>
-          </div>
+         
 
 
-          <div class="col-sm-4 col-xs-7 no-padding ">
+         
             <div class="promobox"><label>Promo code:</label> 
-            <div class="dispInlineblk"> <span><input type="text" ng-model="coupon_code" ng-focus="focus()">
-              </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length||su_booking" class="btn btn-primary promoapply" ng-switch="su_couponing" style="border: 1px solid #ccc;">
+            <div class="promotxt"> <span><input type="text" ng-model="coupon_code" ng-focus="focus()">
+              </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length||su_booking" class="btn btn-primary promoapply" ng-switch="su_couponing" >
                   <span ng-switch-default style="padding-left: 5px;">Apply</span>
                   <span ng-switch-when="true">Apply&nbsp;<i class="fa fa-spinner"></i></span>
               </button>
               </div>
+               <span class="red" >{%verbatim%}{{coupon_resp}}{%endverbatim%}</span>
             </div>
-            <span class="red" style="float:right;">{%verbatim%}{{coupon_resp}}{%endverbatim%}</span>
-          </div>
+           
+         
 
           <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" ng-if="promo_amount>0">Discount - ₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
      
@@ -236,15 +237,21 @@
         </div> 
 
 
-        <div class="row">
-        <div class="col-sm-12 ">
+
+
+        <div class="col-sm-12 ">         
           
+          <div class="col-sm-4 col-xs-4 text-right fntbold pull-right" style="color:#63696a">
+              <span > Total : ₹{%verbatim%}{{total_amount}}{%endverbatim%}</span>
+          </div>
+        </div>
+
+
+        
+        <div class="col-sm-12 ">         
           
-          <div class="col-sm-4">
-          </div>
-           <div class="col-sm-4">
-          </div>
-          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" ng-if="service_tax > 0" style="color:#63696a">
+        
+          <div class="col-sm-4 col-xs-4 text-right fntbold pull-right" ng-if="service_tax > 0" style="color:#63696a">
             <span > Service tax : + ₹{%verbatim%}{{service_tax}}{%endverbatim%}</span>
           </div>
          <!-- <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">
@@ -252,7 +259,7 @@
           </div>-->
           
         </div>
-        </div>
+       
 
             <div class="col-sm-12 amntpayable">
           

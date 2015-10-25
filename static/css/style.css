@@ -1167,7 +1167,7 @@ h4.shopname{font-size: 18px;
     padding-right: 15px;}
   
 .cart-count{border-radius: 7px !important; -webkit-border-radius:7px !important; -moz-border-radius:7px !important;}
-
+.servicepaypanel{border-right:1px solid #EAE9E9; border-left:1px solid #EAE9E9; border-bottom:1px solid #EAE9E9;}
 
 /* Mobile device 767px */
 @media (max-width: 767px) {
@@ -1322,6 +1322,8 @@ h4.shopname{font-size: 18px;
 }
 
 @media (max-width: 480px) {
+  .promo span.red, .promobox span.red{font-size: 12px;}
+  .servicenametxt{width: 50%;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
   #mobileapp h2{font-size: 24px;padding: 20px 0 15px 0;}
   #storemap h2{font-size: 24px;padding: 20px 0 15px 0;}
   .home-mapview{top:134px;}
@@ -1415,6 +1417,8 @@ h4.shopname{font-size: 18px;
 
 /* Tablet device Landscape 1024px and 768px */
 @media (min-width: 768px) {
+  .promotxt{width:180px; float: left;}
+  .servicenametxt{width: 50%;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
   .stu-type-last{
   width: 146px;
 }
@@ -1524,13 +1528,13 @@ li.fbbutton:hover{
    .getdetails-panel-wrapper { margin: 0 auto; width: 550px;}
    .getdetails-panel-wrapper label{font-weight:normal;} 
    .bookingdetails .promo .mobspan input{width:160px;}
-   .promobox{float:right;}
+   .promobox{float:left;width:300px;text-align: left;}
    .promobox span{padding-left:10px;float:left;}
    .promobox button{padding:5px 0px;float:left;}
    .bookingdetails .promobox input{width: 92px;height: 28px;float:left;} 
    
-   .bookingdetails label {line-height: 12px; font-size: 13px;  font-weight: normal;float:left;padding: 5px 0 0 0;}
-    .bookingdetails .promo{text-align:right;float:right;}
+   .bookingdetails label {float:left; text-align: left; width:100px; line-height: 12px; font-size: 13px;  font-weight: normal;float:left;padding: 5px 0 0 0;}
+  .bookingdetails .promo{text-align:right;float:left;width:300px;margin-right: 20px;}
 
    
 }
@@ -1626,7 +1630,7 @@ li.fbbutton:hover{
 .booking-panel .info1{float: left; width: 305px;}
  .nav-tabs>li{width:250px;text-align:center;}
  .bookingdetails .promo .mobspan input{width:160px;}
-   .bookingdetails .promo input{width: 110px;}
+   .bookingdetails .promo input{width: 200px;float: left;}
   
    .searchpanel .service-icon .icon-active{padding-bottom: 13px;}
    .booking-list-item-container h4 span{padding-left: 14.5%;}
