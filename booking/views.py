@@ -651,6 +651,7 @@ class  GetSlots(APIView):
                     slots[key] = [s for s in slots[key] if s not in values]
             #import pdb;pdb.set_trace();
             new_slot = []
+            new_slot_2 =[]
             if datetime.strptime(date,'%Y-%m-%d').date() == datetime.today().date():
                 td_hr = datetime.now().time().hour
                 td_min = datetime.now().time().minute
@@ -659,7 +660,10 @@ class  GetSlots(APIView):
                         slots.pop(i,None)
                 if td_hr in slots:
                     new_slot = [i for i in slots[td_hr] if td_min < i]
+                if td_hr+1 in slots:
+                    new_slot_2 = [i for i in slots[td_hr+1] if td_min < i]
                 slots[td_hr] = new_slot
+                slots[td_hr+1] = new_slot_2
         except Exception,e:
             logger_error.error(traceback.format_exc())
             data = None
