@@ -1105,6 +1105,12 @@ $scope.book = function()
     }
 }
 
+$scope.closemodel=function(){
+    $('#signupmodel').modal('hide');
+    $('#cartmodal').modal('hide');
+    $('#servicemodelbox').modal('hide');
+}
+
 //fb keys
 $scope.fb_key = httpServices.getFBKey() 
 /*
