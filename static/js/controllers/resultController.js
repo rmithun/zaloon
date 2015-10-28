@@ -129,35 +129,39 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     }
 
         //Google Maps    
-    var imagUrls = {        
-        //oneOff: '../static/img/blue24.png',
-        //oneOn: '../static/img/green24.png'
+    var imagUrls = {                
         iconsaloon:'../static/img/saloon.png',
         iconparlor:'../static/img/beautyparlor.png',
         iconspa:'../static/img/spa.png',
-        iconuser:'../static/img/user.png'
+        iconuser:'../static/img/user.png',
+        iconsaloonselect:'../static/img/saloon-select.png',
+        iconparlorselect:'../static/img/beautyparlor-select.png',
+        iconspaselect:'../static/img/spa-select.png',
+        iconuserselect:'../static/img/user-select.png'
     };
-    var images = {
-        //oneOn: new google.maps.MarkerImage(imagUrls.oneOn),
-        //oneOff: new google.maps.MarkerImage(imagUrls.oneOff)
+    var images = {        
         iconsaloon: new google.maps.MarkerImage(imagUrls.iconsaloon),
         iconparlor: new google.maps.MarkerImage(imagUrls.iconparlor),
         iconspa: new google.maps.MarkerImage(imagUrls.iconspa),
-        iconuser:new google.maps.MarkerImage(imagUrls.iconuser)
+        iconuser:new google.maps.MarkerImage(imagUrls.iconuser),
+        iconsaloonselect: new google.maps.MarkerImage(imagUrls.iconsaloonselect),
+        iconparlorselect: new google.maps.MarkerImage(imagUrls.iconparlorselect),
+        iconspaselect: new google.maps.MarkerImage(imagUrls.iconspaselect),
+        iconuserselect:new google.maps.MarkerImage(imagUrls.iconuserselect)
     };
     var bounds = new google.maps.LatLngBounds();
     var createmarker = function (studio) {        
         var mousein,mouseout;
         if(studio.type_desc=="Salon"){
-            mousein=images.iconsaloon;
+            mousein=images.iconsaloonselect;
             mouseout=images.iconsaloon;
         }
         else if(studio.type_desc=="Spa"){
-            mousein=images.iconspa;
+            mousein=images.iconspaselect;
             mouseout=images.iconspa;
         }
         else{
-            mousein=images.iconparlor;
+            mousein=images.iconparlorselect;
             mouseout=images.iconparlor;
         }
         var marker = new google.maps.Marker({
@@ -170,10 +174,10 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
         });
         var compiled;
         if(typeof studio.distance !="undefined"){
-            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div style="color: #4c4c4c;font-size: 12px;width: 150px;line-height: 17px;">'+ studio.address_1 +'</div><div class="sub-line-2"><span>'+ studio.distance +' KM</span><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.min_price +'+</span></span></div></div></div></div>')($scope);            
+            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div style="color: #4c4c4c;font-size: 12px;width: 150px;line-height: 17px;">'+ studio.address_1 +'</div><div class="sub-line-2"><span>'+ studio.distance +' KM</span><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate"><i class="fa fa-inr"></i>'+ studio.min_price +'+</span></span></div></div></div></div>')($scope);            
         }        
         else{
-            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div style="color: #4c4c4c;font-size: 12px;width: 150px;line-height: 17px;">'+ studio.address_1 +'</div><div class="sub-line-2"><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate">₹'+ studio.min_price +'+</span></span></div></div></div></div>')($scope);
+            compiled = $compile('<div class="map-tooltip-panel"><div class="details"><img class="image loaded" style="height: 100px;" alt="" src='+studio.thumbnail+'><div class="info"><div class="heading"><h4>'+ studio.name + '</h4></div><div style="color: #4c4c4c;font-size: 12px;width: 150px;line-height: 17px;">'+ studio.address_1 +'</div><div class="sub-line-2"><span class="price"><span class="icon-rupee rupee"></span><span class="info-rate"><i class="fa fa-inr"></i>'+ studio.min_price +'+</span></span></div></div></div></div>')($scope);
         }
         marker.content = compiled[0];
         google.maps.event.addListener(marker, 'click', function () {
@@ -948,6 +952,7 @@ $scope.bindstudio=function(data){
             }            
             $scope.searchicon=false;        
             removemarker();
+            removedirmarker();
             clearlatlongbound();
             var obj={'service':$scope.studioservicegroup[idx].id,'location':$scope.searchdata_.searchlocation,'servicename':$scope.studioservicegroup[idx].service_name};
             $('#lister').hide();
@@ -1666,7 +1671,7 @@ noqapp.controller('accountscontroller',function($scope,$cookies,lodash,httpServi
     '<div class="col-md-3">SMS sent to:</div>'+
     '<div class="col-md-4">{{new_booking.mobile_no}}</div><br/>'+
     '<div class="col-md-3">Total amount:</div>'+
-    '<div class="col-md-4">₹ {{new_booking.purchase_amount}}</div><br/>'+
+    '<div class="col-md-4"><i class="fa fa-inr"></i> {{new_booking.purchase_amount}}</div><br/>'+
     '<div class="col-md-3">Services booked:</div>'+
     '<div class="col-md-9"><span ng-repeat="ser in new_booking.serviceschosen">{{$index + 1}} - {{ser.servicename}}<br/></span><br/></div><br/>'+
     '<div style="clear:both"> </div>'+

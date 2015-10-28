@@ -40,7 +40,7 @@
                 <ul>
                   <li  class="col-sm-4" ng-repeat = "serv in serviceschosen.services">               
                   <div class="todo-content">                 
-                    {%verbatim%}{{serv.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{serv.price}}{%endverbatim%}
+                    {%verbatim%}{{serv.servicename}}{%endverbatim%} - <i class="fa fa-inr"></i> {%verbatim%}{{serv.price}}{%endverbatim%}
                   </div>
                   </li>
                  
@@ -185,7 +185,7 @@
         <div class="col-sm-12" >
           <div class="col-sm-6 col-xs-6 servicenametxt">{%verbatim%}{{servs.servicename}}{%endverbatim%}</div>
           <div class="col-sm-3 hidden-xs">{%verbatim%}{{servs.duration}}{%endverbatim%} Min</div>
-          <div class="col-sm-3 col-xs-6">₹ {%verbatim%}{{servs.price}}{%endverbatim%}</div>
+          <div class="col-sm-3 col-xs-6"><i class="fa fa-inr"></i> {%verbatim%}{{servs.price}}{%endverbatim%}</div>
         </div>
       </div>
        </div>
@@ -220,7 +220,7 @@
 
          
             <div class="promobox"><label>Promo code:</label> 
-            <div class="promotxt"> <span><input type="text" ng-model="coupon_code" ng-focus="focus()">
+            <div class="promotxt"> <span><input type="text" style="border: 1px solid #ccc;" ng-model="coupon_code" ng-focus="focus()">
               </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length||su_booking" class="btn btn-primary promoapply" ng-switch="su_couponing" >
                   <span ng-switch-default style="padding-left: 5px;">Apply</span>
                   <span ng-switch-when="true">Apply&nbsp;<i class="fa fa-spinner"></i></span>
@@ -231,7 +231,7 @@
            
          
 
-          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" ng-if="promo_amount>0">Discount - ₹ {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
+          <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" ng-if="promo_amount>0">Discount - <i class="fa fa-inr"></i> {%verbatim%}{{promo_amount}}{%endverbatim%} </div>          
      
         </div>        
         </div> 
@@ -242,7 +242,7 @@
         <div class="col-sm-12 ">         
           
           <div class="col-sm-4 col-xs-4 text-right fntbold pull-right" style="color:#63696a">
-              <span > Total : ₹{%verbatim%}{{total_amount}}{%endverbatim%}</span>
+              <span > Total : <i class="fa fa-inr"></i>{%verbatim%}{{total_amount}}{%endverbatim%}</span>
           </div>
         </div>
 
@@ -252,7 +252,7 @@
           
         
           <div class="col-sm-4 col-xs-4 text-right fntbold pull-right" ng-if="service_tax > 0" style="color:#63696a">
-            <span > Service tax : + ₹{%verbatim%}{{service_tax}}{%endverbatim%}</span>
+            <span > Service tax : + <i class="fa fa-inr"></i>{%verbatim%}{{service_tax}}{%endverbatim%}</span>
           </div>
          <!-- <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">
          <span > Total : {%verbatim%}{{amount_to_pay}}{%endverbatim%}</span>
@@ -264,7 +264,7 @@
             <div class="col-sm-12 amntpayable">
           
           
-          <div class="col-sm-4 col-xs-12 amntpay">Amount Payable: <span>₹ {%verbatim%}{{amount_to_pay}}{%endverbatim%}</span>
+          <div class="col-sm-4 col-xs-12 amntpay">Amount Payable: <span><i class="fa fa-inr"></i> {%verbatim%}{{amount_to_pay}}{%endverbatim%}</span>
           <div class="continuebtn"><button ng-click="makepayment(bookingForm)" class="btn btn-primary">MAKE PAYMENT</button></div>
           </div>
         </div>

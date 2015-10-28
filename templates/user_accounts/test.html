@@ -290,7 +290,7 @@ $scope.fbLogin = function(dummy)
                             <div class="sub-line-2" style="text-transform:none;">
                                 <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
                                 <span class="price circlebg">
-                <span class="icon-rupee rupee"></span><span class="info-rate">₹{%verbatim%}{{stu.min_price}}{%endverbatim%}+</span>
+                <span class="icon-rupee rupee"></span><span class="info-rate"><i class="fa fa-inr"></i>{%verbatim%}{{stu.min_price}}{%endverbatim%}+</span>
                                 </span>
                             </div>
                         </div>
@@ -320,7 +320,7 @@ $scope.fbLogin = function(dummy)
             </div>  
 
             <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
-                <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
+                <button class="btn btn-secondary col-xs-12">Total - <i class="fa fa-inr"></i> {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
             <div class="col-sm-6 col-xs-4 no-padding" >
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
@@ -395,7 +395,7 @@ $scope.fbLogin = function(dummy)
                         <ul>
                             <li ng-if="ser.isactive" ng-repeat="ser in servicelist | limitTo:10" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
-                                    {%verbatim%} {{ser.servicename}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                                    {%verbatim%} {{ser.servicename}}{%endverbatim%} - <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
                             </li>
                             <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
@@ -483,7 +483,7 @@ $scope.fbLogin = function(dummy)
             <!-- <div class="service-rate-panel col-sm-12 no-padding">
             <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
                 <i class="icon icon-contact"></i>
-                <span class="text">₹ 240</span>
+                <span class="text"><i class="fa fa-inr"></i> 240</span>
             </div> -->
 
         </div>
@@ -509,7 +509,7 @@ $scope.fbLogin = function(dummy)
             <!-- <div class="service-rate-panel col-sm-12 no-padding">
             <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
                 <i class="icon icon-contact"></i>
-                <span class="text">₹ 240</span>
+                <span class="text"><i class="fa fa-inr"></i> 240</span>
             </div> -->
 
         </div>
@@ -547,14 +547,14 @@ $scope.fbLogin = function(dummy)
         <div class="modal-header modal-register-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             Select  More Services
-            <span class="service-totamnt">Total Amount - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
+            <span class="service-totamnt">Total Amount - <i class="fa fa-inr"></i> {%verbatim%}{{serviceprice}}{%endverbatim%}</span>
         </div>
         <div class="service-checkboxcolumn col-sm-12">
             <div class="todo">
                 <ul>
                     <li ng-repeat="ser in servicelist" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
-                            {%verbatim%} {{ser.servicename}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                            {%verbatim%} {{ser.servicename}} {%endverbatim%}- <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>
                     </li>
                 </ul>

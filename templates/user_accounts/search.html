@@ -208,7 +208,7 @@
                             <div class="sub-line-2" style="text-transform:none;">
                                 <span class ="fa fa-map-marker mappad">{%verbatim%}{{stu.distance}}{%endverbatim%} km</span>
                                 <span class="price circlebg">
-                <span class="icon-rupee rupee"></span><span class="info-rate">₹{%verbatim%}{{stu.min_price}}{%endverbatim%}+</span>
+                <span class="icon-rupee rupee"></span><span class="info-rate"><i class="fa fa-inr"></i>{%verbatim%}{{stu.min_price}}{%endverbatim%}+</span>
                                 </span>
                             </div>
                         </div>
@@ -341,7 +341,7 @@ You can still enter your email ID to get notified when we launch our service her
                             <li ng-if="ser.isactive" ng-repeat="ser in value | limitTo:5" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
                                     {%verbatim%} {{ser.servicename|limitTo:29}}
-                                    {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                                    {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
                             </li>
                             <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
