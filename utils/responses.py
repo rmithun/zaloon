@@ -19,7 +19,8 @@ PAYMENT_CODES = {'PAID':'P001','PAY_FAILED':'P002','PAY_CANCELLED':'P003',  \
 
 SMS_TEMPLATES = {'DLY_REM':"Hi %s,This is a reminder for your booking in zaloon.in for %s, %s on %s at %s. Booking code - %s",
                 'HLY_REM':"Hi %s,This is a reminder for your booking for %s on %s at %s ",
-                'BOOKING_SMS':"Hi %s,Your appointment with %s on %s at %s has been confirmed.Your booking code is %s."}
+                'BOOKING_SMS':"Hi %s,Your appointment with %s on %s at %s has been confirmed.Your booking code is %s.",
+                'STUDIO_SMS':"Hey! You have a new booking from %s (%s) on %s at %s.Booking code - %s"}
 
 MAIL_SUBJECTS = {'THANKS_EMAIL':"How was %s?",
                  'BOOKING_EMAIL':"Booking code from Zaloon.in",

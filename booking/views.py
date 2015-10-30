@@ -261,6 +261,8 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 logger_booking.info("Booking email data - "+str(booking_details))
                 message = get_template('emails/booking.html').render(Context(booking_details))
                 studio_msg = get_template('emails/studio_booking.html').render(Context(booking_details))
+                studio_sms = responses.SMS_TEMPLATES['STUDIO_SMS']%(user['first_name'],mobile_no,appnt_date,appnt_time,  \
+                    studio_id.booking_code)
                 to_user = user['email']
                 if promo_code:
                     if not coupon_detail:
@@ -285,9 +287,11 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 studio_email.studio.email = 'vbnetmithun@gmail.com' ##comment in production
                 mail_to_studio = sendEmail(studio_email.studio.email,studio_subject,
                     studio_msg)
-                #sms = sendSMS(studio_id.mobile_no,sms_message)
+                sms = sendSMS(studio_id.mobile_no,sms_message)
+                #sms_studio = sendSMS(studio['incharge_mobile_no'],studio_sms)
+                sms_studio = sendSMS('9677267542',studio_sms)
                 #email = 1
-                sms = 1
+                #sms = 1
                 review_key = uniquekey_generator()
                 new_link = ReviewLink(booking_id = booking_id, link_code = review_key,  \
                     service_updated = "booking confirmed")
