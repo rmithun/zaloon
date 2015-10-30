@@ -265,7 +265,7 @@ You can still enter your email ID to get notified when we launch our service her
             </div>  
 
             <div style="cursor:default;" class="col-sm-6 col-xs-5 no-padding">
-                <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
+                <button class="btn btn-secondary col-xs-12">Total - <i class="fa fa-inr"></i> {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
             <div class="col-sm-6 col-xs-5 no-padding" >
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
@@ -344,7 +344,7 @@ You can still enter your email ID to get notified when we launch our service her
                                     {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}
                                 </div>
                             </li>
-                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox">
+                            <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox" class="last">
                                 <div class="todo-content"> Click to view more services...</div>
                             </li>
                         </ul>
@@ -427,7 +427,7 @@ You can still enter your email ID to get notified when we launch our service her
             <!-- <div class="service-rate-panel col-sm-12 no-padding">
             <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
                 <i class="icon icon-contact"></i>
-                <span class="text">₹ 240</span>
+                <span class="text"><i class="fa fa-inr"></i> 240</span>
             </div> -->
 
         </div>
@@ -453,7 +453,7 @@ You can still enter your email ID to get notified when we launch our service her
             <!-- <div class="service-rate-panel col-sm-12 no-padding">
             <div class="col-sm-6 col-xs-6 btn contact contact-section btn-secondary">
                 <i class="icon icon-contact"></i>
-                <span class="text">₹ 240</span>
+                <span class="text"><i class="fa fa-inr"></i> 240</span>
             </div> -->
 
         </div>
@@ -551,7 +551,7 @@ You can still enter your email ID to get notified when we launch our service her
                    <div ng-repeat="ser in selected_service" class="cartlistdiv" >
                 <span ng-click="removeselectedservice(ser)"><img width="15" height="15" class="logo" alt="" src="{% static 'img/delete-icon.png' %}"></span>
 
-                <span class="selected-service">{%verbatim%} {{ser.servicename}} {%endverbatim%} </span> <span class ="text-right" style="float:right;">  ₹ {%verbatim%}{{ser.price}}{%endverbatim%}</span>
+                <span class="selected-service">{%verbatim%} {{ser.servicename}} {%endverbatim%} </span> <span class ="text-right" style="float:right;">  <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}</span>
             </div>
             </div>
          
@@ -559,7 +559,7 @@ You can still enter your email ID to get notified when we launch our service her
 
         <div class="modal-footer">
              <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
-                <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
+                <button class="btn btn-secondary col-xs-12">Total - <i class="fa fa-inr"></i> {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
             <div class="col-sm-6 col-xs-6 no-padding" >
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
@@ -594,7 +594,7 @@ You can still enter your email ID to get notified when we launch our service her
                 <br ng-if="service.length>0"/>
                     <li ng-repeat="ser in service=(value | filter:filterservicebyname)" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
-                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- ₹ {%verbatim%}{{ser.price}}{%endverbatim%}
+                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}
                         </div>
                     </li>   
                     <br ng-if="service.length>0" style="clear:both;height:0;font-size: 1px;line-height: 0px;" />            
@@ -605,7 +605,7 @@ You can still enter your email ID to get notified when we launch our service her
 
         <div class="modal-footer">
              <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
-                <button class="btn btn-secondary col-xs-12">Total - ₹ {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
+                <button class="btn btn-secondary col-xs-12">Total - <i class="fa fa-inr"></i> {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
             <div class="col-sm-6 col-xs-6 no-padding" >
                 <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 

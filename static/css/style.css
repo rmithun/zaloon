@@ -720,7 +720,7 @@ h3.more-panel-title{color: #4c4c4c;
   color: #fff;
    text-align: center;
   }
-  .todo li:last-child:after{
+  .todo li.last:last-child:after{
     background: #1abc9c;
   }
 .todo li.todo-done:after {
