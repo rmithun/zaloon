@@ -5,6 +5,7 @@ $scope.iswrongservice=false;
 $scope.studioservicegroup=[];
 $scope.studioactiveservice=[];
 $scope.studiolocation=[];
+$scope.arealocation=['Porur, Chennai, Tamil Nadu, India','Ramapuram, Chennai, Tamil Nadu, India','Iyappanthangal, Chennai, Tamil Nadu, India','Valasaravakkam, Chennai, Tamil Nadu, India'];
 
 function getFBKey()
 {
@@ -99,7 +100,9 @@ $scope.logOut = function()
 	//AutoComplete
 	$scope.searchdata_ = {};		
 	$scope.areacomplete = function (val) { 
-    	 return gService.getPlace(val).then(function (data) {           
+		console.log(val)
+    	 return gService.getPlace(val).then(function (data) {     
+    	 console.log(data.location)      
             return data.location;
         });
     }

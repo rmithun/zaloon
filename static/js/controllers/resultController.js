@@ -91,6 +91,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.itemLimit = 10;
     $scope.currentPage = 1;
     $scope.directionlocation='';
+    $scope.arealocation=['Porur, Chennai, Tamil Nadu, India','Ramapuram, Chennai, Tamil Nadu, India','Iyappanthangal, Chennai, Tamil Nadu, India','Valasaravakkam, Chennai, Tamil Nadu, India'];
     var top;
     var serviceheight;
     var data;        

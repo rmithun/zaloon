@@ -128,7 +128,7 @@
                 <div class="col-md-2 col-lg-3 no-padding">
                     <div class="form-group autocomplete">
                           <span class="service-icon"><i class="fa fa-map-marker icon-active"></i></span>
-                        <input type="text" name="location" ng-model="searchdata_.searchlocation" class="form-control location" placeholder="Location: Porur" typeahead="area for area in areacomplete($viewValue) | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" am-reset-field resetclass="test" autocomplete="off" required>
+                        <input type="text" name="location" ng-model="searchdata_.searchlocation" class="form-control location" placeholder="Location: Porur" typeahead="area for area in arealocation | filter:$viewValue | limitTo:10" typeahead-min-length='1' typeahead-on-select='onlocationselect($item, $model, $label)' typeahead-template-url="location.html" typeahead-focus am-reset-field resetclass="test" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="col-custom-button">
@@ -399,7 +399,7 @@ You can still enter your email ID to get notified when we launch our service her
 </script>
 <script type="text/ng-template" id="location.html">
     <a>
-        <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>   </i>
+        <i class="fa fa-map-marker"><span style="padding-left: 5px;" bind-html-unsafe="match.label | typeaheadHighlight:query"></span>   </i>
     </a>
 
 </script>
