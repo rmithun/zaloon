@@ -12,7 +12,7 @@ noqapp.filter('startFrom', function () {
 
 
 
-noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,lodash,httpServices,sessionService,putResultService,gService) {
+noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$cookies,$window,$facebook,lodash,httpServices,sessionService,putResultService,gService) {
     
     //detect device    
     $scope.device = navigator.platform
@@ -964,6 +964,10 @@ $scope.bindstudio=function(data){
                 $cookies.putObject('searchdata',obj,{path:'/'});   
                 $scope.searchdata=obj;                  
                 putResultService.setresult(data.studio_details.data);
+                $scope.studiotypefilter = [];
+                $scope.studiokindfilter = [];
+                $scope.studioratingfilter = [];        
+                $('input:checkbox').removeAttr('checked');
                 $scope.bindstudio(data.studio_details.data); 
                 setTimeout(function(){
                     $('#lister').show();
@@ -1124,13 +1128,31 @@ httpServices.getFBKey().then(function(data)
 {
     $scope.fb_key = data['fb_key'].data
 });*/
-
+$scope.login = function() {
+    $facebook.login().then(function() {
+      refresh();
+    });
+  }
+  function refresh() {
+    $facebook.api("/me").then( 
+      function(response) {  
+        $('#signupmodel').modal('hide');
+        $('#cartmodal').modal('hide');
+        $('#servicemodelbox').modal('hide');        
+        var token=$facebook.getAuthResponse();
+        $scope.fbLogin(token.accessToken);        
+        $scope.user_name =response.name;
+      },
+      function(err) {
+        $scope.welcomeMsg = "Please log in";
+      });
+  }  
 $scope.fbLogin = function(dummy)
 {    
     $('.loader-overlay').show();
-    $('#signupmodel').modal('hide');
-    $('#cartmodal').modal('hide');
-    $('#servicemodelbox').modal('hide');
+    //$('#signupmodel').modal('hide');
+    //$('#cartmodal').modal('hide');
+    //$('#servicemodelbox').modal('hide');
     httpServices.loginUsingFB(dummy).then(function(data)
     {
         if(data)
@@ -1396,6 +1418,11 @@ $("#datepicker").on("changeDate", function(event) {
     slot_data['date'] = $scope.date_selected
     slot_data['duration'] = $scope.total_duration
     slot_data['studio_id'] = $scope.serviceschosen.studio.id
+    $('.available').removeClass('active'); 
+    $scope.from_time='';
+    $scope.booking_class1 = "panel panel-default bookingdetails panel-closed"
+    $scope.booking_class2 = ""
+    $scope.booking_class3 = "panel-heading"
     $('#loading').show();
     $('#slotter').hide();
     $('html, body').animate({

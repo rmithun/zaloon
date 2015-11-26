@@ -4,8 +4,8 @@
 
   <!-- csrf token-->{% csrf_token %} 
  
-     <!-- Preloader --><div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
-    <div id="fb-root"></div>
+     <!-- Preloader --> <div id="fb-root">
+        </div>
     
 
    
@@ -25,7 +25,7 @@
                 <div  class="navigation-navbar">                    
                     <ul class="navigation-bar navigation-bar-right" style="margin-top:3px;">
                       <li ng-show = "is_logged == 0"  >
-                       <button data-ng-click='fetch();' class="btn btn-block btn-social btn-facebook">
+                       <button data-ng-click='login();' class="btn btn-block btn-social btn-facebook">
               <i class="fa fa-facebook"></i>Login with Facebook
             </button>  
                    </li><li ng-show = "is_logged == 1 && !user_name  || logging_out "><i style="color:white;" class="fa fa-spinner fa-spin"></i></li>
@@ -122,7 +122,7 @@
      <i class="icon icon-socialmedia-25"><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>      
   </a>-->
 
-  </div> 
+
   </div>
 
   <div id="signuperrormodal" class=" modal fade" role="dialog">

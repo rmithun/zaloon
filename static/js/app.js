@@ -1,14 +1,28 @@
-var noqapp = angular.module('accountApp', ['ngAnimate','ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable','ui.bootstrap.setNgAnimate', 'am.resetField','typeahead-focus']);
+var noqapp = angular.module('accountApp', ['ngAnimate','ngCookies','ngRoute','ui.bootstrap','ngLodash','ui.editable','ui.bootstrap.setNgAnimate', 'am.resetField','typeahead-focus','ngFacebook']);
 
 noqapp.run(function($http,$cookies,sessionService) {
 
   $http.defaults.headers.post['X-CSRFToken'] = $cookies.get('csrftoken');
+  // If we've already installed the SDK, we're done
+     if (document.getElementById('facebook-jssdk')) {return;}
 
+     // Get the first script element, which we'll use to find the parent node
+     var firstScriptElement = document.getElementsByTagName('script')[0];
+
+     // Create a new script element and set its id
+     var facebookJS = document.createElement('script'); 
+     facebookJS.id = 'facebook-jssdk';
+
+     // Set the new script's source to the source of the Facebook JS SDK
+     facebookJS.src = '//connect.facebook.net/en_US/all.js';
+
+     // Insert the Facebook JS SDK into the DOM
+     firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
 });
 
 // configure our routes
-noqapp.config(function($routeProvider,$httpProvider) {
-
+noqapp.config(function($routeProvider,$httpProvider,$facebookProvider) {
+$facebookProvider.setAppId('442681529234727');
   var $cookies;
   angular.injector(['ngCookies']).invoke(['$cookies', function(_$cookies_) {
     $cookies = _$cookies_;

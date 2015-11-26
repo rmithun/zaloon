@@ -1,7 +1,8 @@
  
  {% load static from staticfiles %}
- <div data-facebook = {%verbatim%}{{fb_key}}{%endverbatim%}>
-    <div id="fb-root"></div>
+ <div>
+    <div id="fb-root">
+        </div>
 <header class="searchheader">
 
 
@@ -83,7 +84,7 @@
                     <span ng-show="selected_service.length>0" class="cart-count">{%verbatim%}{{selected_service.length}}{%endverbatim%}</span>
                 </li>
                 <li ng-show="is_logged == 0" class="hidden-xs hidden-sm">
-                    <button data-ng-click='fetch();' class="btn  btn-social btn-facebook">
+                    <button data-ng-click='login();' class="btn  btn-social btn-facebook">
                         <i class="fa fa-facebook"></i>Login with Facebook
                     </button>
                 </li>
@@ -518,7 +519,7 @@ You can still enter your email ID to get notified when we launch our service her
         <div class="modal-body register">
             
             <div class="socialpanel">
-                <button data-ng-click='closemodel(); fetch();' class="btn btn-block btn-social btn-facebook">
+                <button data-ng-click='login();' class="btn btn-block btn-social btn-facebook">
                     <i class="fa fa-facebook"></i>Login using Facebook</button>
 
             </div>

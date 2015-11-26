@@ -1,12 +1,13 @@
-noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $timeout, $location,lodash,httpServices,sessionService,putResultService,gService){
+noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $timeout, $location,$facebook,lodash,httpServices,sessionService,putResultService,gService){
 $scope.is_logged = sessionService.isLogged();
+//$scope.is_logged=false;
 $scope.formsubmit=false;
 $scope.iswrongservice=false;
 $scope.studioservicegroup=[];
 $scope.studioactiveservice=[];
 $scope.studiolocation=[];
 $scope.arealocation=['Porur, Chennai, Tamil Nadu, India','Ramapuram, Chennai, Tamil Nadu, India','Iyappanthangal, Chennai, Tamil Nadu, India','Valasaravakkam, Chennai, Tamil Nadu, India'];
-
+$scope.isLoggedIn = true;
 function getFBKey()
 {
  	$scope.fb_key = httpServices.getFBKey()
@@ -19,6 +20,22 @@ function getFBKey()
 		console.log("Error getting FB key")
 	});*/
 }
+$scope.login = function() {
+    $facebook.login().then(function() {
+      refresh();
+    });
+  }
+  function refresh() {
+    $facebook.api("/me").then( 
+      function(response) {      	
+      	var token=$facebook.getAuthResponse();
+      	$scope.fbLogin(token.accessToken);        
+        $scope.user_name =response.name;
+      },
+      function(err) {
+        $scope.welcomeMsg = "Please log in";
+      });
+  }  
 $scope.getAllAreaStudios = function()
 {
 	httpServices.getAllStudios().then(function(data)
