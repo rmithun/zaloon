@@ -195,6 +195,11 @@
             <li class="list-item-container" ng-mouseover="hoverIn(stu.name)" ng-mouseleave="hoverOut(stu.name)" ng-click="confirm(stu.id)" ng-repeat="stu in filteredstudio | filter:query:name | orderBy:orderProp:direction | startFrom:(currentPage-1)*itemLimit | limitTo:itemLimit">
                 <a class="list-item" style="cursor:pointer;">
                     <div class="details">
+
+                    <div ng-if="stu.zaloonoffer!=0" style="position: absolute; top: 9px; z-index: 10;">
+                                            <span style="font-weight: bold; background-color: #FC8638; color: White; padding: 2px;">
+                                                {%verbatim%}{{stu.zaloonoffer}}{%endverbatim%}%</span>
+                                        </div>
                         <img class="image loaded" style="height:100px;" alt="No image" ng-src="{%verbatim%}{{stu.thumbnail}}{%endverbatim%}">
                         <div class="info">
                             <div class="heading">
@@ -218,7 +223,7 @@
             </li>
         </ul>
         <div ng-show="filteredstudio.length > itemLimit" style="padding: 10px 12px;">
-            <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="$parent.currentPage" num-pages="smallnumPages"></pagination>
+            <pagination direction-links="false" ng-change="pagechange()" items-per-page="itemLimit" total-items="totalItems" ng-model="currentPage" num-pages="smallnumPages"></pagination>
 
         </div>
     </div>

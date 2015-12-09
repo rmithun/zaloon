@@ -92,6 +92,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.currentPage = 1;
     $scope.directionlocation='';
     $scope.arealocation=['Porur, Chennai, Tamil Nadu, India','Ramapuram, Chennai, Tamil Nadu, India','Iyappanthangal, Chennai, Tamil Nadu, India','Valasaravakkam, Chennai, Tamil Nadu, India'];
+    $scope.showpromo=false;
     var top;
     var serviceheight;
     var data;        
@@ -328,8 +329,10 @@ $scope.bindstudio=function(data){
     $scope.studio=[];
     $scope.filteredstudio=[];     
     if(data.length>0){  
-    $scope.totalItems=data.length;                 
-            angular.forEach(data, function (value, key) {
+    $scope.totalItems=data.length;    
+    var random=randomIntFromInterval(1,5);
+    console.log(random);
+            angular.forEach(data, function (value, key) {                       
             $scope.studio.push(value);            
             $scope.filteredstudio.push(value);            
             $scope.getprice_rating(key, value);
@@ -338,8 +341,16 @@ $scope.bindstudio=function(data){
             $scope.studio[key].kind_icon = kind.icon;
             $scope.studio[key].kind_desc = kind.name;
             $scope.studio[key].type_icon = type.icon;
-            $scope.studio[key].type_desc = type.name;                                
+            $scope.studio[key].type_desc = type.name;  
+            $scope.studio[key].showpromo=$scope.showpromo;
+            $scope.studio[key].zaloonoffer=0;
+            if(!$scope.showpromo){
+                if((key%5)+1==random){
+                    $scope.studio[key].zaloonoffer=$scope.studio[key].commission_percent-3;
+                }                 
+            }                                
         });
+            console.log($scope.studio)
         getgeocode($scope.searchdata.location); 
         $scope.totalItems = $scope.filteredstudio.length;        
     }
@@ -905,9 +916,10 @@ $scope.bindstudio=function(data){
      }
 
     //Pagination
-    $scope.pagechange = function (page) {      
+    $scope.pagechange = function () {      
         removemarker();
         clearlatlongbound();
+        console.log($scope.currentPage)
         $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
         autozoom();
     }
@@ -1109,7 +1121,8 @@ $scope.book = function()
         $scope.su_booking = true
         var booking_data = {'studio':$scope.selectedstudio,'services':$scope.selected_service,  
         'user_details':$scope.user_details}
-        putResultService.setSelectedservice(booking_data)
+        console.log(booking_data)
+        putResultService.setSelectedservice(booking_data)        
         $location.path('/booking')
         //$scope.su_booking = false
     }
@@ -1190,6 +1203,11 @@ $scope.fbLogin = function(dummy)
         $('#signuperrormodal').modal('show');
         console.log("Cannot login to FB")
     });
+}
+
+function randomIntFromInterval(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 if(sessionService.isLogged())
@@ -1303,11 +1321,17 @@ $scope.selected_services = lodash.pluck($scope.serviceschosen.services, 'id');
 $scope.promo_amount = 0
 $scope.amount_to_pay = $scope.total_amount - $scope.promo_amount
 $scope.service_tax = 0
+$scope.zaloonoffer=0;
 if ($scope.serviceschosen.studio['has_service_tax'] > 0)
 {
     $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
 }
-$scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
+if(!$scope.serviceschosen.studio['showpromo']){
+    if($scope.serviceschosen.studio['zaloonoffer']!=0){
+        $scope.zaloonoffer = Math.round(($scope.amount_to_pay * $scope.serviceschosen.studio['zaloonoffer'])/100)
+    }
+}
+$scope.amount_to_pay = ($scope.amount_to_pay + $scope.service_tax)-$scope.zaloonoffer;
 
 angular.forEach($scope.serviceschosen.studio.studio_closed_details, function(value, key) {    
     $scope.closed_days.push(value.closed_on.id-1);    
@@ -1472,7 +1496,12 @@ $scope.applyPromo = function()
         {
             $scope.service_tax = Math.round(($scope.amount_to_pay * 14)/100)
         }
-        $scope.amount_to_pay = $scope.amount_to_pay + $scope.service_tax
+        if(!$scope.serviceschosen.studio['showpromo']){
+            if($scope.serviceschosen.studio['zaloonoffer']!=0){
+                $scope.zaloonoffer = Math.round(($scope.amount_to_pay * $scope.serviceschosen.studio['zaloonoffer'])/100)
+            }
+        }
+        $scope.amount_to_pay = ($scope.amount_to_pay + $scope.service_tax)-$scope.zaloonoffer;
         //$scope.promo_amount = cdata.
     },function(cdata)
     {   

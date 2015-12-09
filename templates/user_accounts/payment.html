@@ -219,7 +219,7 @@
 
 
          
-            <div class="promobox"><label>Promo code:</label> 
+            <div ng-if="serviceschosen.studio.showpromo" class="promobox"><label>Promo code:</label> 
             <div class="promotxt"> <span><input type="text" style="border: 1px solid #ccc;" ng-model="coupon_code" ng-focus="focus()">
               </span><button ng-click="applyPromo()" ng-disabled="!coupon_code.length||su_booking" class="btn btn-primary promoapply" ng-switch="su_couponing" >
                   <span ng-switch-default style="padding-left: 5px;">Apply</span>
@@ -248,16 +248,16 @@
 
 
         
-        <div class="col-sm-12 ">         
-          
-        
+        <div class="col-sm-12 ">                           
           <div class="col-sm-4 col-xs-4 text-right fntbold pull-right" ng-if="service_tax > 0" style="color:#63696a">
             <span > Service tax : + <i class="fa fa-inr"></i>{%verbatim%}{{service_tax}}{%endverbatim%}</span>
-          </div>
-         <!-- <div class="col-sm-4 col-xs-3 text-center fntbold no-padding" style="color:#63696a">
-         <span > Total : {%verbatim%}{{amount_to_pay}}{%endverbatim%}</span>
-          </div>-->
-          
+          </div>                   
+        </div>
+
+        <div class="col-sm-12" ng-if="!serviceschosen.studio.showpromo && serviceschosen.studio.zaloonoffer!=0">                           
+          <div class="col-sm-4 col-xs-4 text-right fntbold pull-right" ng-if="service_tax > 0" style="color:#63696a">
+            <span > Zaloon offer : - <i class="fa fa-inr"></i>{%verbatim%}{{zaloonoffer}}{%endverbatim%}</span>
+          </div>                   
         </div>
        
 

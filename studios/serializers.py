@@ -138,7 +138,8 @@ class StudioProfileSerializer(serializers.ModelSerializer):
 			'opening_at', 'closing_at', 'is_active', 'is_closed',  \
 			'daily_studio_closed_from', 'daily_studio_closed_till',   \
 			'latitude','longitude','studio_kind','landmark','thumbnail',  \
-			'has_online_payment','pic_of_studio','studio_closed_details','has_service_tax')
+			'has_online_payment','pic_of_studio','studio_closed_details','has_service_tax', \
+			'commission_percent')
 
 class StudioResponse(serializers.ModelSerializer):
 	class Meta:

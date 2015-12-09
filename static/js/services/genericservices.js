@@ -61,7 +61,7 @@ noqapp.factory('putResultService', function(){
     {
         selectedservices = [];
         booking_data = []
-    }
+    }    
     return putresult; 
 });
 
