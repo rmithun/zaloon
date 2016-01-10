@@ -232,6 +232,7 @@ class StudioServices(models.Model):
 	is_active = models.BooleanField(default = 1)
 	mins_takes = models.PositiveIntegerField()
 	price = models.FloatField()
+	#service_for = models.IntegerField(default = 1) #3- unisex, 1- Men 2 -Women
 	service_updated = models.CharField(max_length = 25)
 	updated_date_time = models.DateTimeField(default = datetime.now())
 
@@ -270,6 +271,7 @@ class StudioAccountDetails(models.Model):
 	bank_ifsc = models.CharField(max_length = 25)
 	bank_city = models.CharField(max_length = 40)
 	bank_acc_number = models.CharField(max_length = 120)
+	name = models.CharField(max_length =300)
 	#min_deposit = models.PositiveIntegerField()
 	#max_deposit = models.PositiveIntegerField()
 	#transaction_percent = models.PositiveIntegerField()

@@ -115,11 +115,11 @@ class StudioProfileMixin(object):
                 return Response(cache.get(cache_key))
             logger_studios.info("Search Query - "+str(self.request.GET))
             studios = StudioServiceTypes.objects.filter(service_type_id = service, is_active = 1).values('studio_profile_id')
-            #chosen_studios = StudioProfile.objects.filter(Q(id__in = studios), 
-            #    (Q(search_field_1 = location)|Q(search_field_2 = location))).select_related('studio_closed_details', \
-            #    'pic_of_studio')
-            chosen_studios = StudioProfile.objects.filter(Q(id__in = studios)).select_related('studio_closed_details', \
+            chosen_studios = StudioProfile.objects.filter(Q(id__in = studios), 
+                (Q(search_field_1 = location)|Q(search_field_2 = location))).select_related('studio_closed_details', \
                 'pic_of_studio')
+            #chosen_studios = StudioProfile.objects.filter(Q(id__in = studios)).select_related('studio_closed_details', \
+            #    'pic_of_studio')
             ser_data = StudioProfileSerializer(chosen_studios, many = True)
             data = ser_data.data
             for studio in data:

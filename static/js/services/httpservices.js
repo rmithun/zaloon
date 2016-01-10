@@ -124,18 +124,12 @@ noqapp.factory('httpServices', function($http, $q, $cookies, sessionService)
 		return $q.all({'apply_coupon':apply_coupon})
 	}
 
-	loginData.splitBookings = function(bookings)
+	loginData.splitBookings = function(bookings,expired_booking)
 	{
 		var active_booking = [], inactive_booking = [];
-		today = new Date()
-		console.log(today)
 		for(i=0;i<bookings.length;i++)
 		{
-			appnt_date = new Date(bookings[i].appointment_date)
-			//if(bookings[i].booking_status == 'BOOKED' && bookings[i].status_code == 'B001' && 
-			//appnt_date	>= today )	
-console.log(appnt_date)
-			if(appnt_date >= today)
+			if(bookings[i].booking_status == 'BOOKED' && bookings[i].status_code == 'B001')	
 			{
 				active_booking.push(bookings[i])
 			}
@@ -143,6 +137,7 @@ console.log(appnt_date)
 			{
 				inactive_booking.push(bookings[i])
 			}
+			expired_booking.push(inactive_booking)
 		}
 
 		return $q.all({'active_booking':active_booking,'inactive_booking':inactive_booking})

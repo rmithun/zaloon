@@ -23,7 +23,8 @@ urlpatterns = patterns('',
     url(r'^iframe/$',TemplateView.as_view(template_name='user_accounts/iframe.html'),name = 'iframe'),
 
     url(r'^search/$',TemplateView.as_view(template_name='user_accounts/search.html'),name = 'search'),
-    url(r'^$',TemplateView.as_view(template_name='user_accounts/index.html'),name = 'lp'),
+    url(r'^$',TemplateView.as_view(template_name='user_accounts/default.html'),name = 'default'),
+    url(r'^lp/$',TemplateView.as_view(template_name='user_accounts/index.html'),name = 'lp'),
     url(r'^test/$',TemplateView.as_view(template_name='user_accounts/test.html'),name = 'test'),
     url(r'^faqs/$',TemplateView.as_view(template_name='user_accounts/test.html'),name = 'faqs'),
     

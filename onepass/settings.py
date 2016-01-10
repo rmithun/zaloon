@@ -124,16 +124,17 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'zaloon_dev',                      # Or path to database file if using sqlite3.
+            'NAME': 'zaloon_prod',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
-            'USER': 'zaloon_dev',
-            'PASSWORD': 'Zaloon123',
-            'HOST': 'zaloon-dev.cyscy0cpjemo.ap-southeast-1.rds.amazonaws.com',
+            'USER': 'zaloon_dba',
+            'PASSWORD': '11July!99#',
+            'HOST': 'zaloon.cwh48zxk9diu.ap-southeast-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
             'PORT': '5432',                      # Set to empty string for default.
         }
     }
-    ALLOWED_HOSTS = []
     """
+    #ALLOWED_HOSTS = []
+    
     ##AWS DEV DB
     HOST_NAME = 'http://127.0.0.1:8000'
     # Additional locations of static files
@@ -180,7 +181,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'zaloon_p',                      # Or path to database file if using sqlite3.
+            'NAME': 'zaloon_prod',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
             'USER': 'zaloon_dba',
             'PASSWORD': '11July!99#',

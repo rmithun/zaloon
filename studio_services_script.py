@@ -1,0 +1,213 @@
+import xlrd
+from datetime import datetime
+from os import listdir
+from os.path import isfile, join
+import django,sys,os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'onepass'))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "onepass.settings")
+django.setup()
+
+from django.core.files import File
+from django.db import transaction
+from studios.models import *
+import traceback
+
+
+
+def get_timesplits(sent_time):
+	sent_time = str(sent_time)
+	mins = 00
+	hr = 5
+	if len(sent_time) is 1:
+		hr = int(sent_time)
+	else:
+		if sent_time in ":":
+			hr = int(sent_time.split(":")[0])
+			mins = int(sent_time.split(":")[0])
+		else:
+			hr = sent_time[0]
+	if hr < 10:
+		hr = '0' + str(hr)
+	if mins < 10:
+		mins = '0' + str(mins)
+	time = hr + ":" + mins + ":00"
+	from_ti = datetime.strptime(time,'%H:%M:%S').time()
+	print from_ti
+
+
+@transaction.commit_manually
+def insert_studio_details(parlour_name):
+	try:
+
+		studio_details_book = xlrd.open_workbook('/home/asha/Desktop/DataEntry/'+parlour_name+'/'+parlour_name+'DetailsForm.xls')
+		sd_first_sheet = studio_details_book.sheet_by_index(0)
+		details = {}
+		for i in range(0,sd_first_sheet.nrows):
+			#print sd_first_sheet.row_values(i)[0],sd_first_sheet.row_values(i)[1]
+			details[sd_first_sheet.row_values(i)[0]] = str(sd_first_sheet.row_values(i)[1])
+		if details['has_group'] == 0:
+			details['group_name'] = 'No Branches'
+		got_group = StudioGroup.objects.filter(group_name__icontains = details['group_name']).values('id','group_name')
+		if got_group:
+			details['group_name'] = got_group[0]['group_name']
+			details['group_id'] = got_group[0]['id']
+		else:
+			new_group = StudioGroup(group_name = details['group_name'], service_updated = 'new entry from script',  \
+				updated_date_time = datetime.now())
+			new_group.save()
+			details['group_id'] = new_group.id
+
+		if details['studio_type'].lower() in 'Unisex':
+			details['studio_type_id'] = 2
+		elif details['studio_type'].lower() in 'beauty':
+			details['studio_type_id'] = 3
+		else:
+			details['studio_type_id'] = 1
+
+		if details['studio_kind'].lower() in 'unisex':
+			details['studio_kind_id'] = 2
+		elif details['studio_kind'].lower() in 'women':
+			details['studio_kind_id'] = 1
+		else:
+			details['studio_kind_id'] = 3
+		###new studio login details
+		studio_tbl = Studio.objects.create_user(email = details['email'], password = 'dummy')
+		studio_tbl.is_active = True
+		studio_tbl.save()
+
+		##trim the spaces
+		##change open close time format
+		##check bank account number
+		##check studio close dates
+		details['opening_at'] = get_timesplits(details['opening_at'])
+		details['closing_at'] = get_timesplits(details['closing_at'])
+
+		if details['bank_account_no'].strip() != details['confirm_account_no'].strip():
+			print "account no doesnt match"
+			exit(0)
+
+		##new studio profile
+		path = '/home/asha/Desktop/DataEntry/'+parlour_name+'/thumbnail/'
+		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+		thumbnail = open(path+onlyfiles[0])
+		imz = File(thumbnail)
+		#import pdb;pdb.set_trace();
+		new_studio_profile = StudioProfile(studio_group_id = details['group_id'], studio_id = studio_tbl.id, studio_type_id = details['studio_type_id'], \
+			studio_kind_id = details['studio_kind_id'], name = details['name'].strip(), address_1 = details['address_1'].strip(),  \
+			address_2 = details['address_2'].strip(), landmark = details['landmark'].strip(), city = details['city'].strip(),  \
+			area = details['area'].strip(), state = details['state'].strip(),search_field_1 =details['search_field_1'].strip(), \
+			search_field_2 =details['search_field_2'].strip(),landline_no_1 = details['landline_no_1'].strip(), landline_no_2 = \
+			details['landline_no_2'].strip(),in_charge_person = details['in_charge_person'].strip(), incharge_mobile_no =  \
+			details['in_charge_mobileno'].strip(),contact_person = details['contact_person'].strip(), contact_mobile_no = \
+			details['contact_mobileno'].strip(), opening_at = details['opening_at']	, closing_at = details['closing_at'],  \
+			is_ac = True, latitude = details['latitude'].strip(), longitude = details['longitude'].strip(), commission_percent = int(float(details['rate'])), \
+			has_service_tax = float(details['service_tax']),thumbnail = imz)
+		new_studio_profile.save()
+		thumbnail.close()
+		##account details
+		new_acc = StudioAccountDetails(studio_id =  new_studio_profile.id, bank_name = details['bank_name'].strip(), \
+			bank_branch = details['bank_branch'].strip(),bank_ifsc = details['bank_ifsc_code'].strip(), bank_city = details['bank_city'].strip(), \
+			bank_acc_number = details['bank_account_no'].strip(),service_updated ='new studio script', updated_date_time = \
+			datetime.now(),name = details['name'].strip())
+		new_acc.save()
+
+		path = '/home/asha/Desktop/DataEntry/'+parlour_name+'/pics/'
+		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+		print onlyfiles
+		for i in onlyfiles:
+			file_ = open(path+i)
+			img = File(file_)
+			stu_pic = StudioPicture(studio_profile_id = new_studio_profile.id, picture = img, service_updated = \
+				'service_updated')
+			stu_pic.save()
+			file_.close()
+		##studio closed details
+		closed_on = []
+		if details['closed_on_days'] != 'none':
+			if "," in details['closed_on_days'] :
+			    closed_on = details['closed_on_days'].split(",")
+			else:
+				closed_on = details['closed_on_days'].split(" ")
+		for dyz in closed_on:
+			if 'sun' in dyz.lower():
+				closed_id = 1
+			if 'mon' in dyz.lower():
+				closed_id = 2
+			if 'tue' in dyz.lower():
+				closed_id = 3
+			if 'wed' in dyz.lower():
+				closed_id = 4
+			if 'thu' in dyz.lower():
+				closed_id = 5
+			if 'fri' in dyz.lower():
+				closed_id = 6
+			if 'sat' in dyz.lower():
+				closed_id = 7
+			closed_on_dates = StudioClosedDetails(closed_on = closed_id, studio_id = new_studio_profile.id, 
+					service_updated = 'new studio script', updated_date_time = datetime.now())
+			closed_on_dates.save()
+		###enter service types for studio
+
+		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
+		studio_service_details = services_in_studio.sheet_by_index(0)
+		service_details = {}
+		service_types = []
+		services = []
+		for i in range(1,studio_service_details.nrows):
+			obj ={}
+			service_types.append(studio_service_details.row_values(i)[2])
+			obj['service_name'] = studio_service_details.row_values(i)[1]
+			obj['service_type'] = studio_service_details.row_values(i)[2]
+			obj['duration'] = studio_service_details.row_values(i)[3]
+			obj['rate'] = studio_service_details.row_values(i)[4]
+			obj['sex'] = studio_service_details.row_values(i)[5]
+			services.append(obj)
+		service_types=set(service_types)
+		for st in service_types:
+			new_st =StudioServiceTypes(studio_profile_id = new_studio_profile.id, service_type_id = st,  \
+				service_updated = "studio entry script", updated_date_time = datetime.now())
+			new_st.save()
+		for serz in services:
+			try:
+				is_there = Service.objects.filter(service_name = serz['service_name'].strip(),service_type_id = int(serz['service_type']), \
+					min_duration = int(serz['duration']), is_active = True, service_for = int(serz['sex']))
+				if details['has_group'] == 1:
+					service_id = is_there[0].id
+				else:
+					new_service = Service(service_name = serz['service_name'].strip(),service_type_id = int(serz['service_type']), \
+						min_duration = int(serz['duration']), is_active = True, service_for = int(serz['sex']), \
+						service_updated = 'studio entry script', updated_date_time = datetime.now())
+					new_service.save()
+					service_id = new_service.id
+				#enter service in studio
+				new_st_ser = StudioServices(studio_profile_id = new_studio_profile.id, service_id = service_id,  \
+					mins_takes = int(serz['duration']),service_for = int(serz['sex']), price = int(serz['rate']),  \
+					service_updated = 'studio entry script', updated_date_time = datetime.now())
+				new_st_ser.save()
+			except Exception as r:
+				print(traceback.format_exc())
+		import pdb;pdb.set_trace();
+	except Exception as e:
+		print repr(e)
+		print(traceback.format_exc())
+		transaction.rollback()
+	else:
+		try:
+			transaction.commit()
+		except Exception as d:
+			print(traceback.format_exc())
+
+
+
+insert_studio_details("NaturalsRamapuram")
+
+
+##insert studio group
+##insert studio profile & thumbnail
+##insert pictures
+##insert account details
+
+service_types = ['Haircut','Hair Colouring','Hair Spa','Massage','Skin Care','Bleach','Reflexology', \
+'Manicure & Pedicure','Straightening & Curling','Style Bar','Threading','Waxing','Body Treatment',  \
+'Facials','Makeup']
