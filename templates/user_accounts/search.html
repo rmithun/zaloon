@@ -289,7 +289,7 @@ You can still enter your email ID to get notified when we launch our service her
 
                 <carousel no-wrap="true" disable-ng-animate>
                     <slide ng-repeat="pic in selectedstudio.pic_of_studio" active="slide.active">
-                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" class="carousel-image" style="margin:auto;height:250px;">
+                        <img src="{%verbatim%}{{pic.picture}}{%endverbatim%}" class="carousel-image" style="margin:auto;height:250px;width:auto;">
 
                     </slide>
                 </carousel>
@@ -347,7 +347,12 @@ You can still enter your email ID to get notified when we launch our service her
                             <li ng-if="ser.isactive" ng-repeat="ser in value | limitTo:5" ng-click="addservice('slider',ser)" ng-class="{'todo-done':ser.flag == true}">
                                 <div class="todo-content">
                                     {%verbatim%} {{ser.servicename|limitTo:29}}
-                                    {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}
+                                    {{ser.servicename.length > 29 ? '...' : ''}}{%endverbatim%} - <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}<span ng-if="ser.servicefor==1" class="fa fa-mars"  style="margin-left: 10px;color: #F06370;">
+                            </span>
+                            <span  ng-if="ser.servicefor==2"  class="fa fa-venus" style="margin-left: 10px;color: #22AB81;">
+                            </span>
+                            <span  ng-if="ser.servicefor==3"  class="fa fa-venus-mars" style="margin-left:10px;">
+                            </span>
                                 </div>
                             </li>
                             <li ng-if="servicelist.length > 9" href="#" data-toggle="modal" data-target="#servicemodelbox" class="last">
@@ -562,13 +567,12 @@ You can still enter your email ID to get notified when we launch our service her
             </div>
          
         </div>
-
         <div class="modal-footer">
              <div style="cursor:default;" class="col-sm-6 col-xs-6 no-padding">
                 <button class="btn btn-secondary col-xs-12">Total - <i class="fa fa-inr"></i> {%verbatim%}{{serviceprice}}{%endverbatim%}</button>
             </div>
             <div class="col-sm-6 col-xs-6 no-padding" >
-                <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="su_booking" ng-if="has_online_payment" 
+                <button class="btn btn-primary col-xs-12" ng-click="book()" ng-disabled="has_online_payment &&bookdisable" ng-if="has_online_payment" 
                 ng-switch="su_booking">
                 <span ng-switch-default>BOOK</span>
                 <span ng-switch-when="true">BOOK&nbsp;<i class="fa fa-spinner fa-spin"></i></span>
@@ -606,7 +610,12 @@ You can still enter your email ID to get notified when we launch our service her
                 <br ng-if="service.length>0"/>
                     <li ng-repeat="ser in service=(value | filter:filterservicebyname | filter:filterfor)" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
-                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}
+                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}<span ng-if="ser.servicefor==1" class="fa fa-mars"  style="margin-left: 10px;color: #F06370;">
+                            </span>
+                            <span  ng-if="ser.servicefor==2"  class="fa fa-venus" style="margin-left: 10px;color: #22AB81;">
+                            </span>
+                            <span  ng-if="ser.servicefor==3"  class="fa fa-venus-mars" style="margin-left:10px;">
+                            </span>
                         </div>
                     </li>   
                     <br ng-if="service.length>0" style="clear:both;height:0;font-size: 1px;line-height: 0px;" />            

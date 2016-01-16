@@ -12,6 +12,7 @@ from django.core.files import File
 from django.db import transaction
 from studios.models import *
 import traceback
+import re
 
 
 
@@ -22,16 +23,19 @@ def get_timesplits(sent_time):
 	if len(sent_time) is 1:
 		hr = int(sent_time)
 	else:
-		if sent_time in ":":
+		if ":" in sent_time:
 			hr = int(sent_time.split(":")[0])
-			mins = int(sent_time.split(":")[0])
+			mins = int(sent_time.split(":")[1])
+		elif "." in sent_time:
+			hr = int(sent_time.split(".")[0])
+			mins = int(sent_time.split(".")[1])
 		else:
 			hr = sent_time[0]
 	if hr < 10:
 		hr = '0' + str(hr)
 	if mins < 10:
 		mins = '0' + str(mins)
-	time = hr + ":" + mins + ":00"
+	time = str(hr) + ":" + str(mins) + ":00"
 	from_ti = datetime.strptime(time,'%H:%M:%S').time()
 	print from_ti
 
@@ -58,19 +62,19 @@ def insert_studio_details(parlour_name):
 			new_group.save()
 			details['group_id'] = new_group.id
 
-		if details['studio_type'].lower() in 'Unisex':
-			details['studio_type_id'] = 2
+		if details['studio_type'].lower() in 'salon':
+			details['studio_type_id'] = 1
 		elif details['studio_type'].lower() in 'beauty':
 			details['studio_type_id'] = 3
 		else:
-			details['studio_type_id'] = 1
+			details['studio_type_id'] = 2
 
 		if details['studio_kind'].lower() in 'unisex':
-			details['studio_kind_id'] = 2
-		elif details['studio_kind'].lower() in 'women':
-			details['studio_kind_id'] = 1
-		else:
 			details['studio_kind_id'] = 3
+		elif details['studio_kind'].lower() in 'women':
+			details['studio_kind_id'] = 2
+		else:
+			details['studio_kind_id'] = 1
 		###new studio login details
 		studio_tbl = Studio.objects.create_user(email = details['email'], password = 'dummy')
 		studio_tbl.is_active = True
@@ -82,11 +86,11 @@ def insert_studio_details(parlour_name):
 		##check studio close dates
 		details['opening_at'] = get_timesplits(details['opening_at'])
 		details['closing_at'] = get_timesplits(details['closing_at'])
-
+		
 		if details['bank_account_no'].strip() != details['confirm_account_no'].strip():
 			print "account no doesnt match"
 			exit(0)
-
+		print details
 		##new studio profile
 		path = '/home/asha/Desktop/DataEntry/'+parlour_name+'/thumbnail/'
 		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
@@ -99,17 +103,18 @@ def insert_studio_details(parlour_name):
 			area = details['area'].strip(), state = details['state'].strip(),search_field_1 =details['search_field_1'].strip(), \
 			search_field_2 =details['search_field_2'].strip(),landline_no_1 = details['landline_no_1'].strip(), landline_no_2 = \
 			details['landline_no_2'].strip(),in_charge_person = details['in_charge_person'].strip(), incharge_mobile_no =  \
-			details['in_charge_mobileno'].strip(),contact_person = details['contact_person'].strip(), contact_mobile_no = \
-			details['contact_mobileno'].strip(), opening_at = details['opening_at']	, closing_at = details['closing_at'],  \
+			details['in_charge_mobileno'].strip().split('.')[0],contact_person = details['contact_person'].strip(), contact_mobile_no = \
+			details['contact_mobileno'].strip().split('.')[0], opening_at = details['opening_at']	, closing_at = details['closing_at'],  \
 			is_ac = True, latitude = details['latitude'].strip(), longitude = details['longitude'].strip(), commission_percent = int(float(details['rate'])), \
 			has_service_tax = float(details['service_tax']),thumbnail = imz)
 		new_studio_profile.save()
 		thumbnail.close()
 		##account details
+		account_no = re.findall(r'\d+', details['bank_account_no'].strip())[0]
 		new_acc = StudioAccountDetails(studio_id =  new_studio_profile.id, bank_name = details['bank_name'].strip(), \
 			bank_branch = details['bank_branch'].strip(),bank_ifsc = details['bank_ifsc_code'].strip(), bank_city = details['bank_city'].strip(), \
-			bank_acc_number = details['bank_account_no'].strip(),service_updated ='new studio script', updated_date_time = \
-			datetime.now(),name = details['name'].strip())
+			bank_acc_number = account_no,service_updated ='new studio script', updated_date_time = \
+			datetime.now(),name = details['acc_name'].strip())
 		new_acc.save()
 
 		path = '/home/asha/Desktop/DataEntry/'+parlour_name+'/pics/'
@@ -182,12 +187,11 @@ def insert_studio_details(parlour_name):
 					service_id = new_service.id
 				#enter service in studio
 				new_st_ser = StudioServices(studio_profile_id = new_studio_profile.id, service_id = service_id,  \
-					mins_takes = int(serz['duration']),service_for = int(serz['sex']), price = int(serz['rate']),  \
+					mins_takes = int(serz['duration']), price = int(serz['rate']),  \
 					service_updated = 'studio entry script', updated_date_time = datetime.now())
 				new_st_ser.save()
 			except Exception as r:
 				print(traceback.format_exc())
-		import pdb;pdb.set_trace();
 	except Exception as e:
 		print repr(e)
 		print(traceback.format_exc())
@@ -200,14 +204,32 @@ def insert_studio_details(parlour_name):
 
 
 
-insert_studio_details("NaturalsRamapuram")
+insert_studio_details("HaltPorur")
 
 
 ##insert studio group
 ##insert studio profile & thumbnail
 ##insert pictures
 ##insert account details
+def insert_service_types():
+	service_types = ['Haircut','Hair Colouring','Hair Spa','Massage','Skin Care/De-Tan','Bleach','Reflexology', \
+'Manicure & Pedicure','Straightening & Curling','Style Bar','Threading','Waxing','Body Treatment/Body Bright',  \
+'Facials','Makeup','Shave and Trim']
+	for i in service_types:
+		new_sst = ServiceType(service_name = i, description = i,is_active = True, service_updated ='studio entry script', \
+			updated_date_time = datetime.now())
+		new_sst.save()
 
-service_types = ['Haircut','Hair Colouring','Hair Spa','Massage','Skin Care','Bleach','Reflexology', \
-'Manicure & Pedicure','Straightening & Curling','Style Bar','Threading','Waxing','Body Treatment',  \
-'Facials','Makeup']
+#insert_service_types()
+
+def insert_studio_kind_types():
+	studio_kind  = ['Men','Women','Unisex']
+	studio_type = ['Salon','Spa','Beauty Parlour']
+	for ki in studio_kind:
+		new_kind = StudioKind(kind_desc = ki, updated_date_time = datetime.now(), service_updated = 'studio entry script')
+		new_kind.save()
+	for ty in studio_type:
+		new_type = StudioType(type_desc = ty, updated_date_time = datetime.now(), service_updated = 'studio entry script')
+		new_type.save()
+
+#insert_studio_kind_types()

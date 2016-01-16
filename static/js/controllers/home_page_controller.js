@@ -1,4 +1,4 @@
-noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $timeout, $location,$facebook,lodash,httpServices,sessionService,putResultService,gService){
+noqapp.controller('homepagecontroller',function($scope, $cookies,$window, $timeout, $location,$facebook,lodash,httpServices,sessionService,putResultService,gService,landingServices){
 $scope.is_logged = sessionService.isLogged();
 //$scope.is_logged=false;
 $scope.formsubmit=false;
@@ -8,6 +8,34 @@ $scope.studioactiveservice=[];
 $scope.studiolocation=[];
 $scope.arealocation=['Porur, Chennai, Tamil Nadu, India','Ramapuram, Chennai, Tamil Nadu, India','Iyappanthangal, Chennai, Tamil Nadu, India','Valasaravakkam, Chennai, Tamil Nadu, India'];
 $scope.isLoggedIn = true;
+var mapOptions = {
+        zoom: 10,
+        scrollwheel: false,
+        center: new google.maps.LatLng(13.0827, 80.2707),
+        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        disableDefaultUI: true,
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.SMALL,
+            position: google.maps.ControlPosition.LEFT_CENTER
+        }
+    }
+    $scope.map = new google.maps.Map(document.getElementById('googleMap1'), mapOptions);
+    var latlongcollection = [];
+    $scope.markers = [];
+    var bounds = new google.maps.LatLngBounds();
+    var imagUrls = {                
+        iconsaloon:'../static/img/saloon.png',
+        iconparlor:'../static/img/beautyparlor.png',
+        iconspa:'../static/img/spa.png',
+        iconuser:'../static/img/user.png'
+    };
+    var images = {
+        iconsaloon: new google.maps.MarkerImage(imagUrls.iconsaloon),
+        iconparlor: new google.maps.MarkerImage(imagUrls.iconparlor),
+        iconspa: new google.maps.MarkerImage(imagUrls.iconspa),
+        iconuser:new google.maps.MarkerImage(imagUrls.iconuser)
+    };
 function getFBKey()
 {
  	$scope.fb_key = httpServices.getFBKey()
@@ -169,4 +197,50 @@ $scope.logOut = function()
 			$scope.searchdata_.searchlocation="";
 		}
 	};	
+	$scope.getAllAreaStudios = function()
+	{
+		landingServices.getAllAreaStudios().then(function(data)
+		{
+			$scope.studios = data.allstudios.data
+			angular.forEach($scope.studios, function (studio, key) {				
+				createmarker(studio);								
+			});
+			$scope.map.fitBounds(bounds);
+            autozoom();
+		},function()
+		{
+			console.log("Not getting studios")
+		})
+	}
+	var createmarker = function (studio) {
+		//console.log(studio)
+        var icon;
+        if(studio.type_desc=="Salon"){
+            icon=images.iconsaloon;            
+        }
+        else if(studio.type_desc=="Spa"){
+            icon=images.iconspa;            
+        }
+        else{
+            icon=images.iconparlor;            
+        }
+        var marker = new google.maps.Marker({
+            map: $scope.map,
+            position: new google.maps.LatLng(studio.latitude, studio.longitude),            
+            icon: icon            
+        });        
+        $scope.markers.push(marker);
+        var latlong = new google.maps.LatLng(studio.latitude, studio.longitude);
+        latlongcollection.push(latlong);
+    }    
+    function autozoom() {
+        var latlngbounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < latlongcollection.length; i++) {
+            latlngbounds.extend(latlongcollection[i]);
+        }
+        $scope.map.fitBounds(latlngbounds);
+        $scope.map.panToBounds(latlngbounds);
+        $scope.map.setZoom(13);         
+    }
+$scope.getAllAreaStudios();
 });

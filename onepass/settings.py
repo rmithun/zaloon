@@ -120,7 +120,7 @@ if DEBUG:
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    )
+    )"""
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -132,7 +132,7 @@ if DEBUG:
             'PORT': '5432',                      # Set to empty string for default.
         }
     }
-    """
+    
     #ALLOWED_HOSTS = []
     
     ##AWS DEV DB
@@ -150,7 +150,7 @@ if DEBUG:
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
     }
-    """
+    
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -162,6 +162,7 @@ if DEBUG:
             'PORT': '5432',                      # Set to empty string for default.
         }
     }
+    """
  
 
     ALLOWED_HOSTS = []
@@ -401,8 +402,8 @@ if DEBUG:
     RZP_KEY_ID = 'rzp_test_bKVgZ668B7jtSR'
     RZP_SECRET_KEY = 'xn0zaYvoB90aUwLu2bad8oSs'
 else:
-    RZP_KEY_ID = 'putliveid'
-    RZP_SECRET_KEY = 'put live key'
+    RZP_KEY_ID = 'rzp_live_RYXktqbBE8xIJb'
+    RZP_SECRET_KEY = 'UWgcD2L2UrlQxzOz2B8i2WM1'
 
 ##CCAVENUE SETTINGS
 MERCHANT_ID = 71637

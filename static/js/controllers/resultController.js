@@ -44,7 +44,7 @@ noqapp.controller('resultCtrl', function ($scope, $compile,$location, $filter,$c
     $scope.serviceduration=0;  
     $scope.morefilter = false;
     $scope.stariconset={1:'star1',2:'star2',3:'star3',4:'star4',5:'star5'};
-    $scope.studiotype = [{ id:1, name: "Salon", active: false, icon: "fa fa-scissors" }, { id:2, name: "Spa", active: false, icon: "fa fa-scissors" }, { id:3, name: "Beauty parlor", active: false, icon: "fa fa-scissors" }];
+    $scope.studiotype = [{ id:1, name: "Salon", active: false, icon: "cus-icon-salon" }, { id:2, name: "Spa", active: false, icon: "cus-icon-spa" }, { id:3, name: "Beauty parlor", active: false, icon: "cus-icon-women" }];
     $scope.studiokind = [{ id:1, name: "Men", active: false, icon: "fa-mars" }, {id:2, name: "Women", active: false, icon: "fa-venus" }, {id:3, name: "Unisex", active: false, icon: "fa-venus-mars" }];
     $scope.servicefor = [{id:0, name: "All", active:true},{id:1, name: "Men", active:false},{id:2, name: "Women", active:false}]
     $scope.studiostar = [{ star: 1, active: false }, { star: 2, active: false }, { star: 3, active: false }, { star: 4, active: false }, { star: 5, active: false }];
@@ -665,8 +665,9 @@ $scope.bindstudio=function(data){
             serviceheight=0;            
             $scope.searchicon=false;
             $scope.morefilter=false;
-            $scope.selectedstudio = studio[0];            
-            $scope.has_online_payment = $scope.selectedstudio.has_online_payment            
+            $scope.selectedstudio = studio[0];       
+            console.log($scope.selectedstudio)     
+            $scope.has_online_payment = $scope.selectedstudio.has_online_payment;            
             //$scope.sortservicebyfilter();
             $('.header-tabs').removeClass('stick');
             $('.header-tabs').removeClass('stick-mobile');
@@ -814,10 +815,14 @@ $scope.bindstudio=function(data){
         },300);                
     }
 
-    $scope.servicecart=function(){        
-        //if($('#studiodetails').css('display') != 'none'){
-        //    $scope.closeslider();
-        //} 
+    $scope.servicecart=function(){                
+        if($scope.selected_service.length == 0){
+            $scope.has_online_payment=true;
+            $scope.bookdisable=true;
+        }
+        else{
+            $scope.bookdisable=false;
+        }
         $('#cartmodal').modal('show');
     }
 
@@ -828,7 +833,14 @@ $scope.bindstudio=function(data){
         //$scope.servicelist.splice(idx, 1);
         $scope.servicelist[idx].flag = false;
         $scope.serviceprice = $scope.serviceprice - service.price;
-        $scope.serviceduration=$scope.serviceduration-service.duration;        
+        $scope.serviceduration=$scope.serviceduration-service.duration; 
+        if($scope.selected_service.length == 0){
+            $scope.has_online_payment=true;
+            $scope.bookdisable=true;
+        }   
+        else{
+            $scope.bookdisable=false;
+        }  
     }
 
     $scope.filterfor = function(service) {
@@ -1593,7 +1605,10 @@ $scope.makepayment = function(bookingForm)
             booking_data['promo_code'] = $scope.coupon_code
             booking_data['serviceschosen'] = $scope.serviceschosen['services']
             var options = {
-                "key": "rzp_test_bKVgZ668B7jtSR",
+                //test key
+                //"key": "rzp_test_bKVgZ668B7jtSR", 
+                //live key
+                "key": "rzp_live_RYXktqbBE8xIJb", 
                 "amount": ($scope.amount_to_pay * 100),
                 "name": $scope.user_details.user_acc['first_name'], //inser user name here
                 "description": $scope.rp_service_txt,

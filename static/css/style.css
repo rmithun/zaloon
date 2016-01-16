@@ -35,6 +35,43 @@ h4 { font-size: 15px; font-weight: 700; display: block;color:#34495E;margin-top:
   }
 
 
+@font-face {
+    font-family: 'icomoon';
+    src:    url('../fonts/icomoon.eot?4wvopc');
+    src:    url('../fonts/icomoon.eot?4wvopc#iefix') format('embedded-opentype'),
+        url('../fonts/icomoon.ttf?4wvopc') format('truetype'),
+        url('../fonts/icomoon.woff?4wvopc') format('woff'),
+        url('../fonts/icomoon.svg?4wvopc#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="cus-icon-"], [class*=" cus-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.cus-icon-salon:before {
+    content: "\e900";
+}
+.cus-icon-women:before {
+    content: "\e901";
+}
+.cus-icon-spa:before {
+    content: "\e902";
+}
+
+
 /* h1, .h1, h2, .h2, h3, .h3, h4, .h4 { margin-top: 20px; margin-bottom: 15px; }
 h5, .h5, h6, .h6, .h7 { margin-top: 20px; margin-bottom: 10px; } */
 
@@ -1181,9 +1218,7 @@ width: 0;
 .offerzone span{font-weight: bold;  color: White;position: absolute;top:0;left:2px;}
 .modal-body{min-height: 100px;text-align: center;}
 .book-price{text-align: right;}
-.searchbyfilter{right: 345px; top:12px;position: absolute;}
 .sortbywish{right: 34px; top:144px;position: absolute;}
-.hereyourcart{right: 204px; top:45px;position: absolute;}
 .clicktoview{right: 315px; bottom:110px;position: absolute;}
 .viewsalondetails{right: 315px; bottom:50px;position: absolute;}
 .getbacksearch{right: 385px; top:78px;position: absolute;}
@@ -1671,6 +1706,8 @@ li.fbbutton:hover{
     width: 400px;
     overflow: hidden;
     text-overflow: ellipsis;}
+  .searchbyfilter{right: 30%; top:12px;position: absolute;}
+  .hereyourcart{right: 18%; top:45px;position: absolute;}
 }
 
 /* Desktop large screen 1200px */
@@ -1679,5 +1716,7 @@ li.fbbutton:hover{
    
 .navigation-brand{padding-right:4%;float:left;}
 .booking-panel-wrapper{margin:0 auto;width:97%; } 
+.searchbyfilter{right: 27%; top:12px;position: absolute;}
+.hereyourcart{right: 16%; top:45px;position: absolute;}
     
 }
