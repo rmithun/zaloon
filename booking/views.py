@@ -284,12 +284,12 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
                 email = sendEmail(to_user,subject,message)
                 studio_email = StudioProfile.objects.get(id = studio_id.studio.id)
                 studio_subject = (responses.MAIL_SUBJECTS['STUDIO_BOOKING_EMAIL'])%(user['first_name'])
-                studio_email.studio.email = 'vbnetmithun@gmail.com' ##comment in production
+                #studio_email.studio.email = 'vbnetmithun@gmail.com' ##comment in production
                 mail_to_studio = sendEmail(studio_email.studio.email,studio_subject,
                     studio_msg)
                 sms = sendSMS(studio_id.mobile_no,sms_message)
-                #sms_studio = sendSMS(studio['incharge_mobile_no'],studio_sms)
-                sms_studio = sendSMS('9677267542',studio_sms)
+                sms_studio = sendSMS(studio['incharge_mobile_no'],studio_sms)
+                #sms_studio = sendSMS('9677267542',studio_sms)
                 #email = 1
                 #sms = 1
                 review_key = uniquekey_generator()
