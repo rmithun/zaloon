@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'a-o-a%mudeees3je=$2qaa132e3e*f3167h*50q(j)0khoty_&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -240,8 +240,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
  'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/day',  ##change before going live
-        'user': '10/day'
+        'anon': '75/day',  ##change before going live
+        'user': '200/day'
     }
 
 }
@@ -252,9 +252,9 @@ OAUTH2_PROVIDER = {
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope'}
 }
 
-SOCIAL_AUTH_FACEBOOK_KEY = 442685319234348 #test
+#SOCIAL_AUTH_FACEBOOK_KEY = 442685319234348 #test
 SOCIAL_AUTH_FACEBOOK_KEY = 442681529234727 #production
-SOCIAL_AUTH_FACEBOOK_SECRET = '514402ab5b5f424bb288737376f508d3' #test
+#SOCIAL_AUTH_FACEBOOK_SECRET = '514402ab5b5f424bb288737376f508d3' #test
 SOCIAL_AUTH_FACEBOOK_SECRET = '4a43863afe181c1c014f669cceae3d92' #production
 
 
@@ -404,20 +404,6 @@ if DEBUG:
 else:
     RZP_KEY_ID = 'rzp_live_RYXktqbBE8xIJb'
     RZP_SECRET_KEY = 'UWgcD2L2UrlQxzOz2B8i2WM1'
-
-##CCAVENUE SETTINGS
-MERCHANT_ID = 71637
-WORKING_KEY = '1A69CD164CBEB1F1822010B3E0495369'
-ACCESS_CODE = 'AVNI05CG68BJ32INJB'
-CURRENCY = 'INR'
-if DEBUG:
-    REDIRECT_URL = 'www.zaloon.in/paymentsuccess/'
-    CANCEL_URL =  'www.zaloon.in/paymentfailed/'
-else:
-    REDIRECT_URL = 'www.zaloon.in/paymentsuccess/'
-    CANCEL_URL =  'www.zaloon.in/paymentfailed/'
-LANGUAGE = 'EN'
-INTEGRATION_TYPE = "iframe_normal"
 
 
 

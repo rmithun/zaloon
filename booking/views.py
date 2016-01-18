@@ -798,7 +798,7 @@ class NewBooking(CreateAPIView,UpdateAPIView):
     @transaction.commit_manually
     def create(self,request,*args,**kwargs):
         try:
-            import pdb;pdb.set_trace();
+            #import pdb;pdb.set_trace();
             user = self.request.user
             data = self.request.DATA
             appnt_date = datetime.strptime(data['appnt_date'],'%Y-%m-%d')

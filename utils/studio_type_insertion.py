@@ -19,7 +19,7 @@ def studio_type():
 
 		 studios = StudioProfile.objects.all().values('id')
 		 ser_types = ServiceType.objects.all().values('id')
-		 import pdb;pdb.set_trace();
+		 #import pdb;pdb.set_trace();
 		 for stu in studios:
 		 	for ser in ser_types:
 		 		new_type = StudioServiceTypes(studio_profile_id = stu['id'],  \
