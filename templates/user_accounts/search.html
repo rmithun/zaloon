@@ -608,11 +608,12 @@ You can still enter your email ID to get notified when we launch our service her
                 <br ng-if="service.length>0"/>
                     <li ng-repeat="ser in service=(value | filter:filterservicebyname | filter:filterfor)" ng-click="addservice('popup',ser)" ng-class="{'todo-done':ser.flag == true}">
                         <div class="todo-content">
-                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}<span ng-if="ser.servicefor==1" class="fa fa-mars"  style="margin-left: 10px;color: #F06370;">
+                            {%verbatim%} {{ser.servicename | limitTo:40}}{{ser.servicename.length > 40 ? '...' : ''}} {%endverbatim%}- <i class="fa fa-inr"></i> {%verbatim%}{{ser.price}}{%endverbatim%}<span ng-if="ser.servicefor==1" class="fa fa-mars"  style="margin-left: 10px;color: #F06370;"><span style="color: #656063;margin-left: 5px;font-size: smaller;">Men</span>
                             </span>
                             <span  ng-if="ser.servicefor==2"  class="fa fa-venus" style="margin-left: 10px;color: #22AB81;">
+                            <span style="color: #656063;margin-left: 5px;font-size: smaller;">Women</span>
                             </span>
-                            <span  ng-if="ser.servicefor==3"  class="fa fa-venus-mars" style="margin-left:10px;">
+                            <span  ng-if="ser.servicefor==3"  class="fa fa-venus-mars" style="margin-left:10px;"><span style="color: #656063;margin-left: 5px;font-size: smaller;">Unisex</span>
                             </span>
                         </div>
                     </li>   
