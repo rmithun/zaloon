@@ -4,7 +4,7 @@ noqapp.factory('genericServices', function($q)
 	var acService = new google.maps.places.AutocompleteService();
 	autocompData.getLocation = function(location)
 	{
-		console.log(location);
+		//console.log(location);
 		acService.getPlacePredictions({
                 input: location,
                 types: ['(regions)'],
@@ -33,7 +33,7 @@ noqapp.factory('putResultService', function(){
     var putresult = {}
     var result=[];
     putresult.setresult= function(obj){
-        console.log(obj);
+        //console.log(obj);
         result=obj;
     };        
     putresult.getresult = function(){

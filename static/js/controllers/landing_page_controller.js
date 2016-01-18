@@ -38,7 +38,7 @@ noqapp.controller('landingpagecontroller',function($scope, landingServices){
 	$scope.invite=function(form)
 	{
 		$scope.formsubmit=true;
-		console.log(form.$valid)
+//		console.log(form.$valid)
 		if(form.$valid)
 		{
             $scope.lp_invited = true;

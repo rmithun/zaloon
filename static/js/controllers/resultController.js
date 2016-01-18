@@ -666,7 +666,7 @@ $scope.bindstudio=function(data){
             $scope.searchicon=false;
             $scope.morefilter=false;
             $scope.selectedstudio = studio[0];       
-            console.log($scope.selectedstudio)     
+//            console.log($scope.selectedstudio)     
             $scope.has_online_payment = $scope.selectedstudio.has_online_payment;            
             //$scope.sortservicebyfilter();
             $('.header-tabs').removeClass('stick');
@@ -1585,7 +1585,7 @@ $scope.payment_class3 = "panel-heading"
 
 $scope.makepayment = function(bookingForm)
 {
-    console.log($scope.serviceschosen);
+    //console.log($scope.serviceschosen);
     $scope.continueclick=true;
     if (!bookingForm.$invalid) {
         if ($scope.from_time && $scope.date_selected && $scope.mobileno)
@@ -1620,7 +1620,7 @@ $scope.makepayment = function(bookingForm)
                     booking_data['razorpay_payment_id'] = response.razorpay_payment_id
                     httpServices.newBooking(booking_data).then(function(paydata)
                     {
-                        console.log(paydata.new_booking.data)
+                        //console.log(paydata.new_booking.data)
                         resp = JSON.parse(paydata.new_booking.data)
                         booking_data['has_booked'] = 1
                         booking_data['booking_code'] = resp['code']
@@ -1730,14 +1730,14 @@ $scope.timeFilter =  function (value) {
                 }
             });
         }
-        console.log(slot+" - "+flag);
+        //console.log(slot+" - "+flag);
         return flag;        
     }
 });
 
 
 noqapp.controller('modalController', ['$scope','$modalInstance', function($scope, $modalInstance,book) {
-console.log(book)
+//console.log(book)
     $scope.cancel = function () {
     $modalInstance.dismiss('cancel')
   };
@@ -1836,8 +1836,8 @@ $scope.logOut = function()
                     $scope.active_loading_more = false
                     $scope.active_bookings = $scope.active_bookings.concat(data.more_booking.data.results)
                     $scope.active_next = data.more_booking.data.next
-                    console.log(data.more_booking.data)
-                    console.log($scope.active_bookings.concat(data.more_booking.data.results))
+                    //console.log(data.more_booking.data)
+                    //console.log($scope.active_bookings.concat(data.more_booking.data.results))
                     if($scope.active_next != null)
                     {
                         $scope.loadMore('active')   
@@ -1980,7 +1980,7 @@ $scope.logOut = function()
     $scope.updateprofile=function(){
         
         var obj={area:$scope.user_details.area,mobile:$scope.user_details.mobile};
-        console.log(obj);
+        //console.log(obj);
     }
 
     //For mobile
@@ -2106,7 +2106,7 @@ $scope.add_review = function(form)
             $scope.is_adding = 1
             $scope.submitting = 0
             //$('#reviewmodal').modal('hide')
-            console.log(rdata)
+            //console.log(rdata)
             lodash.find($scope.expired_bookings,function(booking) 
                 { if(booking['id'] == $scope.review_data['booking_id'])
                     {

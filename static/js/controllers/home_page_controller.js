@@ -145,9 +145,9 @@ $scope.logOut = function()
 	//AutoComplete
 	$scope.searchdata_ = {};		
 	$scope.areacomplete = function (val) { 
-		console.log(val)
+		//console.log(val)
     	 return gService.getPlace(val).then(function (data) {     
-    	 console.log(data.location)      
+    	 //console.log(data.location)      
             return data.location;
         });
     }
@@ -166,7 +166,7 @@ $scope.logOut = function()
     	if(form.$valid)
 		{				
     		var idx=lodash.findIndex($scope.studioservicegroup, { service_name: $scope.searchdata_.servicename.trim() });
-    		console.log(idx)
+    		//console.log(idx)
     		if (idx != -1) {
     			var obj={'service':$scope.studioservicegroup[idx].id,'location':$scope.searchdata_.searchlocation,'servicename':$scope.studioservicegroup[idx].service_name};    			
 				$('.finder-overlay').show();

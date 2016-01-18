@@ -15,7 +15,7 @@ String.prototype.repeat = function (num) {
           orientation = option.orientation;
       if ( 'vertical' === orientation ) {
         var output = '', i;
-        console.log(amount);
+        //console.log(amount);
         for (i = 1; i <= amount - 1; i++) {
             output += '<div class="ui-slider-segment" style="top:' + 100 / amount * i + '%;"></div>';
         }

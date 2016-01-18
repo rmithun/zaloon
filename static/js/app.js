@@ -129,8 +129,8 @@ angular.module("ui.editable", []).directive('txtEditable', function (httpService
                obj[$scope.editableKey] =  $scope.editableModel
              httpServices.updateUserProfile(obj).then(function(data)
               {
-                console.log("Updated successfully")
-                console.log(data)
+                //console.log("Updated successfully")
+                //console.log(data)
        
                 //message as updated
               },function()

@@ -29,9 +29,9 @@ noqapp.directive('facebook', function($http,httpServices) {
         {
           FB.login(function(response) {
 
-            console.log(response)
+           // console.log(response)
             if (response.authResponse) {
-              console.log(response)
+              //console.log(response)
               $scope.login_status =  response.status
               $scope.fbLogin(response.authResponse.accessToken)
               console.log('FB.login connected');
