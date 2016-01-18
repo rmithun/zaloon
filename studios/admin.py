@@ -35,7 +35,7 @@ class StudioServicesTypesAdmin(admin.ModelAdmin):
 	list_display = ['studio_profile','service_type']
 
 class StudioAccountDetailsAdmin(admin.ModelAdmin):
-	list_display = ['bank_name']
+	list_display = ['bank_name','studio']
 
 admin.site.register(StudioAccountDetails, StudioAccountDetailsAdmin)
 admin.site.register(StudioServiceTypes, StudioServicesTypesAdmin)

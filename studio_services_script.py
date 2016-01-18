@@ -37,7 +37,7 @@ def get_timesplits(sent_time):
 		mins = '0' + str(mins)
 	time = str(hr) + ":" + str(mins) + ":00"
 	from_ti = datetime.strptime(time,'%H:%M:%S').time()
-	print from_ti
+	return from_ti
 
 
 @transaction.commit_manually
@@ -204,7 +204,7 @@ def insert_studio_details(parlour_name):
 
 
 
-insert_studio_details("HaltPorur")
+insert_studio_details("essensualsporur")
 
 
 ##insert studio group

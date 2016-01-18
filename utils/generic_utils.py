@@ -123,7 +123,6 @@ def social_auth_to_profile(backend, details, response, user=None, is_new=False, 
 
 
 def sendEmail(to, subject, message, *args,**cc):
-    return False
     server = smtplib.SMTP(host = SMTP_SERVER,port = SMTP_PORT,timeout = 10)
     server.starttls()
     server.login(SMTP_USERNAME, SMTP_PASSWORD)
@@ -157,7 +156,6 @@ def sendEmail(to, subject, message, *args,**cc):
 
 
 def sendSMS(to,body):
-    return False
 
     try:
         import plivo

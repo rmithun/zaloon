@@ -106,12 +106,12 @@ class StudioProfileMixin(object):
         try:
             #city = self.request.GET['location'].split(',')
             ##add city to filter in future
-            print datetime.now()
+            #print datetime.now()
             location = self.request.GET['location']
             service = self.request.GET['service']
             cache_key = location.replace(" ","")+str(service)
             if cache.get(cache_key):
-                print datetime.now()
+                #print datetime.now()
                 return Response(cache.get(cache_key))
             logger_studios.info("Search Query - "+str(self.request.GET))
             studios = StudioServiceTypes.objects.filter(service_type_id = service, is_active = 1).values('studio_profile_id')
