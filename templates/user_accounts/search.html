@@ -105,7 +105,7 @@
 
                     <!-- for mobile-->
                 <li ng-show="is_logged == 0" class="fbbutton hidden-md hidden-lg">
-                    <button data-ng-click='fetch()' class="btn btn-block fbmobile" style="width:34px;">
+                    <button data-ng-click='login();' class="btn btn-block fbmobile" style="width:34px;">
                         <i class="fa fa-facebook"></i>
                     </button>
                 </li>
@@ -233,8 +233,8 @@
 </div>
 <div class="list-box" id = "lister1" style="text-align:center;" ng-show="studio.length == 0">
     <span>
-        Sorry Folks! Zaloon doesn’t provide you services in this area. <br/>
-You can still enter your email ID to get notified when we launch our service here.
+        Sorry Folks! Zaloon can't find the parolours serving this service in this area. <br/>
+You can still enter your email ID to get notified when we have it here.
     </span>
     <form  ng-hide="inviteflag == 1;" class="form-inline form-register form-register-small" name="inviteform" style="padding:0px;" novalidate>
               
