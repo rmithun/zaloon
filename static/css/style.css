@@ -1227,6 +1227,12 @@ width: 0;
 @media (max-width: 767px) { 
 
 
+
+.mobileapptxt{position: relative; top:0px;}
+.mobileapptxt-overlay{color: #fff;
+    max-width: 400px;
+    padding: 30px;
+    background-color: rgba(37,42,64,.8);}
   .home-mapview{top:120px;}
   .stu-type-last{
   width: 137px;
@@ -1386,6 +1392,14 @@ width: 0;
 
 @media (max-width: 480px) {
 
+
+.mobileapptxt{position: relative; top:0px;}
+
+.mobileapptxt-overlay{color: #fff;
+    max-width: 300px;
+    padding: 10px;
+    background-color: rgba(37,42,64,.8);}
+
   .bookingdetails .promo input{width: 240px;}  
   .bookingdetails .promobox input{width: 170px;}
   .promo span.red, .promobox span.red{font-size: 12px;width: 100%;float: left;}
@@ -1490,6 +1504,12 @@ width: 0;
   .stu-type-last{
   width: 146px;
 }
+.mobileapptxt{position: relative; top:0px;}
+
+  .mobileapptxt-overlay{color: #fff;
+    max-width: 600px;
+    padding: 30px;
+    background-color: rgba(37,42,64,.8);}
 .panel-open .heading-bar
 {
   width:101.9%;
