@@ -187,6 +187,14 @@ class StudioProfile(models.Model):
 	has_online_payment = models.BooleanField(default = 1)
 	commission_percent = models.IntegerField(default = 10)
 	has_service_tax = models.FloatField(default = 14) #14.5- has 0- no
+
+	def update(self):
+		for field in self._meta.fields:
+			if field.name == 'thumbnail':
+				field.upload_to = 'img_gallery/%d' % self.id
+		super(StudioProfile, self).save()
+    
+
 	def __unicode__(self):
 		return str(self.name +'--'+self.area)
 	"""def save(self):
@@ -377,6 +385,7 @@ class StudioPicture(models.Model):
             if field.name == 'picture':
                 field.upload_to = 'img_gallery/%d' % self.studio_profile_id
         super(StudioPicture, self).save()
+
 
 
 

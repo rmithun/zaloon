@@ -204,9 +204,71 @@ def insert_studio_details(parlour_name):
 
 
 
+
+@transaction.commit_manually        
+def services_for_studio(studio_id,parlour_name):
+	try:
+		new_studio_profile = StudioProfile.objects.get(id = studio_id)
+		details = {}
+		details['has_group'] = 1
+		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
+		studio_service_details = services_in_studio.sheet_by_index(0)
+		service_details = {}
+		service_types = []
+		services = []
+		for i in range(1,studio_service_details.nrows):
+			obj ={}
+			service_types.append(studio_service_details.row_values(i)[2])
+			obj['service_name'] = studio_service_details.row_values(i)[1]
+			obj['service_type'] = studio_service_details.row_values(i)[2]
+			obj['duration'] = studio_service_details.row_values(i)[3]
+			obj['rate'] = studio_service_details.row_values(i)[4]
+			obj['sex'] = studio_service_details.row_values(i)[5]
+			services.append(obj)
+		service_types=set(service_types)
+		import pdb;pdb.set_trace();
+		for st in service_types:
+			has_st_type = StudioServiceTypes.objects.filter(service_type_id = st, studio_profile_id = new_studio_profile.id)
+			if not has_st_type:
+				new_st =StudioServiceTypes(studio_profile_id = new_studio_profile.id, service_type_id = st,  \
+					service_updated = "studio entry script", updated_date_time = datetime.now())
+				new_st.save()
+		for serz in services:
+			try:
+				is_there = Service.objects.filter(service_name = serz['service_name'].strip(),service_type_id = int(serz['service_type']), \
+					min_duration = int(serz['duration']), is_active = True, service_for = int(serz['sex']))
+				if details['has_group'] == 1 and is_there:
+					service_id = is_there[0].id
+				else:
+					new_service = Service(service_name = serz['service_name'].strip(),service_type_id = int(serz['service_type']), \
+						min_duration = int(serz['duration']), is_active = True, service_for = int(serz['sex']), \
+						service_updated = 'studio entry script', updated_date_time = datetime.now())
+					new_service.save()
+					service_id = new_service.id
+				#enter service in studio
+				new_st_ser = StudioServices(studio_profile_id = new_studio_profile.id, service_id = service_id,  \
+					mins_takes = int(serz['duration']), price = int(serz['rate']),  \
+					service_updated = 'studio entry script', updated_date_time = datetime.now())
+				new_st_ser.save()
+			except Exception as r:
+				print(traceback.format_exc())
+	except Exception as e:
+		print repr(e)
+		print(traceback.format_exc())
+		transaction.rollback()
+	else:
+		try:
+			transaction.commit()
+		except Exception as d:
+			print(traceback.format_exc())
+
+
+
+
+
 insert_studio_details("essensualsporur")
 
-
+#services_for_studio(studi_id,"name")
 ##insert studio group
 ##insert studio profile & thumbnail
 ##insert pictures
