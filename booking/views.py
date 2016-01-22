@@ -219,7 +219,15 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             logger_booking.info("New purchase id - "+str(new_purchase.id))
             appointment_end_time = appointment_start_time + timedelta(minutes = total_duration['mins_takes__sum'])
             ##check has slots available by passing start time with duration
-            new_booking = BookingDetails(user = user, booked_date =
+            if coupon_detail:
+                new_booking = BookingDetails(user = user, booked_date =
+                datetime.now(), appointment_date = appnt_date,  \
+                appointment_start_time = appointment_start_time, booking_code = booking_code,  \
+                studio_id = studio_id, booking_status = 'BOOKED',  \
+                service_updated = 'new booking', purchase = new_purchase,status_code = status_code,  \
+                appointment_end_time = appointment_end_time, mobile_no = mobile_no,coupon_id = coupon_detail.id)
+            else:
+                new_booking = BookingDetails(user = user, booked_date =
                 datetime.now(), appointment_date = appnt_date,  \
                 appointment_start_time = appointment_start_time, booking_code = booking_code,  \
                 studio_id = studio_id, booking_status = 'BOOKED',  \
