@@ -57,7 +57,7 @@ def get_Bookings_for_day():
                 try:
                     ##remove email and set to sms
                     status = generic_utils.sendSMS(mobile_no,sms_template) uncomment while sending sms
-                    status = generic_utils.sendEmail(every_book.user.email, 'Booking confirmation SMS', sms_template)
+                    #status = generic_utils.sendEmail(every_book.user.email, 'Booking confirmation SMS', sms_template)
                 except Exception,smserr:
                     logger_error.error(traceback.format_exc())
                     status = False

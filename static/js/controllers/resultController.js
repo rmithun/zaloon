@@ -409,6 +409,7 @@ $scope.bindstudio=function(data){
                     getdistance(key, value.latitude, value.longitude); 
                 });
                 $scope.$apply();
+                $scope.sortchange({property: "distance", direction: false});
                 $scope.addmarker((($scope.currentPage - 1) * $scope.itemLimit), (($scope.currentPage - 1) * $scope.itemLimit) + $scope.itemLimit);
                 autozoom();               
             }
@@ -590,13 +591,13 @@ $scope.bindstudio=function(data){
         }
     }    
 
-    $scope.sortchange=function(selectitem){        
+    $scope.sortchange=function(selectitem){      
         if(selectitem!=null){
             $scope.orderProp = selectitem.property;
             $scope.direction = selectitem.direction;
         } 
         else{
-            $scope.orderProp = 'min_price';
+            $scope.orderProp = 'distance';
             $scope.direction = false;    
         }
         removemarker();

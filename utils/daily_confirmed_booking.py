@@ -175,8 +175,8 @@ def render_to_pdf(template_url,data,studio):
                 #send email
                 message  = "Please find the booking data"
                 subject = (responses.MAIL_SUBJECTS['DAILY_BOOKING_MAIL'])%(today)
-                generic_utils.sendEmail('asha.ruku93@gmail.com ',subject,message,filename+'.pdf')
-                #generic_utils.sendEmail(studio_email['email'],subject,message)
+                generic_utils.sendEmail(studio_email['email'],subject,message,filename+'.pdf')
+                generic_utils.sendEmail('vbnetmithun@gmail.com',subject,message,filename+'.pdf')
                 rep = DailyBookingConfirmation.objects.filter(studio_id = studio, report_date = \
                  today).update(mail_sent = 1, updated_date_time = datetime.now())
                 response = 1
