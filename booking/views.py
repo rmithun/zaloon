@@ -119,6 +119,7 @@ class NewBookingRZP(CreateAPIView,UpdateAPIView):
             promo_code = None
             payment_success = 0
             service_tax = data['service_tax']
+            coupon_detail = []
             if data.has_key('promo_code'):
                 promo_code = data['promo_code']
                 if promo_code:
