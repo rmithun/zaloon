@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'a-o-a%mudeees3je=$2qaa132e3e*f3167h*50q(j)0khoty_&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
@@ -115,12 +115,12 @@ MEDIA_URL = "http://%s/%s/" % (AWS_CDN_URL, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 if DEBUG:
-    """STATICFILES_DIRS = (
+    STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    )"""
+    )
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -132,7 +132,7 @@ if DEBUG:
             'PORT': '5432',                      # Set to empty string for default.
         }
     }
-    
+    """
     #ALLOWED_HOSTS = []
     
     ##AWS DEV DB
@@ -144,13 +144,12 @@ if DEBUG:
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     )  
-    """DATABASES = {
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-    }
-    
+    }    
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -161,9 +160,8 @@ if DEBUG:
             'HOST': 'zaloon-dev.cyscy0cpjemo.ap-southeast-1.rds.amazonaws.com',
             'PORT': '5432',                      # Set to empty string for default.
         }
-    }
-    """
- 
+    }"""
+     
 
     ALLOWED_HOSTS = []
     HOST_NAME = 'http://www.dev.zaloon.in'

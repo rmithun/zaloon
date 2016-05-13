@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'onepass.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    #url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^account/', include("user_accounts.urls")),
     url(r'^studios/', include("studios.urls")),
     url(r'^booking/', include("booking.urls")),

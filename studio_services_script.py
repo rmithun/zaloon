@@ -13,6 +13,43 @@ from django.db import transaction
 from studios.models import *
 import traceback
 import re
+from PIL import Image, ImageFile
+from os.path import getsize
+from os import listdir
+import io,random
+
+
+
+
+
+def compressImages(image_file,picname):
+  new_file_name = str(random.randint(1000,90000))
+  img = Image.open(image_file)
+  if image_file:
+    format = str(img.format)
+    if format != 'PNG' and format != 'JPEG':
+        print 'Ignoring file "' + filename + '" with unsupported format ' + format
+        return False
+    ImageFile.MAXBLOCK = img.size[0] * img.size[1]
+    divider = 1
+    if img.size[0] > 1000:
+      divider = 2
+    if img.size[0] > 2000:
+      divider = 4
+    if img.size[0] > 3000:
+      divider = 6
+    width = img.size[0]/divider
+    height = img.size[0]/divider
+    img = img.resize((width, height), Image.ANTIALIAS)
+    try:
+      os.remove("/home/asha/Desktop/bkup-desktop/temp/"+picname)
+    except OSError:
+      pass
+    picname = "/home/asha/Desktop/bkup-desktop/temp/"+new_file_name+picname
+    img.save(picname, quality=50,optimize=True)
+    return picname
+  return False
+
 
 
 
@@ -44,7 +81,7 @@ def get_timesplits(sent_time):
 def insert_studio_details(parlour_name):
 	try:
 
-		studio_details_book = xlrd.open_workbook('/home/asha/Desktop/DataEntry/'+parlour_name+'/'+parlour_name+'DetailsForm.xls')
+		studio_details_book = xlrd.open_workbook('/home/asha/Desktop/bkup-desktop/DataEntry/'+parlour_name+'/'+parlour_name+'DetailsForm.xls')
 		sd_first_sheet = studio_details_book.sheet_by_index(0)
 		details = {}
 		for i in range(0,sd_first_sheet.nrows):
@@ -92,12 +129,15 @@ def insert_studio_details(parlour_name):
 			exit(0)
 		print details
 		##new studio profile
-		path = '/home/asha/Desktop/DataEntry/'+parlour_name+'/thumbnail/'
+		path = '/home/asha/Desktop/bkup-desktop/DataEntry/'+parlour_name+'/thumbnail/'
 		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
 		thumbnail = open(path+onlyfiles[0])
-		imz = File(thumbnail)
-		#import pdb;pdb.set_trace();
-		new_studio_profile = StudioProfile(studio_group_id = details['group_id'], studio_id = studio_tbl.id, studio_type_id = details['studio_type_id'], \
+		newfile_name = compressImages(thumbnail,onlyfiles[0])
+		if newfile_name:
+			path2 = newfile_name
+	        file_ = open(path2)
+	        img = File(file_)
+	        new_studio_profile = StudioProfile(studio_group_id = details['group_id'], studio_id = studio_tbl.id, studio_type_id = details['studio_type_id'], \
 			studio_kind_id = details['studio_kind_id'], name = details['name'].strip(), address_1 = details['address_1'].strip(),  \
 			address_2 = details['address_2'].strip(), landmark = details['landmark'].strip(), city = details['city'].strip(),  \
 			area = details['area'].strip(), state = details['state'].strip(),search_field_1 =details['search_field_1'].strip(), \
@@ -106,8 +146,14 @@ def insert_studio_details(parlour_name):
 			details['in_charge_mobileno'].strip().split('.')[0],contact_person = details['contact_person'].strip(), contact_mobile_no = \
 			details['contact_mobileno'].strip().split('.')[0], opening_at = details['opening_at']	, closing_at = details['closing_at'],  \
 			is_ac = True, latitude = details['latitude'].strip(), longitude = details['longitude'].strip(), commission_percent = int(float(details['rate'])), \
-			has_service_tax = float(details['service_tax']),thumbnail = imz)
-		new_studio_profile.save()
+			has_service_tax = float(details['service_tax']),thumbnail = img)
+                new_studio_profile.save()
+	        #stu_pic = StudioProfile.objects.get(id = obj.id)
+	        #stu_pic.thumbnail = img
+	        #stu_pic.save()
+	        file_.close()
+			#imz = File(thumbnail)
+		#import pdb;pdb.set_trace();
 		thumbnail.close()
 		##account details
 		account_no = re.findall(r'\d+', details['bank_account_no'].strip())[0]
@@ -117,16 +163,20 @@ def insert_studio_details(parlour_name):
 			datetime.now(),name = details['acc_name'].strip())
 		new_acc.save()
 
-		path = '/home/asha/Desktop/DataEntry/'+parlour_name+'/pics/'
+		path = '/home/asha/Desktop/bkup-desktop/DataEntry/'+parlour_name+'/pics/'
 		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
 		print onlyfiles
 		for i in onlyfiles:
-			file_ = open(path+i)
-			img = File(file_)
-			stu_pic = StudioPicture(studio_profile_id = new_studio_profile.id, picture = img, service_updated = \
-				'service_updated')
-			stu_pic.save()
-			file_.close()
+			image_file = open(path+i)
+			newfile_name = compressImages(image_file,i)
+			if newfile_name:
+				path2 = newfile_name
+		        file_ = open(path2)
+		        img = File(file_)
+		        stu_pic = StudioPicture(studio_profile_id = new_studio_profile.id, picture = img, service_updated = \
+		          'service_updated')
+		        stu_pic.save()
+		        file_.close()
 		##studio closed details
 		closed_on = []
 		if details['closed_on_days'] != 'none':
@@ -149,12 +199,12 @@ def insert_studio_details(parlour_name):
 				closed_id = 6
 			if 'sat' in dyz.lower():
 				closed_id = 7
-			closed_on_dates = StudioClosedDetails(closed_on = closed_id, studio_id = new_studio_profile.id, 
+			closed_on_dates = StudioClosedDetails(closed_on_id = closed_id, studio_id = new_studio_profile.id, 
 					service_updated = 'new studio script', updated_date_time = datetime.now())
 			closed_on_dates.save()
 		###enter service types for studio
 
-		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
+		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/bkup-desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
 		studio_service_details = services_in_studio.sheet_by_index(0)
 		service_details = {}
 		service_types = []
@@ -191,6 +241,7 @@ def insert_studio_details(parlour_name):
 					service_updated = 'studio entry script', updated_date_time = datetime.now())
 				new_st_ser.save()
 			except Exception as r:
+				import pdb;pdb.set_trace();
 				print(traceback.format_exc())
 	except Exception as e:
 		print repr(e)
@@ -211,7 +262,7 @@ def services_for_studio(studio_id,parlour_name):
 		new_studio_profile = StudioProfile.objects.get(id = studio_id)
 		details = {}
 		details['has_group'] = 1
-		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
+		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/bkup-desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
 		studio_service_details = services_in_studio.sheet_by_index(0)
 		service_details = {}
 		service_types = []
@@ -266,7 +317,7 @@ def services_for_studio(studio_id,parlour_name):
 
 
 
-insert_studio_details("essensualsporur")
+insert_studio_details("StylinAadambakkam")
 
 #services_for_studio(studi_id,"name")
 ##insert studio group
