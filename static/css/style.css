@@ -10,7 +10,7 @@ strong { font-family: 'Lato', sans-serif; font-weight: 700; }
 /* Global */
 body { color: #000; font-size: 14px; line-height:27px; background: #fff; margin: 0; }
 
-h1 { font-size: 50px; font-weight: 700; display: block;color:#fff;margin-top: 20px; margin-bottom: 15px;  } 
+h1 { font-size: 50px; font-weight: 300; display: block;color:#fff;margin-top: 20px; margin-bottom: 15px;  } 
 h2 { font-size: 47px; font-weight: 300; display: block;margin-top: 20px; margin-bottom: 15px;  } 
 h3 { font-size: 17px; font-weight: 500; display: block; color:#34495E;margin-top: 20px; margin-bottom: 15px; }
 h4 { font-size: 15px; font-weight: 700; display: block;color:#34495E;margin-top: 20px; } 
@@ -120,7 +120,7 @@ hr { width: 100%; border-top: 1px solid #E9E9E9; display: inline-block; }
 
 .section { min-height: 50px; padding-top: 30px; padding-bottom: 30px; position: relative; text-align: center; }
 .wrapper { width: 70%; margin: 0 auto; }
-.container { z-index: 1; position: relative; }
+.container { z-index: 1; position: relative;}
 .icon-active { color: #1ABB9A; }
 .section .icon-active { color: #fd3753; }
 .gap { padding-bottom: 50px; }
@@ -216,6 +216,7 @@ text-transform: capitalize;font-weight:normal;}
 
 .text-heading { position: relative; width: 100%; left: 0; right: 0; text-align: center; padding-top: 135px; }
 .text-heading p { font-size: 14px; font-weight: 500;color:#fff; }
+.text-heading h1 { font-weight: 300;}
 .static-header h4 { text-align: center; display: block; position: absolute; bottom: 20px; left: 0; right: 0; width: 100%; margin-bottom: 0; }
 #register-page .text-heading { padding-top: 125px; }
 
@@ -894,7 +895,7 @@ h3.more-panel-title{color: #4c4c4c;
 .form-register-small .form-control.location{border-left: 1px solid #ADADAD;}
 
 
-.static-header .text-heading { margin-bottom: -10px; z-index: 20; }
+.static-header .text-heading { margin-bottom: -10px; z-index: 20;top:50px; }
 .static-header .text-heading p { color:#fff; }
 .static-header .list-inline { padding: 30px 0; }
 .static-header .list-inline li { margin-left: 15px; margin-right: 15px; }
@@ -1152,7 +1153,8 @@ box-shadow: inset 1px 1px rgba(240, 240, 240, 0.5);
 #about h1{color:#252a40}
 
 #mobileapp {
-  padding: 40px 0px;background-color: #f6f2f1;border-top: 1px solid #E9E9E9;
+  padding: 40px 0px;background-color: #f6f2f1;
+  /*border-top: 1px solid #E9E9E9;*/
   background-image: url("../img/background/bg-1.jpg");
     background-position: 0 0;
     background-size: cover;
@@ -1674,7 +1676,7 @@ li.fbbutton:hover{
   .navigation-bar li.logindetails button{color:#000;}
 .bookingdetails .promobox input{width:110px;}
 .distance{margin-bottom:0px;}
-#landing-page .static-header-landing, #landing-page .static-header{height:400px;}
+#landing-page .static-header-landing, #landing-page .static-header{height:450px;}
 .searchheader .navigation{background:#f8f8f8;padding:15px 20px 8px 0px ;border-top: 5px solid #f06471;height:80px;}
 .searchdevice{position: initial;  background-color: transparent;display:block;/*Jawahar*/}
 .searchpanel{padding:0px;}

@@ -42,10 +42,10 @@ def compressImages(image_file,picname):
     height = img.size[0]/divider
     img = img.resize((width, height), Image.ANTIALIAS)
     try:
-      os.remove("/home/asha/Desktop/bkup-desktop/temp/"+picname)
+      os.remove("/home/mithu/Desktop/dataentry/temp/"+picname)
     except OSError:
       pass
-    picname = "/home/asha/Desktop/bkup-desktop/temp/"+new_file_name+picname
+    picname = "/home/mithu/Desktop/dataentry/temp/"+new_file_name+picname
     img.save(picname, quality=50,optimize=True)
     return picname
   return False
@@ -81,7 +81,7 @@ def get_timesplits(sent_time):
 def insert_studio_details(parlour_name):
 	try:
 
-		studio_details_book = xlrd.open_workbook('/home/asha/Desktop/bkup-desktop/DataEntry/'+parlour_name+'/'+parlour_name+'DetailsForm.xls')
+		studio_details_book = xlrd.open_workbook('/home/mithu/Desktop/dataentry/'+parlour_name+'/'+parlour_name+'DetailsForm.xls')
 		sd_first_sheet = studio_details_book.sheet_by_index(0)
 		details = {}
 		for i in range(0,sd_first_sheet.nrows):
@@ -129,7 +129,7 @@ def insert_studio_details(parlour_name):
 			exit(0)
 		print details
 		##new studio profile
-		path = '/home/asha/Desktop/bkup-desktop/DataEntry/'+parlour_name+'/thumbnail/'
+		path = '/home/mithu/Desktop/dataentry/'+parlour_name+'/thumbnail/'
 		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
 		thumbnail = open(path+onlyfiles[0])
 		newfile_name = compressImages(thumbnail,onlyfiles[0])
@@ -163,7 +163,7 @@ def insert_studio_details(parlour_name):
 			datetime.now(),name = details['acc_name'].strip())
 		new_acc.save()
 
-		path = '/home/asha/Desktop/bkup-desktop/DataEntry/'+parlour_name+'/pics/'
+		path = '/home/mithu/Desktop/dataentry/'+parlour_name+'/pics/'
 		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
 		print onlyfiles
 		for i in onlyfiles:
@@ -204,7 +204,7 @@ def insert_studio_details(parlour_name):
 			closed_on_dates.save()
 		###enter service types for studio
 
-		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/bkup-desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
+		services_in_studio = xlrd.open_workbook("/home/mithu/Desktop/dataentry/"+parlour_name+"/"+parlour_name+"Service.xls")
 		studio_service_details = services_in_studio.sheet_by_index(0)
 		service_details = {}
 		service_types = []
@@ -262,7 +262,7 @@ def services_for_studio(studio_id,parlour_name):
 		new_studio_profile = StudioProfile.objects.get(id = studio_id)
 		details = {}
 		details['has_group'] = 1
-		services_in_studio = xlrd.open_workbook("/home/asha/Desktop/bkup-desktop/DataEntry/"+parlour_name+"/"+parlour_name+"Service.xls")
+		services_in_studio = xlrd.open_workbook("/home/mithu/Desktop/dataentry/"+parlour_name+"/"+parlour_name+"Service.xls")
 		studio_service_details = services_in_studio.sheet_by_index(0)
 		service_details = {}
 		service_types = []
