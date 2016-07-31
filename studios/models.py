@@ -73,7 +73,7 @@ class StudioManager(BaseUserManager):
 class Studio(AbstractBaseUser):
     
     #custom user model which has email as primary key
-	email = models.EmailField(max_length=254, unique=True, db_index=True)
+	email = models.EmailField(max_length=254)
 	is_active = models.BooleanField(default=False)
 	last_password_reset_datetime = models.DateTimeField(null = True)
 	last_signout_datetime = models.DateTimeField(default = datetime.now(), null = True)
@@ -186,7 +186,7 @@ class StudioProfile(models.Model):
 	longitude = models.CharField(max_length = 30)
 	has_online_payment = models.BooleanField(default = 1)
 	commission_percent = models.IntegerField(default = 10)
-	has_service_tax = models.FloatField(default = 14) #14.5- has 0- no
+	has_service_tax = models.FloatField(default = 15) #15- has 0- no
 
 	def update(self):
 		for field in self._meta.fields:
