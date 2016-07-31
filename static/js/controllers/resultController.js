@@ -1354,7 +1354,7 @@ $scope.service_tax = 0
 $scope.zaloonoffer=0;
 if ($scope.serviceschosen.studio['has_service_tax'] > 0)
 {
-    $scope.service_tax = Math.round(($scope.total_amount * 14.5)/100)
+    $scope.service_tax = Math.round(($scope.total_amount * 15)/100)
 }
 if(!$scope.serviceschosen.studio['showpromo']){
     if($scope.serviceschosen.studio['zaloonoffer']!=0){
@@ -1524,7 +1524,7 @@ $scope.applyPromo = function()
         $scope.amount_to_pay = ($scope.total_amount - $scope.promo_amount)
         if ($scope.serviceschosen.studio['has_service_tax'] > 0)
         {
-            $scope.service_tax = Math.round(($scope.total_amount * 14.5)/100)
+            $scope.service_tax = Math.round(($scope.total_amount * 15)/100)
         }
         if(!$scope.serviceschosen.studio['showpromo']){
             if($scope.serviceschosen.studio['zaloonoffer']!=0){
@@ -1541,7 +1541,7 @@ $scope.applyPromo = function()
         $scope.total_amount = lodash.sum($scope.serviceschosen.services,'price');
         if ($scope.serviceschosen.studio['has_service_tax'] > 0)
         {
-            $scope.service_tax = Math.round(($scope.total_amount * 14.5)/100)
+            $scope.service_tax = Math.round(($scope.total_amount * 15)/100)
         }
         $scope.amount_to_pay = $scope.total_amount + $scope.service_tax 
         $scope.coupon_code="";
